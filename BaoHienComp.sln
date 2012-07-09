@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL", "DAL\DAL.csproj", "{E20ACD5C-C921-45BB-BC44-D227D734C34A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UI", "UI\UI.csproj", "{DF19CFFF-1701-4336-AAC0-89DAF906A799}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaoHien", "UI\BaoHien.csproj", "{DF19CFFF-1701-4336-AAC0-89DAF906A799}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
