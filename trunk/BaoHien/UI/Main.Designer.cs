@@ -31,8 +31,8 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
             this.menuMain = new System.Windows.Forms.MenuStrip();
             this.menuFile = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuExit = new System.Windows.Forms.ToolStripMenuItem();
             this.menuLogout = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuExit = new System.Windows.Forms.ToolStripMenuItem();
             this.menuEntity = new System.Windows.Forms.ToolStripMenuItem();
             this.menuProductType = new System.Windows.Forms.ToolStripMenuItem();
             this.menuProduct = new System.Windows.Forms.ToolStripMenuItem();
@@ -94,21 +94,21 @@
             this.menuFile.Size = new System.Drawing.Size(39, 20);
             this.menuFile.Text = "Tệp";
             // 
-            // menuExit
-            // 
-            this.menuExit.Name = "menuExit";
-            this.menuExit.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F4)));
-            this.menuExit.Size = new System.Drawing.Size(152, 22);
-            this.menuExit.Text = "Đóng";
-            this.menuExit.Click += new System.EventHandler(this.menuExit_Click);
-            // 
             // menuLogout
             // 
             this.menuLogout.Name = "menuLogout";
             this.menuLogout.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F4)));
-            this.menuLogout.Size = new System.Drawing.Size(152, 22);
+            this.menuLogout.Size = new System.Drawing.Size(151, 22);
             this.menuLogout.Text = "Thoát";
             this.menuLogout.Click += new System.EventHandler(this.menuLogout_Click);
+            // 
+            // menuExit
+            // 
+            this.menuExit.Name = "menuExit";
+            this.menuExit.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F4)));
+            this.menuExit.Size = new System.Drawing.Size(151, 22);
+            this.menuExit.Text = "Đóng";
+            this.menuExit.Click += new System.EventHandler(this.menuExit_Click);
             // 
             // menuEntity
             // 
@@ -131,6 +131,7 @@
             this.menuProduct.Name = "menuProduct";
             this.menuProduct.Size = new System.Drawing.Size(152, 22);
             this.menuProduct.Text = "Sản Phẩm";
+            this.menuProduct.Click += new System.EventHandler(this.menuProduct_Click);
             // 
             // menuOperation
             // 
