@@ -14,6 +14,12 @@ namespace BaoHien.UI
         public ucProductType()
         {
             InitializeComponent();
+        }
+
+        private void btnAdd_Click(object sender, EventArgs e)
+        {
+            AddProductType frmAddProductType = new AddProductType();
+            frmAddProductType.ShowDialog();
         }      
        
     }

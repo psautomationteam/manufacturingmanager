@@ -106,6 +106,7 @@
             this.btnAdd.TabIndex = 1;
             this.btnAdd.Text = "Thêm loại sản phẩm";
             this.btnAdd.UseVisualStyleBackColor = true;
+            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
             // 
             // dataGridView1
             // 
