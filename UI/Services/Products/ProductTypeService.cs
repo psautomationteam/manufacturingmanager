@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using DAL;
+using BaoHien.Services.Base;
 
-namespace BaoHienServices
+namespace BaoHien.Services.Products
 {
     public class ProductTypeService : BaseService<ProductType>
     {

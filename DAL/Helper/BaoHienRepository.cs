@@ -9,7 +9,7 @@ using System.Data.Linq.Mapping;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 
-namespace BaoHienServices.Helper
+namespace DAL.Helper
 {
     public class BaoHienRepository
     {
