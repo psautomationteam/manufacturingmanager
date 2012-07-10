@@ -4,8 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using DAL;
-using BaoHienServices.Helper;
-using BaoHienServices;
+using BaoHien.Services.Products;
 
 namespace BaoHienTest
 {

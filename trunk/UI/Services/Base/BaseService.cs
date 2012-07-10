@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using DAL;
 using System.Reflection;
-using BaoHienServices.Helper;
-namespace BaoHienServices
+using DAL.Helper;
+namespace BaoHien.Services.Base
 {
     
     public class BaseService<TItem>
