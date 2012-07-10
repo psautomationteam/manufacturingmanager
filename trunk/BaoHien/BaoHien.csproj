@@ -69,6 +69,12 @@
     <Compile Include="UI\Product\AddProductType.Designer.cs">
       <DependentUpon>AddProductType.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\Product\ProductList.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\Product\ProductList.Designer.cs">
+      <DependentUpon>ProductList.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\Product\ProductType.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -93,6 +99,9 @@
     </Compile>
     <EmbeddedResource Include="UI\Product\AddProductType.resx">
       <DependentUpon>AddProductType.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Product\ProductList.resx">
+      <DependentUpon>ProductList.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Product\ProductType.resx">
       <DependentUpon>ProductType.cs</DependentUpon>
