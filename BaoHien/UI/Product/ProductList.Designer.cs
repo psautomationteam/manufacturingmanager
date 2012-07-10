@@ -1,6 +1,6 @@
-﻿namespace BaoHien.UI
+﻿namespace BaoHien.UI.UI.Product
 {
-    partial class ucProductType
+    partial class ProductList
     {
         /// <summary> 
         /// Required designer variable.
@@ -34,13 +34,13 @@
             this.txtCode = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.btnAdd = new System.Windows.Forms.Button();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.btnDelete = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
+            this.btnDelete = new System.Windows.Forms.Button();
+            this.dgvProductTypeList = new System.Windows.Forms.DataGridView();
+            this.btnAdd = new System.Windows.Forms.Button();
             this.lblTotalResult = new System.Windows.Forms.Label();
             this.grpSearch.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvProductTypeList)).BeginInit();
             this.SuspendLayout();
             // 
             // grpSearch
@@ -50,10 +50,10 @@
             this.grpSearch.Controls.Add(this.txtCode);
             this.grpSearch.Controls.Add(this.label2);
             this.grpSearch.Controls.Add(this.label1);
-            this.grpSearch.Location = new System.Drawing.Point(12, 3);
+            this.grpSearch.Location = new System.Drawing.Point(3, 3);
             this.grpSearch.Name = "grpSearch";
-            this.grpSearch.Size = new System.Drawing.Size(787, 52);
-            this.grpSearch.TabIndex = 0;
+            this.grpSearch.Size = new System.Drawing.Size(787, 77);
+            this.grpSearch.TabIndex = 6;
             this.grpSearch.TabStop = false;
             this.grpSearch.Text = "Tìm Kiếm";
             // 
@@ -61,7 +61,7 @@
             // 
             this.btnSearch.Location = new System.Drawing.Point(636, 17);
             this.btnSearch.Name = "btnSearch";
-            this.btnSearch.Size = new System.Drawing.Size(75, 23);
+            this.btnSearch.Size = new System.Drawing.Size(75, 54);
             this.btnSearch.TabIndex = 4;
             this.btnSearch.Text = "Tìm";
             this.btnSearch.UseVisualStyleBackColor = true;
@@ -98,68 +98,67 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Mã loại sản phẩm:";
             // 
-            // btnAdd
-            // 
-            this.btnAdd.Location = new System.Drawing.Point(724, 86);
-            this.btnAdd.Name = "btnAdd";
-            this.btnAdd.Size = new System.Drawing.Size(75, 43);
-            this.btnAdd.TabIndex = 1;
-            this.btnAdd.Text = "Thêm loại sản phẩm";
-            this.btnAdd.UseVisualStyleBackColor = true;
-            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
-            // 
-            // dataGridView1
-            // 
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(12, 136);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(787, 305);
-            this.dataGridView1.TabIndex = 2;
-            // 
-            // btnDelete
-            // 
-            this.btnDelete.Location = new System.Drawing.Point(628, 86);
-            this.btnDelete.Name = "btnDelete";
-            this.btnDelete.Size = new System.Drawing.Size(75, 43);
-            this.btnDelete.TabIndex = 3;
-            this.btnDelete.Text = "Xóa loại được chọn";
-            this.btnDelete.UseVisualStyleBackColor = true;
-            // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 98);
+            this.label3.Location = new System.Drawing.Point(3, 120);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(132, 13);
-            this.label3.TabIndex = 4;
+            this.label3.TabIndex = 10;
             this.label3.Text = "Tổng số kết quả tìm được:";
+            // 
+            // btnDelete
+            // 
+            this.btnDelete.Location = new System.Drawing.Point(619, 108);
+            this.btnDelete.Name = "btnDelete";
+            this.btnDelete.Size = new System.Drawing.Size(75, 43);
+            this.btnDelete.TabIndex = 9;
+            this.btnDelete.Text = "Xóa loại được chọn";
+            this.btnDelete.UseVisualStyleBackColor = true;
+            // 
+            // dgvProductTypeList
+            // 
+            this.dgvProductTypeList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvProductTypeList.Location = new System.Drawing.Point(3, 161);
+            this.dgvProductTypeList.Name = "dgvProductTypeList";
+            this.dgvProductTypeList.Size = new System.Drawing.Size(787, 469);
+            this.dgvProductTypeList.TabIndex = 8;
+            // 
+            // btnAdd
+            // 
+            this.btnAdd.Location = new System.Drawing.Point(715, 108);
+            this.btnAdd.Name = "btnAdd";
+            this.btnAdd.Size = new System.Drawing.Size(75, 43);
+            this.btnAdd.TabIndex = 7;
+            this.btnAdd.Text = "Thêm loại sản phẩm";
+            this.btnAdd.UseVisualStyleBackColor = true;
             // 
             // lblTotalResult
             // 
             this.lblTotalResult.AutoSize = true;
             this.lblTotalResult.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTotalResult.ForeColor = System.Drawing.Color.Blue;
-            this.lblTotalResult.Location = new System.Drawing.Point(148, 93);
+            this.lblTotalResult.Location = new System.Drawing.Point(139, 115);
             this.lblTotalResult.Name = "lblTotalResult";
             this.lblTotalResult.Size = new System.Drawing.Size(26, 17);
-            this.lblTotalResult.TabIndex = 5;
+            this.lblTotalResult.TabIndex = 11;
             this.lblTotalResult.Text = "10";
             // 
-            // ucProductType
+            // ProductList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.lblTotalResult);
+            this.Controls.Add(this.grpSearch);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.btnDelete);
-            this.Controls.Add(this.dataGridView1);
+            this.Controls.Add(this.dgvProductTypeList);
             this.Controls.Add(this.btnAdd);
-            this.Controls.Add(this.grpSearch);
-            this.Name = "ucProductType";
+            this.Controls.Add(this.lblTotalResult);
+            this.Name = "ProductList";
             this.Size = new System.Drawing.Size(1084, 641);
             this.grpSearch.ResumeLayout(false);
             this.grpSearch.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvProductTypeList)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -168,15 +167,15 @@
         #endregion
 
         private System.Windows.Forms.GroupBox grpSearch;
+        private System.Windows.Forms.Button btnSearch;
+        private System.Windows.Forms.TextBox txtName;
         private System.Windows.Forms.TextBox txtCode;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button btnSearch;
-        private System.Windows.Forms.TextBox txtName;
-        private System.Windows.Forms.Button btnAdd;
-        private System.Windows.Forms.DataGridView dataGridView1;
-        private System.Windows.Forms.Button btnDelete;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Button btnDelete;
+        private System.Windows.Forms.DataGridView dgvProductTypeList;
+        private System.Windows.Forms.Button btnAdd;
         private System.Windows.Forms.Label lblTotalResult;
     }
 }
