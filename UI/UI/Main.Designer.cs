@@ -48,13 +48,22 @@
             this.menuGuide = new System.Windows.Forms.ToolStripMenuItem();
             this.menuAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
+            this.tsbAddOrder = new System.Windows.Forms.ToolStripButton();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.lblMessage = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
             this.menuSystem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuEmployee = new System.Windows.Forms.ToolStripMenuItem();
             this.menuSystemUser = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
+            this.tsbAddProductionRequest = new System.Windows.Forms.ToolStripButton();
+            this.toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
+            this.tsbAddProduct = new System.Windows.Forms.ToolStripButton();
+            this.toolStripLabel3 = new System.Windows.Forms.ToolStripLabel();
+            this.pnlMain = new System.Windows.Forms.Panel();
+            this.tsbAddCustomer = new System.Windows.Forms.ToolStripButton();
+            this.toolStripLabel4 = new System.Windows.Forms.ToolStripLabel();
+            this.menuLogout = new System.Windows.Forms.ToolStripMenuItem();
             this.menuMain.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -79,7 +88,8 @@
             // menuFile
             // 
             this.menuFile.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.menuExit});
+            this.menuExit,
+            this.menuLogout});
             this.menuFile.Name = "menuFile";
             this.menuFile.Size = new System.Drawing.Size(39, 20);
             this.menuFile.Text = "Tệp";
@@ -88,7 +98,7 @@
             // 
             this.menuExit.Name = "menuExit";
             this.menuExit.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F4)));
-            this.menuExit.Size = new System.Drawing.Size(145, 22);
+            this.menuExit.Size = new System.Drawing.Size(152, 22);
             this.menuExit.Text = "Đóng";
             // 
             // menuEntity
@@ -201,22 +211,30 @@
             // 
             // toolStrip1
             // 
+            this.toolStrip1.BackColor = System.Drawing.SystemColors.Highlight;
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButton1});
+            this.tsbAddOrder,
+            this.toolStripLabel1,
+            this.tsbAddProductionRequest,
+            this.toolStripLabel2,
+            this.tsbAddProduct,
+            this.toolStripLabel3,
+            this.tsbAddCustomer,
+            this.toolStripLabel4});
             this.toolStrip1.Location = new System.Drawing.Point(0, 24);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(1084, 25);
             this.toolStrip1.TabIndex = 1;
             this.toolStrip1.Text = "toolStrip1";
             // 
-            // toolStripButton1
+            // tsbAddOrder
             // 
-            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
-            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton1.Text = "toolStripButton1";
+            this.tsbAddOrder.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbAddOrder.Image = ((System.Drawing.Image)(resources.GetObject("tsbAddOrder.Image")));
+            this.tsbAddOrder.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbAddOrder.Name = "tsbAddOrder";
+            this.tsbAddOrder.Size = new System.Drawing.Size(23, 22);
+            this.tsbAddOrder.Text = "toolStripButton1";
             // 
             // statusStrip1
             // 
@@ -263,11 +281,78 @@
             this.menuSystemUser.Size = new System.Drawing.Size(152, 22);
             this.menuSystemUser.Text = "Người Dùng";
             // 
+            // toolStripLabel1
+            // 
+            this.toolStripLabel1.Name = "toolStripLabel1";
+            this.toolStripLabel1.Size = new System.Drawing.Size(62, 22);
+            this.toolStripLabel1.Text = "Phiếu xuất";
+            // 
+            // tsbAddProductionRequest
+            // 
+            this.tsbAddProductionRequest.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbAddProductionRequest.Image = ((System.Drawing.Image)(resources.GetObject("tsbAddProductionRequest.Image")));
+            this.tsbAddProductionRequest.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbAddProductionRequest.Name = "tsbAddProductionRequest";
+            this.tsbAddProductionRequest.Size = new System.Drawing.Size(23, 22);
+            this.tsbAddProductionRequest.Text = "toolStripButton2";
+            // 
+            // toolStripLabel2
+            // 
+            this.toolStripLabel2.Name = "toolStripLabel2";
+            this.toolStripLabel2.Size = new System.Drawing.Size(83, 22);
+            this.toolStripLabel2.Text = "Phiếu sản xuất";
+            // 
+            // tsbAddProduct
+            // 
+            this.tsbAddProduct.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbAddProduct.Image = ((System.Drawing.Image)(resources.GetObject("tsbAddProduct.Image")));
+            this.tsbAddProduct.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbAddProduct.Name = "tsbAddProduct";
+            this.tsbAddProduct.Size = new System.Drawing.Size(23, 22);
+            this.tsbAddProduct.Text = "toolStripButton2";
+            // 
+            // toolStripLabel3
+            // 
+            this.toolStripLabel3.Name = "toolStripLabel3";
+            this.toolStripLabel3.Size = new System.Drawing.Size(82, 22);
+            this.toolStripLabel3.Text = "Tạo sản phẩm";
+            // 
+            // pnlMain
+            // 
+            this.pnlMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlMain.Location = new System.Drawing.Point(0, 49);
+            this.pnlMain.Name = "pnlMain";
+            this.pnlMain.Size = new System.Drawing.Size(1084, 641);
+            this.pnlMain.TabIndex = 3;
+            // 
+            // tsbAddCustomer
+            // 
+            this.tsbAddCustomer.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbAddCustomer.Image = ((System.Drawing.Image)(resources.GetObject("tsbAddCustomer.Image")));
+            this.tsbAddCustomer.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbAddCustomer.Name = "tsbAddCustomer";
+            this.tsbAddCustomer.Size = new System.Drawing.Size(23, 22);
+            this.tsbAddCustomer.Text = "toolStripButton3";
+            // 
+            // toolStripLabel4
+            // 
+            this.toolStripLabel4.Name = "toolStripLabel4";
+            this.toolStripLabel4.Size = new System.Drawing.Size(103, 22);
+            this.toolStripLabel4.Text = "Thêm khách hàng";
+            // 
+            // menuLogout
+            // 
+            this.menuLogout.Name = "menuLogout";
+            this.menuLogout.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F4)));
+            this.menuLogout.Size = new System.Drawing.Size(152, 22);
+            this.menuLogout.Text = "Thoát";
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1084, 712);
+            this.Controls.Add(this.pnlMain);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.menuMain);
@@ -294,7 +379,7 @@
         private System.Windows.Forms.ToolStripMenuItem menuFile;
         private System.Windows.Forms.ToolStripMenuItem menuExit;
         private System.Windows.Forms.ToolStrip toolStrip1;
-        private System.Windows.Forms.ToolStripButton toolStripButton1;
+        private System.Windows.Forms.ToolStripButton tsbAddOrder;
         private System.Windows.Forms.ToolStripMenuItem menuEntity;
         private System.Windows.Forms.ToolStripMenuItem menuProductType;
         private System.Windows.Forms.ToolStripMenuItem menuProduct;
@@ -316,6 +401,15 @@
         private System.Windows.Forms.ToolStripMenuItem menuEmployee;
         private System.Windows.Forms.ToolStripMenuItem menuSystem;
         private System.Windows.Forms.ToolStripMenuItem menuSystemUser;
+        private System.Windows.Forms.ToolStripLabel toolStripLabel1;
+        private System.Windows.Forms.ToolStripButton tsbAddProductionRequest;
+        private System.Windows.Forms.ToolStripLabel toolStripLabel2;
+        private System.Windows.Forms.ToolStripButton tsbAddProduct;
+        private System.Windows.Forms.ToolStripLabel toolStripLabel3;
+        private System.Windows.Forms.ToolStripButton tsbAddCustomer;
+        private System.Windows.Forms.ToolStripLabel toolStripLabel4;
+        private System.Windows.Forms.Panel pnlMain;
+        private System.Windows.Forms.ToolStripMenuItem menuLogout;
 
     }
 }
