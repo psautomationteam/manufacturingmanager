@@ -1,0 +1,1106 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="BaoHienDBModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="BaoHienDBModelStoreContainer">
+          <EntitySet Name="Attribute" EntityType="BaoHienDBModel.Store.Attribute" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Customer" EntityType="BaoHienDBModel.Store.Customer" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Employee" EntityType="BaoHienDBModel.Store.Employee" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="MaterialInStock" EntityType="BaoHienDBModel.Store.MaterialInStock" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="MeasurementUnit" EntityType="BaoHienDBModel.Store.MeasurementUnit" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Order" EntityType="BaoHienDBModel.Store.Order" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="OrderDetail" EntityType="BaoHienDBModel.Store.OrderDetail" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Price" EntityType="BaoHienDBModel.Store.Price" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Product" EntityType="BaoHienDBModel.Store.Product" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="ProductAttribute" EntityType="BaoHienDBModel.Store.ProductAttribute" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="ProductInStock" EntityType="BaoHienDBModel.Store.ProductInStock" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="ProductionRequest" EntityType="BaoHienDBModel.Store.ProductionRequest" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="ProductionRequestDetail" EntityType="BaoHienDBModel.Store.ProductionRequestDetail" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="ProductType" EntityType="BaoHienDBModel.Store.ProductType" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="SystemUser" EntityType="BaoHienDBModel.Store.SystemUser" store:Type="Tables" Schema="dbo" />
+          <AssociationSet Name="FK_Customer_Employee" Association="BaoHienDBModel.Store.FK_Customer_Employee">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="Customer" EntitySet="Customer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MaterialInStock_Product" Association="BaoHienDBModel.Store.FK_MaterialInStock_Product">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="MaterialInStock" EntitySet="MaterialInStock" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order_Customer" Association="BaoHienDBModel.Store.FK_Order_Customer">
+            <End Role="Customer" EntitySet="Customer" />
+            <End Role="Order" EntitySet="Order" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order_SystemUser" Association="BaoHienDBModel.Store.FK_Order_SystemUser">
+            <End Role="SystemUser" EntitySet="SystemUser" />
+            <End Role="Order" EntitySet="Order" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderDetail_Order" Association="BaoHienDBModel.Store.FK_OrderDetail_Order">
+            <End Role="Order" EntitySet="Order" />
+            <End Role="OrderDetail" EntitySet="OrderDetail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderDetail_Product" Association="BaoHienDBModel.Store.FK_OrderDetail_Product">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="OrderDetail" EntitySet="OrderDetail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Price_Product" Association="BaoHienDBModel.Store.FK_Price_Product">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="Price" EntitySet="Price" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Product_MeasurementUnit" Association="BaoHienDBModel.Store.FK_Product_MeasurementUnit">
+            <End Role="MeasurementUnit" EntitySet="MeasurementUnit" />
+            <End Role="Product" EntitySet="Product" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Product_ProductType" Association="BaoHienDBModel.Store.FK_Product_ProductType">
+            <End Role="ProductType" EntitySet="ProductType" />
+            <End Role="Product" EntitySet="Product" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductAttribute_Attribute" Association="BaoHienDBModel.Store.FK_ProductAttribute_Attribute">
+            <End Role="Attribute" EntitySet="Attribute" />
+            <End Role="ProductAttribute" EntitySet="ProductAttribute" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductAttribute_Product" Association="BaoHienDBModel.Store.FK_ProductAttribute_Product">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="ProductAttribute" EntitySet="ProductAttribute" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductInStock_Product" Association="BaoHienDBModel.Store.FK_ProductInStock_Product">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="ProductInStock" EntitySet="ProductInStock" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductionRequestDetail_Product" Association="BaoHienDBModel.Store.FK_ProductionRequestDetail_Product">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="ProductionRequestDetail" EntitySet="ProductionRequestDetail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductionRequestDetail_ProductionRequest" Association="BaoHienDBModel.Store.FK_ProductionRequestDetail_ProductionRequest">
+            <End Role="ProductionRequest" EntitySet="ProductionRequest" />
+            <End Role="ProductionRequestDetail" EntitySet="ProductionRequestDetail" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Attribute">
+          <Key>
+            <PropertyRef Name="AttributeId" />
+          </Key>
+          <Property Name="AttributeId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="Description" Type="text" />
+          <Property Name="AttributeCode" Type="varchar" Nullable="false" MaxLength="25" />
+        </EntityType>
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="CustId" />
+          </Key>
+          <Property Name="CustId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="CustCode" Type="varchar" Nullable="false" MaxLength="25" />
+          <Property Name="Address" Type="varchar" Nullable="false" MaxLength="250" />
+          <Property Name="Phone" Type="varchar" Nullable="false" MaxLength="25" />
+          <Property Name="BankAcc" Type="varchar" MaxLength="25" />
+          <Property Name="BankName" Type="varchar" MaxLength="50" />
+          <Property Name="ContactPerson" Type="varchar" MaxLength="50" />
+          <Property Name="ContactPersonPhone" Type="varchar" MaxLength="25" />
+          <Property Name="ContactPersonEmail" Type="varchar" MaxLength="50" />
+          <Property Name="Email" Type="varchar" MaxLength="50" />
+          <Property Name="Fax" Type="varchar" MaxLength="50" />
+          <Property Name="Description" Type="text" />
+          <Property Name="Status" Type="smallint" />
+          <Property Name="SalerId" Type="int" />
+        </EntityType>
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="EmployeeId" />
+          </Key>
+          <Property Name="EmployeeId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Code" Type="varchar" Nullable="false" MaxLength="25" />
+          <Property Name="FirstName" Type="varchar" Nullable="false" MaxLength="25" />
+          <Property Name="LastName" Type="varchar" Nullable="false" MaxLength="25" />
+          <Property Name="MiddleName" Type="varchar" Nullable="false" MaxLength="25" />
+          <Property Name="NickName" Type="varchar" MaxLength="25" />
+          <Property Name="Address" Type="varchar" MaxLength="250" />
+          <Property Name="Phone" Type="varchar" MaxLength="25" />
+          <Property Name="MobilePhone" Type="varchar" MaxLength="25" />
+          <Property Name="Type" Type="smallint" Nullable="false" />
+          <Property Name="Description" Type="varchar" MaxLength="500" />
+          <Property Name="Status" Type="smallint" />
+        </EntityType>
+        <EntityType Name="MaterialInStock">
+          <Key>
+            <PropertyRef Name="ProductId" />
+            <PropertyRef Name="LatestUpdate" />
+          </Key>
+          <Property Name="ProductId" Type="int" Nullable="false" />
+          <Property Name="NumberOfItem" Type="int" Nullable="false" />
+          <Property Name="LatestUpdate" Type="datetime" Nullable="false" />
+          <Property Name="Note" Type="varchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="MeasurementUnit">
+          <Key>
+            <PropertyRef Name="UnitId" />
+          </Key>
+          <Property Name="UnitId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="Description" Type="text" />
+          <Property Name="UnitCode" Type="varchar" Nullable="false" MaxLength="25" />
+        </EntityType>
+        <EntityType Name="Order">
+          <Key>
+            <PropertyRef Name="OrderId" />
+          </Key>
+          <Property Name="OrderId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="OrderCode" Type="varchar" Nullable="false" MaxLength="25" />
+          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+          <Property Name="CreateBy" Type="int" Nullable="false" />
+          <Property Name="CustId" Type="int" Nullable="false" />
+          <Property Name="Total" Type="float" Nullable="false" />
+          <Property Name="Note" Type="varchar" MaxLength="250" />
+          <Property Name="VAT" Type="float" Nullable="false" />
+        </EntityType>
+        <EntityType Name="OrderDetail">
+          <Key>
+            <PropertyRef Name="OrderId" />
+            <PropertyRef Name="ProductId" />
+          </Key>
+          <Property Name="OrderId" Type="int" Nullable="false" />
+          <Property Name="ProductId" Type="int" Nullable="false" />
+          <Property Name="NumberUnit" Type="int" Nullable="false" />
+          <Property Name="Price" Type="float" Nullable="false" />
+          <Property Name="Cost" Type="float" Nullable="false" />
+          <Property Name="Tax" Type="float" Nullable="false" />
+          <Property Name="Note" Type="varchar" Nullable="false" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Price">
+          <Key>
+            <PropertyRef Name="ProductId" />
+            <PropertyRef Name="UpdatedDate" />
+          </Key>
+          <Property Name="ProductId" Type="int" Nullable="false" />
+          <Property Name="Price" Type="float" Nullable="false" />
+          <Property Name="UpdatedDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="ProductId" />
+          </Key>
+          <Property Name="ProductId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="ProductCode" Type="varchar" Nullable="false" MaxLength="25" />
+          <Property Name="Name" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="Description" Type="text" />
+          <Property Name="BaseUnit" Type="int" />
+          <Property Name="ProductType" Type="int" Nullable="false" />
+          <Property Name="Status" Type="int" />
+        </EntityType>
+        <EntityType Name="ProductAttribute">
+          <Key>
+            <PropertyRef Name="ProductId" />
+            <PropertyRef Name="AttributeId" />
+          </Key>
+          <Property Name="ProductId" Type="int" Nullable="false" />
+          <Property Name="AttributeId" Type="int" Nullable="false" />
+          <Property Name="Value" Type="varchar" Nullable="false" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="ProductInStock">
+          <Key>
+            <PropertyRef Name="ProductId" />
+            <PropertyRef Name="LatestUpdate" />
+          </Key>
+          <Property Name="ProductId" Type="int" Nullable="false" />
+          <Property Name="NumberOfItem" Type="int" Nullable="false" />
+          <Property Name="LatestUpdate" Type="datetime" Nullable="false" />
+          <Property Name="Note" Type="varchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="ProductionRequest">
+          <Key>
+            <PropertyRef Name="ReqId" />
+          </Key>
+          <Property Name="ReqId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="ReqCode" Type="varchar" MaxLength="25" />
+          <Property Name="RequestedDate" Type="int" />
+          <Property Name="RequestedBy" Type="varchar" MaxLength="25" />
+        </EntityType>
+        <EntityType Name="ProductionRequestDetail">
+          <Key>
+            <PropertyRef Name="ReqId" />
+            <PropertyRef Name="ProductId" />
+          </Key>
+          <Property Name="ReqId" Type="int" Nullable="false" />
+          <Property Name="ProductId" Type="int" Nullable="false" />
+          <Property Name="NumberUnit" Type="int" />
+          <Property Name="Origin" Type="smallint" />
+        </EntityType>
+        <EntityType Name="ProductType">
+          <Key>
+            <PropertyRef Name="ProductTypeId" />
+          </Key>
+          <Property Name="ProductTypeId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="Description" Type="nchar" MaxLength="10" />
+          <Property Name="TypeCode" Type="varchar" Nullable="false" MaxLength="25" />
+        </EntityType>
+        <EntityType Name="SystemUser">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="username" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="password" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="Status" Type="smallint" />
+          <Property Name="Type" Type="smallint" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <Association Name="FK_Customer_Employee">
+          <End Role="Employee" Type="BaoHienDBModel.Store.Employee" Multiplicity="0..1" />
+          <End Role="Customer" Type="BaoHienDBModel.Store.Customer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmployeeId" />
+            </Principal>
+            <Dependent Role="Customer">
+              <PropertyRef Name="SalerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MaterialInStock_Product">
+          <End Role="Product" Type="BaoHienDBModel.Store.Product" Multiplicity="1" />
+          <End Role="MaterialInStock" Type="BaoHienDBModel.Store.MaterialInStock" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="ProductId" />
+            </Principal>
+            <Dependent Role="MaterialInStock">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order_Customer">
+          <End Role="Customer" Type="BaoHienDBModel.Store.Customer" Multiplicity="1" />
+          <End Role="Order" Type="BaoHienDBModel.Store.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="CustId" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="CustId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order_SystemUser">
+          <End Role="SystemUser" Type="BaoHienDBModel.Store.SystemUser" Multiplicity="1" />
+          <End Role="Order" Type="BaoHienDBModel.Store.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SystemUser">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="CreateBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderDetail_Order">
+          <End Role="Order" Type="BaoHienDBModel.Store.Order" Multiplicity="1" />
+          <End Role="OrderDetail" Type="BaoHienDBModel.Store.OrderDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Order">
+              <PropertyRef Name="OrderId" />
+            </Principal>
+            <Dependent Role="OrderDetail">
+              <PropertyRef Name="OrderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderDetail_Product">
+          <End Role="Product" Type="BaoHienDBModel.Store.Product" Multiplicity="1" />
+          <End Role="OrderDetail" Type="BaoHienDBModel.Store.OrderDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="ProductId" />
+            </Principal>
+            <Dependent Role="OrderDetail">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Price_Product">
+          <End Role="Product" Type="BaoHienDBModel.Store.Product" Multiplicity="1" />
+          <End Role="Price" Type="BaoHienDBModel.Store.Price" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="ProductId" />
+            </Principal>
+            <Dependent Role="Price">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Product_MeasurementUnit">
+          <End Role="MeasurementUnit" Type="BaoHienDBModel.Store.MeasurementUnit" Multiplicity="0..1" />
+          <End Role="Product" Type="BaoHienDBModel.Store.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MeasurementUnit">
+              <PropertyRef Name="UnitId" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="BaseUnit" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Product_ProductType">
+          <End Role="ProductType" Type="BaoHienDBModel.Store.ProductType" Multiplicity="1" />
+          <End Role="Product" Type="BaoHienDBModel.Store.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductType">
+              <PropertyRef Name="ProductTypeId" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="ProductType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProductAttribute_Attribute">
+          <End Role="Attribute" Type="BaoHienDBModel.Store.Attribute" Multiplicity="1" />
+          <End Role="ProductAttribute" Type="BaoHienDBModel.Store.ProductAttribute" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Attribute">
+              <PropertyRef Name="AttributeId" />
+            </Principal>
+            <Dependent Role="ProductAttribute">
+              <PropertyRef Name="AttributeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProductAttribute_Product">
+          <End Role="Product" Type="BaoHienDBModel.Store.Product" Multiplicity="1" />
+          <End Role="ProductAttribute" Type="BaoHienDBModel.Store.ProductAttribute" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="ProductId" />
+            </Principal>
+            <Dependent Role="ProductAttribute">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProductInStock_Product">
+          <End Role="Product" Type="BaoHienDBModel.Store.Product" Multiplicity="1" />
+          <End Role="ProductInStock" Type="BaoHienDBModel.Store.ProductInStock" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="ProductId" />
+            </Principal>
+            <Dependent Role="ProductInStock">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProductionRequestDetail_Product">
+          <End Role="Product" Type="BaoHienDBModel.Store.Product" Multiplicity="1" />
+          <End Role="ProductionRequestDetail" Type="BaoHienDBModel.Store.ProductionRequestDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="ProductId" />
+            </Principal>
+            <Dependent Role="ProductionRequestDetail">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProductionRequestDetail_ProductionRequest">
+          <End Role="ProductionRequest" Type="BaoHienDBModel.Store.ProductionRequest" Multiplicity="1" />
+          <End Role="ProductionRequestDetail" Type="BaoHienDBModel.Store.ProductionRequestDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductionRequest">
+              <PropertyRef Name="ReqId" />
+            </Principal>
+            <Dependent Role="ProductionRequestDetail">
+              <PropertyRef Name="ReqId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="BaoHienDBModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="BaoHienDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Attributes" EntityType="BaoHienDBModel.Attribute" />
+          <EntitySet Name="Customers" EntityType="BaoHienDBModel.Customer" />
+          <EntitySet Name="Employees" EntityType="BaoHienDBModel.Employee" />
+          <EntitySet Name="MaterialInStocks" EntityType="BaoHienDBModel.MaterialInStock" />
+          <EntitySet Name="MeasurementUnits" EntityType="BaoHienDBModel.MeasurementUnit" />
+          <EntitySet Name="Orders" EntityType="BaoHienDBModel.Order" />
+          <EntitySet Name="OrderDetails" EntityType="BaoHienDBModel.OrderDetail" />
+          <EntitySet Name="Prices" EntityType="BaoHienDBModel.Price" />
+          <EntitySet Name="Products" EntityType="BaoHienDBModel.Product" />
+          <EntitySet Name="ProductAttributes" EntityType="BaoHienDBModel.ProductAttribute" />
+          <EntitySet Name="ProductInStocks" EntityType="BaoHienDBModel.ProductInStock" />
+          <EntitySet Name="ProductionRequests" EntityType="BaoHienDBModel.ProductionRequest" />
+          <EntitySet Name="ProductionRequestDetails" EntityType="BaoHienDBModel.ProductionRequestDetail" />
+          <EntitySet Name="ProductTypes" EntityType="BaoHienDBModel.ProductType" />
+          <EntitySet Name="SystemUsers" EntityType="BaoHienDBModel.SystemUser" />
+          <AssociationSet Name="FK_ProductAttribute_Attribute" Association="BaoHienDBModel.FK_ProductAttribute_Attribute">
+            <End Role="Attribute" EntitySet="Attributes" />
+            <End Role="ProductAttribute" EntitySet="ProductAttributes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Customer_Employee" Association="BaoHienDBModel.FK_Customer_Employee">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="Customer" EntitySet="Customers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order_Customer" Association="BaoHienDBModel.FK_Order_Customer">
+            <End Role="Customer" EntitySet="Customers" />
+            <End Role="Order" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MaterialInStock_Product" Association="BaoHienDBModel.FK_MaterialInStock_Product">
+            <End Role="Product" EntitySet="Products" />
+            <End Role="MaterialInStock" EntitySet="MaterialInStocks" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Product_MeasurementUnit" Association="BaoHienDBModel.FK_Product_MeasurementUnit">
+            <End Role="MeasurementUnit" EntitySet="MeasurementUnits" />
+            <End Role="Product" EntitySet="Products" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order_SystemUser" Association="BaoHienDBModel.FK_Order_SystemUser">
+            <End Role="SystemUser" EntitySet="SystemUsers" />
+            <End Role="Order" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderDetail_Order" Association="BaoHienDBModel.FK_OrderDetail_Order">
+            <End Role="Order" EntitySet="Orders" />
+            <End Role="OrderDetail" EntitySet="OrderDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderDetail_Product" Association="BaoHienDBModel.FK_OrderDetail_Product">
+            <End Role="Product" EntitySet="Products" />
+            <End Role="OrderDetail" EntitySet="OrderDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Price_Product" Association="BaoHienDBModel.FK_Price_Product">
+            <End Role="Product" EntitySet="Products" />
+            <End Role="Price" EntitySet="Prices" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Product_ProductType" Association="BaoHienDBModel.FK_Product_ProductType">
+            <End Role="ProductType" EntitySet="ProductTypes" />
+            <End Role="Product" EntitySet="Products" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductAttribute_Product" Association="BaoHienDBModel.FK_ProductAttribute_Product">
+            <End Role="Product" EntitySet="Products" />
+            <End Role="ProductAttribute" EntitySet="ProductAttributes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductInStock_Product" Association="BaoHienDBModel.FK_ProductInStock_Product">
+            <End Role="Product" EntitySet="Products" />
+            <End Role="ProductInStock" EntitySet="ProductInStocks" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductionRequestDetail_Product" Association="BaoHienDBModel.FK_ProductionRequestDetail_Product">
+            <End Role="Product" EntitySet="Products" />
+            <End Role="ProductionRequestDetail" EntitySet="ProductionRequestDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductionRequestDetail_ProductionRequest" Association="BaoHienDBModel.FK_ProductionRequestDetail_ProductionRequest">
+            <End Role="ProductionRequest" EntitySet="ProductionRequests" />
+            <End Role="ProductionRequestDetail" EntitySet="ProductionRequestDetails" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Attribute">
+          <Key>
+            <PropertyRef Name="AttributeId" />
+          </Key>
+          <Property Name="AttributeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
+          <Property Name="AttributeCode" Type="String" Nullable="false" MaxLength="25" Unicode="false" FixedLength="false" />
+          <NavigationProperty Name="ProductAttributes" Relationship="BaoHienDBModel.FK_ProductAttribute_Attribute" FromRole="Attribute" ToRole="ProductAttribute" />
+        </EntityType>
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="CustId" />
+          </Key>
+          <Property Name="CustId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="CustCode" Type="String" Nullable="false" MaxLength="25" Unicode="false" FixedLength="false" />
+          <Property Name="Address" Type="String" Nullable="false" MaxLength="250" Unicode="false" FixedLength="false" />
+          <Property Name="Phone" Type="String" Nullable="false" MaxLength="25" Unicode="false" FixedLength="false" />
+          <Property Name="BankAcc" Type="String" MaxLength="25" Unicode="false" FixedLength="false" />
+          <Property Name="BankName" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="ContactPerson" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="ContactPersonPhone" Type="String" MaxLength="25" Unicode="false" FixedLength="false" />
+          <Property Name="ContactPersonEmail" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="Email" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="Fax" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
+          <Property Name="Status" Type="Int16" />
+          <Property Name="SalerId" Type="Int32" />
+          <NavigationProperty Name="Employee" Relationship="BaoHienDBModel.FK_Customer_Employee" FromRole="Customer" ToRole="Employee" />
+          <NavigationProperty Name="Orders" Relationship="BaoHienDBModel.FK_Order_Customer" FromRole="Customer" ToRole="Order" />
+        </EntityType>
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="EmployeeId" />
+          </Key>
+          <Property Name="EmployeeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Code" Type="String" Nullable="false" MaxLength="25" Unicode="false" FixedLength="false" />
+          <Property Name="FirstName" Type="String" Nullable="false" MaxLength="25" Unicode="false" FixedLength="false" />
+          <Property Name="LastName" Type="String" Nullable="false" MaxLength="25" Unicode="false" FixedLength="false" />
+          <Property Name="MiddleName" Type="String" Nullable="false" MaxLength="25" Unicode="false" FixedLength="false" />
+          <Property Name="NickName" Type="String" MaxLength="25" Unicode="false" FixedLength="false" />
+          <Property Name="Address" Type="String" MaxLength="250" Unicode="false" FixedLength="false" />
+          <Property Name="Phone" Type="String" MaxLength="25" Unicode="false" FixedLength="false" />
+          <Property Name="MobilePhone" Type="String" MaxLength="25" Unicode="false" FixedLength="false" />
+          <Property Name="Type" Type="Int16" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="500" Unicode="false" FixedLength="false" />
+          <Property Name="Status" Type="Int16" />
+          <NavigationProperty Name="Customers" Relationship="BaoHienDBModel.FK_Customer_Employee" FromRole="Employee" ToRole="Customer" />
+        </EntityType>
+        <EntityType Name="MaterialInStock">
+          <Key>
+            <PropertyRef Name="ProductId" />
+            <PropertyRef Name="LatestUpdate" />
+          </Key>
+          <Property Name="ProductId" Type="Int32" Nullable="false" />
+          <Property Name="NumberOfItem" Type="Int32" Nullable="false" />
+          <Property Name="LatestUpdate" Type="DateTime" Nullable="false" />
+          <Property Name="Note" Type="String" MaxLength="250" Unicode="false" FixedLength="false" />
+          <NavigationProperty Name="Product" Relationship="BaoHienDBModel.FK_MaterialInStock_Product" FromRole="MaterialInStock" ToRole="Product" />
+        </EntityType>
+        <EntityType Name="MeasurementUnit">
+          <Key>
+            <PropertyRef Name="UnitId" />
+          </Key>
+          <Property Name="UnitId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
+          <Property Name="UnitCode" Type="String" Nullable="false" MaxLength="25" Unicode="false" FixedLength="false" />
+          <NavigationProperty Name="Products" Relationship="BaoHienDBModel.FK_Product_MeasurementUnit" FromRole="MeasurementUnit" ToRole="Product" />
+        </EntityType>
+        <EntityType Name="Order">
+          <Key>
+            <PropertyRef Name="OrderId" />
+          </Key>
+          <Property Name="OrderId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrderCode" Type="String" Nullable="false" MaxLength="25" Unicode="false" FixedLength="false" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" />
+          <Property Name="CreateBy" Type="Int32" Nullable="false" />
+          <Property Name="CustId" Type="Int32" Nullable="false" />
+          <Property Name="Total" Type="Double" Nullable="false" />
+          <Property Name="Note" Type="String" MaxLength="250" Unicode="false" FixedLength="false" />
+          <Property Name="VAT" Type="Double" Nullable="false" />
+          <NavigationProperty Name="Customer" Relationship="BaoHienDBModel.FK_Order_Customer" FromRole="Order" ToRole="Customer" />
+          <NavigationProperty Name="SystemUser" Relationship="BaoHienDBModel.FK_Order_SystemUser" FromRole="Order" ToRole="SystemUser" />
+          <NavigationProperty Name="OrderDetails" Relationship="BaoHienDBModel.FK_OrderDetail_Order" FromRole="Order" ToRole="OrderDetail" />
+        </EntityType>
+        <EntityType Name="OrderDetail">
+          <Key>
+            <PropertyRef Name="OrderId" />
+            <PropertyRef Name="ProductId" />
+          </Key>
+          <Property Name="OrderId" Type="Int32" Nullable="false" />
+          <Property Name="ProductId" Type="Int32" Nullable="false" />
+          <Property Name="NumberUnit" Type="Int32" Nullable="false" />
+          <Property Name="Price" Type="Double" Nullable="false" />
+          <Property Name="Cost" Type="Double" Nullable="false" />
+          <Property Name="Tax" Type="Double" Nullable="false" />
+          <Property Name="Note" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <NavigationProperty Name="Order" Relationship="BaoHienDBModel.FK_OrderDetail_Order" FromRole="OrderDetail" ToRole="Order" />
+          <NavigationProperty Name="Product" Relationship="BaoHienDBModel.FK_OrderDetail_Product" FromRole="OrderDetail" ToRole="Product" />
+        </EntityType>
+        <EntityType Name="Price">
+          <Key>
+            <PropertyRef Name="ProductId" />
+            <PropertyRef Name="UpdatedDate" />
+          </Key>
+          <Property Name="ProductId" Type="Int32" Nullable="false" />
+          <Property Name="Price1" Type="Double" Nullable="false" />
+          <Property Name="UpdatedDate" Type="DateTime" Nullable="false" />
+          <NavigationProperty Name="Product" Relationship="BaoHienDBModel.FK_Price_Product" FromRole="Price" ToRole="Product" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="ProductId" />
+          </Key>
+          <Property Name="ProductId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProductCode" Type="String" Nullable="false" MaxLength="25" Unicode="false" FixedLength="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
+          <Property Name="BaseUnit" Type="Int32" />
+          <Property Name="ProductType" Type="Int32" Nullable="false" />
+          <Property Name="Status" Type="Int32" />
+          <NavigationProperty Name="MaterialInStocks" Relationship="BaoHienDBModel.FK_MaterialInStock_Product" FromRole="Product" ToRole="MaterialInStock" />
+          <NavigationProperty Name="MeasurementUnit" Relationship="BaoHienDBModel.FK_Product_MeasurementUnit" FromRole="Product" ToRole="MeasurementUnit" />
+          <NavigationProperty Name="OrderDetails" Relationship="BaoHienDBModel.FK_OrderDetail_Product" FromRole="Product" ToRole="OrderDetail" />
+          <NavigationProperty Name="Prices" Relationship="BaoHienDBModel.FK_Price_Product" FromRole="Product" ToRole="Price" />
+          <NavigationProperty Name="ProductType1" Relationship="BaoHienDBModel.FK_Product_ProductType" FromRole="Product" ToRole="ProductType" />
+          <NavigationProperty Name="ProductAttributes" Relationship="BaoHienDBModel.FK_ProductAttribute_Product" FromRole="Product" ToRole="ProductAttribute" />
+          <NavigationProperty Name="ProductInStocks" Relationship="BaoHienDBModel.FK_ProductInStock_Product" FromRole="Product" ToRole="ProductInStock" />
+          <NavigationProperty Name="ProductionRequestDetails" Relationship="BaoHienDBModel.FK_ProductionRequestDetail_Product" FromRole="Product" ToRole="ProductionRequestDetail" />
+        </EntityType>
+        <EntityType Name="ProductAttribute">
+          <Key>
+            <PropertyRef Name="ProductId" />
+            <PropertyRef Name="AttributeId" />
+          </Key>
+          <Property Name="ProductId" Type="Int32" Nullable="false" />
+          <Property Name="AttributeId" Type="Int32" Nullable="false" />
+          <Property Name="Value" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <NavigationProperty Name="Attribute" Relationship="BaoHienDBModel.FK_ProductAttribute_Attribute" FromRole="ProductAttribute" ToRole="Attribute" />
+          <NavigationProperty Name="Product" Relationship="BaoHienDBModel.FK_ProductAttribute_Product" FromRole="ProductAttribute" ToRole="Product" />
+        </EntityType>
+        <EntityType Name="ProductInStock">
+          <Key>
+            <PropertyRef Name="ProductId" />
+            <PropertyRef Name="LatestUpdate" />
+          </Key>
+          <Property Name="ProductId" Type="Int32" Nullable="false" />
+          <Property Name="NumberOfItem" Type="Int32" Nullable="false" />
+          <Property Name="LatestUpdate" Type="DateTime" Nullable="false" />
+          <Property Name="Note" Type="String" MaxLength="250" Unicode="false" FixedLength="false" />
+          <NavigationProperty Name="Product" Relationship="BaoHienDBModel.FK_ProductInStock_Product" FromRole="ProductInStock" ToRole="Product" />
+        </EntityType>
+        <EntityType Name="ProductionRequest">
+          <Key>
+            <PropertyRef Name="ReqId" />
+          </Key>
+          <Property Name="ReqId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ReqCode" Type="String" MaxLength="25" Unicode="false" FixedLength="false" />
+          <Property Name="RequestedDate" Type="Int32" />
+          <Property Name="RequestedBy" Type="String" MaxLength="25" Unicode="false" FixedLength="false" />
+          <NavigationProperty Name="ProductionRequestDetails" Relationship="BaoHienDBModel.FK_ProductionRequestDetail_ProductionRequest" FromRole="ProductionRequest" ToRole="ProductionRequestDetail" />
+        </EntityType>
+        <EntityType Name="ProductionRequestDetail">
+          <Key>
+            <PropertyRef Name="ReqId" />
+            <PropertyRef Name="ProductId" />
+          </Key>
+          <Property Name="ReqId" Type="Int32" Nullable="false" />
+          <Property Name="ProductId" Type="Int32" Nullable="false" />
+          <Property Name="NumberUnit" Type="Int32" />
+          <Property Name="Origin" Type="Int16" />
+          <NavigationProperty Name="Product" Relationship="BaoHienDBModel.FK_ProductionRequestDetail_Product" FromRole="ProductionRequestDetail" ToRole="Product" />
+          <NavigationProperty Name="ProductionRequest" Relationship="BaoHienDBModel.FK_ProductionRequestDetail_ProductionRequest" FromRole="ProductionRequestDetail" ToRole="ProductionRequest" />
+        </EntityType>
+        <EntityType Name="ProductType">
+          <Key>
+            <PropertyRef Name="ProductTypeId" />
+          </Key>
+          <Property Name="ProductTypeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="Description" Type="String" MaxLength="10" Unicode="true" FixedLength="true" />
+          <Property Name="TypeCode" Type="String" Nullable="false" MaxLength="25" Unicode="false" FixedLength="false" />
+          <NavigationProperty Name="Products" Relationship="BaoHienDBModel.FK_Product_ProductType" FromRole="ProductType" ToRole="Product" />
+        </EntityType>
+        <EntityType Name="SystemUser">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="username" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="password" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="Status" Type="Int16" />
+          <Property Name="Type" Type="Int16" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <NavigationProperty Name="Orders" Relationship="BaoHienDBModel.FK_Order_SystemUser" FromRole="SystemUser" ToRole="Order" />
+        </EntityType>
+        <Association Name="FK_ProductAttribute_Attribute">
+          <End Role="Attribute" Type="BaoHienDBModel.Attribute" Multiplicity="1" />
+          <End Role="ProductAttribute" Type="BaoHienDBModel.ProductAttribute" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Attribute">
+              <PropertyRef Name="AttributeId" />
+            </Principal>
+            <Dependent Role="ProductAttribute">
+              <PropertyRef Name="AttributeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Customer_Employee">
+          <End Role="Employee" Type="BaoHienDBModel.Employee" Multiplicity="0..1" />
+          <End Role="Customer" Type="BaoHienDBModel.Customer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmployeeId" />
+            </Principal>
+            <Dependent Role="Customer">
+              <PropertyRef Name="SalerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order_Customer">
+          <End Role="Customer" Type="BaoHienDBModel.Customer" Multiplicity="1" />
+          <End Role="Order" Type="BaoHienDBModel.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="CustId" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="CustId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MaterialInStock_Product">
+          <End Role="Product" Type="BaoHienDBModel.Product" Multiplicity="1" />
+          <End Role="MaterialInStock" Type="BaoHienDBModel.MaterialInStock" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="ProductId" />
+            </Principal>
+            <Dependent Role="MaterialInStock">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Product_MeasurementUnit">
+          <End Role="MeasurementUnit" Type="BaoHienDBModel.MeasurementUnit" Multiplicity="0..1" />
+          <End Role="Product" Type="BaoHienDBModel.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MeasurementUnit">
+              <PropertyRef Name="UnitId" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="BaseUnit" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order_SystemUser">
+          <End Role="SystemUser" Type="BaoHienDBModel.SystemUser" Multiplicity="1" />
+          <End Role="Order" Type="BaoHienDBModel.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SystemUser">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="CreateBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderDetail_Order">
+          <End Role="Order" Type="BaoHienDBModel.Order" Multiplicity="1" />
+          <End Role="OrderDetail" Type="BaoHienDBModel.OrderDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Order">
+              <PropertyRef Name="OrderId" />
+            </Principal>
+            <Dependent Role="OrderDetail">
+              <PropertyRef Name="OrderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderDetail_Product">
+          <End Role="Product" Type="BaoHienDBModel.Product" Multiplicity="1" />
+          <End Role="OrderDetail" Type="BaoHienDBModel.OrderDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="ProductId" />
+            </Principal>
+            <Dependent Role="OrderDetail">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Price_Product">
+          <End Role="Product" Type="BaoHienDBModel.Product" Multiplicity="1" />
+          <End Role="Price" Type="BaoHienDBModel.Price" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="ProductId" />
+            </Principal>
+            <Dependent Role="Price">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Product_ProductType">
+          <End Role="ProductType" Type="BaoHienDBModel.ProductType" Multiplicity="1" />
+          <End Role="Product" Type="BaoHienDBModel.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductType">
+              <PropertyRef Name="ProductTypeId" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="ProductType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProductAttribute_Product">
+          <End Role="Product" Type="BaoHienDBModel.Product" Multiplicity="1" />
+          <End Role="ProductAttribute" Type="BaoHienDBModel.ProductAttribute" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="ProductId" />
+            </Principal>
+            <Dependent Role="ProductAttribute">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProductInStock_Product">
+          <End Role="Product" Type="BaoHienDBModel.Product" Multiplicity="1" />
+          <End Role="ProductInStock" Type="BaoHienDBModel.ProductInStock" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="ProductId" />
+            </Principal>
+            <Dependent Role="ProductInStock">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProductionRequestDetail_Product">
+          <End Role="Product" Type="BaoHienDBModel.Product" Multiplicity="1" />
+          <End Role="ProductionRequestDetail" Type="BaoHienDBModel.ProductionRequestDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="ProductId" />
+            </Principal>
+            <Dependent Role="ProductionRequestDetail">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProductionRequestDetail_ProductionRequest">
+          <End Role="ProductionRequest" Type="BaoHienDBModel.ProductionRequest" Multiplicity="1" />
+          <End Role="ProductionRequestDetail" Type="BaoHienDBModel.ProductionRequestDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductionRequest">
+              <PropertyRef Name="ReqId" />
+            </Principal>
+            <Dependent Role="ProductionRequestDetail">
+              <PropertyRef Name="ReqId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="BaoHienDBModelStoreContainer" CdmEntityContainer="BaoHienDBEntities">
+          <EntitySetMapping Name="Attributes"><EntityTypeMapping TypeName="BaoHienDBModel.Attribute"><MappingFragment StoreEntitySet="Attribute">
+            <ScalarProperty Name="AttributeId" ColumnName="AttributeId" />
+            <ScalarProperty Name="Name" ColumnName="Name" />
+            <ScalarProperty Name="Description" ColumnName="Description" />
+            <ScalarProperty Name="AttributeCode" ColumnName="AttributeCode" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="Customers"><EntityTypeMapping TypeName="BaoHienDBModel.Customer"><MappingFragment StoreEntitySet="Customer">
+            <ScalarProperty Name="CustId" ColumnName="CustId" />
+            <ScalarProperty Name="Name" ColumnName="Name" />
+            <ScalarProperty Name="CustCode" ColumnName="CustCode" />
+            <ScalarProperty Name="Address" ColumnName="Address" />
+            <ScalarProperty Name="Phone" ColumnName="Phone" />
+            <ScalarProperty Name="BankAcc" ColumnName="BankAcc" />
+            <ScalarProperty Name="BankName" ColumnName="BankName" />
+            <ScalarProperty Name="ContactPerson" ColumnName="ContactPerson" />
+            <ScalarProperty Name="ContactPersonPhone" ColumnName="ContactPersonPhone" />
+            <ScalarProperty Name="ContactPersonEmail" ColumnName="ContactPersonEmail" />
+            <ScalarProperty Name="Email" ColumnName="Email" />
+            <ScalarProperty Name="Fax" ColumnName="Fax" />
+            <ScalarProperty Name="Description" ColumnName="Description" />
+            <ScalarProperty Name="Status" ColumnName="Status" />
+            <ScalarProperty Name="SalerId" ColumnName="SalerId" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="Employees"><EntityTypeMapping TypeName="BaoHienDBModel.Employee"><MappingFragment StoreEntitySet="Employee">
+            <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
+            <ScalarProperty Name="Code" ColumnName="Code" />
+            <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+            <ScalarProperty Name="LastName" ColumnName="LastName" />
+            <ScalarProperty Name="MiddleName" ColumnName="MiddleName" />
+            <ScalarProperty Name="NickName" ColumnName="NickName" />
+            <ScalarProperty Name="Address" ColumnName="Address" />
+            <ScalarProperty Name="Phone" ColumnName="Phone" />
+            <ScalarProperty Name="MobilePhone" ColumnName="MobilePhone" />
+            <ScalarProperty Name="Type" ColumnName="Type" />
+            <ScalarProperty Name="Description" ColumnName="Description" />
+            <ScalarProperty Name="Status" ColumnName="Status" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="MaterialInStocks"><EntityTypeMapping TypeName="BaoHienDBModel.MaterialInStock"><MappingFragment StoreEntitySet="MaterialInStock">
+            <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+            <ScalarProperty Name="NumberOfItem" ColumnName="NumberOfItem" />
+            <ScalarProperty Name="LatestUpdate" ColumnName="LatestUpdate" />
+            <ScalarProperty Name="Note" ColumnName="Note" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="MeasurementUnits"><EntityTypeMapping TypeName="BaoHienDBModel.MeasurementUnit"><MappingFragment StoreEntitySet="MeasurementUnit">
+            <ScalarProperty Name="UnitId" ColumnName="UnitId" />
+            <ScalarProperty Name="Name" ColumnName="Name" />
+            <ScalarProperty Name="Description" ColumnName="Description" />
+            <ScalarProperty Name="UnitCode" ColumnName="UnitCode" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="Orders"><EntityTypeMapping TypeName="BaoHienDBModel.Order"><MappingFragment StoreEntitySet="Order">
+            <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+            <ScalarProperty Name="OrderCode" ColumnName="OrderCode" />
+            <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+            <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+            <ScalarProperty Name="CustId" ColumnName="CustId" />
+            <ScalarProperty Name="Total" ColumnName="Total" />
+            <ScalarProperty Name="Note" ColumnName="Note" />
+            <ScalarProperty Name="VAT" ColumnName="VAT" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="OrderDetails"><EntityTypeMapping TypeName="BaoHienDBModel.OrderDetail"><MappingFragment StoreEntitySet="OrderDetail">
+            <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+            <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+            <ScalarProperty Name="NumberUnit" ColumnName="NumberUnit" />
+            <ScalarProperty Name="Price" ColumnName="Price" />
+            <ScalarProperty Name="Cost" ColumnName="Cost" />
+            <ScalarProperty Name="Tax" ColumnName="Tax" />
+            <ScalarProperty Name="Note" ColumnName="Note" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="Prices"><EntityTypeMapping TypeName="BaoHienDBModel.Price"><MappingFragment StoreEntitySet="Price">
+            <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+            <ScalarProperty Name="Price1" ColumnName="Price" />
+            <ScalarProperty Name="UpdatedDate" ColumnName="UpdatedDate" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="Products"><EntityTypeMapping TypeName="BaoHienDBModel.Product"><MappingFragment StoreEntitySet="Product">
+            <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+            <ScalarProperty Name="ProductCode" ColumnName="ProductCode" />
+            <ScalarProperty Name="Name" ColumnName="Name" />
+            <ScalarProperty Name="Description" ColumnName="Description" />
+            <ScalarProperty Name="BaseUnit" ColumnName="BaseUnit" />
+            <ScalarProperty Name="ProductType" ColumnName="ProductType" />
+            <ScalarProperty Name="Status" ColumnName="Status" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="ProductAttributes"><EntityTypeMapping TypeName="BaoHienDBModel.ProductAttribute"><MappingFragment StoreEntitySet="ProductAttribute">
+            <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+            <ScalarProperty Name="AttributeId" ColumnName="AttributeId" />
+            <ScalarProperty Name="Value" ColumnName="Value" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="ProductInStocks"><EntityTypeMapping TypeName="BaoHienDBModel.ProductInStock"><MappingFragment StoreEntitySet="ProductInStock">
+            <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+            <ScalarProperty Name="NumberOfItem" ColumnName="NumberOfItem" />
+            <ScalarProperty Name="LatestUpdate" ColumnName="LatestUpdate" />
+            <ScalarProperty Name="Note" ColumnName="Note" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="ProductionRequests"><EntityTypeMapping TypeName="BaoHienDBModel.ProductionRequest"><MappingFragment StoreEntitySet="ProductionRequest">
+            <ScalarProperty Name="ReqId" ColumnName="ReqId" />
+            <ScalarProperty Name="ReqCode" ColumnName="ReqCode" />
+            <ScalarProperty Name="RequestedDate" ColumnName="RequestedDate" />
+            <ScalarProperty Name="RequestedBy" ColumnName="RequestedBy" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="ProductionRequestDetails"><EntityTypeMapping TypeName="BaoHienDBModel.ProductionRequestDetail"><MappingFragment StoreEntitySet="ProductionRequestDetail">
+            <ScalarProperty Name="ReqId" ColumnName="ReqId" />
+            <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+            <ScalarProperty Name="NumberUnit" ColumnName="NumberUnit" />
+            <ScalarProperty Name="Origin" ColumnName="Origin" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="ProductTypes"><EntityTypeMapping TypeName="BaoHienDBModel.ProductType"><MappingFragment StoreEntitySet="ProductType">
+            <ScalarProperty Name="ProductTypeId" ColumnName="ProductTypeId" />
+            <ScalarProperty Name="Name" ColumnName="Name" />
+            <ScalarProperty Name="Description" ColumnName="Description" />
+            <ScalarProperty Name="TypeCode" ColumnName="TypeCode" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="SystemUsers"><EntityTypeMapping TypeName="BaoHienDBModel.SystemUser"><MappingFragment StoreEntitySet="SystemUser">
+            <ScalarProperty Name="UserId" ColumnName="UserId" />
+            <ScalarProperty Name="username" ColumnName="username" />
+            <ScalarProperty Name="password" ColumnName="password" />
+            <ScalarProperty Name="Status" ColumnName="Status" />
+            <ScalarProperty Name="Type" ColumnName="Type" />
+            <ScalarProperty Name="Name" ColumnName="Name" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="BaoHienADM">
+        <EntityTypeShape EntityType="BaoHienDBModel.Attribute" Width="1.5" PointX="6" PointY="3.125" Height="1.7566536458333335" IsExpanded="true" />
+        <EntityTypeShape EntityType="BaoHienDBModel.Customer" Width="1.5" PointX="3.75" PointY="19.75" Height="3.7288216145833317" IsExpanded="true" />
+        <EntityTypeShape EntityType="BaoHienDBModel.Employee" Width="1.5" PointX="1.5" PointY="20.125" Height="3.0714322916666674" IsExpanded="true" />
+        <EntityTypeShape EntityType="BaoHienDBModel.MaterialInStock" Width="1.5" PointX="5.25" PointY="5.75" Height="1.7566536458333335" IsExpanded="true" />
+        <EntityTypeShape EntityType="BaoHienDBModel.MeasurementUnit" Width="1.5" PointX="0.75" PointY="8.125" Height="1.7566536458333353" IsExpanded="true" />
+        <EntityTypeShape EntityType="BaoHienDBModel.Order" Width="1.5" PointX="6" PointY="21.625" Height="2.7427376302083317" IsExpanded="true" />
+        <EntityTypeShape EntityType="BaoHienDBModel.OrderDetail" Width="1.5" PointX="8.25" PointY="7.875" Height="2.4140429687499996" IsExpanded="true" />
+        <EntityTypeShape EntityType="BaoHienDBModel.Price" Width="1.5" PointX="5.25" PointY="11.375" Height="1.5923063151041674" IsExpanded="true" />
+        <EntityTypeShape EntityType="BaoHienDBModel.Product" Width="1.5" PointX="3" PointY="7.375" Height="3.4001269531249996" IsExpanded="true" />
+        <EntityTypeShape EntityType="BaoHienDBModel.ProductAttribute" Width="1.5" PointX="8.25" PointY="5.125" Height="1.7566536458333317" IsExpanded="true" />
+        <EntityTypeShape EntityType="BaoHienDBModel.ProductInStock" Width="1.5" PointX="5.25" PointY="16.25" Height="1.7566536458333388" IsExpanded="true" />
+        <EntityTypeShape EntityType="BaoHienDBModel.ProductionRequest" Width="1.5" PointX="6" PointY="19.125" Height="1.7566536458333317" IsExpanded="true" />
+        <EntityTypeShape EntityType="BaoHienDBModel.ProductionRequestDetail" Width="1.5" PointX="8.25" PointY="11.125" Height="1.921000976562496" IsExpanded="true" />
+        <EntityTypeShape EntityType="BaoHienDBModel.ProductType" Width="1.5" PointX="0.75" PointY="5.125" Height="1.7566536458333388" IsExpanded="true" />
+        <EntityTypeShape EntityType="BaoHienDBModel.SystemUser" Width="1.5" PointX="3.75" PointY="24.25" Height="2.0853483072916674" IsExpanded="true" />
+        <AssociationConnector Association="BaoHienDBModel.FK_ProductAttribute_Attribute" ManuallyRouted="false">
+          <ConnectorPoint PointX="7.5" PointY="4.0033268229166667" />
+          <ConnectorPoint PointX="9" PointY="4.0033268229166667" />
+          <ConnectorPoint PointX="9" PointY="5.125" />
+        </AssociationConnector>
+        <AssociationConnector Association="BaoHienDBModel.FK_Customer_Employee" ManuallyRouted="false">
+          <ConnectorPoint PointX="3" PointY="21.660716145833334" />
+          <ConnectorPoint PointX="3.75" PointY="21.660716145833334" />
+        </AssociationConnector>
+        <AssociationConnector Association="BaoHienDBModel.FK_Order_Customer" ManuallyRouted="false">
+          <ConnectorPoint PointX="5.25" PointY="22.551910807291666" />
+          <ConnectorPoint PointX="6" PointY="22.551910807291666" />
+        </AssociationConnector>
+        <AssociationConnector Association="BaoHienDBModel.FK_MaterialInStock_Product" ManuallyRouted="false">
+          <ConnectorPoint PointX="4.5" PointY="9.1408907994791662" />
+          <ConnectorPoint PointX="6" PointY="9.1408907994791662" />
+          <ConnectorPoint PointX="6" PointY="7.5066536458333335" />
+        </AssociationConnector>
+        <AssociationConnector Association="BaoHienDBModel.FK_Product_MeasurementUnit" ManuallyRouted="false">
+          <ConnectorPoint PointX="2.25" PointY="9.0033268229166676" />
+          <ConnectorPoint PointX="3" PointY="9.0033268229166676" />
+        </AssociationConnector>
+        <AssociationConnector Association="BaoHienDBModel.FK_Order_SystemUser" ManuallyRouted="false">
+          <ConnectorPoint PointX="5.25" PointY="25.351543468750002" />
+          <ConnectorPoint PointX="6.75" PointY="25.351543468750002" />
+          <ConnectorPoint PointX="6.75" PointY="24.367737630208332" />
+        </AssociationConnector>
+        <AssociationConnector Association="BaoHienDBModel.FK_OrderDetail_Order" ManuallyRouted="false">
+          <ConnectorPoint PointX="7.5" PointY="21.626152846153843" />
+          <ConnectorPoint PointX="7.875" PointY="21.251152846153843" />
+          <ConnectorPoint PointX="7.875" PointY="9.082021484375" />
+          <ConnectorPoint PointX="8.25" PointY="9.082021484375" />
+        </AssociationConnector>
+        <AssociationConnector Association="BaoHienDBModel.FK_OrderDetail_Product" ManuallyRouted="false">
+          <ConnectorPoint PointX="4.5" PointY="8.416010742187499" />
+          <ConnectorPoint PointX="5.916666666666667" PointY="8.416010742187499" />
+          <ConnectorPoint PointX="6.083333333333333" PointY="8.416010742187499" />
+          <ConnectorPoint PointX="8.25" PointY="8.416010742187499" />
+        </AssociationConnector>
+        <AssociationConnector Association="BaoHienDBModel.FK_Price_Product" ManuallyRouted="false">
+          <ConnectorPoint PointX="3.75" PointY="10.775126953125" />
+          <ConnectorPoint PointX="3.75" PointY="12.171153157552084" />
+          <ConnectorPoint PointX="4.0729191666666669" PointY="12.171153157552084" />
+          <ConnectorPoint PointX="4.2395858333333329" PointY="12.171153157552084" />
+          <ConnectorPoint PointX="5.25" PointY="12.171153157552084" />
+        </AssociationConnector>
+        <AssociationConnector Association="BaoHienDBModel.FK_Product_ProductType" ManuallyRouted="false">
+          <ConnectorPoint PointX="2.25" PointY="6.0033268229166694" />
+          <ConnectorPoint PointX="3.75" PointY="6.0033268229166694" />
+          <ConnectorPoint PointX="3.75" PointY="7.375" />
+        </AssociationConnector>
+        <AssociationConnector Association="BaoHienDBModel.FK_ProductAttribute_Product" ManuallyRouted="false">
+          <ConnectorPoint PointX="4.1562525" PointY="7.375" />
+          <ConnectorPoint PointX="4.1562525" PointY="5.40625" />
+          <ConnectorPoint PointX="8.25" PointY="5.40625" />
+        </AssociationConnector>
+        <AssociationConnector Association="BaoHienDBModel.FK_ProductInStock_Product" ManuallyRouted="false">
+          <ConnectorPoint PointX="4.1562525" PointY="10.775126953125" />
+          <ConnectorPoint PointX="4.1562525" PointY="17.128326822916669" />
+          <ConnectorPoint PointX="5.25" PointY="17.128326822916669" />
+        </AssociationConnector>
+        <AssociationConnector Association="BaoHienDBModel.FK_ProductionRequestDetail_Product" ManuallyRouted="false">
+          <ConnectorPoint PointX="3.3437475" PointY="10.775126953125" />
+          <ConnectorPoint PointX="3.3437475" PointY="11.21875" />
+          <ConnectorPoint PointX="3.6666666666666665" PointY="11.21875" />
+          <ConnectorPoint PointX="3.8333333333333335" PointY="11.21875" />
+          <ConnectorPoint PointX="4.0729191666666669" PointY="11.21875" />
+          <ConnectorPoint PointX="4.2395858333333329" PointY="11.21875" />
+          <ConnectorPoint PointX="7.791666666666667" PointY="11.21875" />
+          <ConnectorPoint PointX="7.958333333333333" PointY="11.21875" />
+          <ConnectorPoint PointX="8.25" PointY="11.21875" />
+        </AssociationConnector>
+        <AssociationConnector Association="BaoHienDBModel.FK_ProductionRequestDetail_ProductionRequest" ManuallyRouted="false">
+          <ConnectorPoint PointX="7.15625" PointY="19.125" />
+          <ConnectorPoint PointX="7.15625" PointY="11.2500025" />
+          <ConnectorPoint PointX="7.791666666666667" PointY="11.2500025" />
+          <ConnectorPoint PointX="7.958333333333333" PointY="11.2500025" />
+          <ConnectorPoint PointX="8.25" PointY="11.2500025" />
+        </AssociationConnector>
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>
