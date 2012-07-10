@@ -8,8 +8,8 @@
     <ProjectGuid>{DF19CFFF-1701-4336-AAC0-89DAF906A799}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>UI</RootNamespace>
-    <AssemblyName>UI</AssemblyName>
+    <RootNamespace>BaoHien.UI</RootNamespace>
+    <AssemblyName>BaoHien.UI</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
@@ -46,6 +46,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="UI\Login.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Login.Designer.cs">
+      <DependentUpon>Login.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\Main.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -54,6 +60,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="UI\Login.resx">
+      <DependentUpon>Login.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
     </EmbeddedResource>
@@ -65,6 +74,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -82,8 +92,20 @@
     <Folder Include="Services\ProductionRequest\" />
     <Folder Include="Services\Product\" />
     <Folder Include="Services\User\" />
+    <Folder Include="UI\Configuration\" />
+    <Folder Include="UI\Customer\" />
+    <Folder Include="UI\Order\" />
+    <Folder Include="UI\Other\" />
+    <Folder Include="UI\ProductionRequest\" />
+    <Folder Include="UI\Product\" />
+    <Folder Include="UI\Report\" />
+    <Folder Include="UI\User\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BaoHienServices\BaoHienServices.csproj">
+      <Project>{B4DD2976-5B00-459A-B955-32AB664998B3}</Project>
+      <Name>BaoHienServices</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DAL\DAL.csproj">
       <Project>{E20ACD5C-C921-45BB-BC44-D227D734C34A}</Project>
       <Name>DAL</Name>

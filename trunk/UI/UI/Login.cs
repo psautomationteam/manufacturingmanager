@@ -9,12 +9,12 @@ using System.Windows.Forms;
 
 namespace BaoHien.UI
 {
-    public partial class Main : Form
+    public partial class Login : Form
     {
-        public Main()
+        public Login()
         {
             InitializeComponent();
         }
-        
+                
     }
 }
