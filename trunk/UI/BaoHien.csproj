@@ -46,6 +46,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Services\Base\BaseService.cs" />
+    <Compile Include="Services\Product\ProductService.cs" />
+    <Compile Include="Services\Product\ProductTypeService.cs" />
     <Compile Include="UI\Login.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -96,10 +99,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Helper\" />
     <Folder Include="Services\Order\" />
     <Folder Include="Services\ProductionRequest\" />
-    <Folder Include="Services\Product\" />
     <Folder Include="Services\User\" />
     <Folder Include="UI\Configuration\" />
     <Folder Include="UI\Customer\" />
