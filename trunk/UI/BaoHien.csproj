@@ -63,6 +63,12 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UI\Product\AddProductType.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Product\AddProductType.Designer.cs">
+      <DependentUpon>AddProductType.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\Product\ProductType.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -85,6 +91,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="UI\Product\AddProductType.resx">
+      <DependentUpon>AddProductType.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\Product\ProductType.resx">
       <DependentUpon>ProductType.cs</DependentUpon>
     </EmbeddedResource>
