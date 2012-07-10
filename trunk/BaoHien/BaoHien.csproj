@@ -48,21 +48,13 @@
   <ItemGroup>
     <Compile Include="Services\Base\BaseService.cs" />
     <Compile Include="Services\Products\ProductService.cs" />
-    <Compile Include="Services\Products\ProductTypeService.cs" />
-    <Compile Include="UI\Login.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\Login.Designer.cs">
-      <DependentUpon>Login.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Main.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\Main.Designer.cs">
-      <DependentUpon>Main.cs</DependentUpon>
-    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\Products\ProductTypeService.cs" />
+    <Compile Include="UI\Main.cs" />
+    <Compile Include="UI\Main.designer.cs">
+      <DependentUpon>Main.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\Product\AddProductType.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -81,12 +73,10 @@
     <Compile Include="UI\Product\ProductType.Designer.cs">
       <DependentUpon>ProductType.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="UI\Login.resx">
+    <Compile Include="UI\User\Login.cs" />
+    <Compile Include="UI\User\Login.designer.cs">
       <DependentUpon>Login.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI\Main.resx">
-      <DependentUpon>Main.cs</DependentUpon>
-    </EmbeddedResource>
+    </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -97,6 +87,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="UI\Main.resx">
+      <DependentUpon>Main.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\Product\AddProductType.resx">
       <DependentUpon>AddProductType.cs</DependentUpon>
     </EmbeddedResource>
@@ -105,6 +98,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Product\ProductType.resx">
       <DependentUpon>ProductType.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\User\Login.resx">
+      <DependentUpon>Login.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -126,7 +122,6 @@
     <Folder Include="UI\Other\" />
     <Folder Include="UI\ProductionRequest\" />
     <Folder Include="UI\Report\" />
-    <Folder Include="UI\User\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DAL\DAL.csproj">

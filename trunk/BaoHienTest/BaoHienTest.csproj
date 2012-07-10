@@ -50,13 +50,13 @@
     <Compile Include="ProductTypeTest.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BaoHien\BaoHien.csproj">
+      <Project>{DF19CFFF-1701-4336-AAC0-89DAF906A799}</Project>
+      <Name>BaoHien</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DAL\DAL.csproj">
       <Project>{E20ACD5C-C921-45BB-BC44-D227D734C34A}</Project>
       <Name>DAL</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\UI\BaoHien.csproj">
-      <Project>{DF19CFFF-1701-4336-AAC0-89DAF906A799}</Project>
-      <Name>BaoHien</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
