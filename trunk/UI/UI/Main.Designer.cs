@@ -32,6 +32,7 @@
             this.menuMain = new System.Windows.Forms.MenuStrip();
             this.menuFile = new System.Windows.Forms.ToolStripMenuItem();
             this.menuExit = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuLogout = new System.Windows.Forms.ToolStripMenuItem();
             this.menuEntity = new System.Windows.Forms.ToolStripMenuItem();
             this.menuProductType = new System.Windows.Forms.ToolStripMenuItem();
             this.menuProduct = new System.Windows.Forms.ToolStripMenuItem();
@@ -41,29 +42,28 @@
             this.menuConfiguration = new System.Windows.Forms.ToolStripMenuItem();
             this.menuAttribute = new System.Windows.Forms.ToolStripMenuItem();
             this.menuMeasurementUnit = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuEmployee = new System.Windows.Forms.ToolStripMenuItem();
             this.menuReport = new System.Windows.Forms.ToolStripMenuItem();
             this.menuInventory = new System.Windows.Forms.ToolStripMenuItem();
             this.menuInvoice = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuSystem = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuSystemUser = new System.Windows.Forms.ToolStripMenuItem();
             this.menuHelp = new System.Windows.Forms.ToolStripMenuItem();
             this.menuGuide = new System.Windows.Forms.ToolStripMenuItem();
             this.menuAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.tsbAddOrder = new System.Windows.Forms.ToolStripButton();
-            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.lblMessage = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
-            this.menuSystem = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuEmployee = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuSystemUser = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.tsbAddProductionRequest = new System.Windows.Forms.ToolStripButton();
             this.toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
             this.tsbAddProduct = new System.Windows.Forms.ToolStripButton();
             this.toolStripLabel3 = new System.Windows.Forms.ToolStripLabel();
-            this.pnlMain = new System.Windows.Forms.Panel();
             this.tsbAddCustomer = new System.Windows.Forms.ToolStripButton();
             this.toolStripLabel4 = new System.Windows.Forms.ToolStripLabel();
-            this.menuLogout = new System.Windows.Forms.ToolStripMenuItem();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.lblMessage = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
+            this.pnlMain = new System.Windows.Forms.Panel();
             this.menuMain.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -88,8 +88,8 @@
             // menuFile
             // 
             this.menuFile.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.menuExit,
-            this.menuLogout});
+            this.menuLogout,
+            this.menuExit});
             this.menuFile.Name = "menuFile";
             this.menuFile.Size = new System.Drawing.Size(39, 20);
             this.menuFile.Text = "Tệp";
@@ -100,6 +100,15 @@
             this.menuExit.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F4)));
             this.menuExit.Size = new System.Drawing.Size(152, 22);
             this.menuExit.Text = "Đóng";
+            this.menuExit.Click += new System.EventHandler(this.menuExit_Click);
+            // 
+            // menuLogout
+            // 
+            this.menuLogout.Name = "menuLogout";
+            this.menuLogout.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F4)));
+            this.menuLogout.Size = new System.Drawing.Size(152, 22);
+            this.menuLogout.Text = "Thoát";
+            this.menuLogout.Click += new System.EventHandler(this.menuLogout_Click);
             // 
             // menuEntity
             // 
@@ -115,6 +124,7 @@
             this.menuProductType.Name = "menuProductType";
             this.menuProductType.Size = new System.Drawing.Size(152, 22);
             this.menuProductType.Text = "Loại Sản Phẩm";
+            this.menuProductType.Click += new System.EventHandler(this.menuProductType_Click);
             // 
             // menuProduct
             // 
@@ -158,14 +168,20 @@
             // menuAttribute
             // 
             this.menuAttribute.Name = "menuAttribute";
-            this.menuAttribute.Size = new System.Drawing.Size(152, 22);
+            this.menuAttribute.Size = new System.Drawing.Size(148, 22);
             this.menuAttribute.Text = "Thuộc tính SP";
             // 
             // menuMeasurementUnit
             // 
             this.menuMeasurementUnit.Name = "menuMeasurementUnit";
-            this.menuMeasurementUnit.Size = new System.Drawing.Size(152, 22);
+            this.menuMeasurementUnit.Size = new System.Drawing.Size(148, 22);
             this.menuMeasurementUnit.Text = "Đơn Vị Tính";
+            // 
+            // menuEmployee
+            // 
+            this.menuEmployee.Name = "menuEmployee";
+            this.menuEmployee.Size = new System.Drawing.Size(148, 22);
+            this.menuEmployee.Text = "Nhân Viên";
             // 
             // menuReport
             // 
@@ -188,6 +204,20 @@
             this.menuInvoice.Size = new System.Drawing.Size(225, 22);
             this.menuInvoice.Text = "Tổng Công Nợ";
             // 
+            // menuSystem
+            // 
+            this.menuSystem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuSystemUser});
+            this.menuSystem.Name = "menuSystem";
+            this.menuSystem.Size = new System.Drawing.Size(72, 20);
+            this.menuSystem.Text = "Hệ Thống";
+            // 
+            // menuSystemUser
+            // 
+            this.menuSystemUser.Name = "menuSystemUser";
+            this.menuSystemUser.Size = new System.Drawing.Size(139, 22);
+            this.menuSystemUser.Text = "Người Dùng";
+            // 
             // menuHelp
             // 
             this.menuHelp.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -200,13 +230,13 @@
             // menuGuide
             // 
             this.menuGuide.Name = "menuGuide";
-            this.menuGuide.Size = new System.Drawing.Size(152, 22);
+            this.menuGuide.Size = new System.Drawing.Size(135, 22);
             this.menuGuide.Text = "Hướng Dẫn";
             // 
             // menuAbout
             // 
             this.menuAbout.Name = "menuAbout";
-            this.menuAbout.Size = new System.Drawing.Size(152, 22);
+            this.menuAbout.Size = new System.Drawing.Size(135, 22);
             this.menuAbout.Text = "Phần Mềm";
             // 
             // toolStrip1
@@ -235,51 +265,6 @@
             this.tsbAddOrder.Name = "tsbAddOrder";
             this.tsbAddOrder.Size = new System.Drawing.Size(23, 22);
             this.tsbAddOrder.Text = "toolStripButton1";
-            // 
-            // statusStrip1
-            // 
-            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.lblMessage,
-            this.toolStripProgressBar1});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 690);
-            this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(1084, 22);
-            this.statusStrip1.TabIndex = 2;
-            this.statusStrip1.Text = "statusStrip1";
-            // 
-            // lblMessage
-            // 
-            this.lblMessage.Name = "lblMessage";
-            this.lblMessage.Size = new System.Drawing.Size(35, 17);
-            this.lblMessage.Text = "Done";
-            // 
-            // toolStripProgressBar1
-            // 
-            this.toolStripProgressBar1.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.toolStripProgressBar1.Name = "toolStripProgressBar1";
-            this.toolStripProgressBar1.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.toolStripProgressBar1.RightToLeftLayout = true;
-            this.toolStripProgressBar1.Size = new System.Drawing.Size(100, 16);
-            // 
-            // menuSystem
-            // 
-            this.menuSystem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.menuSystemUser});
-            this.menuSystem.Name = "menuSystem";
-            this.menuSystem.Size = new System.Drawing.Size(72, 20);
-            this.menuSystem.Text = "Hệ Thống";
-            // 
-            // menuEmployee
-            // 
-            this.menuEmployee.Name = "menuEmployee";
-            this.menuEmployee.Size = new System.Drawing.Size(152, 22);
-            this.menuEmployee.Text = "Nhân Viên";
-            // 
-            // menuSystemUser
-            // 
-            this.menuSystemUser.Name = "menuSystemUser";
-            this.menuSystemUser.Size = new System.Drawing.Size(152, 22);
-            this.menuSystemUser.Text = "Người Dùng";
             // 
             // toolStripLabel1
             // 
@@ -317,14 +302,6 @@
             this.toolStripLabel3.Size = new System.Drawing.Size(82, 22);
             this.toolStripLabel3.Text = "Tạo sản phẩm";
             // 
-            // pnlMain
-            // 
-            this.pnlMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlMain.Location = new System.Drawing.Point(0, 49);
-            this.pnlMain.Name = "pnlMain";
-            this.pnlMain.Size = new System.Drawing.Size(1084, 641);
-            this.pnlMain.TabIndex = 3;
-            // 
             // tsbAddCustomer
             // 
             this.tsbAddCustomer.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -340,12 +317,38 @@
             this.toolStripLabel4.Size = new System.Drawing.Size(103, 22);
             this.toolStripLabel4.Text = "Thêm khách hàng";
             // 
-            // menuLogout
+            // statusStrip1
             // 
-            this.menuLogout.Name = "menuLogout";
-            this.menuLogout.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F4)));
-            this.menuLogout.Size = new System.Drawing.Size(152, 22);
-            this.menuLogout.Text = "Thoát";
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.lblMessage,
+            this.toolStripProgressBar1});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 690);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(1084, 22);
+            this.statusStrip1.TabIndex = 2;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
+            // lblMessage
+            // 
+            this.lblMessage.Name = "lblMessage";
+            this.lblMessage.Size = new System.Drawing.Size(35, 17);
+            this.lblMessage.Text = "Done";
+            // 
+            // toolStripProgressBar1
+            // 
+            this.toolStripProgressBar1.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.toolStripProgressBar1.Name = "toolStripProgressBar1";
+            this.toolStripProgressBar1.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.toolStripProgressBar1.RightToLeftLayout = true;
+            this.toolStripProgressBar1.Size = new System.Drawing.Size(100, 16);
+            // 
+            // pnlMain
+            // 
+            this.pnlMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlMain.Location = new System.Drawing.Point(0, 49);
+            this.pnlMain.Name = "pnlMain";
+            this.pnlMain.Size = new System.Drawing.Size(1084, 641);
+            this.pnlMain.TabIndex = 3;
             // 
             // Main
             // 
