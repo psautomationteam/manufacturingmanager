@@ -120,10 +120,6 @@
     <Folder Include="UI\User\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BaoHienServices\BaoHienServices.csproj">
-      <Project>{B4DD2976-5B00-459A-B955-32AB664998B3}</Project>
-      <Name>BaoHienServices</Name>
-    </ProjectReference>
     <ProjectReference Include="..\DAL\DAL.csproj">
       <Project>{E20ACD5C-C921-45BB-BC44-D227D734C34A}</Project>
       <Name>DAL</Name>
