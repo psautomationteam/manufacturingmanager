@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using DAL;
 using System.Reflection;
-using DAL.Model;
 using BaoHienServices.Helper;
 namespace BaoHienServices
 {
     
-    public class BaseService
+    public class BaseService<TItem>
     {
         private Object retrieveObjectFromEntity<TItem>(TItem entity)
         {
@@ -28,25 +27,26 @@ namespace BaoHienServices
 
             return result;
         }
-        protected Entity OnGetItems<TItem>()
+        protected List<TItem> OnGetItems<TItem>()
         {
-            Entity entity = new Entity();
+            
+            List<TItem> list = null;
             try
             {
                 Type typeofClassWithGenericStaticMethod = typeof(BaoHienRepository);
                 MethodInfo methodInfo = typeofClassWithGenericStaticMethod.GetMethod("SelectAll", System.Reflection.BindingFlags.Static | BindingFlags.Public);
                 Type[] genericArguments = new Type[] { typeof(TItem) };
                 MethodInfo genericMethodInfo = methodInfo.MakeGenericMethod(genericArguments);
-                List<TItem> list = (List<TItem>)genericMethodInfo.Invoke(null, null);
+                list = (List<TItem>)genericMethodInfo.Invoke(null, null);
 
-                entity.Data = list.Where(item => !checkDeletedItems<TItem>(item)).ToList<TItem>();
+                list = list.Where(item => !checkDeletedItems<TItem>(item)).ToList<TItem>();
 
             }
             catch (Exception)
             {
 
             }
-            return entity;
+            return list;
         }
         private Boolean checkDeletedItems<TItem>(TItem item)
         {
@@ -64,20 +64,17 @@ namespace BaoHienServices
             return false;
         }
 
-        protected Entity OnGetItem<TItem>(string id)
+        protected TItem OnGetItem<TItem>(string id)
         {
-            Entity entity = new Entity();
+            TItem item = default(TItem);
             try
             {
                 Type typeofClassWithGenericStaticMethod = typeof(BaoHienRepository);
                 MethodInfo methodInfo = typeofClassWithGenericStaticMethod.GetMethod("SelectByPK", System.Reflection.BindingFlags.Static | BindingFlags.Public);
                 Type[] genericArguments = new Type[] { typeof(TItem) };
                 MethodInfo genericMethodInfo = methodInfo.MakeGenericMethod(genericArguments);
-                TItem item = (TItem)genericMethodInfo.Invoke(null, new object[] { id });
-                if (!checkDeletedItems<TItem>(item))
-                {
-                    entity.Data = item;
-                }
+                item = (TItem)genericMethodInfo.Invoke(null, new object[] { id });
+                
 
 
             }
@@ -85,7 +82,7 @@ namespace BaoHienServices
             {
 
             }
-            return entity;
+            return item;
         }
 
 
@@ -172,7 +169,7 @@ namespace BaoHienServices
             try
             {
                 Type type = typeof(TItem);
-                TItem item = (TItem)OnGetItem<TItem>(id).Data;
+                TItem item = (TItem)OnGetItem<TItem>(id);
                 if (type.GetProperties().Any(x => x.Name == Constant.DELETED_PROPERTY_NAME))
                 {
                     //soft delete

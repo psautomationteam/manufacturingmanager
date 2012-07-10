@@ -15,10 +15,7 @@ namespace BaoHienServices
         public ProductType GetProductType(System.Int32 id)
         {
             ProductType productType = null;
-            if (baoHienDBEntities != null)
-            {
-                productType = baoHienDBEntities.ProductTypes.Where<ProductType>(pt=>pt.ProductTypeId == id).Single();
-            }
+            
             return productType;
         }
         public ProductType AddProductType(ProductType productType)
