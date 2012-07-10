@@ -1,4 +1,4 @@
-﻿namespace UI
+﻿namespace BaoHien.UI
 {
     partial class Main
     {
