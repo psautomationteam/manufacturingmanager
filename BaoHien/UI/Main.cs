@@ -37,7 +37,18 @@ namespace BaoHien.UI
             main.ShowDialog();
             this.Close();
         }
+
+        private void menuProduct_Click(object sender, EventArgs e)
+        {
+            ProductList productList = new ProductList();
+            pnlMain.Controls.Clear();
+            pnlMain.Controls.Add(productList);
+        }
+
+
         #endregion 
+
+        
 
        
 

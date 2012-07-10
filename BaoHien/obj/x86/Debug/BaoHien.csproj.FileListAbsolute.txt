@@ -27,3 +27,18 @@ G:\Working\VS10\manufacturingmanager\BaoHien\obj\x86\Debug\GenerateResource.read
 G:\Working\VS10\manufacturingmanager\BaoHien\obj\x86\Debug\GenerateResource.write.1.tlog
 G:\Working\VS10\manufacturingmanager\BaoHien\obj\x86\Debug\BaoHien.UI.exe
 G:\Working\VS10\manufacturingmanager\BaoHien\obj\x86\Debug\BaoHien.UI.pdb
+C:\Users\bryanpham\Documents\Visual Studio 2010\Projects\BaoHienComp\manufacturingmanager\BaoHien\bin\Debug\BaoHien.UI.exe
+C:\Users\bryanpham\Documents\Visual Studio 2010\Projects\BaoHienComp\manufacturingmanager\BaoHien\bin\Debug\BaoHien.UI.pdb
+C:\Users\bryanpham\Documents\Visual Studio 2010\Projects\BaoHienComp\manufacturingmanager\BaoHien\bin\Debug\DAL.dll
+C:\Users\bryanpham\Documents\Visual Studio 2010\Projects\BaoHienComp\manufacturingmanager\BaoHien\bin\Debug\DAL.pdb
+C:\Users\bryanpham\Documents\Visual Studio 2010\Projects\BaoHienComp\manufacturingmanager\BaoHien\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\bryanpham\Documents\Visual Studio 2010\Projects\BaoHienComp\manufacturingmanager\BaoHien\obj\x86\Debug\BaoHien.UI.Properties.Resources.resources
+C:\Users\bryanpham\Documents\Visual Studio 2010\Projects\BaoHienComp\manufacturingmanager\BaoHien\obj\x86\Debug\BaoHien.UI.Main.resources
+C:\Users\bryanpham\Documents\Visual Studio 2010\Projects\BaoHienComp\manufacturingmanager\BaoHien\obj\x86\Debug\BaoHien.UI.AddProductType.resources
+C:\Users\bryanpham\Documents\Visual Studio 2010\Projects\BaoHienComp\manufacturingmanager\BaoHien\obj\x86\Debug\BaoHien.UI.ProductList.resources
+C:\Users\bryanpham\Documents\Visual Studio 2010\Projects\BaoHienComp\manufacturingmanager\BaoHien\obj\x86\Debug\BaoHien.UI.ucProductType.resources
+C:\Users\bryanpham\Documents\Visual Studio 2010\Projects\BaoHienComp\manufacturingmanager\BaoHien\obj\x86\Debug\BaoHien.UI.Login.resources
+C:\Users\bryanpham\Documents\Visual Studio 2010\Projects\BaoHienComp\manufacturingmanager\BaoHien\obj\x86\Debug\GenerateResource.read.1.tlog
+C:\Users\bryanpham\Documents\Visual Studio 2010\Projects\BaoHienComp\manufacturingmanager\BaoHien\obj\x86\Debug\GenerateResource.write.1.tlog
+C:\Users\bryanpham\Documents\Visual Studio 2010\Projects\BaoHienComp\manufacturingmanager\BaoHien\obj\x86\Debug\BaoHien.UI.exe
+C:\Users\bryanpham\Documents\Visual Studio 2010\Projects\BaoHienComp\manufacturingmanager\BaoHien\obj\x86\Debug\BaoHien.UI.pdb

@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace BaoHien.UI.UI.Product
+namespace BaoHien.UI
 {
     public partial class ProductList : UserControl
     {
