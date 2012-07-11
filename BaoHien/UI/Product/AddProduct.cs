@@ -11,6 +11,7 @@ using BaoHien.Services.Products;
 using BaoHien.Services.MeasurementUnits;
 using BaoHien.Services.Prices;
 using DAL.Helper;
+using BaoHien.Services.BaseAttributes;
 
 namespace BaoHien.UI
 {
@@ -89,7 +90,14 @@ namespace BaoHien.UI
                 cmbType.ValueMember = "Id";
 
             }
+            BaseAttributeService baseAttributeService = new BaseAttributeService();
+            List<BaseAttribute> baseAttributes = baseAttributeService.GetBaseAttributes();
+            if (baseAttributes != null)
+            {
+                
+                dgvBaseAttributes.DataSource = baseAttributes;
 
+            }
             
         }
     }
