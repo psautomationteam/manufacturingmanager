@@ -35,6 +35,7 @@
             this.txtDescription = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
+            this.txtPrice = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.cmbUnit = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
@@ -46,14 +47,13 @@
             this.txtName = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.dgvBaseAttributes = new System.Windows.Forms.DataGridView();
             this.btnAdd = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.lblErrorMessage = new System.Windows.Forms.Label();
-            this.txtPrice = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvBaseAttributes)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -138,6 +138,13 @@
             this.label6.Size = new System.Drawing.Size(29, 14);
             this.label6.TabIndex = 11;
             this.label6.Text = "VND";
+            // 
+            // txtPrice
+            // 
+            this.txtPrice.Location = new System.Drawing.Point(119, 83);
+            this.txtPrice.Name = "txtPrice";
+            this.txtPrice.Size = new System.Drawing.Size(140, 20);
+            this.txtPrice.TabIndex = 10;
             // 
             // label5
             // 
@@ -229,7 +236,7 @@
             // 
             // groupBox2
             // 
-            this.groupBox2.Controls.Add(this.dataGridView1);
+            this.groupBox2.Controls.Add(this.dgvBaseAttributes);
             this.groupBox2.Location = new System.Drawing.Point(1, 227);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(693, 182);
@@ -237,13 +244,13 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Cấu hình sản phẩm";
             // 
-            // dataGridView1
+            // dgvBaseAttributes
             // 
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(14, 22);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(658, 154);
-            this.dataGridView1.TabIndex = 0;
+            this.dgvBaseAttributes.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvBaseAttributes.Location = new System.Drawing.Point(14, 22);
+            this.dgvBaseAttributes.Name = "dgvBaseAttributes";
+            this.dgvBaseAttributes.Size = new System.Drawing.Size(658, 154);
+            this.dgvBaseAttributes.TabIndex = 0;
             // 
             // btnAdd
             // 
@@ -273,13 +280,6 @@
             this.lblErrorMessage.Size = new System.Drawing.Size(0, 14);
             this.lblErrorMessage.TabIndex = 3;
             // 
-            // txtPrice
-            // 
-            this.txtPrice.Location = new System.Drawing.Point(119, 83);
-            this.txtPrice.Name = "txtPrice";
-            this.txtPrice.Size = new System.Drawing.Size(140, 20);
-            this.txtPrice.TabIndex = 10;
-            // 
             // AddProduct
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 14F);
@@ -297,7 +297,7 @@
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvBaseAttributes)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -320,7 +320,7 @@
         private System.Windows.Forms.TextBox txtName;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridView dgvBaseAttributes;
         private System.Windows.Forms.Button btnAdd;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Label label8;

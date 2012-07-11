@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using BaoHien.Services.ProductAttributes;
 using DAL;
+using BaoHien.Services.BaseAttributes;
 
 namespace BaoHien.UI
 {
@@ -26,11 +27,11 @@ namespace BaoHien.UI
 
         private void ProductAttributeList_Load(object sender, EventArgs e)
         {
-            ProductAttributeService productAttributeService = new ProductAttributeService();
-            List<ProductAttribute> productAttributes = productAttributeService.GetProductAttributes();
-            if (productAttributes != null)
+            BaseAttributeService baseAttributeService = new BaseAttributeService();
+            List<BaseAttribute> baseAttributes = baseAttributeService.GetBaseAttributes();
+            if (baseAttributes != null)
             {
-                dgvProductAttributeList.DataSource = productAttributes;
+                dgvProductAttributeList.DataSource = baseAttributes;
                 
             }
         }
