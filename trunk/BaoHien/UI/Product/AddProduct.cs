@@ -13,6 +13,7 @@ using BaoHien.Services.Prices;
 using DAL.Helper;
 using BaoHien.Services.BaseAttributes;
 
+
 namespace BaoHien.UI
 {
     public partial class AddProduct : Form
@@ -94,8 +95,10 @@ namespace BaoHien.UI
             List<BaseAttribute> baseAttributes = baseAttributeService.GetBaseAttributes();
             if (baseAttributes != null)
             {
-                
                 dgvBaseAttributes.DataSource = baseAttributes;
+                
+
+               
 
             }
             
