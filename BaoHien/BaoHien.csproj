@@ -46,11 +46,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Services\Attribute\BaseAttributeService.cs" />
     <Compile Include="Services\Base\BaseService.cs" />
+    <Compile Include="Services\Customer\CustomerService.cs" />
+    <Compile Include="Services\Employee\EmployeeService.cs" />
+    <Compile Include="Services\MeterialInStock\MaterialInStockService.cs" />
+    <Compile Include="Services\OrderDetail\OrderDetailService.cs" />
+    <Compile Include="Services\Order\OrderService.cs" />
+    <Compile Include="Services\Price\PriceService.cs" />
+    <Compile Include="Services\ProductAttribute\ProductAttributeService.cs" />
+    <Compile Include="Services\ProductInStock\ProductInStockService.cs" />
+    <Compile Include="Services\ProductionRequestDetail\ProductionRequestService.cs" />
+    <Compile Include="Services\ProductionRequest\ProductionRequestService.cs" />
     <Compile Include="Services\Products\ProductService.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Products\ProductTypeService.cs" />
+    <Compile Include="Services\SystemUser\SystemUserService.cs" />
     <Compile Include="UI\Main.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -117,8 +129,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Services\Order\" />
-    <Folder Include="Services\ProductionRequest\" />
     <Folder Include="Services\User\" />
     <Folder Include="UI\Configuration\" />
     <Folder Include="UI\Customer\" />

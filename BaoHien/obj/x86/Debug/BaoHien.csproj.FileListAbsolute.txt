@@ -20,7 +20,6 @@ G:\Working\VS10\manufacturingmanager\BaoHien\obj\x86\Debug\ResolveAssemblyRefere
 G:\Working\VS10\manufacturingmanager\BaoHien\obj\x86\Debug\BaoHien.UI.Properties.Resources.resources
 G:\Working\VS10\manufacturingmanager\BaoHien\obj\x86\Debug\BaoHien.UI.Main.resources
 G:\Working\VS10\manufacturingmanager\BaoHien\obj\x86\Debug\BaoHien.UI.AddProductType.resources
-G:\Working\VS10\manufacturingmanager\BaoHien\obj\x86\Debug\BaoHien.UI.UI.Product.ProductList.resources
 G:\Working\VS10\manufacturingmanager\BaoHien\obj\x86\Debug\BaoHien.UI.ucProductType.resources
 G:\Working\VS10\manufacturingmanager\BaoHien\obj\x86\Debug\BaoHien.UI.Login.resources
 G:\Working\VS10\manufacturingmanager\BaoHien\obj\x86\Debug\GenerateResource.read.1.tlog
@@ -42,3 +41,4 @@ C:\Users\bryanpham\Documents\Visual Studio 2010\Projects\BaoHienComp\manufacturi
 C:\Users\bryanpham\Documents\Visual Studio 2010\Projects\BaoHienComp\manufacturingmanager\BaoHien\obj\x86\Debug\GenerateResource.write.1.tlog
 C:\Users\bryanpham\Documents\Visual Studio 2010\Projects\BaoHienComp\manufacturingmanager\BaoHien\obj\x86\Debug\BaoHien.UI.exe
 C:\Users\bryanpham\Documents\Visual Studio 2010\Projects\BaoHienComp\manufacturingmanager\BaoHien\obj\x86\Debug\BaoHien.UI.pdb
+G:\Working\VS10\manufacturingmanager\BaoHien\obj\x86\Debug\BaoHien.UI.ProductList.resources
