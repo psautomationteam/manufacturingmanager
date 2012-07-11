@@ -35,5 +35,10 @@ namespace BaoHien.UI
                 
             }
         }
+
+        private void dgvProductAttributeList_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+
+        }
     }
 }
