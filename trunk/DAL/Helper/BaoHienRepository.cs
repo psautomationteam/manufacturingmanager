@@ -17,8 +17,15 @@ namespace DAL.Helper
         //                  "geocode/xml?latlng={0},{1}&sensor=false";
 
         //public static string addr;
-
-        
+        private static BaoHienDBDataContext context = null;
+        static bool checkExistingContext()
+        {
+            if (context == null)
+            {
+                context = new BaoHienDBDataContext();
+            }
+            return context != null;
+        }
         static Expression<Func<T, T2>> CreateLambdaForDeletedField<T, T2>()
         {
             var param = Expression.Parameter(typeof(T), "item");
@@ -35,12 +42,13 @@ namespace DAL.Helper
             return expression;
         }
 
-        public static long GetMaxId<T>() where T : class
+        public static int GetMaxId<T>() where T : class
         {
-            long value = long.MaxValue;
+
+            int value = int.MaxValue;
             try
             {
-                using (BaoHienDBDataContext context = new BaoHienDBDataContext())
+                if (checkExistingContext())
                 {
                     // get the table matching the type
                     // and return all of it as typed list
@@ -48,18 +56,19 @@ namespace DAL.Helper
                     Type type = typeof(T);
                     if (objectWithMaxId != null && type.GetProperties().Any(x => x.Name == Constant.PRIMARYKEY_PROPERTY_NAME))
                     {
-                        PropertyInfo property = type.GetProperty(type.Name + Constant.PRIMARYKEY_PROPERTY_NAME);
-                        value = (long)property.GetValue(objectWithMaxId, null);
+                        PropertyInfo property = type.GetProperty(Constant.PRIMARYKEY_PROPERTY_NAME);
+                        value = (int)property.GetValue(objectWithMaxId, null);
 
                     }
-                    if (value == long.MaxValue) value = 0;
-                    else value++;
+                    if (value == int.MaxValue) value = 0;
+                    
                     return value;
-                }
+                }else
+                    return value;
             }
             catch (Exception)
             {
-                if (value == long.MaxValue) value = 0;
+                if (value == int.MaxValue) value = 0;
                 else value++;
                 return value;
             }
@@ -69,11 +78,13 @@ namespace DAL.Helper
         {
             try
             {
-                using (BaoHienDBDataContext context = new BaoHienDBDataContext())
+                if (checkExistingContext())
                 {
                     var table = context.GetTable<T>().Where(func).ToList<T>();
                     return table;
                 }
+                else
+                    throw new Exception();
             }
             catch (Exception)
             {
@@ -86,7 +97,7 @@ namespace DAL.Helper
         {
             try
             {
-                using (BaoHienDBDataContext context = new BaoHienDBDataContext())
+                if (checkExistingContext())
                 {
                     // get the table by the type passed in
                     var table = context.GetTable<T>();
@@ -111,6 +122,8 @@ namespace DAL.Helper
                         return memberId.ToString() == id.ToString();
                     });
                 }
+                else
+                    throw new Exception();
             }
             catch (Exception)
             {
@@ -121,7 +134,7 @@ namespace DAL.Helper
         {
             try
             {
-                using (BaoHienDBDataContext context = new BaoHienDBDataContext())
+                if (checkExistingContext())
                 {
 
                     // get the table matching the type
@@ -129,6 +142,8 @@ namespace DAL.Helper
                     var table = context.GetTable<T>().ToList<T>();
                     return table;
                 }
+                else
+                    throw new Exception();
             }
             catch (Exception)
             {
@@ -139,7 +154,7 @@ namespace DAL.Helper
         {
             try
             {
-                using (BaoHienDBDataContext context = new BaoHienDBDataContext())
+                if (checkExistingContext())
                 {
                     // get the table by the type passed in
                     var table = context.GetTable<T>();
@@ -157,6 +172,8 @@ namespace DAL.Helper
                     return (dataMembers.Single<MetaDataMember>(m =>
                     m.IsPrimaryKey)).Type;
                 }
+                else
+                    throw new Exception();
             }
             catch (Exception)
             {
@@ -167,7 +184,7 @@ namespace DAL.Helper
         {
             try
             {
-                using (BaoHienDBDataContext context = new BaoHienDBDataContext())
+                if (checkExistingContext())
                 {
                     // get the table by the type passed in
                     var table = context.GetTable<T>();
@@ -186,6 +203,8 @@ namespace DAL.Helper
                     return (dataMembers.Single<MetaDataMember>(m
                     => m.IsPrimaryKey)).Name;
                 }
+                else
+                    throw new Exception();
             }
             catch (Exception)
             {
@@ -199,7 +218,7 @@ namespace DAL.Helper
                 // get the approapriate table by type and then
                 // insert the passed in object and submit
                 // that change to the data context
-                using (BaoHienDBDataContext context = new BaoHienDBDataContext())
+                if (checkExistingContext())
                 {
                     // get the table by the type passed in
                     var table = context.GetTable<T>();
@@ -209,6 +228,8 @@ namespace DAL.Helper
                     table.InsertOnSubmit(item);
                     context.SubmitChanges();
                 }
+                else
+                    throw new Exception();
             }
             catch (Exception)
             {
@@ -248,14 +269,15 @@ namespace DAL.Helper
                 // attach the new object to a new data context and
                 // call submit changes on the context
                 T originObject = SelectByPK<T>(id);
-                using (BaoHienDBDataContext context = new BaoHienDBDataContext())
+                if (checkExistingContext())
                 {
                     var table = context.GetTable<T>();
                     table.Attach((T)newObj, originObject);
                     //table.
 
                     context.SubmitChanges();
-                }
+                }else
+                    throw new Exception();
             }
             catch (Exception)
             {
@@ -286,48 +308,22 @@ namespace DAL.Helper
                 }
 
                 T originObject = SelectByPK<T>(id);
-                using (BaoHienDBDataContext context = new BaoHienDBDataContext())
+                if (checkExistingContext())
                 {
                     var table = context.GetTable<T>();
                     table.Attach((T)newObj, originObject);
                     table.DeleteOnSubmit((T)newObj);
                     context.SubmitChanges();
                 }
+                else
+                    throw new Exception();
             }
             catch (Exception)
             {
                 throw;
             }
         }
-        //public static GeocoderLocation Locate(string query)
-        //{
-        //    WebRequest request = WebRequest.Create("http://maps.google.com/maps?output=kml&q="
-        //        + HttpUtility.UrlEncode(query));
-
-        //    using (WebResponse response = request.GetResponse())
-        //    {
-        //        using (Stream stream = response.GetResponseStream())
-        //        {
-        //            XDocument document = XDocument.Load(new StreamReader(stream));
-
-        //            XNamespace ns = "http://earth.google.com/kml/2.0";
-
-        //            XElement longitudeElement = document.Descendants(ns + "longitude").FirstOrDefault();
-        //            XElement latitudeElement = document.Descendants(ns + "latitude").FirstOrDefault();
-
-        //            if (longitudeElement != null && latitudeElement != null)
-        //            {
-        //                return new GeocoderLocation
-        //                {
-        //                    Longitude = Double.Parse(longitudeElement.Value, CultureInfo.InvariantCulture),
-        //                    Latitude = Double.Parse(latitudeElement.Value, CultureInfo.InvariantCulture)
-        //                };
-        //            }
-        //        }
-        //    }
-
-        //    return null;
-        //}
+       
 
         
 

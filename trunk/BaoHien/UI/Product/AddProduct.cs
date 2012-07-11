@@ -52,7 +52,7 @@ namespace BaoHien.UI
                 Price1 = price,
                 UpdatedDate = DateTime.Now
             };
-            //result = priceService.AddPrice(newPrice);
+            result = priceService.AddPrice(newPrice);
             if (result)
             {
                 MessageBox.Show("Product Type added successfully");
