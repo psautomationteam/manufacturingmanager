@@ -6,6 +6,8 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using BaoHien.Services.ProductAttributes;
+using DAL;
 
 namespace BaoHien.UI
 {
@@ -20,6 +22,17 @@ namespace BaoHien.UI
         {
             AddProductAttribute frmProductAttribute = new AddProductAttribute();
             frmProductAttribute.ShowDialog();
+        }
+
+        private void ProductAttributeList_Load(object sender, EventArgs e)
+        {
+            ProductAttributeService productAttributeService = new ProductAttributeService();
+            List<ProductAttribute> productAttributes = productAttributeService.GetProductAttributes();
+            if (productAttributes != null)
+            {
+                dgvProductAttributeList.DataSource = productAttributes;
+                
+            }
         }
     }
 }

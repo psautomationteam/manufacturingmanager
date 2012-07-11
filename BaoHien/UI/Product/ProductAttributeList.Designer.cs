@@ -37,16 +37,16 @@
             // dgvProductAttributeList
             // 
             this.dgvProductAttributeList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvProductAttributeList.Location = new System.Drawing.Point(23, 67);
+            this.dgvProductAttributeList.Location = new System.Drawing.Point(23, 72);
             this.dgvProductAttributeList.Name = "dgvProductAttributeList";
-            this.dgvProductAttributeList.Size = new System.Drawing.Size(787, 469);
+            this.dgvProductAttributeList.Size = new System.Drawing.Size(787, 505);
             this.dgvProductAttributeList.TabIndex = 17;
             // 
             // btnAdd
             // 
-            this.btnAdd.Location = new System.Drawing.Point(121, 18);
+            this.btnAdd.Location = new System.Drawing.Point(121, 19);
             this.btnAdd.Name = "btnAdd";
-            this.btnAdd.Size = new System.Drawing.Size(75, 43);
+            this.btnAdd.Size = new System.Drawing.Size(75, 46);
             this.btnAdd.TabIndex = 16;
             this.btnAdd.Text = "Thêm thuộc tính mới";
             this.btnAdd.UseVisualStyleBackColor = true;
@@ -54,22 +54,23 @@
             // 
             // btnDelete
             // 
-            this.btnDelete.Location = new System.Drawing.Point(25, 18);
+            this.btnDelete.Location = new System.Drawing.Point(25, 19);
             this.btnDelete.Name = "btnDelete";
-            this.btnDelete.Size = new System.Drawing.Size(75, 43);
+            this.btnDelete.Size = new System.Drawing.Size(75, 46);
             this.btnDelete.TabIndex = 18;
             this.btnDelete.Text = "Xóa ttính được chọn";
             this.btnDelete.UseVisualStyleBackColor = true;
             // 
             // ProductAttributeList
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.dgvProductAttributeList);
             this.Controls.Add(this.btnAdd);
             this.Controls.Add(this.btnDelete);
             this.Name = "ProductAttributeList";
-            this.Size = new System.Drawing.Size(1084, 641);
+            this.Size = new System.Drawing.Size(1084, 690);
+            this.Load += new System.EventHandler(this.ProductAttributeList_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvProductAttributeList)).EndInit();
             this.ResumeLayout(false);
 

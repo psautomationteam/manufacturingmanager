@@ -88,20 +88,20 @@ namespace BaoHien.Services.Base
 
         protected bool OnAddItem<TItem>(TItem initialValue)
         {
-            long id = long.MaxValue;
+            int id = int.MaxValue;
             try
             {
                 Type typeofClassWithGenericStaticMethod = typeof(BaoHienRepository);
                 MethodInfo methodInfo = typeofClassWithGenericStaticMethod.GetMethod("GetMaxId", System.Reflection.BindingFlags.Static | BindingFlags.Public);
                 Type[] genericArguments = new Type[] { typeof(TItem) };
                 MethodInfo genericMethodInfo = methodInfo.MakeGenericMethod(genericArguments);
-                id = (long)genericMethodInfo.Invoke(null, null);
+                id = (int)genericMethodInfo.Invoke(null, null);
             }
             catch (Exception)
             {
             }
 
-            if (id == long.MaxValue || id == long.MinValue)
+            if (id == int.MaxValue || id == int.MinValue)
             {
                 return false;
             }
