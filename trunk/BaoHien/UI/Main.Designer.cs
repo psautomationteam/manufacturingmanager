@@ -36,6 +36,7 @@
             this.menuEntity = new System.Windows.Forms.ToolStripMenuItem();
             this.menuProductType = new System.Windows.Forms.ToolStripMenuItem();
             this.menuProduct = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuCustomer = new System.Windows.Forms.ToolStripMenuItem();
             this.menuOperation = new System.Windows.Forms.ToolStripMenuItem();
             this.menuProductionRequest = new System.Windows.Forms.ToolStripMenuItem();
             this.menuOrder = new System.Windows.Forms.ToolStripMenuItem();
@@ -64,7 +65,6 @@
             this.lblMessage = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
             this.pnlMain = new System.Windows.Forms.Panel();
-            this.menuCustomer = new System.Windows.Forms.ToolStripMenuItem();
             this.menuMain.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -135,6 +135,13 @@
             this.menuProduct.Text = "Sản Phẩm";
             this.menuProduct.Click += new System.EventHandler(this.menuProduct_Click);
             // 
+            // menuCustomer
+            // 
+            this.menuCustomer.Name = "menuCustomer";
+            this.menuCustomer.Size = new System.Drawing.Size(152, 22);
+            this.menuCustomer.Text = "Khách Hàng";
+            this.menuCustomer.Click += new System.EventHandler(this.menuCustomer_Click);
+            // 
             // menuOperation
             // 
             this.menuOperation.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -171,21 +178,21 @@
             // menuAttribute
             // 
             this.menuAttribute.Name = "menuAttribute";
-            this.menuAttribute.Size = new System.Drawing.Size(152, 22);
+            this.menuAttribute.Size = new System.Drawing.Size(148, 22);
             this.menuAttribute.Text = "Thuộc tính SP";
             this.menuAttribute.Click += new System.EventHandler(this.menuAttribute_Click);
             // 
             // menuMeasurementUnit
             // 
             this.menuMeasurementUnit.Name = "menuMeasurementUnit";
-            this.menuMeasurementUnit.Size = new System.Drawing.Size(152, 22);
+            this.menuMeasurementUnit.Size = new System.Drawing.Size(148, 22);
             this.menuMeasurementUnit.Text = "Đơn Vị Tính";
             this.menuMeasurementUnit.Click += new System.EventHandler(this.menuMeasurementUnit_Click);
             // 
             // menuEmployee
             // 
             this.menuEmployee.Name = "menuEmployee";
-            this.menuEmployee.Size = new System.Drawing.Size(152, 22);
+            this.menuEmployee.Size = new System.Drawing.Size(148, 22);
             this.menuEmployee.Text = "Nhân Viên";
             // 
             // menuReport
@@ -222,6 +229,7 @@
             this.menuSystemUser.Name = "menuSystemUser";
             this.menuSystemUser.Size = new System.Drawing.Size(152, 22);
             this.menuSystemUser.Text = "Người Dùng";
+            this.menuSystemUser.Click += new System.EventHandler(this.menuSystemUser_Click);
             // 
             // menuHelp
             // 
@@ -235,13 +243,13 @@
             // menuGuide
             // 
             this.menuGuide.Name = "menuGuide";
-            this.menuGuide.Size = new System.Drawing.Size(152, 22);
+            this.menuGuide.Size = new System.Drawing.Size(135, 22);
             this.menuGuide.Text = "Hướng Dẫn";
             // 
             // menuAbout
             // 
             this.menuAbout.Name = "menuAbout";
-            this.menuAbout.Size = new System.Drawing.Size(152, 22);
+            this.menuAbout.Size = new System.Drawing.Size(135, 22);
             this.menuAbout.Text = "Phần Mềm";
             // 
             // toolStrip1
@@ -356,13 +364,6 @@
             this.pnlMain.Name = "pnlMain";
             this.pnlMain.Size = new System.Drawing.Size(1084, 641);
             this.pnlMain.TabIndex = 3;
-            // 
-            // menuCustomer
-            // 
-            this.menuCustomer.Name = "menuCustomer";
-            this.menuCustomer.Size = new System.Drawing.Size(152, 22);
-            this.menuCustomer.Text = "Khách Hàng";
-            this.menuCustomer.Click += new System.EventHandler(this.menuCustomer_Click);
             // 
             // Main
             // 

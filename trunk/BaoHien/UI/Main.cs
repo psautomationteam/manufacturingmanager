@@ -67,6 +67,13 @@ namespace BaoHien.UI
             pnlMain.Controls.Add(ucCustomerlist);
         }
 
+        private void menuSystemUser_Click(object sender, EventArgs e)
+        {
+            SystemUserList ucSystemUser = new SystemUserList();
+            pnlMain.Controls.Clear();
+            pnlMain.Controls.Add(ucSystemUser);
+        }
+
         #endregion 
 
 #region toolbar action
@@ -84,6 +91,8 @@ namespace BaoHien.UI
         }
 
 #endregion
+
+        
 
         
 
