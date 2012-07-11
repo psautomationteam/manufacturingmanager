@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="BaoHienDB" Class="BaoHienDBDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
   <Connection Mode="AppSettings" ConnectionString="Data Source=.\SQLExpress;Initial Catalog=BaoHienDB;Integrated Security=True;Pooling=False" SettingsObjectName="DAL.Properties.Settings" SettingsPropertyName="BaoHienDBConnectionString" Provider="System.Data.SqlClient" />
-  <Table Name="dbo.Attribute" Member="Attributes">
-    <Type Name="Attribute">
+  <Table Name="dbo.BaseAttribute" Member="BaseAttributes">
+    <Type Name="BaseAttribute">
       <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="AttributeName" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
       <Column Name="Description" Type="System.String" DbType="Text" CanBeNull="true" UpdateCheck="Never" />
       <Column Name="AttributeCode" Type="System.String" DbType="VarChar(25) NOT NULL" CanBeNull="false" />
-      <Association Name="Attribute_ProductAttribute" Member="ProductAttributes" ThisKey="Id" OtherKey="AttributeId" Type="ProductAttribute" />
+      <Association Name="BaseAttribute_ProductAttribute" Member="ProductAttributes" ThisKey="Id" OtherKey="AttributeId" Type="ProductAttribute" />
     </Type>
   </Table>
   <Table Name="dbo.SystemUser" Member="SystemUsers">
@@ -136,7 +136,7 @@
       <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="AttributeId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="Value" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
-      <Association Name="Attribute_ProductAttribute" Member="Attribute" ThisKey="AttributeId" OtherKey="Id" Type="Attribute" IsForeignKey="true" />
+      <Association Name="BaseAttribute_ProductAttribute" Member="BaseAttribute" ThisKey="AttributeId" OtherKey="Id" Type="BaseAttribute" IsForeignKey="true" />
       <Association Name="Product_ProductAttribute" Member="Product" ThisKey="Id" OtherKey="Id" Type="Product" IsForeignKey="true" />
     </Type>
   </Table>

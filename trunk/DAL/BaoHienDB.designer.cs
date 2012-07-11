@@ -30,9 +30,9 @@ namespace DAL
 		
     #region Extensibility Method Definitions
     partial void OnCreated();
-    partial void InsertAttribute(Attribute instance);
-    partial void UpdateAttribute(Attribute instance);
-    partial void DeleteAttribute(Attribute instance);
+    partial void InsertBaseAttribute(BaseAttribute instance);
+    partial void UpdateBaseAttribute(BaseAttribute instance);
+    partial void DeleteBaseAttribute(BaseAttribute instance);
     partial void InsertSystemUser(SystemUser instance);
     partial void UpdateSystemUser(SystemUser instance);
     partial void DeleteSystemUser(SystemUser instance);
@@ -107,11 +107,11 @@ namespace DAL
 			OnCreated();
 		}
 		
-		public System.Data.Linq.Table<Attribute> Attributes
+		public System.Data.Linq.Table<BaseAttribute> BaseAttributes
 		{
 			get
 			{
-				return this.GetTable<Attribute>();
+				return this.GetTable<BaseAttribute>();
 			}
 		}
 		
@@ -228,8 +228,8 @@ namespace DAL
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Attribute")]
-	public partial class Attribute : INotifyPropertyChanging, INotifyPropertyChanged
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.BaseAttribute")]
+	public partial class BaseAttribute : INotifyPropertyChanging, INotifyPropertyChanged
 	{
 		
 		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
@@ -258,7 +258,7 @@ namespace DAL
     partial void OnAttributeCodeChanged();
     #endregion
 		
-		public Attribute()
+		public BaseAttribute()
 		{
 			this._ProductAttributes = new EntitySet<ProductAttribute>(new Action<ProductAttribute>(this.attach_ProductAttributes), new Action<ProductAttribute>(this.detach_ProductAttributes));
 			OnCreated();
@@ -344,7 +344,7 @@ namespace DAL
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Attribute_ProductAttribute", Storage="_ProductAttributes", ThisKey="Id", OtherKey="AttributeId")]
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="BaseAttribute_ProductAttribute", Storage="_ProductAttributes", ThisKey="Id", OtherKey="AttributeId")]
 		public EntitySet<ProductAttribute> ProductAttributes
 		{
 			get
@@ -380,13 +380,13 @@ namespace DAL
 		private void attach_ProductAttributes(ProductAttribute entity)
 		{
 			this.SendPropertyChanging();
-			entity.Attribute = this;
+			entity.BaseAttribute = this;
 		}
 		
 		private void detach_ProductAttributes(ProductAttribute entity)
 		{
 			this.SendPropertyChanging();
-			entity.Attribute = null;
+			entity.BaseAttribute = null;
 		}
 	}
 	
@@ -3005,7 +3005,7 @@ namespace DAL
 		
 		private string _Value;
 		
-		private EntityRef<Attribute> _Attribute;
+		private EntityRef<BaseAttribute> _BaseAttribute;
 		
 		private EntityRef<Product> _Product;
 		
@@ -3023,7 +3023,7 @@ namespace DAL
 		
 		public ProductAttribute()
 		{
-			this._Attribute = default(EntityRef<Attribute>);
+			this._BaseAttribute = default(EntityRef<BaseAttribute>);
 			this._Product = default(EntityRef<Product>);
 			OnCreated();
 		}
@@ -3063,7 +3063,7 @@ namespace DAL
 			{
 				if ((this._AttributeId != value))
 				{
-					if (this._Attribute.HasLoadedOrAssignedValue)
+					if (this._BaseAttribute.HasLoadedOrAssignedValue)
 					{
 						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
 					}
@@ -3096,26 +3096,26 @@ namespace DAL
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Attribute_ProductAttribute", Storage="_Attribute", ThisKey="AttributeId", OtherKey="Id", IsForeignKey=true)]
-		public Attribute Attribute
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="BaseAttribute_ProductAttribute", Storage="_BaseAttribute", ThisKey="AttributeId", OtherKey="Id", IsForeignKey=true)]
+		public BaseAttribute BaseAttribute
 		{
 			get
 			{
-				return this._Attribute.Entity;
+				return this._BaseAttribute.Entity;
 			}
 			set
 			{
-				Attribute previousValue = this._Attribute.Entity;
+				BaseAttribute previousValue = this._BaseAttribute.Entity;
 				if (((previousValue != value) 
-							|| (this._Attribute.HasLoadedOrAssignedValue == false)))
+							|| (this._BaseAttribute.HasLoadedOrAssignedValue == false)))
 				{
 					this.SendPropertyChanging();
 					if ((previousValue != null))
 					{
-						this._Attribute.Entity = null;
+						this._BaseAttribute.Entity = null;
 						previousValue.ProductAttributes.Remove(this);
 					}
-					this._Attribute.Entity = value;
+					this._BaseAttribute.Entity = value;
 					if ((value != null))
 					{
 						value.ProductAttributes.Add(this);
@@ -3125,7 +3125,7 @@ namespace DAL
 					{
 						this._AttributeId = default(int);
 					}
-					this.SendPropertyChanged("Attribute");
+					this.SendPropertyChanged("BaseAttribute");
 				}
 			}
 		}
