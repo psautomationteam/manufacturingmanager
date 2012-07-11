@@ -9,17 +9,17 @@ using System.Windows.Forms;
 
 namespace BaoHien.UI
 {
-    public partial class ProductList : UserControl
+    public partial class BaseUnitList : UserControl
     {
-        public ProductList()
+        public BaseUnitList()
         {
             InitializeComponent();
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            AddProduct frmAddProduct = new AddProduct();
-            frmAddProduct.ShowDialog();
+            AddMeasurementUnit frmAddUnit = new AddMeasurementUnit();
+            frmAddUnit.ShowDialog();
         }
     }
 }

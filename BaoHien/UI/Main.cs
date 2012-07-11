@@ -46,7 +46,35 @@ namespace BaoHien.UI
         }
 
 
+        private void menuMeasurementUnit_Click(object sender, EventArgs e)
+        {
+            BaseUnitList ucBaseUnitList = new BaseUnitList();
+            pnlMain.Controls.Clear();
+            pnlMain.Controls.Add(ucBaseUnitList);
+        }
+
+        private void menuAttribute_Click(object sender, EventArgs e)
+        {
+            ProductAttributeList ucAttributeList = new ProductAttributeList();
+            pnlMain.Controls.Clear();
+            pnlMain.Controls.Add(ucAttributeList);
+        }
+
         #endregion 
+
+#region toolbar action
+        private void tsbAddProduct_Click(object sender, EventArgs e)
+        {
+            AddProduct frmAddProduct = new AddProduct();
+            frmAddProduct.ShowDialog();
+
+        }
+
+#endregion
+
+        
+
+        
 
         
 

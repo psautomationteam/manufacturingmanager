@@ -1,25 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
 using System.Data;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
 namespace BaoHien.UI
 {
-    public partial class ProductList : UserControl
+    public partial class AddMeasurementUnit : Form
     {
-        public ProductList()
+        public AddMeasurementUnit()
         {
             InitializeComponent();
         }
 
-        private void btnAdd_Click(object sender, EventArgs e)
+        private void btnCancel_Click(object sender, EventArgs e)
         {
-            AddProduct frmAddProduct = new AddProduct();
-            frmAddProduct.ShowDialog();
+            this.Close();
         }
     }
 }

@@ -8,8 +8,8 @@
     <ProjectGuid>{DF19CFFF-1701-4336-AAC0-89DAF906A799}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BaoHien.UI</RootNamespace>
-    <AssemblyName>BaoHien.UI</AssemblyName>
+    <RootNamespace>BaoHien</RootNamespace>
+    <AssemblyName>BaoHien</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
@@ -69,11 +69,41 @@
     <Compile Include="UI\Main.designer.cs">
       <DependentUpon>Main.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\Product\AddMeasurementUnit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Product\AddMeasurementUnit.Designer.cs">
+      <DependentUpon>AddMeasurementUnit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Product\AddProduct.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Product\AddProduct.Designer.cs">
+      <DependentUpon>AddProduct.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Product\AddProductAttribute.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Product\AddProductAttribute.Designer.cs">
+      <DependentUpon>AddProductAttribute.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\Product\AddProductType.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="UI\Product\AddProductType.Designer.cs">
       <DependentUpon>AddProductType.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Product\BaseUnitList.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\Product\BaseUnitList.Designer.cs">
+      <DependentUpon>BaseUnitList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Product\ProductAttributeList.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\Product\ProductAttributeList.Designer.cs">
+      <DependentUpon>ProductAttributeList.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\Product\ProductList.cs">
       <SubType>UserControl</SubType>
@@ -106,8 +136,23 @@
     <EmbeddedResource Include="UI\Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UI\Product\AddMeasurementUnit.resx">
+      <DependentUpon>AddMeasurementUnit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Product\AddProduct.resx">
+      <DependentUpon>AddProduct.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Product\AddProductAttribute.resx">
+      <DependentUpon>AddProductAttribute.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\Product\AddProductType.resx">
       <DependentUpon>AddProductType.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Product\BaseUnitList.resx">
+      <DependentUpon>BaseUnitList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Product\ProductAttributeList.resx">
+      <DependentUpon>ProductAttributeList.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Product\ProductList.resx">
       <DependentUpon>ProductList.cs</DependentUpon>
