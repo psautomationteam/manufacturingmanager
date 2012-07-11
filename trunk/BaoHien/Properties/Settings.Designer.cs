@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace BaoHien.UI.Properties {
+namespace BaoHien.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

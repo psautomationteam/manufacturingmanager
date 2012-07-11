@@ -169,14 +169,16 @@
             // menuAttribute
             // 
             this.menuAttribute.Name = "menuAttribute";
-            this.menuAttribute.Size = new System.Drawing.Size(148, 22);
+            this.menuAttribute.Size = new System.Drawing.Size(152, 22);
             this.menuAttribute.Text = "Thuộc tính SP";
+            this.menuAttribute.Click += new System.EventHandler(this.menuAttribute_Click);
             // 
             // menuMeasurementUnit
             // 
             this.menuMeasurementUnit.Name = "menuMeasurementUnit";
-            this.menuMeasurementUnit.Size = new System.Drawing.Size(148, 22);
+            this.menuMeasurementUnit.Size = new System.Drawing.Size(152, 22);
             this.menuMeasurementUnit.Text = "Đơn Vị Tính";
+            this.menuMeasurementUnit.Click += new System.EventHandler(this.menuMeasurementUnit_Click);
             // 
             // menuEmployee
             // 
@@ -296,6 +298,7 @@
             this.tsbAddProduct.Name = "tsbAddProduct";
             this.tsbAddProduct.Size = new System.Drawing.Size(23, 22);
             this.tsbAddProduct.Text = "toolStripButton2";
+            this.tsbAddProduct.Click += new System.EventHandler(this.tsbAddProduct_Click);
             // 
             // toolStripLabel3
             // 
