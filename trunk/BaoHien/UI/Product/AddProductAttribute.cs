@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using DAL;
 using BaoHien.Services.ProductAttributes;
+using BaoHien.Services.BaseAttributes;
 
 namespace BaoHien.UI
 {
@@ -25,15 +26,18 @@ namespace BaoHien.UI
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            ProductAttribute productAttribute = new ProductAttribute
+            BaseAttribute baseAttribute = new BaseAttribute
             {
-
+                
+                AttributeName = txtName.Text,
+                Description = txtDescription.Text,
+                AttributeCode = txtCode.Text
             };
-            ProductAttributeService productAttributeService = new ProductAttributeService();
-            bool result = productAttributeService.AddProductAttribute(productAttribute);
+            BaseAttributeService baseAttributeService = new BaseAttributeService();
+            bool result = baseAttributeService.AddBaseAttribute(baseAttribute);
             if (result)
             {
-                MessageBox.Show("Product Type added successfully");
+                MessageBox.Show("Attribute added successfully");
                 this.Close();
             }
             else
