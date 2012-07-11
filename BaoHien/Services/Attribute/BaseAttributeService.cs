@@ -5,33 +5,33 @@ using System.Text;
 using DAL;
 using BaoHien.Services.Base;
 
-namespace BaoHien.Services.Attributes
+namespace BaoHien.Services.BaseAttributes
 {
     public class BaseAttributeService : BaseService<BaseAttribute>
     {
-        public BaseAttribute GetAttribute(System.Int32 id)
+        public BaseAttribute GetBaseAttribute(System.Int32 id)
         {
-            BaseAttribute attribute = OnGetItem<BaseAttribute>(id.ToString());
+            BaseAttribute baseAttribute = OnGetItem<BaseAttribute>(id.ToString());
 
-            return attribute;
+            return baseAttribute;
         }
         public List<BaseAttribute> GetBaseAttributes()
         {
-            List<BaseAttribute> attributes = OnGetItems<BaseAttribute>();
+            List<BaseAttribute> baseAttributes = OnGetItems<BaseAttribute>();
 
-            return attributes;
+            return baseAttributes;
         }
-        public bool AddProduct(BaseAttribute attribute)
+        public bool AddBaseAttribute(BaseAttribute baseAttribute)
         {
-            return OnAddItem<BaseAttribute>(attribute);
+            return OnAddItem<BaseAttribute>(baseAttribute);
         }
-        public bool DeleteProduct(System.Int32 id)
+        public bool DeleteBaseAttribute(System.Int32 id)
         {
             return OnDeleteItem<BaseAttribute>(id.ToString());
         }
-        public bool Updateattribute(BaseAttribute attribute)
+        public bool UpdateBaseAttribute(BaseAttribute baseAttribute)
         {
-            return OnUpdateItem<BaseAttribute>(attribute, attribute.Id.ToString());
+            return OnUpdateItem<BaseAttribute>(baseAttribute, baseAttribute.Id.ToString());
         }
     }
 }
