@@ -56,12 +56,12 @@ namespace BaoHien.UI
             result = priceService.AddPrice(newPrice);
             if (result)
             {
-                MessageBox.Show("Product Type added successfully");
+                MessageBox.Show("Sản phẩm đã được tạo thành công");
                 this.Close();
             }
             else
             {
-                MessageBox.Show("Opps! Something wrong!");
+                MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
             }
         }
 
