@@ -15,5 +15,11 @@ namespace BaoHien.UI
         {
             InitializeComponent();
         }
+
+        private void btnAdd_Click(object sender, EventArgs e)
+        {
+            AddSystemUser frmAddUser = new AddSystemUser();
+            frmAddUser.ShowDialog();
+        }
     }
 }

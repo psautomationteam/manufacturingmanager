@@ -34,7 +34,7 @@ namespace BaoHien.UI
             {
 
                 Description = txtDescription.Text,
-                ProductName = txtName.Text,
+                ProductName = txtName.Text,                
                 BaseUnit = cmbUnit.SelectedValue != null ? (int)cmbUnit.SelectedValue : (int?)null,
                 ProductCode = txtCode.Text,
                 ProductType = (int)cmbType.SelectedValue,
