@@ -37,12 +37,12 @@ namespace BaoHien.UI
             bool result = baseAttributeService.AddBaseAttribute(baseAttribute);
             if (result)
             {
-                MessageBox.Show("Attribute added successfully");
+                MessageBox.Show("Thuộc tính được tạo thành công");
                 this.Close();
             }
             else
             {
-                MessageBox.Show("Opps! Something wrong!");
+                MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
             }
         }
     }

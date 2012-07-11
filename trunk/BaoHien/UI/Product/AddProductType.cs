@@ -36,12 +36,12 @@ namespace BaoHien.UI
             bool result = productTypeService.AddProductType(productType);
             if (result)
             {
-                MessageBox.Show("Product Type added successfully");
+                MessageBox.Show("Loại sản phẩm đã được thêm mới vào hệ thống");
                 this.Close();
             }
             else
             {
-                MessageBox.Show("Opps! Something wrong!");
+                MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
             }
         }        
     }
