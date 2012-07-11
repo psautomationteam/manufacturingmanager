@@ -60,6 +60,13 @@ namespace BaoHien.UI
             pnlMain.Controls.Add(ucAttributeList);
         }
 
+        private void menuCustomer_Click(object sender, EventArgs e)
+        {
+            CustomerList ucCustomerlist = new CustomerList();
+            pnlMain.Controls.Clear();
+            pnlMain.Controls.Add(ucCustomerlist);
+        }
+
         #endregion 
 
 #region toolbar action
@@ -70,7 +77,17 @@ namespace BaoHien.UI
 
         }
 
+        private void tsbAddCustomer_Click(object sender, EventArgs e)
+        {
+            AddCustomer fromAddCustomer = new AddCustomer();
+            fromAddCustomer.ShowDialog();
+        }
+
 #endregion
+
+        
+
+        
 
         
 
