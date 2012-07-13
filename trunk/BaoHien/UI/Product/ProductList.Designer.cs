@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.grpSearch = new System.Windows.Forms.GroupBox();
-            this.comboBox2 = new System.Windows.Forms.ComboBox();
+            this.cbPurchaseStatus = new System.Windows.Forms.ComboBox();
             this.cbProductTypes = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
@@ -49,7 +49,7 @@
             // 
             // grpSearch
             // 
-            this.grpSearch.Controls.Add(this.comboBox2);
+            this.grpSearch.Controls.Add(this.cbPurchaseStatus);
             this.grpSearch.Controls.Add(this.cbProductTypes);
             this.grpSearch.Controls.Add(this.label4);
             this.grpSearch.Controls.Add(this.label5);
@@ -65,16 +65,16 @@
             this.grpSearch.TabStop = false;
             this.grpSearch.Text = "Tìm Kiếm";
             // 
-            // comboBox2
+            // cbPurchaseStatus
             // 
-            this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Items.AddRange(new object[] {
+            this.cbPurchaseStatus.FormattingEnabled = true;
+            this.cbPurchaseStatus.Items.AddRange(new object[] {
             "Còn giao dịch",
             "Hết giao dịch"});
-            this.comboBox2.Location = new System.Drawing.Point(448, 60);
-            this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(170, 22);
-            this.comboBox2.TabIndex = 8;
+            this.cbPurchaseStatus.Location = new System.Drawing.Point(448, 60);
+            this.cbPurchaseStatus.Name = "cbPurchaseStatus";
+            this.cbPurchaseStatus.Size = new System.Drawing.Size(170, 22);
+            this.cbPurchaseStatus.TabIndex = 8;
             // 
             // cbProductTypes
             // 
@@ -110,6 +110,7 @@
             this.btnSearch.TabIndex = 4;
             this.btnSearch.Text = "Tìm";
             this.btnSearch.UseVisualStyleBackColor = true;
+            this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
             // 
             // txtName
             // 
@@ -160,6 +161,7 @@
             this.btnDelete.TabIndex = 9;
             this.btnDelete.Text = "Xóa loại được chọn";
             this.btnDelete.UseVisualStyleBackColor = true;
+            this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
             // 
             // dgvProductList
             // 
@@ -227,6 +229,6 @@
         private System.Windows.Forms.ComboBox cbProductTypes;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.ComboBox comboBox2;
+        private System.Windows.Forms.ComboBox cbPurchaseStatus;
     }
 }

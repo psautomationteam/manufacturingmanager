@@ -12,11 +12,12 @@ using BaoHien.Services.MeasurementUnits;
 using BaoHien.Services.Prices;
 using DAL.Helper;
 using BaoHien.Services.BaseAttributes;
+using BaoHien.UI.Base;
 
 
 namespace BaoHien.UI
 {
-    public partial class AddProduct : Form
+    public partial class AddProduct : BaseForm
     {
         public AddProduct()
         {
@@ -58,6 +59,7 @@ namespace BaoHien.UI
             if (result)
             {
                 MessageBox.Show("Sản phẩm đã được tạo thành công");
+                ((ProductList)this.CallFromUserControll).loadProductList();
                 this.Close();
             }
             else

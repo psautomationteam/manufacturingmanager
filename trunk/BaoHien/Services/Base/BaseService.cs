@@ -5,6 +5,7 @@ using System.Text;
 using DAL;
 using System.Reflection;
 using DAL.Helper;
+using System.Linq.Expressions;
 namespace BaoHien.Services.Base
 {
     
@@ -54,7 +55,7 @@ namespace BaoHien.Services.Base
             if (type.GetProperties().Any(x => x.Name == Constant.DELETED_PROPERTY_NAME))
             {
                 PropertyInfo property = type.GetProperty(Constant.DELETED_PROPERTY_NAME);
-                Nullable<Boolean> deleted = (Nullable<Boolean>)property.GetValue(item, null);
+                Nullable<bool> deleted = (Nullable<bool>)property.GetValue(item, null);
                 if (deleted.HasValue && deleted.Value)
                 {
                     return true;
@@ -178,7 +179,7 @@ namespace BaoHien.Services.Base
                     if (type.GetProperties().Any(x => x.Name == Constant.DELETED_PROPERTY_NAME))
                     {
                         property = type.GetProperty(Constant.DELETED_PROPERTY_NAME);
-                        property.SetValue(item, new Nullable<Boolean>(true), null);
+                        property.SetValue(item, new Nullable<bool>(true), null);
                     }
                     OnUpdateItem<TItem>(item, id);
                 }
@@ -200,6 +201,32 @@ namespace BaoHien.Services.Base
                 return false;
             }
             return true;
+        }
+        
+        public List<TItem> SelectItemByWhere<TItem>(Expression<Func<TItem, bool>> func)
+        {
+            List<TItem> list = null;
+            try
+            {
+                
+                
+                Type typeofClassWithGenericStaticMethod = typeof(BaoHienRepository);
+                MethodInfo methodInfo = typeofClassWithGenericStaticMethod.GetMethod("SelectByWhere", System.Reflection.BindingFlags.Static | BindingFlags.Public);
+                var expressionKey = typeof(Expression<>).MakeGenericType(typeof(Func<,>).MakeGenericType(typeof(TItem), typeof(bool)));
+
+                Type[] genericArguments = new[] { typeof(TItem) };
+                
+                MethodInfo genericMethodInfo = methodInfo.MakeGenericMethod(genericArguments);
+                list = (List<TItem>)genericMethodInfo.Invoke(null, new [] { func });
+                
+                list = list.Where(item => !checkDeletedItems<TItem>(item)).ToList<TItem>();
+
+            }
+            catch (Exception)
+            {
+
+            }
+            return list;
         }
     }
 }

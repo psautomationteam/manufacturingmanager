@@ -78,7 +78,7 @@ namespace DAL
     #endregion
 		
 		public BaoHienDBDataContext() : 
-				base(global::DAL.Properties.Settings.Default.BaoHienDBConnectionString, mappingSource)
+				base(global::DAL.Properties.Settings.Default.BaoHienDBConnectionString1, mappingSource)
 		{
 			OnCreated();
 		}
@@ -402,7 +402,7 @@ namespace DAL
 		
 		private string _password;
 		
-		private System.Nullable<short> _Status;
+		private System.Nullable<bool> _Status;
 		
 		private short _Type;
 		
@@ -420,7 +420,7 @@ namespace DAL
     partial void OnusernameChanged();
     partial void OnpasswordChanging(string value);
     partial void OnpasswordChanged();
-    partial void OnStatusChanging(System.Nullable<short> value);
+    partial void OnStatusChanging(System.Nullable<bool> value);
     partial void OnStatusChanged();
     partial void OnTypeChanging(short value);
     partial void OnTypeChanged();
@@ -494,8 +494,8 @@ namespace DAL
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Status", DbType="SmallInt")]
-		public System.Nullable<short> Status
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Status", DbType="Bit")]
+		public System.Nullable<bool> Status
 		{
 			get
 			{
@@ -632,7 +632,7 @@ namespace DAL
 		
 		private string _Description;
 		
-		private System.Nullable<short> _Status;
+		private System.Nullable<bool> _Status;
 		
 		private System.Nullable<int> _SalerId;
 		
@@ -670,7 +670,7 @@ namespace DAL
     partial void OnFaxChanged();
     partial void OnDescriptionChanging(string value);
     partial void OnDescriptionChanged();
-    partial void OnStatusChanging(System.Nullable<short> value);
+    partial void OnStatusChanging(System.Nullable<bool> value);
     partial void OnStatusChanged();
     partial void OnSalerIdChanging(System.Nullable<int> value);
     partial void OnSalerIdChanged();
@@ -943,8 +943,8 @@ namespace DAL
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Status", DbType="SmallInt")]
-		public System.Nullable<short> Status
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Status", DbType="Bit")]
+		public System.Nullable<bool> Status
 		{
 			get
 			{
@@ -1095,7 +1095,7 @@ namespace DAL
 		
 		private string _Description;
 		
-		private System.Nullable<short> _Status;
+		private System.Nullable<bool> _Status;
 		
 		private EntitySet<Customer> _Customers;
 		
@@ -1125,7 +1125,7 @@ namespace DAL
     partial void OnTypeChanged();
     partial void OnDescriptionChanging(string value);
     partial void OnDescriptionChanged();
-    partial void OnStatusChanging(System.Nullable<short> value);
+    partial void OnStatusChanging(System.Nullable<bool> value);
     partial void OnStatusChanged();
     #endregion
 		
@@ -1355,8 +1355,8 @@ namespace DAL
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Status", DbType="SmallInt")]
-		public System.Nullable<short> Status
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Status", DbType="Bit")]
+		public System.Nullable<bool> Status
 		{
 			get
 			{
@@ -2555,7 +2555,7 @@ namespace DAL
 		
 		private int _ProductType;
 		
-		private System.Nullable<int> _Status;
+		private System.Nullable<bool> _Status;
 		
 		private EntitySet<MaterialInStock> _MaterialInStocks;
 		
@@ -2589,7 +2589,7 @@ namespace DAL
     partial void OnBaseUnitChanged();
     partial void OnProductTypeChanging(int value);
     partial void OnProductTypeChanged();
-    partial void OnStatusChanging(System.Nullable<int> value);
+    partial void OnStatusChanging(System.Nullable<bool> value);
     partial void OnStatusChanged();
     #endregion
 		
@@ -2734,8 +2734,8 @@ namespace DAL
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Status", DbType="Int")]
-		public System.Nullable<int> Status
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Status", DbType="Bit")]
+		public System.Nullable<bool> Status
 		{
 			get
 			{
@@ -3752,6 +3752,8 @@ namespace DAL
 		
 		private string _TypeCode;
 		
+		private System.Nullable<bool> _Status;
+		
 		private EntitySet<Product> _Products;
 		
     #region Extensibility Method Definitions
@@ -3766,6 +3768,8 @@ namespace DAL
     partial void OnDescriptionChanged();
     partial void OnTypeCodeChanging(string value);
     partial void OnTypeCodeChanged();
+    partial void OnStatusChanging(System.Nullable<bool> value);
+    partial void OnStatusChanged();
     #endregion
 		
 		public ProductType()
@@ -3850,6 +3854,26 @@ namespace DAL
 					this._TypeCode = value;
 					this.SendPropertyChanged("TypeCode");
 					this.OnTypeCodeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Status", DbType="Bit")]
+		public System.Nullable<bool> Status
+		{
+			get
+			{
+				return this._Status;
+			}
+			set
+			{
+				if ((this._Status != value))
+				{
+					this.OnStatusChanging(value);
+					this.SendPropertyChanging();
+					this._Status = value;
+					this.SendPropertyChanged("Status");
+					this.OnStatusChanged();
 				}
 			}
 		}

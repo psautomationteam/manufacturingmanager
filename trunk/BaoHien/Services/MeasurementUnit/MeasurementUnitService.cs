@@ -25,11 +25,11 @@ namespace BaoHien.Services.MeasurementUnits
         {
             return OnAddItem<MeasurementUnit>(materialInStock);
         }
-        public bool DeleteMaterialInStock(System.Int32 id)
+        public bool DeleteMeasurementUnit(System.Int32 id)
         {
             return OnDeleteItem<MeasurementUnit>(id.ToString());
         }
-        public bool UpdateMaterialInStock(MeasurementUnit measurementUnit)
+        public bool UpdateMeasurementUnit(MeasurementUnit measurementUnit)
         {
             return OnUpdateItem<MeasurementUnit>(measurementUnit, measurementUnit.Id.ToString());
         }
