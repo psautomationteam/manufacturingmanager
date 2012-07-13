@@ -9,10 +9,11 @@ using System.Windows.Forms;
 using DAL;
 using BaoHien.Services.ProductAttributes;
 using BaoHien.Services.BaseAttributes;
+using BaoHien.UI.Base;
 
 namespace BaoHien.UI
 {
-    public partial class AddProductAttribute : Form
+    public partial class AddProductAttribute : BaseForm
     {
         public AddProductAttribute()
         {
@@ -38,6 +39,7 @@ namespace BaoHien.UI
             if (result)
             {
                 MessageBox.Show("Thuộc tính được tạo thành công");
+                ((ProductAttributeList)this.CallFromUserControll).loadProductAttributeList();
                 this.Close();
             }
             else

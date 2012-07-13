@@ -37,11 +37,22 @@ namespace DAL.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=stephen\\sqlexpress;Initial Catalog=BaoHienDB;Integrated Security" +
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=stephen\\sqlexpress;Initial Catalog=BaoHienCompany;Integrated Security" +
             "=True;Pooling=False")]
         public string BaoHienDBConnectionString {
             get {
                 return ((string)(this["BaoHienDBConnectionString"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=.\\SQLExpress;Initial Catalog=BaoHienDB;Integrated Security=True;Pooli" +
+            "ng=False")]
+        public string BaoHienDBConnectionString1 {
+            get {
+                return ((string)(this["BaoHienDBConnectionString1"]));
             }
         }
     }

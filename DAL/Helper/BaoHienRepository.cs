@@ -18,6 +18,14 @@ namespace DAL.Helper
 
         //public static string addr;
         private static BaoHienDBDataContext context = null;
+        public static BaoHienDBDataContext GetBaoHienDBDataContext()
+        {
+            if (checkExistingContext())
+            {
+                return context;
+            }
+            return null;
+        }
         static bool checkExistingContext()
         {
             if (context == null)
@@ -290,7 +298,7 @@ namespace DAL.Helper
         {
             try
             {
-
+                /*
                 Type tType = item.GetType();
                 Object newObj = Activator.CreateInstance(tType, new object[0]);
 
@@ -307,12 +315,13 @@ namespace DAL.Helper
                     }
                 }
 
-                T originObject = SelectByPK<T>(id);
+                T originObject = SelectByPK<T>(id);*/
                 if (checkExistingContext())
                 {
                     var table = context.GetTable<T>();
-                    table.Attach((T)newObj, originObject);
-                    table.DeleteOnSubmit((T)newObj);
+                    //table.Attach((T)newObj, originObject);
+                    //table.DeleteOnSubmit((T)newObj);
+                    table.DeleteOnSubmit(item);
                     context.SubmitChanges();
                 }
                 else

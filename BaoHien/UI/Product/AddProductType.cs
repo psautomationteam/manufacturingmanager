@@ -8,10 +8,11 @@ using System.Text;
 using System.Windows.Forms;
 using DAL;
 using BaoHien.Services.Products;
+using BaoHien.UI.Base;
 
 namespace BaoHien.UI
 {
-    public partial class AddProductType : Form
+    public partial class AddProductType : BaseForm
     {
         public AddProductType()
         {
@@ -37,6 +38,7 @@ namespace BaoHien.UI
             if (result)
             {
                 MessageBox.Show("Loại sản phẩm đã được thêm mới vào hệ thống");
+                ((ucProductType)this.CallFromUserControll).loadProductTypeList();
                 this.Close();
             }
             else
