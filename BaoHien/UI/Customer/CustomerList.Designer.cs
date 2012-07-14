@@ -209,6 +209,7 @@
             this.btnDelete.TabIndex = 15;
             this.btnDelete.Text = "Xóa khách hàng được chọn";
             this.btnDelete.UseVisualStyleBackColor = true;
+            this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
             // 
             // label3
             // 

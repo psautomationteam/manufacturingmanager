@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using BaoHien.Services.MeasurementUnits;
 using DAL;
+using DAL.Helper;
 
 namespace BaoHien.UI
 {
@@ -28,6 +29,7 @@ namespace BaoHien.UI
 
         private void BaseUnitList_Load(object sender, EventArgs e)
         {
+            SetupColumns();
             loadMeasurementUnitList();
         }
 
@@ -39,9 +41,8 @@ namespace BaoHien.UI
             {
                
                MeasurementUnitService measurementUnitService = new MeasurementUnitService();
-               MeasurementUnit mu = (MeasurementUnit)dgv.DataBoundItem;
-               
-               if (!measurementUnitService.DeleteMeasurementUnit(mu.Id))
+               int id = ObjectHelper.GetValueFromAnonymousType<int>(dgv.DataBoundItem, "Id");
+               if (!measurementUnitService.DeleteMeasurementUnit(id))
                {
                    MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
                    break;
@@ -56,8 +57,46 @@ namespace BaoHien.UI
             List<MeasurementUnit> measurementUnits = measurementUnitService.GetMeasurementUnits();
             if (measurementUnits != null)
             {
-                dgvBaseUnitList.DataSource = measurementUnits;
+                setUpDataGrid(measurementUnits);
             }
+        }
+        private void setUpDataGrid(List<MeasurementUnit> measurementUnits)
+        {
+            if (measurementUnits != null)
+            {
+                var query = from measurementUnit in measurementUnits
+
+                            select new
+                            {
+                                Name = measurementUnit.Name,
+                                Description = measurementUnit.Description,
+                                Id = measurementUnit.Id,
+
+                            };
+                dgvBaseUnitList.DataSource = query.ToList();
+
+            }
+        }
+        private void SetupColumns()
+        {
+            dgvBaseUnitList.AutoGenerateColumns = false;
+            DataGridViewTextBoxColumn nameColumn = new DataGridViewTextBoxColumn();
+            nameColumn.Width = 150;
+            nameColumn.DataPropertyName = "Name";
+            nameColumn.HeaderText = "Tên đơn vị tính";
+            nameColumn.ValueType = typeof(string);
+            nameColumn.Frozen = true;
+            dgvBaseUnitList.Columns.Add(nameColumn);
+
+
+
+            DataGridViewTextBoxColumn descriptionColumn = new DataGridViewTextBoxColumn();
+            descriptionColumn.Width = dgvBaseUnitList.Width - nameColumn.Width;
+            descriptionColumn.DataPropertyName = "Description";
+            descriptionColumn.HeaderText = "Đặc tả";
+            descriptionColumn.Frozen = true;
+            descriptionColumn.ValueType = typeof(string);
+            dgvBaseUnitList.Columns.Add(descriptionColumn);
         }
     }
 }

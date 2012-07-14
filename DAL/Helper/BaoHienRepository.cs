@@ -248,44 +248,45 @@ namespace DAL.Helper
         {
             try
             {
-                Type type = typeof(T);
+                context.SubmitChanges();
+                //Type type = typeof(T);
 
-                if (item != null && type.GetProperties().Any(x => x.Name == Constant.DELETED_PROPERTY_NAME))
-                {
-                    T origilItem = SelectByPK<T>(id);
-                    PropertyInfo property = type.GetProperty(Constant.DELETED_PROPERTY_NAME);
-                    bool deleted = (bool)property.GetValue(origilItem, null);
-                    if (deleted) return;
+                ////if (item != null && type.GetProperties().Any(x => x.Name == Constant.DELETED_PROPERTY_NAME))
+                ////{
+                ////    T origilItem = SelectByPK<T>(id);
+                ////    PropertyInfo property = type.GetProperty(Constant.DELETED_PROPERTY_NAME);
+                ////    bool deleted = (bool)property.GetValue(origilItem, null);
+                ////    if (deleted) return;
 
-                }
-                if (item == null || id == null || id == "") return;
-                // create a new instance of the object
-                Object newObj = Activator.CreateInstance(typeof(T), new object[0]);
+                ////}
+                //if (item == null || id == null || id == "") return;
+                //// create a new instance of the object
+                //Object newObj = Activator.CreateInstance(typeof(T), new object[0]);
 
-                PropertyDescriptorCollection originalProps = TypeDescriptor.GetProperties(item);
+                //PropertyDescriptorCollection originalProps = TypeDescriptor.GetProperties(item);
 
-                // set the new object to match the passed in object
-                foreach (PropertyDescriptor currentProp in originalProps)
-                {
-                    if (currentProp.Attributes[typeof(System.Data.Linq.Mapping.ColumnAttribute)] != null)
-                    {
-                        object val = currentProp.GetValue(item);
-                        currentProp.SetValue(newObj, val);
-                    }
-                }
+                //// set the new object to match the passed in object
+                //foreach (PropertyDescriptor currentProp in originalProps)
+                //{
+                //    if (currentProp.Attributes[typeof(System.Data.Linq.Mapping.ColumnAttribute)] != null)
+                //    {
+                //        object val = currentProp.GetValue(item);
+                //        currentProp.SetValue(newObj, val);
+                //    }
+                //}
 
-                // attach the new object to a new data context and
-                // call submit changes on the context
-                T originObject = SelectByPK<T>(id);
-                if (checkExistingContext())
-                {
-                    var table = context.GetTable<T>();
-                    table.Attach((T)newObj, originObject);
-                    //table.
+                //// attach the new object to a new data context and
+                //// call submit changes on the context
+                //T originObject = SelectByPK<T>(id);
+                //if (checkExistingContext())
+                //{
+                //    var table = context.GetTable<T>();
+                //    table.Attach((T)newObj, originObject);
+                //    //table.
 
-                    context.SubmitChanges();
-                }else
-                    throw new Exception();
+                //    context.SubmitChanges();
+                //}else
+                //    throw new Exception();
             }
             catch (Exception)
             {
