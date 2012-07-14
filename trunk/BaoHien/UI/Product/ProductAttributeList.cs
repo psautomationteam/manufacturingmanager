@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using BaoHien.Services.ProductAttributes;
 using DAL;
 using BaoHien.Services.BaseAttributes;
+using DAL.Helper;
 
 namespace BaoHien.UI
 {
@@ -28,6 +29,7 @@ namespace BaoHien.UI
 
         private void ProductAttributeList_Load(object sender, EventArgs e)
         {
+            SetupColumns();
             loadProductAttributeList();
         }
 
@@ -44,9 +46,8 @@ namespace BaoHien.UI
             {
 
                 BaseAttributeService productAttributeService = new BaseAttributeService();
-                BaseAttribute mu = (BaseAttribute)dgv.DataBoundItem;
-
-                if (!productAttributeService.DeleteBaseAttribute(mu.Id))
+                int id = ObjectHelper.GetValueFromAnonymousType<int>(dgv.DataBoundItem, "Id");
+                if (!productAttributeService.DeleteBaseAttribute(id))
                 {
                     MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
                     break;
@@ -61,9 +62,56 @@ namespace BaoHien.UI
             List<BaseAttribute> baseAttributes = baseAttributeService.GetBaseAttributes();
             if (baseAttributes != null)
             {
-                dgvProductAttributeList.DataSource = baseAttributes;
+                setUpDataGrid(baseAttributes);
 
             }
+        }
+        private void setUpDataGrid(List<BaseAttribute> baseAttributes)
+        {
+            if (baseAttributes != null)
+            {
+                var query = from baseAttribute in baseAttributes
+
+                            select new
+                            {
+                                AttributeName = baseAttribute.AttributeName,
+                                AttributeCode = baseAttribute.AttributeCode,
+                                Description = baseAttribute.Description,
+                                Id = baseAttribute.Id,
+
+                            };
+                dgvProductAttributeList.DataSource = query.ToList();
+
+            }
+        }
+        private void SetupColumns()
+        {
+            dgvProductAttributeList.AutoGenerateColumns = false;
+            DataGridViewTextBoxColumn attributeNameColumn = new DataGridViewTextBoxColumn();
+            attributeNameColumn.Width = 150;
+            attributeNameColumn.DataPropertyName = "AttributeName";
+            attributeNameColumn.HeaderText = "Tên thuộc tính";
+            attributeNameColumn.ValueType = typeof(string);
+            attributeNameColumn.Frozen = true;
+            dgvProductAttributeList.Columns.Add(attributeNameColumn);
+
+
+
+            DataGridViewTextBoxColumn attributeCodeColumn = new DataGridViewTextBoxColumn();
+            attributeCodeColumn.DataPropertyName = "AttributeCode";
+            attributeCodeColumn.Width = 150;
+            attributeCodeColumn.HeaderText = "Mã Thuộc tính";
+            attributeCodeColumn.Frozen = true;
+            attributeCodeColumn.ValueType = typeof(string);
+            dgvProductAttributeList.Columns.Add(attributeCodeColumn);
+
+            DataGridViewTextBoxColumn descriptionColumn = new DataGridViewTextBoxColumn();
+            descriptionColumn.Width = dgvProductAttributeList.Width - attributeNameColumn.Width - attributeCodeColumn.Width;
+            descriptionColumn.DataPropertyName = "Description";
+            descriptionColumn.HeaderText = "Đặc tả";
+            descriptionColumn.Frozen = true;
+            descriptionColumn.ValueType = typeof(string);
+            dgvProductAttributeList.Columns.Add(descriptionColumn);
         }
     }
 }

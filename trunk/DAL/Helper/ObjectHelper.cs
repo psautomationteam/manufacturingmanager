@@ -7,8 +7,15 @@ using System.ComponentModel;
 
 namespace DAL.Helper
 {
-    class ObjectHelper
+    public class ObjectHelper
     {
+        public static T GetValueFromAnonymousType<T>(object dataitem, string itemkey)
+        {
+            System.Type type = dataitem.GetType();
+            T itemvalue = (T)type.GetProperty(itemkey).GetValue(dataitem, null);
+            return itemvalue;
+        }
+
         public static void ConvertObjectFrom<T1, T2>(T1 sourceObject, ref T2 destObject)
         {
             //	If either the source, or destination is null, return

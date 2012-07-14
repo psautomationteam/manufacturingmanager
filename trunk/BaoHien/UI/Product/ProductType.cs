@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using BaoHien.Services.Products;
 using DAL;
 using BaoHien.Model;
+using DAL.Helper;
 
 namespace BaoHien.UI
 {
@@ -28,18 +29,12 @@ namespace BaoHien.UI
 
         private void ucProductType_Load(object sender, EventArgs e)
         {
-            ProductTypeService productTypeService = new ProductTypeService();
-            List<ProductType> productTypes = productTypeService.GetProductTypes();
-            if (productTypes != null)
-            {
-                
-                dgvProductTypeList.DataSource = productTypes;
-
-
-            }
+            SetupColumns();
+            loadProductTypeList();
         }
         public void loadProductTypeList()
         {
+            
             ProductTypeService productTypeService = new ProductTypeService();
             List<ProductType> productTypes = productTypeService.GetProductTypes();
             if (productTypes != null)
@@ -59,9 +54,9 @@ namespace BaoHien.UI
             {
 
                 ProductTypeService productTypeService = new ProductTypeService();
-                ProductType mu = (ProductType)dgv.DataBoundItem;
+                int id = ObjectHelper.GetValueFromAnonymousType<int>(dgv.DataBoundItem, "Id");
                 ProductService productService = new ProductService();
-                List<Product> productList = productService.SelectProductByWhere(pt=>pt.ProductType == mu.Id);
+                List<Product> productList = productService.SelectProductByWhere(pt => pt.ProductType == id);
                 bool deleteAllProductForThisType = true;
                 foreach (Product p in productList)
                 {
@@ -72,7 +67,7 @@ namespace BaoHien.UI
                         break;
                     }
                 }
-                if (!deleteAllProductForThisType || !productTypeService.DeleteProductType(mu.Id))
+                if (!deleteAllProductForThisType || !productTypeService.DeleteProductType(id))
                 {
                     MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
                     break;
@@ -104,9 +99,39 @@ namespace BaoHien.UI
             List<ProductType> productTypes = producTypeService.SearchingProductType(producTypeSearchCriteria);
             if (productTypes != null)
             {
+                
                 dgvProductTypeList.DataSource = productTypes;
                 lblTotalResult.Text = productTypes.Count.ToString();
             }
+        }
+        private void SetupColumns()
+        {
+            dgvProductTypeList.AutoGenerateColumns = false;
+            DataGridViewTextBoxColumn productNameColumn = new DataGridViewTextBoxColumn();
+            productNameColumn.Width = 150;
+            productNameColumn.DataPropertyName = "ProductName";
+            productNameColumn.HeaderText = "Tên loại sản phẩm";
+            productNameColumn.ValueType = typeof(string);
+            productNameColumn.Frozen = true;
+            dgvProductTypeList.Columns.Add(productNameColumn);
+
+            
+
+            DataGridViewTextBoxColumn typeCodeColumn = new DataGridViewTextBoxColumn();
+            typeCodeColumn.DataPropertyName = "TypeCode";
+            typeCodeColumn.Width = 150;
+            typeCodeColumn.HeaderText = "Mã loại sản phẩm";
+            typeCodeColumn.Frozen = true;
+            typeCodeColumn.ValueType = typeof(string);
+            dgvProductTypeList.Columns.Add(typeCodeColumn);
+
+            DataGridViewTextBoxColumn descriptionColumn = new DataGridViewTextBoxColumn();
+            descriptionColumn.Width = dgvProductTypeList.Width - productNameColumn.Width - typeCodeColumn.Width;
+            descriptionColumn.DataPropertyName = "Description";
+            descriptionColumn.HeaderText = "Đặc tả";
+            descriptionColumn.Frozen = true;
+            descriptionColumn.ValueType = typeof(string);
+            dgvProductTypeList.Columns.Add(descriptionColumn);
         }
     }
 }
