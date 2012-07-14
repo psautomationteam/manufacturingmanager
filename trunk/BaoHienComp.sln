@@ -10,7 +10,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{664DFEF1-0CAA-446F-97CE-1EA5FEB2C3A5}"
 	ProjectSection(SolutionItems) = preProject
 		BaoHienComp.vsmdi = BaoHienComp.vsmdi
-		Local.testsettings = Local.testsettings
 	EndProjectSection
 EndProject
 Global

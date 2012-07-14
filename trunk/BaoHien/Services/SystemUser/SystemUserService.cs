@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using DAL;
 using BaoHien.Services.Base;
+using System.Linq.Expressions;
 
 namespace BaoHien.Services.SystemUsers
 {
@@ -21,9 +22,9 @@ namespace BaoHien.Services.SystemUsers
 
             return systemUsers;
         }
-        public bool AddPSystemUser(SystemUser product)
+        public bool AddPSystemUser(SystemUser systemUser)
         {
-            return OnAddItem<SystemUser>(product);
+            return OnAddItem<SystemUser>(systemUser);
         }
         public bool DeleteSystemUser(System.Int32 id)
         {
@@ -32,6 +33,11 @@ namespace BaoHien.Services.SystemUsers
         public bool UpdateSystemUser(SystemUser systemUser)
         {
             return OnUpdateItem<SystemUser>(systemUser, systemUser.Id.ToString());
+        }
+        public List<SystemUser> SelectSystemUserByWhere(Expression<Func<SystemUser, bool>> func)
+        {
+
+            return SelectItemByWhere<SystemUser>(func);
         }
     }
 }
