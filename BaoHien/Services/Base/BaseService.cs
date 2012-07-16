@@ -55,8 +55,8 @@ namespace BaoHien.Services.Base
             if (type.GetProperties().Any(x => x.Name == Constant.DELETED_PROPERTY_NAME))
             {
                 PropertyInfo property = type.GetProperty(Constant.DELETED_PROPERTY_NAME);
-                Nullable<bool> deleted = (Nullable<bool>)property.GetValue(item, null);
-                if (deleted.HasValue && deleted.Value)
+                Nullable<byte> deleted = (Nullable<byte>)property.GetValue(item, null);
+                if (deleted.HasValue && deleted.Value == Constant.DELETED_PROPERTY_VALUE)
                 {
                     return true;
                 }
@@ -179,7 +179,7 @@ namespace BaoHien.Services.Base
                     if (type.GetProperties().Any(x => x.Name == Constant.DELETED_PROPERTY_NAME))
                     {
                         property = type.GetProperty(Constant.DELETED_PROPERTY_NAME);
-                        property.SetValue(item, new Nullable<bool>(true), null);
+                        property.SetValue(item, new Nullable<byte>(Constant.DELETED_PROPERTY_VALUE), null);
                     }
                     OnUpdateItem<TItem>(item, id);
                 }
