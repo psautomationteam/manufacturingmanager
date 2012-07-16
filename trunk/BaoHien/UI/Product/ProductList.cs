@@ -67,8 +67,8 @@ namespace BaoHien.UI
                                 Description = product.Description,
                                 Id = product.Id,
                                 Status = product.Status,
-                                ProductType = product.ProductType1.ProductName,
-                                BaseUnit = product.MeasurementUnit.Name
+                                ProductType = (product.ProductType1 != null)?product.ProductType1.ProductName:"",
+                                BaseUnit = (product.MeasurementUnit != null)?product.MeasurementUnit.Name:""
                             };
                 dgvProductList.DataSource = query.ToList();
                 lblTotalResult.Text = products.Count.ToString();
@@ -168,6 +168,18 @@ namespace BaoHien.UI
             descriptionColumn.Frozen = true;
             descriptionColumn.ValueType = typeof(string);
             dgvProductList.Columns.Add(descriptionColumn);
+        }
+
+        private void dgvProductList_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            AddProduct frmAddProductType = new AddProduct();
+            DataGridViewRow currentRow = dgvProductList.Rows[e.RowIndex];
+
+            int id = ObjectHelper.GetValueFromAnonymousType<int>(currentRow.DataBoundItem, "Id");
+            frmAddProductType.loadDataForEditProduct(id);
+
+            frmAddProductType.CallFromUserControll = this;
+            frmAddProductType.ShowDialog();
         }
     }
 }

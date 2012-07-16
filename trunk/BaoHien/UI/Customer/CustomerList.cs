@@ -51,7 +51,7 @@ namespace BaoHien.UI
 
                             select new
                             {
-                                CustomerName = customer.CustomerName,
+                                CustomerName = customer.Name,
                                 Address = customer.Address,
                                 BankAcc = customer.BankAcc,
                                 BankName = customer.BankName,
