@@ -9,6 +9,6 @@ namespace DAL
     {
         public const string PRIMARYKEY_PROPERTY_NAME = "Id";
         public const string DELETED_PROPERTY_NAME = "Status";
-        
+        public const byte DELETED_PROPERTY_VALUE = 1;
     }
 }
