@@ -133,5 +133,19 @@ namespace BaoHien.UI
             descriptionColumn.ValueType = typeof(string);
             dgvProductTypeList.Columns.Add(descriptionColumn);
         }
+
+        
+
+        private void dgvProductTypeList_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            AddProductType frmAddProductType = new AddProductType();
+            DataGridViewRow currentRow = dgvProductTypeList.Rows[e.RowIndex];
+
+            int id = ObjectHelper.GetValueFromAnonymousType<int>(currentRow.DataBoundItem, "Id");
+            frmAddProductType.loadDataForEditProductType(id);
+            
+            frmAddProductType.CallFromUserControll = this;
+            frmAddProductType.ShowDialog();
+        }
     }
 }
