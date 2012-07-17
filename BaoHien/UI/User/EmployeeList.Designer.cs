@@ -30,48 +30,37 @@
         {
             this.dgvEmployeeList = new System.Windows.Forms.DataGridView();
             this.btnAdd = new System.Windows.Forms.Button();
-            this.btnDelete = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvEmployeeList)).BeginInit();
             this.SuspendLayout();
             // 
             // dgvEmployeeList
             // 
             this.dgvEmployeeList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvEmployeeList.Location = new System.Drawing.Point(33, 76);
+            this.dgvEmployeeList.Location = new System.Drawing.Point(33, 71);
             this.dgvEmployeeList.Name = "dgvEmployeeList";
-            this.dgvEmployeeList.Size = new System.Drawing.Size(787, 505);
+            this.dgvEmployeeList.Size = new System.Drawing.Size(865, 469);
             this.dgvEmployeeList.TabIndex = 20;
             this.dgvEmployeeList.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvEmployeeList_CellClick);
             this.dgvEmployeeList.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvEmployeeList_CellDoubleClick);
             // 
             // btnAdd
             // 
-            this.btnAdd.Location = new System.Drawing.Point(155, 24);
+            this.btnAdd.Location = new System.Drawing.Point(33, 22);
             this.btnAdd.Name = "btnAdd";
-            this.btnAdd.Size = new System.Drawing.Size(107, 46);
+            this.btnAdd.Size = new System.Drawing.Size(107, 43);
             this.btnAdd.TabIndex = 19;
             this.btnAdd.Text = "Thêm nhân viên mới";
             this.btnAdd.UseVisualStyleBackColor = true;
             this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
             // 
-            // btnDelete
-            // 
-            this.btnDelete.Location = new System.Drawing.Point(35, 24);
-            this.btnDelete.Name = "btnDelete";
-            this.btnDelete.Size = new System.Drawing.Size(104, 46);
-            this.btnDelete.TabIndex = 21;
-            this.btnDelete.Text = "Tạm dừng NV được chọn";
-            this.btnDelete.UseVisualStyleBackColor = true;
-            // 
             // EmployeeList
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 14F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.dgvEmployeeList);
             this.Controls.Add(this.btnAdd);
-            this.Controls.Add(this.btnDelete);
             this.Name = "EmployeeList";
-            this.Size = new System.Drawing.Size(1084, 690);
+            this.Size = new System.Drawing.Size(1084, 641);
             this.Load += new System.EventHandler(this.EmployeeList_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvEmployeeList)).EndInit();
             this.ResumeLayout(false);
@@ -82,6 +71,5 @@
 
         private System.Windows.Forms.DataGridView dgvEmployeeList;
         private System.Windows.Forms.Button btnAdd;
-        private System.Windows.Forms.Button btnDelete;
     }
 }
