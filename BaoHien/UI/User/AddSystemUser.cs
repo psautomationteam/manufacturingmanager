@@ -41,30 +41,89 @@ namespace BaoHien.UI
                     userType = BHConstant.USER_TYPE_ID3;
                 }
             }
-            SystemUser systemUser = new SystemUser
+            if (systemUser != null)
             {
-                FullName = txtName.Text,
-                password = txtPass.Text,
-                Type = userType,
-                username = txtCode.Text
-            };
-            SystemUserService systemUserService = new SystemUserService();
-            if (systemUserService.AddPSystemUser(systemUser))
-            {
-                MessageBox.Show("Người dùng đã được tạo thành công");
-                ((SystemUserList)this.CallFromUserControll).loadSystemUserList();
-                this.Close();
+                systemUser.FullName = txtName.Text;
+                if (txtPass.Text != "" && txtConfirmPass.Text != "" && txtPass.Text.Equals(txtConfirmPass.Text))
+                {
+                    systemUser.password = txtPass.Text;
+                }
+                
+                systemUser.Type = userType;
+                
+                SystemUserService systemUserService = new SystemUserService();
+                if (systemUserService.UpdateSystemUser(systemUser))
+                {
+                    MessageBox.Show("Người dùng đã được cập nhật thành công");
+                    ((SystemUserList)this.CallFromUserControll).loadSystemUserList();
+                    this.Close();
+                }
+                else
+                {
+                    MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                }
             }
             else
             {
-                MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                systemUser = new SystemUser
+                {
+                    FullName = txtName.Text,
+                    password = txtPass.Text,
+                    Type = userType,
+                    username = txtCode.Text
+                };
+                SystemUserService systemUserService = new SystemUserService();
+                if (systemUserService.AddPSystemUser(systemUser))
+                {
+                    MessageBox.Show("Người dùng đã được tạo thành công");
+                    ((SystemUserList)this.CallFromUserControll).loadSystemUserList();
+                    this.Close();
+                }
+                else
+                {
+                    MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                }
             }
+            
             
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
 
+        }
+        public void loadDataForEditSystemUser(int systemUserId)
+        {
+            this.Text = "Chỉnh sửa thuộc tính phẩm này";
+            this.btnAdd.Text = "Cập nhật";
+
+            SystemUserService systemUserService = new SystemUserService();
+
+            systemUser = systemUserService.GetSystemUser(systemUserId);
+
+            short userType = systemUser.Type;
+            string o = cbUserType.Text;
+            if (userType == BHConstant.USER_TYPE_ID1)
+            {
+                cbUserType.Text = BHConstant.USER_TYPE_NAME1;
+            }
+            else if (userType == BHConstant.USER_TYPE_ID2)
+            {
+                cbUserType.Text = BHConstant.USER_TYPE_NAME2;
+            }
+            else if (userType == BHConstant.USER_TYPE_ID3)
+            {
+                cbUserType.Text = BHConstant.USER_TYPE_NAME3;
+            }
+
+            if (systemUser != null)
+            {
+                txtName.Text = systemUser.FullName ;
+                txtCode.Text = systemUser.username;
+                txtCode.Enabled = false;
+                txtConfirmPass.Text = "";
+                txtPass.Text = "";
+            }
         }
     }
 }
