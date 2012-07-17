@@ -170,5 +170,17 @@ namespace BaoHien.UI
 
             }
         }
+
+        private void dgvUserList_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            AddSystemUser frmAddSystemUser = new AddSystemUser();
+            DataGridViewRow currentRow = dgvUserList.Rows[e.RowIndex];
+
+            int id = ObjectHelper.GetValueFromAnonymousType<int>(currentRow.DataBoundItem, "Id");
+            frmAddSystemUser.loadDataForEditSystemUser(id);
+
+            frmAddSystemUser.CallFromUserControll = this;
+            frmAddSystemUser.ShowDialog();
+        }
     }
 }

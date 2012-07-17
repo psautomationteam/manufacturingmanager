@@ -37,17 +37,18 @@
             // dgvUserList
             // 
             this.dgvUserList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvUserList.Location = new System.Drawing.Point(47, 71);
+            this.dgvUserList.Location = new System.Drawing.Point(47, 76);
             this.dgvUserList.Name = "dgvUserList";
-            this.dgvUserList.Size = new System.Drawing.Size(787, 469);
+            this.dgvUserList.Size = new System.Drawing.Size(787, 505);
             this.dgvUserList.TabIndex = 17;
             this.dgvUserList.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvUserList_CellClick);
+            this.dgvUserList.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvUserList_CellDoubleClick);
             // 
             // btnAdd
             // 
-            this.btnAdd.Location = new System.Drawing.Point(169, 22);
+            this.btnAdd.Location = new System.Drawing.Point(169, 24);
             this.btnAdd.Name = "btnAdd";
-            this.btnAdd.Size = new System.Drawing.Size(107, 43);
+            this.btnAdd.Size = new System.Drawing.Size(107, 46);
             this.btnAdd.TabIndex = 16;
             this.btnAdd.Text = "Thêm người dùng mới";
             this.btnAdd.UseVisualStyleBackColor = true;
@@ -55,9 +56,9 @@
             // 
             // btnDelete
             // 
-            this.btnDelete.Location = new System.Drawing.Point(49, 22);
+            this.btnDelete.Location = new System.Drawing.Point(49, 24);
             this.btnDelete.Name = "btnDelete";
-            this.btnDelete.Size = new System.Drawing.Size(104, 43);
+            this.btnDelete.Size = new System.Drawing.Size(104, 46);
             this.btnDelete.TabIndex = 18;
             this.btnDelete.Text = "Tạm dừng người được chọn";
             this.btnDelete.UseVisualStyleBackColor = true;
@@ -65,13 +66,13 @@
             // 
             // SystemUserList
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.dgvUserList);
             this.Controls.Add(this.btnAdd);
             this.Controls.Add(this.btnDelete);
             this.Name = "SystemUserList";
-            this.Size = new System.Drawing.Size(1084, 641);
+            this.Size = new System.Drawing.Size(1084, 690);
             this.Load += new System.EventHandler(this.SystemUserList_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvUserList)).EndInit();
             this.ResumeLayout(false);
