@@ -62,7 +62,7 @@ namespace BaoHien.UI
                                 CustCode = customer.CustCode,
                                 Description = customer.Description,
                                 Email = customer.Email,
-                                Employee = (customer.Employee != null)?customer.Employee.FirstName + " " + customer.Employee.MiddleName + " " + customer.Employee.LastName: "",
+                                Employee = (customer.Employee != null)?customer.Employee.FullName: "",
                                 Fax = customer.Fax,
                                 Phone = customer.Phone,
                                 SalerId = customer.SalerId,
