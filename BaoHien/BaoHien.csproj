@@ -140,11 +140,29 @@
     <Compile Include="UI\Product\ProductType.Designer.cs">
       <DependentUpon>ProductType.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\User\AddEmployee.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\User\AddEmployee.Designer.cs">
+      <DependentUpon>AddEmployee.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\User\AddSystemUser.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="UI\User\AddSystemUser.Designer.cs">
       <DependentUpon>AddSystemUser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\User\ChangePassword.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\User\ChangePassword.Designer.cs">
+      <DependentUpon>ChangePassword.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\User\EmployeeList.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\User\EmployeeList.Designer.cs">
+      <DependentUpon>EmployeeList.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\User\Login.cs">
       <SubType>Form</SubType>
@@ -201,8 +219,17 @@
     <EmbeddedResource Include="UI\Product\ProductType.resx">
       <DependentUpon>ProductType.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UI\User\AddEmployee.resx">
+      <DependentUpon>AddEmployee.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\User\AddSystemUser.resx">
       <DependentUpon>AddSystemUser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\User\ChangePassword.resx">
+      <DependentUpon>ChangePassword.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\User\EmployeeList.resx">
+      <DependentUpon>EmployeeList.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\User\Login.resx">
       <DependentUpon>Login.cs</DependentUpon>

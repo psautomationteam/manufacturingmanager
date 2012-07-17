@@ -32,6 +32,7 @@
             this.menuMain = new System.Windows.Forms.MenuStrip();
             this.menuFile = new System.Windows.Forms.ToolStripMenuItem();
             this.menuLogout = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuChangePass = new System.Windows.Forms.ToolStripMenuItem();
             this.menuExit = new System.Windows.Forms.ToolStripMenuItem();
             this.menuEntity = new System.Windows.Forms.ToolStripMenuItem();
             this.menuProductType = new System.Windows.Forms.ToolStripMenuItem();
@@ -90,6 +91,7 @@
             // 
             this.menuFile.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuLogout,
+            this.menuChangePass,
             this.menuExit});
             this.menuFile.Name = "menuFile";
             this.menuFile.Size = new System.Drawing.Size(39, 20);
@@ -102,6 +104,13 @@
             this.menuLogout.Size = new System.Drawing.Size(151, 22);
             this.menuLogout.Text = "Thoát";
             this.menuLogout.Click += new System.EventHandler(this.menuLogout_Click);
+            // 
+            // menuChangePass
+            // 
+            this.menuChangePass.Name = "menuChangePass";
+            this.menuChangePass.Size = new System.Drawing.Size(151, 22);
+            this.menuChangePass.Text = "Đổi mật mã";
+            this.menuChangePass.Click += new System.EventHandler(this.menuChangePass_Click);
             // 
             // menuExit
             // 
@@ -178,22 +187,23 @@
             // menuAttribute
             // 
             this.menuAttribute.Name = "menuAttribute";
-            this.menuAttribute.Size = new System.Drawing.Size(148, 22);
+            this.menuAttribute.Size = new System.Drawing.Size(152, 22);
             this.menuAttribute.Text = "Thuộc tính SP";
             this.menuAttribute.Click += new System.EventHandler(this.menuAttribute_Click);
             // 
             // menuMeasurementUnit
             // 
             this.menuMeasurementUnit.Name = "menuMeasurementUnit";
-            this.menuMeasurementUnit.Size = new System.Drawing.Size(148, 22);
+            this.menuMeasurementUnit.Size = new System.Drawing.Size(152, 22);
             this.menuMeasurementUnit.Text = "Đơn Vị Tính";
             this.menuMeasurementUnit.Click += new System.EventHandler(this.menuMeasurementUnit_Click);
             // 
             // menuEmployee
             // 
             this.menuEmployee.Name = "menuEmployee";
-            this.menuEmployee.Size = new System.Drawing.Size(148, 22);
+            this.menuEmployee.Size = new System.Drawing.Size(152, 22);
             this.menuEmployee.Text = "Nhân Viên";
+            this.menuEmployee.Click += new System.EventHandler(this.menuEmployee_Click);
             // 
             // menuReport
             // 
@@ -429,6 +439,7 @@
         private System.Windows.Forms.Panel pnlMain;
         private System.Windows.Forms.ToolStripMenuItem menuLogout;
         private System.Windows.Forms.ToolStripMenuItem menuCustomer;
+        private System.Windows.Forms.ToolStripMenuItem menuChangePass;
 
     }
 }
