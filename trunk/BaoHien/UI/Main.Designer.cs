@@ -173,6 +173,7 @@
             this.menuOrder.ShortcutKeys = System.Windows.Forms.Keys.F3;
             this.menuOrder.Size = new System.Drawing.Size(178, 22);
             this.menuOrder.Text = "Phiếu Bán Hàng";
+            this.menuOrder.Click += new System.EventHandler(this.menuOrder_Click);
             // 
             // menuConfiguration
             // 
@@ -187,21 +188,21 @@
             // menuAttribute
             // 
             this.menuAttribute.Name = "menuAttribute";
-            this.menuAttribute.Size = new System.Drawing.Size(152, 22);
+            this.menuAttribute.Size = new System.Drawing.Size(148, 22);
             this.menuAttribute.Text = "Thuộc tính SP";
             this.menuAttribute.Click += new System.EventHandler(this.menuAttribute_Click);
             // 
             // menuMeasurementUnit
             // 
             this.menuMeasurementUnit.Name = "menuMeasurementUnit";
-            this.menuMeasurementUnit.Size = new System.Drawing.Size(152, 22);
+            this.menuMeasurementUnit.Size = new System.Drawing.Size(148, 22);
             this.menuMeasurementUnit.Text = "Đơn Vị Tính";
             this.menuMeasurementUnit.Click += new System.EventHandler(this.menuMeasurementUnit_Click);
             // 
             // menuEmployee
             // 
             this.menuEmployee.Name = "menuEmployee";
-            this.menuEmployee.Size = new System.Drawing.Size(152, 22);
+            this.menuEmployee.Size = new System.Drawing.Size(148, 22);
             this.menuEmployee.Text = "Nhân Viên";
             this.menuEmployee.Click += new System.EventHandler(this.menuEmployee_Click);
             // 
@@ -237,7 +238,7 @@
             // menuSystemUser
             // 
             this.menuSystemUser.Name = "menuSystemUser";
-            this.menuSystemUser.Size = new System.Drawing.Size(152, 22);
+            this.menuSystemUser.Size = new System.Drawing.Size(139, 22);
             this.menuSystemUser.Text = "Người Dùng";
             this.menuSystemUser.Click += new System.EventHandler(this.menuSystemUser_Click);
             // 
@@ -288,6 +289,7 @@
             this.tsbAddOrder.Name = "tsbAddOrder";
             this.tsbAddOrder.Size = new System.Drawing.Size(23, 22);
             this.tsbAddOrder.Text = "toolStripButton1";
+            this.tsbAddOrder.Click += new System.EventHandler(this.tsbAddOrder_Click);
             // 
             // toolStripLabel1
             // 
