@@ -15,6 +15,7 @@ namespace BaoHien.UI
 {
     public partial class AddSystemUser : BaseForm
     {
+        SystemUser systemUser;
         public AddSystemUser()
         {
             InitializeComponent();
