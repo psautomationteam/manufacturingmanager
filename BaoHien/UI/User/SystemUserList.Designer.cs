@@ -41,6 +41,7 @@
             this.dgvUserList.Name = "dgvUserList";
             this.dgvUserList.Size = new System.Drawing.Size(787, 469);
             this.dgvUserList.TabIndex = 17;
+            this.dgvUserList.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvUserList_CellClick);
             // 
             // btnAdd
             // 

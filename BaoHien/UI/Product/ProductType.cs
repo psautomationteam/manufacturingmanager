@@ -39,13 +39,33 @@ namespace BaoHien.UI
             List<ProductType> productTypes = productTypeService.GetProductTypes();
             if (productTypes != null)
             {
-
-                dgvProductTypeList.DataSource = productTypes;
+                setUpDataGrid(productTypes);
+                //dgvProductTypeList.DataSource = productTypes;
 
 
             }
         }
+        private void setUpDataGrid(List<ProductType> productTypes)
+        {
+            if (productTypes != null)
+            {
+                int index = 0;
+                var query = from productType in productTypes
 
+                            select new
+                            {
+                                
+                                ProductName = productType.ProductName,
+                                TypeCode = productType.TypeCode,
+                                Description = productType.Description,
+                                Id = productType.Id,
+                                Status = productType.Status,
+                                Index = index++
+                            };
+                dgvProductTypeList.DataSource = query.ToList();
+                lblTotalResult.Text = productTypes.Count.ToString();
+            }
+        }
         private void btnDelete_Click(object sender, EventArgs e)
         {
             DataGridViewSelectedRowCollection selectedRows = dgvProductTypeList.SelectedRows;
@@ -107,6 +127,14 @@ namespace BaoHien.UI
         private void SetupColumns()
         {
             dgvProductTypeList.AutoGenerateColumns = false;
+            DataGridViewTextBoxColumn indexColumn = new DataGridViewTextBoxColumn();
+            indexColumn.Width = 30;
+            indexColumn.DataPropertyName = "Index";
+            indexColumn.HeaderText = "STT";
+            indexColumn.ValueType = typeof(string);
+            indexColumn.Frozen = true;
+            dgvProductTypeList.Columns.Add(indexColumn);
+
             DataGridViewTextBoxColumn productNameColumn = new DataGridViewTextBoxColumn();
             productNameColumn.Width = 150;
             productNameColumn.DataPropertyName = "ProductName";
@@ -125,13 +153,24 @@ namespace BaoHien.UI
             typeCodeColumn.ValueType = typeof(string);
             dgvProductTypeList.Columns.Add(typeCodeColumn);
 
+            DataGridViewImageColumn deleteButton = new DataGridViewImageColumn();
+            deleteButton.Image = Properties.Resources.erase;
+            deleteButton.Width = 150;
+            deleteButton.HeaderText = "Xóa";
+            deleteButton.ReadOnly = true;
+            deleteButton.ImageLayout = DataGridViewImageCellLayout.Normal;
+            
+            //deleteButton.DataPropertyName = "DeletedIcon";
+
             DataGridViewTextBoxColumn descriptionColumn = new DataGridViewTextBoxColumn();
-            descriptionColumn.Width = dgvProductTypeList.Width - productNameColumn.Width - typeCodeColumn.Width;
+            descriptionColumn.Width = 300;//dgvProductTypeList.Width - productNameColumn.Width - typeCodeColumn.Width - deleteButton.Width;
             descriptionColumn.DataPropertyName = "Description";
             descriptionColumn.HeaderText = "Đặc tả";
             descriptionColumn.Frozen = true;
             descriptionColumn.ValueType = typeof(string);
             dgvProductTypeList.Columns.Add(descriptionColumn);
+
+            dgvProductTypeList.Columns.Add(deleteButton);
         }
 
         
@@ -146,6 +185,49 @@ namespace BaoHien.UI
             
             frmAddProductType.CallFromUserControll = this;
             frmAddProductType.ShowDialog();
+        }
+
+        private void dgvProductTypeList_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (sender is DataGridView)
+            {
+                DataGridViewCell cell = ((DataGridView)sender).CurrentCell;
+                if (cell.ColumnIndex == ((DataGridView)sender).ColumnCount - 1)
+                {
+                    DialogResult result = MessageBox.Show("Bạn có muốn xóa loại sản phẩm này?",
+                    "Xoá loại sản phẩm này",
+                     MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question);
+                    if (result == DialogResult.Yes)
+                    {
+                        DataGridViewRow currentRow = dgvProductTypeList.Rows[e.RowIndex];
+
+                        int id = ObjectHelper.GetValueFromAnonymousType<int>(currentRow.DataBoundItem, "Id");
+                        ProductService productService = new ProductService();
+                        List<Product> productList = productService.SelectProductByWhere(pt => pt.ProductType == id);
+                        bool deleteAllProductForThisType = true;
+                        foreach (Product p in productList)
+                        {
+                            if (!productService.DeleteProduct(p.Id))
+                            {
+                                deleteAllProductForThisType = false;
+                                MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                                break;
+                            }
+                        }
+                        ProductTypeService producTypeService = new ProductTypeService();
+                        if (!deleteAllProductForThisType || !producTypeService.DeleteProductType(id))
+                        {
+                            MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+
+                        }
+                        loadProductTypeList();
+                    }
+                    
+                }
+                
+            }
+            
         }
     }
 }

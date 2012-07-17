@@ -58,6 +58,7 @@ namespace BaoHien.UI
         {
             if (products != null)
             {
+                int index = 0;
                 var query = from product in products
 
                             select new
@@ -68,7 +69,8 @@ namespace BaoHien.UI
                                 Id = product.Id,
                                 Status = product.Status,
                                 ProductType = (product.ProductType1 != null)?product.ProductType1.ProductName:"",
-                                BaseUnit = (product.MeasurementUnit != null)?product.MeasurementUnit.Name:""
+                                BaseUnit = (product.MeasurementUnit != null)?product.MeasurementUnit.Name:"",
+                                Index = index++
                             };
                 dgvProductList.DataSource = query.ToList();
                 lblTotalResult.Text = products.Count.ToString();
@@ -93,6 +95,7 @@ namespace BaoHien.UI
 
             }
         }
+
         private void btnAdd_Click(object sender, EventArgs e)
         {
             AddProduct frmAddProduct = new AddProduct();
@@ -127,6 +130,13 @@ namespace BaoHien.UI
         private void SetupColumns()
         {
             dgvProductList.AutoGenerateColumns = false;
+            DataGridViewTextBoxColumn indexColumn = new DataGridViewTextBoxColumn();
+            indexColumn.Width = 30;
+            indexColumn.DataPropertyName = "Index";
+            indexColumn.HeaderText = "STT";
+            indexColumn.ValueType = typeof(string);
+            indexColumn.Frozen = true;
+            dgvProductList.Columns.Add(indexColumn);
             DataGridViewTextBoxColumn productNameColumn = new DataGridViewTextBoxColumn();
             productNameColumn.Width = 150;
             productNameColumn.DataPropertyName = "ProductName";
@@ -139,7 +149,7 @@ namespace BaoHien.UI
 
             DataGridViewTextBoxColumn typeCodeColumn = new DataGridViewTextBoxColumn();
             typeCodeColumn.DataPropertyName = "ProductCode";
-            typeCodeColumn.Width = 150;
+            typeCodeColumn.Width = 100;
             typeCodeColumn.HeaderText = "Mã sản phẩm";
             typeCodeColumn.Frozen = true;
             typeCodeColumn.ValueType = typeof(string);
@@ -147,7 +157,7 @@ namespace BaoHien.UI
 
             DataGridViewTextBoxColumn productTypeColumn = new DataGridViewTextBoxColumn();
             productTypeColumn.DataPropertyName = "ProductType";
-            productTypeColumn.Width = 150;
+            productTypeColumn.Width = 100;
             productTypeColumn.HeaderText = "Loại sản phẩm";
             productTypeColumn.Frozen = true;
             productTypeColumn.ValueType = typeof(string);
@@ -155,19 +165,28 @@ namespace BaoHien.UI
 
             DataGridViewTextBoxColumn baseUnitColumn = new DataGridViewTextBoxColumn();
             baseUnitColumn.DataPropertyName = "BaseUnit";
-            baseUnitColumn.Width = 150;
+            baseUnitColumn.Width = 100;
             baseUnitColumn.HeaderText = "Đơn vị tính";
             baseUnitColumn.Frozen = true;
             baseUnitColumn.ValueType = typeof(string);
             dgvProductList.Columns.Add(baseUnitColumn);
 
+            DataGridViewImageColumn deleteButton = new DataGridViewImageColumn();
+            deleteButton.Image = Properties.Resources.erase;
+            deleteButton.Width = 100;
+            deleteButton.HeaderText = "Xóa";
+            deleteButton.ReadOnly = true;
+            deleteButton.ImageLayout = DataGridViewImageCellLayout.Normal;
+
             DataGridViewTextBoxColumn descriptionColumn = new DataGridViewTextBoxColumn();
-            descriptionColumn.Width = dgvProductList.Width - productNameColumn.Width - typeCodeColumn.Width;
+            descriptionColumn.Width = 170;// dgvProductList.Width - productNameColumn.Width - typeCodeColumn.Width - deleteButton.Width;
             descriptionColumn.DataPropertyName = "Description";
             descriptionColumn.HeaderText = "Đặc tả";
             descriptionColumn.Frozen = true;
             descriptionColumn.ValueType = typeof(string);
             dgvProductList.Columns.Add(descriptionColumn);
+
+            dgvProductList.Columns.Add(deleteButton);
         }
 
         private void dgvProductList_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
@@ -180,6 +199,37 @@ namespace BaoHien.UI
 
             frmAddProductType.CallFromUserControll = this;
             frmAddProductType.ShowDialog();
+        }
+
+        private void dgvProductList_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (sender is DataGridView)
+            {
+                DataGridViewCell cell = ((DataGridView)sender).CurrentCell;
+                if (cell.ColumnIndex == ((DataGridView)sender).ColumnCount - 1)
+                {
+                    DialogResult result = MessageBox.Show("Bạn có muốn xóa loại sản phẩm này?",
+                    "Xoá loại sản phẩm này",
+                     MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question);
+                    if (result == DialogResult.Yes)
+                    {
+                        DataGridViewRow currentRow = dgvProductList.Rows[e.RowIndex];
+
+                        ProductService productService = new ProductService();
+                        //Product mu = (Product)dgv.DataBoundItem;
+                        int id = ObjectHelper.GetValueFromAnonymousType<int>(currentRow.DataBoundItem, "Id");
+                        if (!productService.DeleteProduct(id))
+                        {
+                            MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                            
+                        }
+                        loadProductList();
+                    }
+
+                }
+
+            }
         }
     }
 }

@@ -41,6 +41,7 @@
             this.dgvProductAttributeList.Name = "dgvProductAttributeList";
             this.dgvProductAttributeList.Size = new System.Drawing.Size(787, 505);
             this.dgvProductAttributeList.TabIndex = 17;
+            this.dgvProductAttributeList.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvProductAttributeList_CellClick);
             this.dgvProductAttributeList.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvProductAttributeList_CellDoubleClick);
             this.dgvProductAttributeList.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dgvProductAttributeList_CellFormatting);
             // 
