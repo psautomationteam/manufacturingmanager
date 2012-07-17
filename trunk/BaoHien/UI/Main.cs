@@ -74,6 +74,19 @@ namespace BaoHien.UI
             pnlMain.Controls.Add(ucSystemUser);
         }
 
+        private void menuChangePass_Click(object sender, EventArgs e)
+        {
+            ChangePassword frmChangePass = new ChangePassword();
+            frmChangePass.ShowDialog();
+
+        }
+
+        private void menuEmployee_Click(object sender, EventArgs e)
+        {
+            EmployeeList ucEmLst = new EmployeeList();
+            pnlMain.Controls.Clear();
+            pnlMain.Controls.Add(ucEmLst);
+        }
         #endregion 
 
 #region toolbar action
@@ -91,6 +104,10 @@ namespace BaoHien.UI
         }
 
 #endregion
+
+        
+
+        
 
         
 

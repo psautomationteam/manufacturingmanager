@@ -174,5 +174,10 @@ namespace BaoHien.UI
                 txtName.Text = product.ProductName;
             }
         }
+
+        private void chkAuto_CheckedChanged(object sender, EventArgs e)
+        {
+            txtCode.Enabled = !chkAuto.Checked;
+        }
     }
 }
