@@ -15,6 +15,7 @@ namespace BaoHien.UI
 {
     public partial class AddProductAttribute : BaseForm
     {
+        BaseAttribute baseAttribute;
         public AddProductAttribute()
         {
             InitializeComponent();
@@ -27,24 +28,62 @@ namespace BaoHien.UI
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            BaseAttribute baseAttribute = new BaseAttribute
+            if (baseAttribute != null && baseAttribute.Id > 0)
             {
-                
-                AttributeName = txtName.Text,
-                Description = txtDescription.Text,
-                AttributeCode = txtCode.Text
-            };
-            BaseAttributeService baseAttributeService = new BaseAttributeService();
-            bool result = baseAttributeService.AddBaseAttribute(baseAttribute);
-            if (result)
-            {
-                MessageBox.Show("Thuộc tính được tạo thành công");
-                ((ProductAttributeList)this.CallFromUserControll).loadProductAttributeList();
-                this.Close();
+                baseAttribute.Description = txtDescription.Text;
+                baseAttribute.AttributeName = txtName.Text;
+                baseAttribute.AttributeCode = txtCode.Text;
+
+                BaseAttributeService baseAttributeService = new BaseAttributeService();
+                bool result = baseAttributeService.UpdateBaseAttribute(baseAttribute);
+                if (result)
+                {
+                    MessageBox.Show("Loại thuộc tính đã được cập nhật vào hệ thống");
+                    ((ProductAttributeList)this.CallFromUserControll).loadProductAttributeList();
+                    this.Close();
+                }
+                else
+                {
+                    MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                }
             }
             else
             {
-                MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                baseAttribute = new BaseAttribute
+                {
+
+                    AttributeName = txtName.Text,
+                    Description = txtDescription.Text,
+                    AttributeCode = txtCode.Text
+                };
+                BaseAttributeService baseAttributeService = new BaseAttributeService();
+                bool result = baseAttributeService.AddBaseAttribute(baseAttribute);
+                if (result)
+                {
+                    MessageBox.Show("Thuộc tính được tạo thành công");
+                    ((ProductAttributeList)this.CallFromUserControll).loadProductAttributeList();
+                    this.Close();
+                }
+                else
+                {
+                    MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                }
+            }
+            
+        }
+        public void loadDataForEditProductAttribute(int productAttributeId)
+        {
+            this.Text = "Chỉnh sửa thuộc tính phẩm này";
+            this.btnSave.Text = "Cập nhật";
+
+            BaseAttributeService baseAttributeService = new BaseAttributeService();
+
+            baseAttribute = baseAttributeService.GetBaseAttribute(productAttributeId);
+            if (baseAttribute != null)
+            {
+                txtDescription.Text = baseAttribute.Description;
+                txtCode.Text = baseAttribute.AttributeCode;
+                txtName.Text = baseAttribute.AttributeName;
             }
         }
     }

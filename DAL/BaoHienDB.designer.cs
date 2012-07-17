@@ -22,7 +22,7 @@ namespace DAL
 	using System;
 	
 	
-	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="BaoHienDB")]
+	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="BaoHienCompany")]
 	public partial class BaoHienDBDataContext : System.Data.Linq.DataContext
 	{
 		
@@ -78,7 +78,7 @@ namespace DAL
     #endregion
 		
 		public BaoHienDBDataContext() : 
-				base(global::DAL.Properties.Settings.Default.BaoHienDBConnectionString1, mappingSource)
+				base(global::DAL.Properties.Settings.Default.BaoHienCompanyConnectionString1, mappingSource)
 		{
 			OnCreated();
 		}
@@ -304,7 +304,7 @@ namespace DAL
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Description", DbType="Text", UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Description", DbType="VarChar(500)")]
 		public string Description
 		{
 			get
@@ -402,7 +402,7 @@ namespace DAL
 		
 		private string _password;
 		
-		private System.Nullable<bool> _Status;
+		private System.Nullable<byte> _Status;
 		
 		private short _Type;
 		
@@ -420,7 +420,7 @@ namespace DAL
     partial void OnusernameChanged();
     partial void OnpasswordChanging(string value);
     partial void OnpasswordChanged();
-    partial void OnStatusChanging(System.Nullable<bool> value);
+    partial void OnStatusChanging(System.Nullable<byte> value);
     partial void OnStatusChanged();
     partial void OnTypeChanging(short value);
     partial void OnTypeChanged();
@@ -494,8 +494,8 @@ namespace DAL
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Status", DbType="Bit")]
-		public System.Nullable<bool> Status
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Status", DbType="TinyInt")]
+		public System.Nullable<byte> Status
 		{
 			get
 			{
@@ -534,7 +534,7 @@ namespace DAL
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FullName", DbType="VarChar(50)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FullName", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
 		public string FullName
 		{
 			get
@@ -632,7 +632,7 @@ namespace DAL
 		
 		private string _Description;
 		
-		private System.Nullable<bool> _Status;
+		private System.Nullable<byte> _Status;
 		
 		private System.Nullable<int> _SalerId;
 		
@@ -670,7 +670,7 @@ namespace DAL
     partial void OnFaxChanged();
     partial void OnDescriptionChanging(string value);
     partial void OnDescriptionChanged();
-    partial void OnStatusChanging(System.Nullable<bool> value);
+    partial void OnStatusChanging(System.Nullable<byte> value);
     partial void OnStatusChanged();
     partial void OnSalerIdChanging(System.Nullable<int> value);
     partial void OnSalerIdChanged();
@@ -923,7 +923,7 @@ namespace DAL
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Description", DbType="Text", UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Description", DbType="VarChar(500)")]
 		public string Description
 		{
 			get
@@ -943,8 +943,8 @@ namespace DAL
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Status", DbType="Bit")]
-		public System.Nullable<bool> Status
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Status", DbType="TinyInt")]
+		public System.Nullable<byte> Status
 		{
 			get
 			{
@@ -1095,7 +1095,7 @@ namespace DAL
 		
 		private string _Description;
 		
-		private System.Nullable<bool> _Status;
+		private System.Nullable<byte> _Status;
 		
 		private EntitySet<Customer> _Customers;
 		
@@ -1125,7 +1125,7 @@ namespace DAL
     partial void OnTypeChanged();
     partial void OnDescriptionChanging(string value);
     partial void OnDescriptionChanged();
-    partial void OnStatusChanging(System.Nullable<bool> value);
+    partial void OnStatusChanging(System.Nullable<byte> value);
     partial void OnStatusChanged();
     #endregion
 		
@@ -1355,8 +1355,8 @@ namespace DAL
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Status", DbType="Bit")]
-		public System.Nullable<bool> Status
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Status", DbType="TinyInt")]
+		public System.Nullable<byte> Status
 		{
 			get
 			{
@@ -1672,7 +1672,7 @@ namespace DAL
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Description", DbType="Text", UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Description", DbType="VarChar(500)")]
 		public string Description
 		{
 			get
@@ -1778,7 +1778,11 @@ namespace DAL
 		
 		private string _Note;
 		
-		private double _VAT;
+		private System.Nullable<double> _VAT;
+		
+		private System.Nullable<double> _Discount;
+		
+		private System.Nullable<byte> _Status;
 		
 		private EntitySet<OrderDetail> _OrderDetails;
 		
@@ -1804,8 +1808,12 @@ namespace DAL
     partial void OnTotalChanged();
     partial void OnNoteChanging(string value);
     partial void OnNoteChanged();
-    partial void OnVATChanging(double value);
+    partial void OnVATChanging(System.Nullable<double> value);
     partial void OnVATChanged();
+    partial void OnDiscountChanging(System.Nullable<double> value);
+    partial void OnDiscountChanged();
+    partial void OnStatusChanging(System.Nullable<byte> value);
+    partial void OnStatusChanged();
     #endregion
 		
 		public Order()
@@ -1944,7 +1952,7 @@ namespace DAL
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Note", DbType="VarChar(250)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Note", DbType="VarChar(500)")]
 		public string Note
 		{
 			get
@@ -1964,8 +1972,8 @@ namespace DAL
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_VAT", DbType="Float NOT NULL")]
-		public double VAT
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_VAT", DbType="Float")]
+		public System.Nullable<double> VAT
 		{
 			get
 			{
@@ -1980,6 +1988,46 @@ namespace DAL
 					this._VAT = value;
 					this.SendPropertyChanged("VAT");
 					this.OnVATChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Discount", DbType="Float")]
+		public System.Nullable<double> Discount
+		{
+			get
+			{
+				return this._Discount;
+			}
+			set
+			{
+				if ((this._Discount != value))
+				{
+					this.OnDiscountChanging(value);
+					this.SendPropertyChanging();
+					this._Discount = value;
+					this.SendPropertyChanged("Discount");
+					this.OnDiscountChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Status", DbType="TinyInt")]
+		public System.Nullable<byte> Status
+		{
+			get
+			{
+				return this._Status;
+			}
+			set
+			{
+				if ((this._Status != value))
+				{
+					this.OnStatusChanging(value);
+					this.SendPropertyChanging();
+					this._Status = value;
+					this.SendPropertyChanged("Status");
+					this.OnStatusChanged();
 				}
 			}
 		}
@@ -2555,7 +2603,7 @@ namespace DAL
 		
 		private int _ProductType;
 		
-		private System.Nullable<bool> _Status;
+		private System.Nullable<byte> _Status;
 		
 		private EntitySet<MaterialInStock> _MaterialInStocks;
 		
@@ -2589,7 +2637,7 @@ namespace DAL
     partial void OnBaseUnitChanged();
     partial void OnProductTypeChanging(int value);
     partial void OnProductTypeChanged();
-    partial void OnStatusChanging(System.Nullable<bool> value);
+    partial void OnStatusChanging(System.Nullable<byte> value);
     partial void OnStatusChanged();
     #endregion
 		
@@ -2666,7 +2714,7 @@ namespace DAL
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Description", DbType="Text", UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Description", DbType="VarChar(500)")]
 		public string Description
 		{
 			get
@@ -2734,8 +2782,8 @@ namespace DAL
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Status", DbType="Bit")]
-		public System.Nullable<bool> Status
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Status", DbType="TinyInt")]
+		public System.Nullable<byte> Status
 		{
 			get
 			{
@@ -3370,9 +3418,11 @@ namespace DAL
 		
 		private string _ReqCode;
 		
-		private System.Nullable<int> _RequestedDate;
+		private int _RequestedDate;
 		
 		private string _RequestedBy;
+		
+		private System.Nullable<byte> _Status;
 		
 		private EntitySet<ProductionRequestDetail> _ProductionRequestDetails;
 		
@@ -3384,10 +3434,12 @@ namespace DAL
     partial void OnIdChanged();
     partial void OnReqCodeChanging(string value);
     partial void OnReqCodeChanged();
-    partial void OnRequestedDateChanging(System.Nullable<int> value);
+    partial void OnRequestedDateChanging(int value);
     partial void OnRequestedDateChanged();
     partial void OnRequestedByChanging(string value);
     partial void OnRequestedByChanged();
+    partial void OnStatusChanging(System.Nullable<byte> value);
+    partial void OnStatusChanged();
     #endregion
 		
 		public ProductionRequest()
@@ -3416,7 +3468,7 @@ namespace DAL
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ReqCode", DbType="VarChar(25)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ReqCode", DbType="VarChar(25) NOT NULL", CanBeNull=false)]
 		public string ReqCode
 		{
 			get
@@ -3436,8 +3488,8 @@ namespace DAL
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RequestedDate", DbType="Int")]
-		public System.Nullable<int> RequestedDate
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RequestedDate", DbType="Int NOT NULL")]
+		public int RequestedDate
 		{
 			get
 			{
@@ -3456,7 +3508,7 @@ namespace DAL
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RequestedBy", DbType="VarChar(25)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RequestedBy", DbType="VarChar(25) NOT NULL", CanBeNull=false)]
 		public string RequestedBy
 		{
 			get
@@ -3472,6 +3524,26 @@ namespace DAL
 					this._RequestedBy = value;
 					this.SendPropertyChanged("RequestedBy");
 					this.OnRequestedByChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Status", DbType="TinyInt")]
+		public System.Nullable<byte> Status
+		{
+			get
+			{
+				return this._Status;
+			}
+			set
+			{
+				if ((this._Status != value))
+				{
+					this.OnStatusChanging(value);
+					this.SendPropertyChanging();
+					this._Status = value;
+					this.SendPropertyChanged("Status");
+					this.OnStatusChanged();
 				}
 			}
 		}
@@ -3752,7 +3824,7 @@ namespace DAL
 		
 		private string _TypeCode;
 		
-		private System.Nullable<bool> _Status;
+		private System.Nullable<byte> _Status;
 		
 		private EntitySet<Product> _Products;
 		
@@ -3768,7 +3840,7 @@ namespace DAL
     partial void OnDescriptionChanged();
     partial void OnTypeCodeChanging(string value);
     partial void OnTypeCodeChanged();
-    partial void OnStatusChanging(System.Nullable<bool> value);
+    partial void OnStatusChanging(System.Nullable<byte> value);
     partial void OnStatusChanged();
     #endregion
 		
@@ -3818,7 +3890,7 @@ namespace DAL
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Description", DbType="NChar(10)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Description", DbType="VarChar(500)")]
 		public string Description
 		{
 			get
@@ -3858,8 +3930,8 @@ namespace DAL
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Status", DbType="Bit")]
-		public System.Nullable<bool> Status
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Status", DbType="TinyInt")]
+		public System.Nullable<byte> Status
 		{
 			get
 			{

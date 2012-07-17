@@ -14,6 +14,7 @@ namespace BaoHien.UI
 {
     public partial class AddMeasurementUnit : BaseForm
     {
+        MeasurementUnit measurementUnit;
         public AddMeasurementUnit()
         {
             InitializeComponent();
@@ -26,24 +27,62 @@ namespace BaoHien.UI
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            MeasurementUnit productType = new MeasurementUnit
+            if (measurementUnit != null && measurementUnit.Id > 0)
             {
-                
-                Description = txtDescription.Text,
-                Name = txtName.Text,
-                UnitCode = txtCode.Text
-            };
-            MeasurementUnitService measurementUnitService = new MeasurementUnitService();
-            bool result = measurementUnitService.AddMeasurementUnit(productType);
-            if (result)
-            {
-                MessageBox.Show("Đơn vị tính đã được thêm mới vào hệ thống");
-                ((BaseUnitList)this.CallFromUserControll).loadMeasurementUnitList();
-                this.Close();
+                measurementUnit.Description = txtDescription.Text;
+                measurementUnit.Name = txtName.Text;
+                measurementUnit.UnitCode = txtCode.Text;
+
+                MeasurementUnitService measurementUnitService = new MeasurementUnitService();
+                bool result = measurementUnitService.UpdateMeasurementUnit(measurementUnit);
+                if (result)
+                {
+                    MessageBox.Show("Loại đơn vị đã được cập nhật vào hệ thống");
+                    ((BaseUnitList)this.CallFromUserControll).loadMeasurementUnitList();
+                    this.Close();
+                }
+                else
+                {
+                    MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                }
             }
             else
             {
-                MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                measurementUnit = new MeasurementUnit
+                {
+
+                    Description = txtDescription.Text,
+                    Name = txtName.Text,
+                    UnitCode = txtCode.Text
+                };
+                MeasurementUnitService measurementUnitService = new MeasurementUnitService();
+                bool result = measurementUnitService.AddMeasurementUnit(measurementUnit);
+                if (result)
+                {
+                    MessageBox.Show("Đơn vị tính đã được thêm mới vào hệ thống");
+                    ((BaseUnitList)this.CallFromUserControll).loadMeasurementUnitList();
+                    this.Close();
+                }
+                else
+                {
+                    MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                }
+            }
+            
+        }
+        public void loadDataForEditMeasurementUnit(int measurementUnitId)
+        {
+            this.Text = "Chỉnh sửa đơn vị này phẩm này";
+            this.btnSave.Text = "Cập nhật";
+
+            MeasurementUnitService measurementUnitService = new MeasurementUnitService();
+
+            measurementUnit = measurementUnitService.GetMeasurementUnit(measurementUnitId);
+            if (measurementUnit != null)
+            {
+                txtDescription.Text = measurementUnit.Description;
+                txtCode.Text = measurementUnit.UnitCode;
+                txtName.Text = measurementUnit.Name;
             }
         }
     }

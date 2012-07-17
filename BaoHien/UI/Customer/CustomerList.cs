@@ -61,7 +61,7 @@ namespace BaoHien.UI
                                 CustCode = customer.CustCode,
                                 Description = customer.Description,
                                 Email = customer.Email,
-                                Employee = customer.Employee.FirstName + " " + customer.Employee.MiddleName + " " + customer.Employee.LastName,
+                                Employee = (customer.Employee != null)?customer.Employee.FirstName + " " + customer.Employee.MiddleName + " " + customer.Employee.LastName: "",
                                 Fax = customer.Fax,
                                 Phone = customer.Phone,
                                 SalerId = customer.SalerId,
@@ -149,6 +149,27 @@ namespace BaoHien.UI
 
             }
             loadCustomerList();
+        }
+
+        private void dgvProductList_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            AddCustomer frmAddCustomer = new AddCustomer();
+            DataGridViewRow currentRow = dgvProductList.Rows[e.RowIndex];
+
+            int id = ObjectHelper.GetValueFromAnonymousType<int>(currentRow.DataBoundItem, "Id");
+            frmAddCustomer.loadDataForEditCustomer(id);
+
+            frmAddCustomer.CallFromUserControll = this;
+            frmAddCustomer.ShowDialog();
+        }
+
+        private void btnAdd_Click(object sender, EventArgs e)
+        {
+            AddCustomer frmAddCustomer = new AddCustomer();
+            
+
+            frmAddCustomer.CallFromUserControll = this;
+            frmAddCustomer.ShowDialog();
         }
     }
 }
