@@ -64,6 +64,7 @@ namespace BaoHien.UI
         {
             if (measurementUnits != null)
             {
+                int index = 0;
                 var query = from measurementUnit in measurementUnits
 
                             select new
@@ -71,7 +72,7 @@ namespace BaoHien.UI
                                 Name = measurementUnit.Name,
                                 Description = measurementUnit.Description,
                                 Id = measurementUnit.Id,
-
+                                Index = index++
                             };
                 dgvBaseUnitList.DataSource = query.ToList();
 
@@ -80,23 +81,38 @@ namespace BaoHien.UI
         private void SetupColumns()
         {
             dgvBaseUnitList.AutoGenerateColumns = false;
+            DataGridViewTextBoxColumn indexColumn = new DataGridViewTextBoxColumn();
+            indexColumn.Width = 30;
+            indexColumn.DataPropertyName = "Index";
+            indexColumn.HeaderText = "STT";
+            indexColumn.ValueType = typeof(string);
+            indexColumn.Frozen = true;
+            dgvBaseUnitList.Columns.Add(indexColumn);
+
             DataGridViewTextBoxColumn nameColumn = new DataGridViewTextBoxColumn();
-            nameColumn.Width = 150;
+            nameColumn.Width = 220;
             nameColumn.DataPropertyName = "Name";
             nameColumn.HeaderText = "Tên đơn vị tính";
             nameColumn.ValueType = typeof(string);
             nameColumn.Frozen = true;
             dgvBaseUnitList.Columns.Add(nameColumn);
 
-
+            DataGridViewImageColumn deleteButton = new DataGridViewImageColumn();
+            deleteButton.Image = Properties.Resources.erase;
+            deleteButton.Width = 100;
+            deleteButton.HeaderText = "Xóa";
+            deleteButton.ReadOnly = true;
+            deleteButton.ImageLayout = DataGridViewImageCellLayout.Normal;
 
             DataGridViewTextBoxColumn descriptionColumn = new DataGridViewTextBoxColumn();
-            descriptionColumn.Width = dgvBaseUnitList.Width - nameColumn.Width;
+            descriptionColumn.Width = 400;// dgvBaseUnitList.Width - nameColumn.Width - deleteButton.Width;
             descriptionColumn.DataPropertyName = "Description";
             descriptionColumn.HeaderText = "Đặc tả";
             descriptionColumn.Frozen = true;
             descriptionColumn.ValueType = typeof(string);
+
             dgvBaseUnitList.Columns.Add(descriptionColumn);
+            dgvBaseUnitList.Columns.Add(deleteButton);
         }
 
         private void dgvBaseUnitList_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
@@ -109,6 +125,36 @@ namespace BaoHien.UI
 
             frmAddMeasurementUnit.CallFromUserControll = this;
             frmAddMeasurementUnit.ShowDialog();
+        }
+
+        private void dgvBaseUnitList_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (sender is DataGridView)
+            {
+                DataGridViewCell cell = ((DataGridView)sender).CurrentCell;
+                if (cell.ColumnIndex == ((DataGridView)sender).ColumnCount - 1)
+                {
+                    DialogResult result = MessageBox.Show("Bạn có muốn xóa loại sản phẩm này?",
+                    "Xoá loại sản phẩm này",
+                     MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question);
+                    if (result == DialogResult.Yes)
+                    {
+                        DataGridViewRow currentRow = dgvBaseUnitList.Rows[e.RowIndex];
+
+                        MeasurementUnitService measurementUnitService = new MeasurementUnitService();
+                        int id = ObjectHelper.GetValueFromAnonymousType<int>(currentRow.DataBoundItem, "Id");
+                        if (!measurementUnitService.DeleteMeasurementUnit(id))
+                        {
+                            MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                           
+                        }
+                        loadMeasurementUnitList();
+                    }
+
+                }
+
+            }
         }
     }
 }

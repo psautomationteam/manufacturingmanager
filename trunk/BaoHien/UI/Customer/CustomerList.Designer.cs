@@ -191,6 +191,7 @@
             this.dgvProductList.Name = "dgvProductList";
             this.dgvProductList.Size = new System.Drawing.Size(787, 482);
             this.dgvProductList.TabIndex = 14;
+            this.dgvProductList.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvProductList_CellClick);
             this.dgvProductList.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvProductList_CellDoubleClick);
             // 
             // btnAdd

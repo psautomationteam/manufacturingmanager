@@ -61,6 +61,7 @@ namespace BaoHien.UI
         {
             if (systemUsers != null)
             {
+                int index = 0;
                 var query = from user in systemUsers
 
                             select new
@@ -69,8 +70,8 @@ namespace BaoHien.UI
                                 FullName = user.FullName,
                                 Type = getNameForTypeUser(user.Type),
                                 Id = user.Id,
-                                Status = user.Status
-                                
+                                Status = user.Status,
+                                Index = index++
                             };
                 dgvUserList.DataSource = query.ToList();
                 
@@ -79,6 +80,14 @@ namespace BaoHien.UI
         private void SetupColumns()
         {
             dgvUserList.AutoGenerateColumns = false;
+            DataGridViewTextBoxColumn indexColumn = new DataGridViewTextBoxColumn();
+            indexColumn.Width = 30;
+            indexColumn.DataPropertyName = "Index";
+            indexColumn.HeaderText = "STT";
+            indexColumn.ValueType = typeof(string);
+            indexColumn.Frozen = true;
+            dgvUserList.Columns.Add(indexColumn);
+
             DataGridViewTextBoxColumn productNameColumn = new DataGridViewTextBoxColumn();
             productNameColumn.Width = 150;
             productNameColumn.DataPropertyName = "username";
@@ -97,13 +106,21 @@ namespace BaoHien.UI
             typeCodeColumn.ValueType = typeof(string);
             dgvUserList.Columns.Add(typeCodeColumn);
 
+            DataGridViewImageColumn deleteButton = new DataGridViewImageColumn();
+            deleteButton.Image = Properties.Resources.erase;
+            deleteButton.Width = 100;
+            deleteButton.HeaderText = "Xóa";
+            deleteButton.ReadOnly = true;
+            deleteButton.ImageLayout = DataGridViewImageCellLayout.Normal;
+
             DataGridViewTextBoxColumn descriptionColumn = new DataGridViewTextBoxColumn();
-            descriptionColumn.Width = dgvUserList.Width - productNameColumn.Width - typeCodeColumn.Width;
+            descriptionColumn.Width = 320;// dgvUserList.Width - productNameColumn.Width - typeCodeColumn.Width;
             descriptionColumn.DataPropertyName = "Type";
             descriptionColumn.HeaderText = "Kiểu người dùng";
             descriptionColumn.Frozen = true;
             descriptionColumn.ValueType = typeof(string);
             dgvUserList.Columns.Add(descriptionColumn);
+            dgvUserList.Columns.Add(deleteButton);
         }
         private void btnDelete_Click(object sender, EventArgs e)
         {
@@ -122,6 +139,36 @@ namespace BaoHien.UI
 
             }
             loadSystemUserList();
+        }
+
+        private void dgvUserList_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (sender is DataGridView)
+            {
+                DataGridViewCell cell = ((DataGridView)sender).CurrentCell;
+                if (cell.ColumnIndex == ((DataGridView)sender).ColumnCount - 1)
+                {
+                    DialogResult result = MessageBox.Show("Bạn có muốn xóa loại sản phẩm này?",
+                    "Xoá loại sản phẩm này",
+                     MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question);
+                    if (result == DialogResult.Yes)
+                    {
+                        DataGridViewRow currentRow = dgvUserList.Rows[e.RowIndex];
+
+                        SystemUserService systemUserService = new SystemUserService();
+                        int id = ObjectHelper.GetValueFromAnonymousType<int>(currentRow.DataBoundItem, "Id");
+                        if (!systemUserService.DeleteSystemUser(id))
+                        {
+                            MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                            
+                        }
+                        loadSystemUserList();
+                    }
+
+                }
+
+            }
         }
     }
 }

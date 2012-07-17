@@ -47,6 +47,7 @@ namespace BaoHien.UI
         {
             if (customers != null)
             {
+                int index = 0;
                 var query = from customer in customers
 
                             select new
@@ -67,6 +68,7 @@ namespace BaoHien.UI
                                 SalerId = customer.SalerId,
                                 Status = customer.Status,
                                 Id = customer.Id,
+                                Index = index++
                             };
                 dgvProductList.DataSource = query.ToList();
 
@@ -75,6 +77,14 @@ namespace BaoHien.UI
         private void SetupColumns()
         {
             dgvProductList.AutoGenerateColumns = false;
+            DataGridViewTextBoxColumn indexColumn = new DataGridViewTextBoxColumn();
+            indexColumn.Width = 30;
+            indexColumn.DataPropertyName = "Index";
+            indexColumn.HeaderText = "STT";
+            indexColumn.ValueType = typeof(string);
+            indexColumn.Frozen = true;
+            dgvProductList.Columns.Add(indexColumn);
+
             DataGridViewTextBoxColumn productNameColumn = new DataGridViewTextBoxColumn();
             productNameColumn.Width = 100;
             productNameColumn.DataPropertyName = "CustomerName";
@@ -119,15 +129,22 @@ namespace BaoHien.UI
             employeeColumn.ValueType = typeof(string);
             dgvProductList.Columns.Add(employeeColumn);
 
+            DataGridViewImageColumn deleteButton = new DataGridViewImageColumn();
+            deleteButton.Image = Properties.Resources.erase;
+            deleteButton.Width = 70;
+            deleteButton.HeaderText = "Xóa";
+            deleteButton.ReadOnly = true;
+            deleteButton.ImageLayout = DataGridViewImageCellLayout.Normal;
+
             DataGridViewTextBoxColumn descriptionColumn = new DataGridViewTextBoxColumn();
             descriptionColumn.DataPropertyName = "Description";
-            descriptionColumn.Width = dgvProductList.Width - productNameColumn.Width - addressColumn.Width - emailColumn.Width - faxColumn.Width - employeeColumn.Width;
+            descriptionColumn.Width = 150;//dgvProductList.Width - productNameColumn.Width - addressColumn.Width - emailColumn.Width - faxColumn.Width - employeeColumn.Width;
             descriptionColumn.HeaderText = "Mô tả khách hàng";
             descriptionColumn.Frozen = true;
             descriptionColumn.ValueType = typeof(string);
 
             dgvProductList.Columns.Add(descriptionColumn);
-
+            dgvProductList.Columns.Add(deleteButton);
            
         }
 
@@ -170,6 +187,37 @@ namespace BaoHien.UI
 
             frmAddCustomer.CallFromUserControll = this;
             frmAddCustomer.ShowDialog();
+        }
+
+        private void dgvProductList_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (sender is DataGridView)
+            {
+                DataGridViewCell cell = ((DataGridView)sender).CurrentCell;
+                if (cell.ColumnIndex == ((DataGridView)sender).ColumnCount - 1)
+                {
+                    DialogResult result = MessageBox.Show("Bạn có muốn xóa loại sản phẩm này?",
+                    "Xoá loại sản phẩm này",
+                     MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question);
+                    if (result == DialogResult.Yes)
+                    {
+                        DataGridViewRow currentRow = dgvProductList.Rows[e.RowIndex];
+
+                        CustomerService customerService = new CustomerService();
+                        int id = ObjectHelper.GetValueFromAnonymousType<int>(currentRow.DataBoundItem, "Id");
+
+                        if (!customerService.DeleteCustomer(id))
+                        {
+                            MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                            
+                        }
+                        loadCustomerList();
+                    }
+
+                }
+
+            }
         }
     }
 }
