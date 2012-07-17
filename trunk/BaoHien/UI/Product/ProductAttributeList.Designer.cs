@@ -30,16 +30,15 @@
         {
             this.dgvProductAttributeList = new System.Windows.Forms.DataGridView();
             this.btnAdd = new System.Windows.Forms.Button();
-            this.btnDelete = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvProductAttributeList)).BeginInit();
             this.SuspendLayout();
             // 
             // dgvProductAttributeList
             // 
             this.dgvProductAttributeList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvProductAttributeList.Location = new System.Drawing.Point(23, 72);
+            this.dgvProductAttributeList.Location = new System.Drawing.Point(23, 67);
             this.dgvProductAttributeList.Name = "dgvProductAttributeList";
-            this.dgvProductAttributeList.Size = new System.Drawing.Size(787, 505);
+            this.dgvProductAttributeList.Size = new System.Drawing.Size(787, 469);
             this.dgvProductAttributeList.TabIndex = 17;
             this.dgvProductAttributeList.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvProductAttributeList_CellClick);
             this.dgvProductAttributeList.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvProductAttributeList_CellDoubleClick);
@@ -47,33 +46,22 @@
             // 
             // btnAdd
             // 
-            this.btnAdd.Location = new System.Drawing.Point(121, 19);
+            this.btnAdd.Location = new System.Drawing.Point(23, 18);
             this.btnAdd.Name = "btnAdd";
-            this.btnAdd.Size = new System.Drawing.Size(75, 46);
+            this.btnAdd.Size = new System.Drawing.Size(75, 43);
             this.btnAdd.TabIndex = 16;
             this.btnAdd.Text = "Thêm thuộc tính mới";
             this.btnAdd.UseVisualStyleBackColor = true;
             this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
             // 
-            // btnDelete
-            // 
-            this.btnDelete.Location = new System.Drawing.Point(25, 19);
-            this.btnDelete.Name = "btnDelete";
-            this.btnDelete.Size = new System.Drawing.Size(75, 46);
-            this.btnDelete.TabIndex = 18;
-            this.btnDelete.Text = "Xóa ttính được chọn";
-            this.btnDelete.UseVisualStyleBackColor = true;
-            this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
-            // 
             // ProductAttributeList
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 14F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.dgvProductAttributeList);
             this.Controls.Add(this.btnAdd);
-            this.Controls.Add(this.btnDelete);
             this.Name = "ProductAttributeList";
-            this.Size = new System.Drawing.Size(1084, 690);
+            this.Size = new System.Drawing.Size(1084, 641);
             this.Load += new System.EventHandler(this.ProductAttributeList_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvProductAttributeList)).EndInit();
             this.ResumeLayout(false);
@@ -84,6 +72,5 @@
 
         private System.Windows.Forms.DataGridView dgvProductAttributeList;
         private System.Windows.Forms.Button btnAdd;
-        private System.Windows.Forms.Button btnDelete;
     }
 }
