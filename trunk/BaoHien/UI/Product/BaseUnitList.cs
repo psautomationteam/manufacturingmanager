@@ -98,5 +98,17 @@ namespace BaoHien.UI
             descriptionColumn.ValueType = typeof(string);
             dgvBaseUnitList.Columns.Add(descriptionColumn);
         }
+
+        private void dgvBaseUnitList_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            AddMeasurementUnit frmAddMeasurementUnit = new AddMeasurementUnit();
+            DataGridViewRow currentRow = dgvBaseUnitList.Rows[e.RowIndex];
+
+            int id = ObjectHelper.GetValueFromAnonymousType<int>(currentRow.DataBoundItem, "Id");
+            frmAddMeasurementUnit.loadDataForEditMeasurementUnit(id);
+
+            frmAddMeasurementUnit.CallFromUserControll = this;
+            frmAddMeasurementUnit.ShowDialog();
+        }
     }
 }

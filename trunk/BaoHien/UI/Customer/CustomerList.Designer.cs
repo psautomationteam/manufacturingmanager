@@ -191,6 +191,7 @@
             this.dgvProductList.Name = "dgvProductList";
             this.dgvProductList.Size = new System.Drawing.Size(787, 482);
             this.dgvProductList.TabIndex = 14;
+            this.dgvProductList.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvProductList_CellDoubleClick);
             // 
             // btnAdd
             // 
@@ -200,6 +201,7 @@
             this.btnAdd.TabIndex = 13;
             this.btnAdd.Text = "Thêm khách hàng";
             this.btnAdd.UseVisualStyleBackColor = true;
+            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
             // 
             // btnDelete
             // 
