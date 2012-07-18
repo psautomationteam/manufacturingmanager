@@ -6,11 +6,15 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using DAL;
+using BaoHien.Common;
+using BaoHien.Services.SystemUsers;
 
 namespace BaoHien.UI
 {
     public partial class Main : Form
     {
+        
         public Main()
         {
             InitializeComponent();
@@ -116,6 +120,17 @@ namespace BaoHien.UI
             frmAddOrder.ShowDialog();
         }
 #endregion
+
+        private void Main_Load(object sender, EventArgs e)
+        {
+            if (Global.CurrentUser == null)
+            {
+                SystemUserService systemUserService = new SystemUserService();
+                //SystemUser user = systemUserService.GetSystemUsers().Single(u => (u.username == DUMMY_USERNAME) && (u.password == DUMMY_PASSWORD));
+                SystemUser user = systemUserService.GetSystemUser(1);
+                Global.CurrentUser = user;
+            }
+        }
 
         
 

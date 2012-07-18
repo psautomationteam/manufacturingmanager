@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\BHConstant.cs" />
+    <Compile Include="Common\Global.cs" />
     <Compile Include="Model\ProductTypeSearchCriteria.cs" />
     <Compile Include="Model\ProductSearchCriteria.cs" />
     <Compile Include="Services\Attribute\BaseAttributeService.cs" />
