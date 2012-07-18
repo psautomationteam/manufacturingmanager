@@ -54,7 +54,19 @@ namespace BaoHien.UI
                 order.Note = txtNote.Text;
                 order.VAT = vat;
                 order.OrderCode = txtOrderCode.Text;
-                
+                OrderService orderService = new OrderService();
+                bool result = orderService.UpdateOrder(order);
+                if (!result)
+                {
+                    MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                    return;
+                }
+                else
+                {
+                    MessageBox.Show("Sản phẩm đã được cập nhật thành công");
+                    ((OrderList)this.CallFromUserControll).loadOrderList();
+                    this.Close();
+                }
             }
             else//add new
             {
@@ -225,23 +237,33 @@ namespace BaoHien.UI
             
            // dgwOrderDetails.DataSource = query.ToList();
             //dgwOrderDetails.DataSource = objects;
-            
 
-            DataGridViewComboBoxColumn productColumn = new DataGridViewComboBoxColumn();
-            productColumn.Width = 150;
             if (isUpdating)
             {
-                productColumn.DataPropertyName = "ProductName";
-                //productColumn.
+                DataGridViewTextBoxColumn productColumn = new DataGridViewTextBoxColumn();
+                productColumn.Width = 150;
+                productColumn.DataPropertyName = "Product";
+
+                productColumn.HeaderText = "Sản phẩm";
+                
+
+                dgwOrderDetails.Columns.Add(productColumn);
+            }
+            else
+            {
+                DataGridViewComboBoxColumn productColumn = new DataGridViewComboBoxColumn();
+                productColumn.Width = 150;
+                
+
+                productColumn.HeaderText = "Sản phẩm";
+                productColumn.DataSource = products;
+                productColumn.DisplayMember = "ProductName";
+                //productColumn.Frozen = true;
+                productColumn.ValueMember = "Id";
+
+                dgwOrderDetails.Columns.Add(productColumn);
             }
             
-            productColumn.HeaderText = "Sản phẩm";
-            productColumn.DataSource = products;
-            productColumn.DisplayMember = "ProductName";
-            //productColumn.Frozen = true;
-            productColumn.ValueMember = "Id";
-            
-            dgwOrderDetails.Columns.Add(productColumn);
 
             DataGridViewTextBoxColumn numberUnitColumn = new DataGridViewTextBoxColumn();
             
