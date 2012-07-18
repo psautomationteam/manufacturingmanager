@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using DAL;
 using BaoHien.Services.Base;
+using System.Linq.Expressions;
 
 namespace BaoHien.Services.OrderDetails
 {
@@ -32,6 +33,11 @@ namespace BaoHien.Services.OrderDetails
         public bool UpdateOrderDetail(OrderDetail orderDetail)
         {
             return OnUpdateItem<OrderDetail>(orderDetail, orderDetail.Id.ToString());
+        }
+        public List<OrderDetail> SelectOrderDetailByWhere(Expression<Func<OrderDetail, bool>> func)
+        {
+
+            return SelectItemByWhere<OrderDetail>(func);
         }
     }
 }

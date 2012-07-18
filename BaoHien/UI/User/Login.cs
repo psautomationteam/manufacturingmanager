@@ -6,6 +6,9 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using DAL;
+using BaoHien.Services.SystemUsers;
+using BaoHien.Common;
 
 namespace BaoHien.UI
 {
@@ -22,8 +25,12 @@ namespace BaoHien.UI
         {
             if (txtUsername.Text == DUMMY_USERNAME && txtPassword.Text == DUMMY_PASSWORD)
             {
-                this.Hide();                
-                Form main = new Main();
+                SystemUserService systemUserService = new SystemUserService();
+                //SystemUser user = systemUserService.GetSystemUsers().Single(u => (u.username == DUMMY_USERNAME) && (u.password == DUMMY_PASSWORD));
+                SystemUser user = systemUserService.GetSystemUser(1);
+                this.Hide();
+                Main main = new Main();
+                Global.CurrentUser = user;
                 main.ShowDialog();
                 this.Close();
             }
