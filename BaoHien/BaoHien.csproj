@@ -105,6 +105,18 @@
     <Compile Include="UI\Order\OrderList.Designer.cs">
       <DependentUpon>OrderList.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\ProductionRequest\AddProductionRequest.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\ProductionRequest\AddProductionRequest.Designer.cs">
+      <DependentUpon>AddProductionRequest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\ProductionRequest\ProductionRequestList.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\ProductionRequest\ProductionRequestList.Designer.cs">
+      <DependentUpon>ProductionRequestList.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\Product\AddMeasurementUnit.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -214,6 +226,12 @@
     <EmbeddedResource Include="UI\Order\OrderList.resx">
       <DependentUpon>OrderList.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UI\ProductionRequest\AddProductionRequest.resx">
+      <DependentUpon>AddProductionRequest.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\ProductionRequest\ProductionRequestList.resx">
+      <DependentUpon>ProductionRequestList.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\Product\AddMeasurementUnit.resx">
       <DependentUpon>AddMeasurementUnit.cs</DependentUpon>
     </EmbeddedResource>
@@ -270,7 +288,6 @@
     <Folder Include="Services\User\" />
     <Folder Include="UI\Configuration\" />
     <Folder Include="UI\Other\" />
-    <Folder Include="UI\ProductionRequest\" />
     <Folder Include="UI\Report\" />
   </ItemGroup>
   <ItemGroup>

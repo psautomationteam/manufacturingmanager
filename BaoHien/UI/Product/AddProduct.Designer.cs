@@ -34,9 +34,6 @@
             this.cmbStatus = new System.Windows.Forms.ComboBox();
             this.txtDescription = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.txtPrice = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
             this.cmbUnit = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -51,6 +48,9 @@
             this.btnAdd = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.lblErrorMessage = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.txtPrice = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvBaseAttributes)).BeginInit();
@@ -130,31 +130,6 @@
             this.label7.TabIndex = 12;
             this.label7.Text = "Mổ tả:";
             // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(275, 79);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(30, 13);
-            this.label6.TabIndex = 11;
-            this.label6.Text = "VND";
-            // 
-            // txtPrice
-            // 
-            this.txtPrice.Location = new System.Drawing.Point(119, 77);
-            this.txtPrice.Name = "txtPrice";
-            this.txtPrice.Size = new System.Drawing.Size(140, 20);
-            this.txtPrice.TabIndex = 10;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(11, 81);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(79, 13);
-            this.label5.TabIndex = 9;
-            this.label5.Text = "Giá tham khảo:";
-            // 
             // cmbUnit
             // 
             this.cmbUnit.FormattingEnabled = true;
@@ -194,7 +169,7 @@
             this.chkAuto.AutoSize = true;
             this.chkAuto.Location = new System.Drawing.Point(273, 50);
             this.chkAuto.Name = "chkAuto";
-            this.chkAuto.Size = new System.Drawing.Size(86, 16);
+            this.chkAuto.Size = new System.Drawing.Size(86, 17);
             this.chkAuto.TabIndex = 4;
             this.chkAuto.Text = "Sinh tự dộng";
             this.chkAuto.UseVisualStyleBackColor = true;
@@ -279,6 +254,34 @@
             this.lblErrorMessage.Size = new System.Drawing.Size(0, 13);
             this.lblErrorMessage.TabIndex = 3;
             // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(275, 79);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(30, 13);
+            this.label6.TabIndex = 11;
+            this.label6.Text = "VND";
+            this.label6.Visible = false;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(11, 81);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(79, 13);
+            this.label5.TabIndex = 9;
+            this.label5.Text = "Giá tham khảo:";
+            this.label5.Visible = false;
+            // 
+            // txtPrice
+            // 
+            this.txtPrice.Location = new System.Drawing.Point(119, 77);
+            this.txtPrice.Name = "txtPrice";
+            this.txtPrice.Size = new System.Drawing.Size(140, 20);
+            this.txtPrice.TabIndex = 10;
+            this.txtPrice.Visible = false;
+            // 
             // AddProduct
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -307,8 +310,6 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.TextBox txtDescription;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Label label5;
         private System.Windows.Forms.ComboBox cmbUnit;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
@@ -326,6 +327,8 @@
         private System.Windows.Forms.ComboBox cmbStatus;
         private System.Windows.Forms.Label lblErrorMessage;
         private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox txtPrice;
+        private System.Windows.Forms.Label label5;
     }
 }
