@@ -95,20 +95,30 @@ namespace BaoHien.UI
                 foreach (DataGridViewRow dgv in selectedRows)
                 {
                     DataGridViewCheckBoxCell checkbox = (DataGridViewCheckBoxCell)dgv.Cells[0];
-                    if (checkbox.Value != null && checkbox.Value.ToString().Equals(bool.TrueString))
-                   {
-                       ProductAttribute productAttribute = new ProductAttribute
-                       {
-                           AttributeId = ((BaseAttribute)dgv.DataBoundItem).Id,
-                           Id = (int)newProductId
-                       };
-                       result = productAttributeService.AddProductAttribute(productAttribute);
-                       if (!result)
-                       {
-                           MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
-                           return;
-                       }
-                   }
+                    if (checkbox.Value != null && checkbox.Value.ToString().Equals(bool.TrueString) && dgv.DataBoundItem != null)
+                    {
+                        ProductAttribute productAttribute = new ProductAttribute
+                        {
+                            AttributeId = ((BaseAttribute)dgv.DataBoundItem).Id,
+                            Id = (int)newProductId
+                        };
+                        result = productAttributeService.AddProductAttribute(productAttribute);
+                        if (!result)
+                        {
+                            MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        if (dgv.DataBoundItem == null)
+                        {
+                            result = false;
+                            break;
+                        }
+                        
+                    }
+
                     
 
                 }
@@ -133,9 +143,9 @@ namespace BaoHien.UI
 
         private void AddProduct_Load(object sender, EventArgs e)
         {
-            dgvBaseAttributes.AutoGenerateColumns = false;
-            SetupColumns();
             loadSomeData();
+            SetupColumns();
+            
             
             
         }
