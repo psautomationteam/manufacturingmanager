@@ -224,7 +224,7 @@ namespace BaoHien.UI
             checkboxColumn.Width = 30;
             checkboxColumn.HeaderText = "STT";
             checkboxColumn.ValueType = typeof(string);
-            checkboxColumn.Frozen = true;
+            //checkboxColumn.Frozen = true;
             dgvBaseAttributes.Columns.Add(checkboxColumn);
 
             DataGridViewTextBoxColumn attributeNameColumn = new DataGridViewTextBoxColumn();
@@ -232,7 +232,7 @@ namespace BaoHien.UI
             attributeNameColumn.DataPropertyName = "AttributeName";
             attributeNameColumn.HeaderText = "Tên thuộc tính";
             attributeNameColumn.ValueType = typeof(string);
-            attributeNameColumn.Frozen = true;
+            //attributeNameColumn.Frozen = true;
             dgvBaseAttributes.Columns.Add(attributeNameColumn);
 
 
@@ -241,7 +241,7 @@ namespace BaoHien.UI
             attributeCodeColumn.DataPropertyName = "AttributeCode";
             attributeCodeColumn.Width = 120;
             attributeCodeColumn.HeaderText = "Mã Thuộc tính";
-            attributeCodeColumn.Frozen = true;
+            //attributeCodeColumn.Frozen = true;
             attributeCodeColumn.ValueType = typeof(string);
             dgvBaseAttributes.Columns.Add(attributeCodeColumn);
 
@@ -249,14 +249,14 @@ namespace BaoHien.UI
             deleteButton.Image = Properties.Resources.erase;
             deleteButton.Width = 100;
             deleteButton.HeaderText = "Xóa";
-            deleteButton.ReadOnly = true;
+            //deleteButton.ReadOnly = true;
             deleteButton.ImageLayout = DataGridViewImageCellLayout.Normal;
 
             DataGridViewTextBoxColumn descriptionColumn = new DataGridViewTextBoxColumn();
             descriptionColumn.Width = 350;// dgvProductAttributeList.Width - attributeNameColumn.Width - attributeCodeColumn.Width;
             descriptionColumn.DataPropertyName = "Description";
             descriptionColumn.HeaderText = "Đặc tả";
-            descriptionColumn.Frozen = true;
+            //descriptionColumn.Frozen = true;
             descriptionColumn.ValueType = typeof(string);
             dgvBaseAttributes.Columns.Add(descriptionColumn);
 

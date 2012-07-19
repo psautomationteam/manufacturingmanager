@@ -70,7 +70,7 @@ namespace BaoHien.UI
                                 FullName = user.FullName,
                                 Type = getNameForTypeUser(user.Type),
                                 Id = user.Id,
-                                Status = user.Status,
+                                Status = user.Status == Constant.ACTIVE_PROPERTY_VALUE?true:false,
                                 Index = index++
                             };
                 dgvUserList.DataSource = query.ToList();
@@ -85,7 +85,7 @@ namespace BaoHien.UI
             indexColumn.DataPropertyName = "Index";
             indexColumn.HeaderText = "STT";
             indexColumn.ValueType = typeof(string);
-            indexColumn.Frozen = true;
+            //indexColumn.Frozen = true;
             dgvUserList.Columns.Add(indexColumn);
 
             DataGridViewTextBoxColumn productNameColumn = new DataGridViewTextBoxColumn();
@@ -93,7 +93,7 @@ namespace BaoHien.UI
             productNameColumn.DataPropertyName = "username";
             productNameColumn.HeaderText = "Tên đăng nhập";
             productNameColumn.ValueType = typeof(string);
-            productNameColumn.Frozen = true;
+            //productNameColumn.Frozen = true;
             dgvUserList.Columns.Add(productNameColumn);
 
 
@@ -102,22 +102,21 @@ namespace BaoHien.UI
             typeCodeColumn.DataPropertyName = "FullName";
             typeCodeColumn.Width = 150;
             typeCodeColumn.HeaderText = "Tên đầy đủ";
-            typeCodeColumn.Frozen = true;
+            //typeCodeColumn.Frozen = true;
             typeCodeColumn.ValueType = typeof(string);
             dgvUserList.Columns.Add(typeCodeColumn);
-
-            DataGridViewImageColumn deleteButton = new DataGridViewImageColumn();
-            deleteButton.Image = Properties.Resources.erase;
+            
+            DataGridViewCheckBoxColumn deleteButton = new DataGridViewCheckBoxColumn();
+            deleteButton.DataPropertyName = "Status";
             deleteButton.Width = 100;
-            deleteButton.HeaderText = "Xóa";
-            deleteButton.ReadOnly = true;
-            deleteButton.ImageLayout = DataGridViewImageCellLayout.Normal;
-
+            deleteButton.HeaderText = "Kích hoạt/Bỏ";
+            deleteButton.FalseValue = false;
+            deleteButton.TrueValue = true;
             DataGridViewTextBoxColumn descriptionColumn = new DataGridViewTextBoxColumn();
             descriptionColumn.Width = 320;// dgvUserList.Width - productNameColumn.Width - typeCodeColumn.Width;
             descriptionColumn.DataPropertyName = "Type";
             descriptionColumn.HeaderText = "Kiểu người dùng";
-            descriptionColumn.Frozen = true;
+            //descriptionColumn.Frozen = true;
             descriptionColumn.ValueType = typeof(string);
             dgvUserList.Columns.Add(descriptionColumn);
             dgvUserList.Columns.Add(deleteButton);
@@ -148,24 +147,27 @@ namespace BaoHien.UI
                 DataGridViewCell cell = ((DataGridView)sender).CurrentCell;
                 if (cell.ColumnIndex == ((DataGridView)sender).ColumnCount - 1)
                 {
-                    DialogResult result = MessageBox.Show("Bạn có muốn xóa loại sản phẩm này?",
-                    "Xoá loại sản phẩm này",
-                     MessageBoxButtons.YesNo,
-                    MessageBoxIcon.Question);
-                    if (result == DialogResult.Yes)
+                    DataGridViewCheckBoxCell checkBoxcell = (DataGridViewCheckBoxCell)cell;
+                    DataGridViewRow currentRow = dgvUserList.Rows[e.RowIndex];
+
+                    SystemUserService systemUserService = new SystemUserService();
+                    int id = ObjectHelper.GetValueFromAnonymousType<int>(currentRow.DataBoundItem, "Id");
+                    SystemUser user = systemUserService.GetSystemUser(id);
+                    if (checkBoxcell.Value != null && checkBoxcell.Value.ToString().Equals(bool.TrueString))
                     {
-                        DataGridViewRow currentRow = dgvUserList.Rows[e.RowIndex];
-
-                        SystemUserService systemUserService = new SystemUserService();
-                        int id = ObjectHelper.GetValueFromAnonymousType<int>(currentRow.DataBoundItem, "Id");
-                        if (!systemUserService.DeleteSystemUser(id))
-                        {
-                            MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
-                            
-                        }
-                        loadSystemUserList();
+                        user.Status = Constant.ACTIVE_PROPERTY_VALUE;
                     }
+                    else
+                    {
+                        user.Status = Constant.DEACTIVE_PROPERTY_VALUE;
+                    }
+                    bool result = systemUserService.UpdateSystemUser(user);
+                    if (!result)
+                    {
+                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
 
+                    }
+                    loadSystemUserList();
                 }
 
             }
