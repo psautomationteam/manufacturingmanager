@@ -67,7 +67,11 @@ namespace BaoHien.UI
                 if (result)
                 {
                     MessageBox.Show("Khách hàng được cập nhật thành công");
-                    ((CustomerList)this.CallFromUserControll).loadCustomerList();
+                    if (this.CallFromUserControll != null && this.CallFromUserControll is CustomerList)
+                    {
+                        ((CustomerList)this.CallFromUserControll).loadCustomerList();
+                    }
+                    
                     this.Close();
                 }
                 else
