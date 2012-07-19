@@ -133,6 +133,7 @@ namespace BaoHien.UI
 
         private void AddProduct_Load(object sender, EventArgs e)
         {
+            dgvBaseAttributes.AutoGenerateColumns = false;
             SetupColumns();
             loadSomeData();
             
@@ -178,19 +179,13 @@ namespace BaoHien.UI
                 baseAttributes = baseAttributeService.GetBaseAttributes();
             }
 
-            if (baseAttributes != null)
-            {
-                dgvBaseAttributes.DataSource = baseAttributes;
-
-
-
-
-            }
+            
         }
         public void loadDataForEditProduct(int productId)
         {
             this.Text = "Chỉnh sửa  sản phẩm này";
             this.btnAdd.Text = "Cập nhật";
+
             loadSomeData();
             ProductService productTypeService = new ProductService();
 
@@ -219,7 +214,14 @@ namespace BaoHien.UI
         private void SetupColumns()
         {
             dgvBaseAttributes.AutoGenerateColumns = false;
-            
+            if (baseAttributes != null)
+            {
+                dgvBaseAttributes.DataSource = baseAttributes;
+
+
+
+
+            }
             DataGridViewCheckBoxColumn checkboxColumn = new DataGridViewCheckBoxColumn();
             checkboxColumn.Width = 30;
             checkboxColumn.HeaderText = "STT";

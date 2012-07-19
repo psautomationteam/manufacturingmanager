@@ -167,7 +167,6 @@ namespace BaoHien.UI
                         MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
 
                     }
-                    loadSystemUserList();
                 }
 
             }
