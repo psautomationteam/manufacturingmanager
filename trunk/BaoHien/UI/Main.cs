@@ -98,6 +98,13 @@ namespace BaoHien.UI
             pnlMain.Controls.Clear();
             pnlMain.Controls.Add(ucOrderList);
         }
+
+        private void menuProductionRequest_Click(object sender, EventArgs e)
+        {
+            ProductionRequestList ucRequestList = new ProductionRequestList();
+            pnlMain.Controls.Clear();
+            pnlMain.Controls.Add(ucRequestList);
+        }
         #endregion 
 
 #region toolbar action
@@ -119,6 +126,12 @@ namespace BaoHien.UI
             AddOrder frmAddOrder = new AddOrder();
             frmAddOrder.ShowDialog();
         }
+
+        private void tsbAddProductionRequest_Click(object sender, EventArgs e)
+        {
+            AddProductionRequest frmRequest = new AddProductionRequest();
+            frmRequest.ShowDialog();
+        }
 #endregion
 
         private void Main_Load(object sender, EventArgs e)
@@ -131,6 +144,10 @@ namespace BaoHien.UI
                 Global.CurrentUser = user;
             }
         }
+
+        
+
+        
 
         
 
