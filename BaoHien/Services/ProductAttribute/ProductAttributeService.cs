@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using DAL;
 using BaoHien.Services.Base;
+using System.Linq.Expressions;
 
 namespace BaoHien.Services.ProductAttributes
 {
@@ -32,6 +33,11 @@ namespace BaoHien.Services.ProductAttributes
         public bool UpdateProductAttribute(ProductAttribute productAttribute)
         {
             return OnUpdateItem<ProductAttribute>(productAttribute, productAttribute.Id.ToString());
+        }
+        public List<ProductAttribute> SelectProductAttributeByWhere(Expression<Func<ProductAttribute, bool>> func)
+        {
+
+            return SelectItemByWhere<ProductAttribute>(func);
         }
     }
 }
