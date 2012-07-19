@@ -9,12 +9,14 @@ using System.Windows.Forms;
 using BaoHien.UI.Base;
 using BaoHien.Services.Customers;
 using DAL;
+using BaoHien.Services.SystemUsers;
 
 namespace BaoHien.UI
 {
     public partial class AddCustomer : BaseForm
     {
         Customer customer;
+        List<SystemUser> salers;
         public AddCustomer()
         {
             InitializeComponent();
@@ -23,10 +25,11 @@ namespace BaoHien.UI
         {
             this.Text = "Chỉnh sửa thuộc tính phẩm này";
             this.btnAdd.Text = "Cập nhật";
-
+            
             CustomerService customerService = new CustomerService();
 
             customer = customerService.GetCustomer(customerId);
+            loadSomeData();
             if (customer != null)
             {
                 txtDescription.Text = customer.Description;
@@ -86,7 +89,8 @@ namespace BaoHien.UI
                     Email = txtEmail.Text,
                     Fax = txtFax.Text,
                     Phone = txtPhoneNumber.Text,
-                    CustomerName = txtName.Text
+                    CustomerName = txtName.Text,
+                    SalerId = cmbSaler.SelectedValue != null ? (int?)cmbSaler.SelectedValue : (int?)null,
                 };
                 CustomerService customerService = new CustomerService();
                 bool result = customerService.AddCustomer(customer);
@@ -101,6 +105,34 @@ namespace BaoHien.UI
                     MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
                 }
             }
+        }
+        private void loadSomeData()
+        {
+            
+            if (salers == null)
+            {
+                SystemUserService systemUserService = new SystemUserService();
+                salers = systemUserService.GetSystemUsers();
+
+            }
+
+            if (salers != null)
+            {
+
+                cmbSaler.DataSource = salers;
+
+                cmbSaler.DisplayMember = "FullName";
+                cmbSaler.ValueMember = "Id";
+                if (customer != null)
+                {
+                    cmbSaler.SelectedIndex = salers.FindIndex(su => su.Id == customer.SalerId);
+                }
+            }
+        }
+
+        private void AddCustomer_Load(object sender, EventArgs e)
+        {
+            loadSomeData();
         }
     }
 }

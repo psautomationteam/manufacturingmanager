@@ -13,6 +13,7 @@ using BaoHien.Services.Prices;
 using DAL.Helper;
 using BaoHien.Services.BaseAttributes;
 using BaoHien.UI.Base;
+using BaoHien.Services.ProductAttributes;
 
 
 namespace BaoHien.UI
@@ -22,6 +23,7 @@ namespace BaoHien.UI
         Product product;
         List<MeasurementUnit> measurementUnits;
         List<ProductType> productTypes;
+        List<BaseAttribute> baseAttributes;
         public AddProduct()
         {
             InitializeComponent();
@@ -87,10 +89,38 @@ namespace BaoHien.UI
                     UpdatedDate = DateTime.Now
                 };
                 result = priceService.AddPrice(newPrice);
+
+                DataGridViewRowCollection selectedRows = dgvBaseAttributes.Rows;
+                ProductAttributeService productAttributeService = new ProductAttributeService();
+                foreach (DataGridViewRow dgv in selectedRows)
+                {
+                    DataGridViewCheckBoxCell checkbox = (DataGridViewCheckBoxCell)dgv.Cells[0];
+                    if (checkbox.Value != null && checkbox.Value.ToString().Equals(bool.TrueString))
+                   {
+                       ProductAttribute productAttribute = new ProductAttribute
+                       {
+                           AttributeId = ((BaseAttribute)dgv.DataBoundItem).Id,
+                           Id = (int)newProductId
+                       };
+                       result = productAttributeService.AddProductAttribute(productAttribute);
+                       if (!result)
+                       {
+                           MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                           return;
+                       }
+                   }
+                    
+
+                }
+
                 if (result)
                 {
                     MessageBox.Show("Sản phẩm đã được tạo thành công");
-                    ((ProductList)this.CallFromUserControll).loadProductList();
+                    if (this.CallFromUserControll != null && this.CallFromUserControll is ProductList)
+                    {
+                        ((ProductList)this.CallFromUserControll).loadProductList();
+                    }
+                    
                     this.Close();
                 }
                 else
@@ -103,17 +133,9 @@ namespace BaoHien.UI
 
         private void AddProduct_Load(object sender, EventArgs e)
         {
+            SetupColumns();
             loadSomeData();
-            BaseAttributeService baseAttributeService = new BaseAttributeService();
-            List<BaseAttribute> baseAttributes = baseAttributeService.GetBaseAttributes();
-            if (baseAttributes != null)
-            {
-                dgvBaseAttributes.DataSource = baseAttributes;
-                
-
-               
-
-            }
+            
             
         }
         private void loadSomeData()
@@ -149,6 +171,21 @@ namespace BaoHien.UI
                 cmbType.ValueMember = "Id";
 
             }
+
+            BaseAttributeService baseAttributeService = new BaseAttributeService();
+            if (baseAttributes == null)
+            {
+                baseAttributes = baseAttributeService.GetBaseAttributes();
+            }
+
+            if (baseAttributes != null)
+            {
+                dgvBaseAttributes.DataSource = baseAttributes;
+
+
+
+
+            }
         }
         public void loadDataForEditProduct(int productId)
         {
@@ -178,6 +215,58 @@ namespace BaoHien.UI
         private void chkAuto_CheckedChanged(object sender, EventArgs e)
         {
             txtCode.Enabled = !chkAuto.Checked;
+        }
+        private void SetupColumns()
+        {
+            dgvBaseAttributes.AutoGenerateColumns = false;
+            
+            DataGridViewCheckBoxColumn checkboxColumn = new DataGridViewCheckBoxColumn();
+            checkboxColumn.Width = 30;
+            checkboxColumn.HeaderText = "STT";
+            checkboxColumn.ValueType = typeof(string);
+            checkboxColumn.Frozen = true;
+            dgvBaseAttributes.Columns.Add(checkboxColumn);
+
+            DataGridViewTextBoxColumn attributeNameColumn = new DataGridViewTextBoxColumn();
+            attributeNameColumn.Width = 150;
+            attributeNameColumn.DataPropertyName = "AttributeName";
+            attributeNameColumn.HeaderText = "Tên thuộc tính";
+            attributeNameColumn.ValueType = typeof(string);
+            attributeNameColumn.Frozen = true;
+            dgvBaseAttributes.Columns.Add(attributeNameColumn);
+
+
+
+            DataGridViewTextBoxColumn attributeCodeColumn = new DataGridViewTextBoxColumn();
+            attributeCodeColumn.DataPropertyName = "AttributeCode";
+            attributeCodeColumn.Width = 120;
+            attributeCodeColumn.HeaderText = "Mã Thuộc tính";
+            attributeCodeColumn.Frozen = true;
+            attributeCodeColumn.ValueType = typeof(string);
+            dgvBaseAttributes.Columns.Add(attributeCodeColumn);
+
+            DataGridViewImageColumn deleteButton = new DataGridViewImageColumn();
+            deleteButton.Image = Properties.Resources.erase;
+            deleteButton.Width = 100;
+            deleteButton.HeaderText = "Xóa";
+            deleteButton.ReadOnly = true;
+            deleteButton.ImageLayout = DataGridViewImageCellLayout.Normal;
+
+            DataGridViewTextBoxColumn descriptionColumn = new DataGridViewTextBoxColumn();
+            descriptionColumn.Width = 350;// dgvProductAttributeList.Width - attributeNameColumn.Width - attributeCodeColumn.Width;
+            descriptionColumn.DataPropertyName = "Description";
+            descriptionColumn.HeaderText = "Đặc tả";
+            descriptionColumn.Frozen = true;
+            descriptionColumn.ValueType = typeof(string);
+            dgvBaseAttributes.Columns.Add(descriptionColumn);
+
+            dgvBaseAttributes.Columns.Add(deleteButton);
+
+        }
+
+        private void dgwOrderDetails_DataError(object sender, DataGridViewDataErrorEventArgs e)
+        {
+            MessageBox.Show("Có lỗi nhập liệu xảy ra,vui lòng kiểm tra lại!");
         }
     }
 }

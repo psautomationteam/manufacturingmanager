@@ -369,6 +369,7 @@
             this.Controls.Add(this.groupBox1);
             this.Name = "AddCustomer";
             this.Text = "Thêm khách hàng";
+            this.Load += new System.EventHandler(this.AddCustomer_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
