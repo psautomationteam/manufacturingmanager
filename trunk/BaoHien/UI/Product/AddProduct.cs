@@ -143,6 +143,7 @@ namespace BaoHien.UI
 
         private void AddProduct_Load(object sender, EventArgs e)
         {
+            dgvBaseAttributes.AutoGenerateColumns = false;
             loadSomeData();
             SetupColumns();
             

@@ -201,6 +201,7 @@ namespace BaoHien.UI
            
             SetupColumns();
             loadSomeData();
+            calculateTotal();
         }
         private void SetupColumns()
         {
@@ -243,7 +244,7 @@ namespace BaoHien.UI
                                 NumberUnit = orderDetail.NumberUnit,
                                 Price = orderDetail.Price,
                                 Note = orderDetail.Note,
-                                
+                                Total = (double)orderDetail.Price * orderDetail.NumberUnit
                             };
                 dgwOrderDetails.DataSource = query.ToList();
                 isUpdating = true;
@@ -332,7 +333,17 @@ namespace BaoHien.UI
             priceColumn.ValueType = typeof(double);
             dgwOrderDetails.Columns.Add(priceColumn);
 
-           
+            DataGridViewTextBoxColumn totalColumn = new DataGridViewTextBoxColumn();
+            //priceColumn.DataPropertyName = "Price";
+            if (isUpdating)
+            {
+                totalColumn.DataPropertyName = "Total";
+            }
+            totalColumn.Width = 100;
+            totalColumn.HeaderText = "Thành Tiền";
+            // numberUnitColumn.Frozen = true;
+            totalColumn.ValueType = typeof(double);
+            dgwOrderDetails.Columns.Add(totalColumn);
 
             DataGridViewTextBoxColumn noteColumn = new DataGridViewTextBoxColumn();
             if (isUpdating)
@@ -422,10 +433,49 @@ namespace BaoHien.UI
                 }
                 else if (e.ColumnIndex == 4)
                 {
+                    if (dgv.CurrentCell.Value != null)
+                    {
+                        orderDetails[e.RowIndex].Cost = (double)dgv.CurrentCell.Value;
+                    }
+                    
+                }
+                else if (e.ColumnIndex == 5)
+                {
                     orderDetails[e.RowIndex].Note = (string)dgv.CurrentCell.Value;
                 }
             }
-            
+            calculateTotal();
+           
+        }
+
+        private void calculateTotal()
+        {
+            double totalNoTax = 0.0;
+            double totalWithTax = 0.0;
+            double discount = 0;
+            double.TryParse(txtDiscount.Text, out discount);
+            bool hasValue = false;
+
+            for (int i = 0; i < dgwOrderDetails.RowCount; i++)
+            {
+                if (dgwOrderDetails.ColumnCount > 4)
+                {
+                    if (dgwOrderDetails.Rows[i].Cells[2].Value != null && dgwOrderDetails.Rows[i].Cells[3].Value != null)
+                    {
+                        dgwOrderDetails.Rows[i].Cells[4].Value = (int)dgwOrderDetails.Rows[i].Cells[2].Value * (double)dgwOrderDetails.Rows[i].Cells[3].Value;
+                        hasValue = true;
+                        totalNoTax += (double)dgwOrderDetails.Rows[i].Cells[4].Value;
+                    }
+                }
+            }
+            if (hasValue)
+            {
+                double vat = 0.0;
+                double.TryParse(txtVAT.Text, out vat);
+                totalWithTax = totalNoTax + vat - discount;
+                lblSubTotal.Text = totalNoTax.ToString();
+                lblGrantTotal.Text = totalWithTax.ToString();
+            }
         }
     }
 }
