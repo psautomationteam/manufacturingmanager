@@ -29,8 +29,10 @@ namespace BaoHien.UI
 
         private void SystemUserList_Load(object sender, EventArgs e)
         {
-            SetupColumns();
+            dgvUserList.AutoGenerateColumns = false;
             loadSystemUserList();
+            SetupColumns();
+            
         }
         public void loadSystemUserList()
         {
@@ -39,7 +41,7 @@ namespace BaoHien.UI
             List<SystemUser> systemUsers = systemUserService.GetSystemUsers();
             if (systemUsers != null)
             {
-                dgvUserList.DataSource = systemUsers;
+                //dgvUserList.DataSource = systemUsers;
                 setUpDataGrid(systemUsers);
             }
             
