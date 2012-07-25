@@ -114,6 +114,7 @@ namespace BaoHien.UI
             deleteButton.HeaderText = "Kích hoạt/Bỏ";
             deleteButton.FalseValue = false;
             deleteButton.TrueValue = true;
+            deleteButton.ValueType = typeof(bool);
             //deleteButton.
             DataGridViewTextBoxColumn descriptionColumn = new DataGridViewTextBoxColumn();
             descriptionColumn.Width = 320;// dgvUserList.Width - productNameColumn.Width - typeCodeColumn.Width;

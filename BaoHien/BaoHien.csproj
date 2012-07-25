@@ -75,6 +75,9 @@
     <Compile Include="UI\Base\BaseForm.Designer.cs">
       <DependentUpon>BaseForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\Base\KeyPressAwareDataGridView .cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="UI\Customer\AddCustomer.cs">
       <SubType>Form</SubType>
     </Compile>

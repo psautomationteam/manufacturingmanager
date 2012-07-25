@@ -24,8 +24,8 @@ namespace BaoHien.UI
         Order order;
         List<Customer> customers;
         List<OrderDetail> orderDetails;
-        
-        
+        List<Product> products;
+        List<BaseAttribute> baseAttributesAtRow;
         public AddOrder()
         {
             InitializeComponent();
@@ -209,7 +209,11 @@ namespace BaoHien.UI
             dgwOrderDetails.AutoGenerateColumns = false;
             
             ProductService productService = new ProductService();
-            List<Product> products = productService.GetProducts();
+            if (products == null)
+            {
+                products = productService.GetProducts();
+            }
+            
             List<object> objects = new List<object>
             {
                 new {
@@ -265,10 +269,20 @@ namespace BaoHien.UI
             }
             else
             {
+                /*
+                DataGridViewTextBoxColumn productColumn = new DataGridViewTextBoxColumn();
+                productColumn.Width = 150;
+                productColumn.DataPropertyName = "ProductName";
+
+                productColumn.HeaderText = "Sản phẩm";
+
+
+                dgwOrderDetails.Columns.Add(productColumn);*/
+                
                 DataGridViewComboBoxColumn productColumn = new DataGridViewComboBoxColumn();
                 productColumn.Width = 150;
-
-
+                productColumn.AutoComplete = false;
+                
                 productColumn.HeaderText = "Sản phẩm";
                 productColumn.DataSource = products;
                 productColumn.DisplayMember = "ProductName";
@@ -402,7 +416,7 @@ namespace BaoHien.UI
                     orderDetails[e.RowIndex].ProductId = (int)dgv.CurrentCell.Value;
                     ProductAttributeService productAttributeService = new ProductAttributeService();
                     List<ProductAttribute> productAttributes = productAttributeService.SelectProductAttributeByWhere(ba => ba.Id == orderDetails[e.RowIndex].ProductId);
-                    List<BaseAttribute> baseAttributesAtRow = new List<BaseAttribute>();
+                    baseAttributesAtRow = new List<BaseAttribute>();
                     foreach(ProductAttribute pa in productAttributes)
                     {
                         baseAttributesAtRow.Add(pa.BaseAttribute);
@@ -477,5 +491,135 @@ namespace BaoHien.UI
                 lblGrantTotal.Text = totalWithTax.ToString();
             }
         }
+
+        private void dgwOrderDetails_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (sender is KeyPressAwareDataGridView)
+            {
+                KeyPressAwareDataGridView dgv = (KeyPressAwareDataGridView)sender;
+
+                
+            }
+        }
+
+        private void dgwOrderDetails_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
+        {
+           
+
+            if (dgwOrderDetails.CurrentCell.ColumnIndex == 0)
+            {
+                var source = new AutoCompleteStringCollection();
+                String[] stringArray = Array.ConvertAll<Product, String>(products.ToArray(), delegate(Product row) { return (String)row.ProductName; });
+                source.AddRange(stringArray);
+
+                ComboBox prodCode = e.Control as ComboBox;
+                if (prodCode != null)
+                {
+                    prodCode.DropDownStyle = ComboBoxStyle.DropDown;
+                    prodCode.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+                    prodCode.AutoCompleteCustomSource = source;
+                    prodCode.AutoCompleteSource = AutoCompleteSource.CustomSource;
+                    prodCode.MaxDropDownItems = 5;
+                   
+                }
+            }
+            else if (dgwOrderDetails.CurrentCell.ColumnIndex == 1)
+            {
+                if (baseAttributesAtRow != null)
+                {
+                    var source = new AutoCompleteStringCollection();
+                    String[] stringArray = Array.ConvertAll<BaseAttribute, String>(baseAttributesAtRow.ToArray(), delegate(BaseAttribute row) { return (String)row.AttributeName; });
+                    source.AddRange(stringArray);
+
+                    ComboBox prodCode = e.Control as ComboBox;
+                    if (prodCode != null)
+                    {
+                        prodCode.DropDownStyle = ComboBoxStyle.DropDown;
+                        prodCode.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+                        prodCode.AutoCompleteCustomSource = source;
+                        prodCode.AutoCompleteSource = AutoCompleteSource.CustomSource;
+                        prodCode.MaxDropDownItems = 5;
+
+                    }
+                }
+                
+            }
+            
+
+        }
+
+        private void dgwOrderDetails_CellEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            DataGridView dgv = (DataGridView)sender;
+            if (orderDetails == null)
+            {
+                orderDetails = new List<OrderDetail>();
+            }
+            if (orderDetails.Count < dgwOrderDetails.RowCount)
+            {
+                OrderDetail orderDetail = new OrderDetail
+                {
+                    //ProductId = (int)dgwOrderDetails.Rows[dgwOrderDetails.RowCount - 1].Cells[0].Value,
+                    //NumberUnit = (int)dgwOrderDetails.Rows[dgwOrderDetails.RowCount - 1].Cells[1].Value,
+                    //Price = (double)dgwOrderDetails.Rows[dgwOrderDetails.RowCount - 1].Cells[2].Value,
+                    //Tax = (double)dgwOrderDetails.Rows[dgwOrderDetails.RowCount - 1].Cells[3].Value,
+                    //Note = (string)dgwOrderDetails.Rows[dgwOrderDetails.RowCount - 1].Cells[4].Value,
+                };
+                orderDetails.Add(orderDetail);
+            }
+            if (dgv.CurrentCell.Value != null)
+            {
+                if (e.ColumnIndex == 0)
+                {
+
+                    orderDetails[e.RowIndex].ProductId = (int)dgv.CurrentCell.Value;
+                    ProductAttributeService productAttributeService = new ProductAttributeService();
+                    List<ProductAttribute> productAttributes = productAttributeService.SelectProductAttributeByWhere(ba => ba.Id == orderDetails[e.RowIndex].ProductId);
+                    List<BaseAttribute> baseAttributesAtRow = new List<BaseAttribute>();
+                    foreach (ProductAttribute pa in productAttributes)
+                    {
+                        baseAttributesAtRow.Add(pa.BaseAttribute);
+                    }
+                    DataGridViewComboBoxCell currentCell = (DataGridViewComboBoxCell)dgwOrderDetails.Rows[e.RowIndex].Cells[1];
+                    if (baseAttributesAtRow.Count > 0)
+                    {
+                        currentCell.DataSource = baseAttributesAtRow;
+                        currentCell.Value = baseAttributesAtRow[0].Id;
+                    }
+
+                    //currentCell.DisplayMember = "AttributeName";
+                    //currentCell.ValueMember = "Id";
+                    //currentCell.
+
+                }
+                else if (e.ColumnIndex == 1)
+                {
+                    orderDetails[e.RowIndex].AttributeId = (int)dgv.CurrentCell.Value;
+                }
+                else if (e.ColumnIndex == 2)
+                {
+                    orderDetails[e.RowIndex].NumberUnit = (int)dgv.CurrentCell.Value;
+                }
+                else if (e.ColumnIndex == 3)
+                {
+                    orderDetails[e.RowIndex].Price = (double)dgv.CurrentCell.Value;
+                }
+                else if (e.ColumnIndex == 4)
+                {
+                    if (dgv.CurrentCell.Value != null)
+                    {
+                        orderDetails[e.RowIndex].Cost = (double)dgv.CurrentCell.Value;
+                    }
+
+                }
+                else if (e.ColumnIndex == 5)
+                {
+                    orderDetails[e.RowIndex].Note = (string)dgv.CurrentCell.Value;
+                }
+            }
+            calculateTotal();
+        }
+
+        
     }
 }
