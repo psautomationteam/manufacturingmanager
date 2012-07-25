@@ -1,4 +1,5 @@
-﻿namespace BaoHien.UI
+﻿using BaoHien.UI.Base;
+namespace BaoHien.UI
 {
     partial class AddOrder
     {
@@ -44,7 +45,7 @@
             this.txtOrderCode = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.dgwOrderDetails = new System.Windows.Forms.DataGridView();
+            this.dgwOrderDetails = new BaoHien.UI.Base.KeyPressAwareDataGridView();
             this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
@@ -217,8 +218,12 @@
             this.dgwOrderDetails.Name = "dgwOrderDetails";
             this.dgwOrderDetails.Size = new System.Drawing.Size(693, 269);
             this.dgwOrderDetails.TabIndex = 0;
+            this.dgwOrderDetails.keyPressHook += new System.Windows.Forms.KeyEventHandler(this.dgwOrderDetails_KeyUp);
             this.dgwOrderDetails.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgwOrderDetails_CellEndEdit);
+            this.dgwOrderDetails.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgwOrderDetails_CellEnter);
             this.dgwOrderDetails.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dgwOrderDetails_DataError);
+            this.dgwOrderDetails.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.dgwOrderDetails_EditingControlShowing);
+            this.dgwOrderDetails.KeyUp += new System.Windows.Forms.KeyEventHandler(this.dgwOrderDetails_KeyUp);
             // 
             // label9
             // 
@@ -357,7 +362,7 @@
         private System.Windows.Forms.TextBox txtCreatedDate;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.DataGridView dgwOrderDetails;
+        private KeyPressAwareDataGridView dgwOrderDetails;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label11;
