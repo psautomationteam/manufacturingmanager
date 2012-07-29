@@ -398,14 +398,7 @@ namespace BaoHien.UI
             }
             if (orderDetails.Count < dgwOrderDetails.RowCount)
             {
-                OrderDetail orderDetail = new OrderDetail
-                {
-                    //ProductId = (int)dgwOrderDetails.Rows[dgwOrderDetails.RowCount - 1].Cells[0].Value,
-                    //NumberUnit = (int)dgwOrderDetails.Rows[dgwOrderDetails.RowCount - 1].Cells[1].Value,
-                    //Price = (double)dgwOrderDetails.Rows[dgwOrderDetails.RowCount - 1].Cells[2].Value,
-                    //Tax = (double)dgwOrderDetails.Rows[dgwOrderDetails.RowCount - 1].Cells[3].Value,
-                    //Note = (string)dgwOrderDetails.Rows[dgwOrderDetails.RowCount - 1].Cells[4].Value,
-                };
+                OrderDetail orderDetail = new OrderDetail();
                 orderDetails.Add(orderDetail);
             }
             if (dgv.CurrentCell.Value != null)

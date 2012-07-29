@@ -14,5 +14,8 @@ namespace BaoHien.Common
         public const short USER_TYPE_ID1 = 1;
         public const short USER_TYPE_ID2 = 2;
         public const short USER_TYPE_ID3 = 3;
+
+        public const bool PRODUCTION_REQUEST_DETAIL_IN = false;
+        public const bool PRODUCTION_REQUEST_DETAIL_OUT = true;
     }
 }

@@ -101,7 +101,7 @@ namespace DAL.Helper
 
 
         }
-        public static T SelectByPK<T>(String id) where T : class
+        public static T SelectByPK<T>(List<String> ids) where T : class
         {
             try
             {
@@ -119,15 +119,51 @@ namespace DAL.Helper
 
                     // find the primary key field name
                     // by checking for IsPrimaryKey
-
-                    string pk = (dataMembers.Single<MetaDataMember>(m => m.IsPrimaryKey)).Name;
+                    List<string> pks = new List<string>();
+                    foreach (string partKey in ids)
+                    {
+                        List<MetaDataMember> metaDataPKs = dataMembers.Where<MetaDataMember>(m => m.IsPrimaryKey).Distinct().ToList(); ;
+                        
+                        if (metaDataPKs != null)
+                        {
+                            foreach (MetaDataMember mdm in metaDataPKs)
+                            {
+                                if (!pks.Contains(mdm.Name))
+                                {
+                                    pks.Add(mdm.Name);
+                                }
+                                
+                            }
+                        }
+                        
+                    }
+                    
 
                     // return a single object where the id argument
                     // matches the primary key field value
+                    
                     return table.SingleOrDefault<T>(delegate(T t)
                     {
-                        String memberId = t.GetType().GetProperty(pk).GetValue(t, null).ToString();
-                        return memberId.ToString() == id.ToString();
+                        
+                        List<string> memberIds = new List<string>();
+                        foreach (string partKey in pks)
+                        {
+                            String memberId = t.GetType().GetProperty(partKey).GetValue(t, null).ToString();
+                            memberIds.Add(memberId);
+                            
+                            
+                        }
+                        int index = 0;
+                        bool isKey = true;
+                        foreach (string memberId in memberIds)
+                        {
+                            if (!(memberId.ToString() == ids[index++].ToString()))
+                            {
+                                isKey = false;
+                                break;
+                            }
+                        }
+                        return isKey;
                     });
                 }
                 else

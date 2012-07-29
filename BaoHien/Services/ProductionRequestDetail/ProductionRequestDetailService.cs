@@ -9,9 +9,14 @@ namespace BaoHien.Services.ProductionRequestDetails
 {
     public class ProductionRequestDetailService : BaseService<ProductionRequestDetail>
     {
-        public ProductionRequestDetail GetProductionRequestDetail(System.Int32 id)
+        public ProductionRequestDetail GetProductionRequestDetail(List<System.Int32> ids)
         {
-            ProductionRequestDetail productionRequestDetail = OnGetItem<ProductionRequestDetail>(id.ToString());
+            List<string> idsInString = new List<string>();
+            foreach (System.Int32 id in ids)
+            {
+                idsInString.Add(id.ToString());
+            }
+            ProductionRequestDetail productionRequestDetail = OnGetItem<ProductionRequestDetail>(idsInString);
 
             return productionRequestDetail;
         }
@@ -25,9 +30,14 @@ namespace BaoHien.Services.ProductionRequestDetails
         {
             return OnAddItem<ProductionRequestDetail>(product);
         }
-        public bool DeleteProductionRequestDetail(System.Int32 id)
+        public bool DeleteProductionRequestDetail(List<System.Int32> ids)
         {
-            return OnDeleteItem<ProductionRequestDetail>(id.ToString());
+            List<string> idsInString = new List<string>();
+            foreach (System.Int32 id in ids)
+            {
+                idsInString.Add(id.ToString());
+            }
+            return OnDeleteItem<ProductionRequestDetail>(idsInString);
         }
         public bool UpdateProductionRequestDetail(ProductionRequestDetail productionRequestDetail)
         {
