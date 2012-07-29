@@ -49,6 +49,9 @@
   <ItemGroup>
     <Compile Include="Common\BHConstant.cs" />
     <Compile Include="Common\Global.cs" />
+    <Compile Include="Model\ProductionRequestSearchCriteria.cs" />
+    <Compile Include="Model\ProductionRequestDetailModel.cs" />
+    <Compile Include="Model\ProductionRequestModel.cs" />
     <Compile Include="Model\ProductTypeSearchCriteria.cs" />
     <Compile Include="Model\ProductSearchCriteria.cs" />
     <Compile Include="Services\Attribute\BaseAttributeService.cs" />
@@ -62,7 +65,7 @@
     <Compile Include="Services\Price\PriceService.cs" />
     <Compile Include="Services\ProductAttribute\ProductAttributeService.cs" />
     <Compile Include="Services\ProductInStock\ProductInStockService.cs" />
-    <Compile Include="Services\ProductionRequestDetail\ProductionRequestService.cs" />
+    <Compile Include="Services\ProductionRequestDetail\ProductionRequestDetailService.cs" />
     <Compile Include="Services\ProductionRequest\ProductionRequestService.cs" />
     <Compile Include="Services\Products\ProductService.cs" />
     <Compile Include="Program.cs" />

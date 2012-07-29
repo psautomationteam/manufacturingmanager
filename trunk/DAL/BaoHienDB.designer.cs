@@ -242,7 +242,11 @@ namespace DAL
 		
 		private string _AttributeCode;
 		
+		private EntitySet<OrderDetail> _OrderDetails;
+		
 		private EntitySet<ProductAttribute> _ProductAttributes;
+		
+		private EntitySet<ProductionRequestDetail> _ProductionRequestDetails;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -260,7 +264,9 @@ namespace DAL
 		
 		public BaseAttribute()
 		{
+			this._OrderDetails = new EntitySet<OrderDetail>(new Action<OrderDetail>(this.attach_OrderDetails), new Action<OrderDetail>(this.detach_OrderDetails));
 			this._ProductAttributes = new EntitySet<ProductAttribute>(new Action<ProductAttribute>(this.attach_ProductAttributes), new Action<ProductAttribute>(this.detach_ProductAttributes));
+			this._ProductionRequestDetails = new EntitySet<ProductionRequestDetail>(new Action<ProductionRequestDetail>(this.attach_ProductionRequestDetails), new Action<ProductionRequestDetail>(this.detach_ProductionRequestDetails));
 			OnCreated();
 		}
 		
@@ -284,7 +290,7 @@ namespace DAL
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AttributeName", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AttributeName", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
 		public string AttributeName
 		{
 			get
@@ -304,7 +310,7 @@ namespace DAL
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Description", DbType="VarChar(500)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Description", DbType="NVarChar(500)")]
 		public string Description
 		{
 			get
@@ -324,7 +330,7 @@ namespace DAL
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AttributeCode", DbType="VarChar(25) NOT NULL", CanBeNull=false)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AttributeCode", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
 		public string AttributeCode
 		{
 			get
@@ -344,6 +350,19 @@ namespace DAL
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="BaseAttribute_OrderDetail", Storage="_OrderDetails", ThisKey="Id", OtherKey="AttributeId")]
+		public EntitySet<OrderDetail> OrderDetails
+		{
+			get
+			{
+				return this._OrderDetails;
+			}
+			set
+			{
+				this._OrderDetails.Assign(value);
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="BaseAttribute_ProductAttribute", Storage="_ProductAttributes", ThisKey="Id", OtherKey="AttributeId")]
 		public EntitySet<ProductAttribute> ProductAttributes
 		{
@@ -354,6 +373,19 @@ namespace DAL
 			set
 			{
 				this._ProductAttributes.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="BaseAttribute_ProductionRequestDetail", Storage="_ProductionRequestDetails", ThisKey="Id", OtherKey="AttributeId")]
+		public EntitySet<ProductionRequestDetail> ProductionRequestDetails
+		{
+			get
+			{
+				return this._ProductionRequestDetails;
+			}
+			set
+			{
+				this._ProductionRequestDetails.Assign(value);
 			}
 		}
 		
@@ -377,6 +409,18 @@ namespace DAL
 			}
 		}
 		
+		private void attach_OrderDetails(OrderDetail entity)
+		{
+			this.SendPropertyChanging();
+			entity.BaseAttribute = this;
+		}
+		
+		private void detach_OrderDetails(OrderDetail entity)
+		{
+			this.SendPropertyChanging();
+			entity.BaseAttribute = null;
+		}
+		
 		private void attach_ProductAttributes(ProductAttribute entity)
 		{
 			this.SendPropertyChanging();
@@ -384,6 +428,18 @@ namespace DAL
 		}
 		
 		private void detach_ProductAttributes(ProductAttribute entity)
+		{
+			this.SendPropertyChanging();
+			entity.BaseAttribute = null;
+		}
+		
+		private void attach_ProductionRequestDetails(ProductionRequestDetail entity)
+		{
+			this.SendPropertyChanging();
+			entity.BaseAttribute = this;
+		}
+		
+		private void detach_ProductionRequestDetails(ProductionRequestDetail entity)
 		{
 			this.SendPropertyChanging();
 			entity.BaseAttribute = null;
@@ -410,6 +466,8 @@ namespace DAL
 		
 		private EntitySet<Order> _Orders;
 		
+		private EntitySet<ProductionRequest> _ProductionRequests;
+		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -431,6 +489,7 @@ namespace DAL
 		public SystemUser()
 		{
 			this._Orders = new EntitySet<Order>(new Action<Order>(this.attach_Orders), new Action<Order>(this.detach_Orders));
+			this._ProductionRequests = new EntitySet<ProductionRequest>(new Action<ProductionRequest>(this.attach_ProductionRequests), new Action<ProductionRequest>(this.detach_ProductionRequests));
 			OnCreated();
 		}
 		
@@ -534,7 +593,7 @@ namespace DAL
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FullName", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FullName", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
 		public string FullName
 		{
 			get
@@ -567,6 +626,19 @@ namespace DAL
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="SystemUser_ProductionRequest", Storage="_ProductionRequests", ThisKey="Id", OtherKey="RequestedBy")]
+		public EntitySet<ProductionRequest> ProductionRequests
+		{
+			get
+			{
+				return this._ProductionRequests;
+			}
+			set
+			{
+				this._ProductionRequests.Assign(value);
+			}
+		}
+		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -594,6 +666,18 @@ namespace DAL
 		}
 		
 		private void detach_Orders(Order entity)
+		{
+			this.SendPropertyChanging();
+			entity.SystemUser = null;
+		}
+		
+		private void attach_ProductionRequests(ProductionRequest entity)
+		{
+			this.SendPropertyChanging();
+			entity.SystemUser = this;
+		}
+		
+		private void detach_ProductionRequests(ProductionRequest entity)
 		{
 			this.SendPropertyChanging();
 			entity.SystemUser = null;
@@ -703,7 +787,7 @@ namespace DAL
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CustomerName", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CustomerName", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
 		public string CustomerName
 		{
 			get
@@ -743,7 +827,7 @@ namespace DAL
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Address", DbType="VarChar(250) NOT NULL", CanBeNull=false)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Address", DbType="NVarChar(250) NOT NULL", CanBeNull=false)]
 		public string Address
 		{
 			get
@@ -783,7 +867,7 @@ namespace DAL
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BankAcc", DbType="VarChar(25)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BankAcc", DbType="NVarChar(50)")]
 		public string BankAcc
 		{
 			get
@@ -803,7 +887,7 @@ namespace DAL
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BankName", DbType="VarChar(50)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BankName", DbType="NVarChar(50)")]
 		public string BankName
 		{
 			get
@@ -823,7 +907,7 @@ namespace DAL
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ContactPerson", DbType="VarChar(50)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ContactPerson", DbType="NVarChar(50)")]
 		public string ContactPerson
 		{
 			get
@@ -843,7 +927,7 @@ namespace DAL
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ContactPersonPhone", DbType="VarChar(25)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ContactPersonPhone", DbType="NVarChar(50)")]
 		public string ContactPersonPhone
 		{
 			get
@@ -923,7 +1007,7 @@ namespace DAL
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Description", DbType="VarChar(500)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Description", DbType="NVarChar(500)")]
 		public string Description
 		{
 			get
@@ -1077,11 +1161,7 @@ namespace DAL
 		
 		private string _Code;
 		
-		private string _FirstName;
-		
-		private string _LastName;
-		
-		private string _MiddleName;
+		private string _FullName;
 		
 		private string _NickName;
 		
@@ -1097,6 +1177,8 @@ namespace DAL
 		
 		private System.Nullable<byte> _Status;
 		
+		private string _Email;
+		
 		private EntitySet<Customer> _Customers;
 		
     #region Extensibility Method Definitions
@@ -1107,12 +1189,8 @@ namespace DAL
     partial void OnIdChanged();
     partial void OnCodeChanging(string value);
     partial void OnCodeChanged();
-    partial void OnFirstNameChanging(string value);
-    partial void OnFirstNameChanged();
-    partial void OnLastNameChanging(string value);
-    partial void OnLastNameChanged();
-    partial void OnMiddleNameChanging(string value);
-    partial void OnMiddleNameChanged();
+    partial void OnFullNameChanging(string value);
+    partial void OnFullNameChanged();
     partial void OnNickNameChanging(string value);
     partial void OnNickNameChanged();
     partial void OnAddressChanging(string value);
@@ -1127,6 +1205,8 @@ namespace DAL
     partial void OnDescriptionChanged();
     partial void OnStatusChanging(System.Nullable<byte> value);
     partial void OnStatusChanged();
+    partial void OnEmailChanging(string value);
+    partial void OnEmailChanged();
     #endregion
 		
 		public Employee()
@@ -1175,67 +1255,27 @@ namespace DAL
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FirstName", DbType="VarChar(25) NOT NULL", CanBeNull=false)]
-		public string FirstName
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FullName", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string FullName
 		{
 			get
 			{
-				return this._FirstName;
+				return this._FullName;
 			}
 			set
 			{
-				if ((this._FirstName != value))
+				if ((this._FullName != value))
 				{
-					this.OnFirstNameChanging(value);
+					this.OnFullNameChanging(value);
 					this.SendPropertyChanging();
-					this._FirstName = value;
-					this.SendPropertyChanged("FirstName");
-					this.OnFirstNameChanged();
+					this._FullName = value;
+					this.SendPropertyChanged("FullName");
+					this.OnFullNameChanged();
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LastName", DbType="VarChar(25) NOT NULL", CanBeNull=false)]
-		public string LastName
-		{
-			get
-			{
-				return this._LastName;
-			}
-			set
-			{
-				if ((this._LastName != value))
-				{
-					this.OnLastNameChanging(value);
-					this.SendPropertyChanging();
-					this._LastName = value;
-					this.SendPropertyChanged("LastName");
-					this.OnLastNameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MiddleName", DbType="VarChar(25) NOT NULL", CanBeNull=false)]
-		public string MiddleName
-		{
-			get
-			{
-				return this._MiddleName;
-			}
-			set
-			{
-				if ((this._MiddleName != value))
-				{
-					this.OnMiddleNameChanging(value);
-					this.SendPropertyChanging();
-					this._MiddleName = value;
-					this.SendPropertyChanged("MiddleName");
-					this.OnMiddleNameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_NickName", DbType="VarChar(25)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_NickName", DbType="NVarChar(50)")]
 		public string NickName
 		{
 			get
@@ -1255,7 +1295,7 @@ namespace DAL
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Address", DbType="VarChar(250)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Address", DbType="NVarChar(250)")]
 		public string Address
 		{
 			get
@@ -1335,7 +1375,7 @@ namespace DAL
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Description", DbType="VarChar(500)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Description", DbType="NVarChar(500)")]
 		public string Description
 		{
 			get
@@ -1371,6 +1411,26 @@ namespace DAL
 					this._Status = value;
 					this.SendPropertyChanged("Status");
 					this.OnStatusChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Email", DbType="VarChar(50)")]
+		public string Email
+		{
+			get
+			{
+				return this._Email;
+			}
+			set
+			{
+				if ((this._Email != value))
+				{
+					this.OnEmailChanging(value);
+					this.SendPropertyChanging();
+					this._Email = value;
+					this.SendPropertyChanged("Email");
+					this.OnEmailChanged();
 				}
 			}
 		}
@@ -1521,7 +1581,7 @@ namespace DAL
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Note", DbType="VarChar(250)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Note", DbType="NVarChar(250)")]
 		public string Note
 		{
 			get
@@ -1652,7 +1712,7 @@ namespace DAL
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
 		public string Name
 		{
 			get
@@ -1672,7 +1732,7 @@ namespace DAL
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Description", DbType="VarChar(500)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Description", DbType="NVarChar(500)")]
 		public string Description
 		{
 			get
@@ -1952,7 +2012,7 @@ namespace DAL
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Note", DbType="VarChar(500)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Note", DbType="NVarChar(500)")]
 		public string Note
 		{
 			get
@@ -2162,9 +2222,11 @@ namespace DAL
 		
 		private double _Cost;
 		
-		private double _Tax;
+		private int _AttributeId;
 		
 		private string _Note;
+		
+		private EntityRef<BaseAttribute> _BaseAttribute;
 		
 		private EntityRef<Order> _Order;
 		
@@ -2184,14 +2246,15 @@ namespace DAL
     partial void OnPriceChanged();
     partial void OnCostChanging(double value);
     partial void OnCostChanged();
-    partial void OnTaxChanging(double value);
-    partial void OnTaxChanged();
+    partial void OnAttributeIdChanging(int value);
+    partial void OnAttributeIdChanged();
     partial void OnNoteChanging(string value);
     partial void OnNoteChanged();
     #endregion
 		
 		public OrderDetail()
 		{
+			this._BaseAttribute = default(EntityRef<BaseAttribute>);
 			this._Order = default(EntityRef<Order>);
 			this._Product = default(EntityRef<Product>);
 			OnCreated();
@@ -2305,27 +2368,31 @@ namespace DAL
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Tax", DbType="Float NOT NULL")]
-		public double Tax
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AttributeId", DbType="Int NOT NULL")]
+		public int AttributeId
 		{
 			get
 			{
-				return this._Tax;
+				return this._AttributeId;
 			}
 			set
 			{
-				if ((this._Tax != value))
+				if ((this._AttributeId != value))
 				{
-					this.OnTaxChanging(value);
+					if (this._BaseAttribute.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnAttributeIdChanging(value);
 					this.SendPropertyChanging();
-					this._Tax = value;
-					this.SendPropertyChanged("Tax");
-					this.OnTaxChanged();
+					this._AttributeId = value;
+					this.SendPropertyChanged("AttributeId");
+					this.OnAttributeIdChanged();
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Note", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Note", DbType="NVarChar(50)")]
 		public string Note
 		{
 			get
@@ -2341,6 +2408,40 @@ namespace DAL
 					this._Note = value;
 					this.SendPropertyChanged("Note");
 					this.OnNoteChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="BaseAttribute_OrderDetail", Storage="_BaseAttribute", ThisKey="AttributeId", OtherKey="Id", IsForeignKey=true)]
+		public BaseAttribute BaseAttribute
+		{
+			get
+			{
+				return this._BaseAttribute.Entity;
+			}
+			set
+			{
+				BaseAttribute previousValue = this._BaseAttribute.Entity;
+				if (((previousValue != value) 
+							|| (this._BaseAttribute.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._BaseAttribute.Entity = null;
+						previousValue.OrderDetails.Remove(this);
+					}
+					this._BaseAttribute.Entity = value;
+					if ((value != null))
+					{
+						value.OrderDetails.Add(this);
+						this._AttributeId = value.Id;
+					}
+					else
+					{
+						this._AttributeId = default(int);
+					}
+					this.SendPropertyChanged("BaseAttribute");
 				}
 			}
 		}
@@ -2694,7 +2795,7 @@ namespace DAL
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ProductName", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ProductName", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
 		public string ProductName
 		{
 			get
@@ -2714,7 +2815,7 @@ namespace DAL
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Description", DbType="VarChar(500)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Description", DbType="NVarChar(500)")]
 		public string Description
 		{
 			get
@@ -3051,8 +3152,6 @@ namespace DAL
 		
 		private int _AttributeId;
 		
-		private string _Value;
-		
 		private EntityRef<BaseAttribute> _BaseAttribute;
 		
 		private EntityRef<Product> _Product;
@@ -3065,8 +3164,6 @@ namespace DAL
     partial void OnIdChanged();
     partial void OnAttributeIdChanging(int value);
     partial void OnAttributeIdChanged();
-    partial void OnValueChanging(string value);
-    partial void OnValueChanged();
     #endregion
 		
 		public ProductAttribute()
@@ -3120,26 +3217,6 @@ namespace DAL
 					this._AttributeId = value;
 					this.SendPropertyChanged("AttributeId");
 					this.OnAttributeIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Value", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
-		public string Value
-		{
-			get
-			{
-				return this._Value;
-			}
-			set
-			{
-				if ((this._Value != value))
-				{
-					this.OnValueChanging(value);
-					this.SendPropertyChanging();
-					this._Value = value;
-					this.SendPropertyChanged("Value");
-					this.OnValueChanged();
 				}
 			}
 		}
@@ -3333,7 +3410,7 @@ namespace DAL
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Note", DbType="VarChar(250)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Note", DbType="NVarChar(250)")]
 		public string Note
 		{
 			get
@@ -3418,13 +3495,17 @@ namespace DAL
 		
 		private string _ReqCode;
 		
-		private int _RequestedDate;
+		private System.DateTime _RequestedDate;
 		
-		private string _RequestedBy;
+		private int _RequestedBy;
 		
 		private System.Nullable<byte> _Status;
 		
+		private string _Note;
+		
 		private EntitySet<ProductionRequestDetail> _ProductionRequestDetails;
+		
+		private EntityRef<SystemUser> _SystemUser;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -3434,17 +3515,20 @@ namespace DAL
     partial void OnIdChanged();
     partial void OnReqCodeChanging(string value);
     partial void OnReqCodeChanged();
-    partial void OnRequestedDateChanging(int value);
+    partial void OnRequestedDateChanging(System.DateTime value);
     partial void OnRequestedDateChanged();
-    partial void OnRequestedByChanging(string value);
+    partial void OnRequestedByChanging(int value);
     partial void OnRequestedByChanged();
     partial void OnStatusChanging(System.Nullable<byte> value);
     partial void OnStatusChanged();
+    partial void OnNoteChanging(string value);
+    partial void OnNoteChanged();
     #endregion
 		
 		public ProductionRequest()
 		{
 			this._ProductionRequestDetails = new EntitySet<ProductionRequestDetail>(new Action<ProductionRequestDetail>(this.attach_ProductionRequestDetails), new Action<ProductionRequestDetail>(this.detach_ProductionRequestDetails));
+			this._SystemUser = default(EntityRef<SystemUser>);
 			OnCreated();
 		}
 		
@@ -3488,8 +3572,8 @@ namespace DAL
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RequestedDate", DbType="Int NOT NULL")]
-		public int RequestedDate
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RequestedDate", DbType="DateTime NOT NULL")]
+		public System.DateTime RequestedDate
 		{
 			get
 			{
@@ -3508,8 +3592,8 @@ namespace DAL
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RequestedBy", DbType="VarChar(25) NOT NULL", CanBeNull=false)]
-		public string RequestedBy
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RequestedBy", DbType="Int NOT NULL")]
+		public int RequestedBy
 		{
 			get
 			{
@@ -3519,6 +3603,10 @@ namespace DAL
 			{
 				if ((this._RequestedBy != value))
 				{
+					if (this._SystemUser.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
 					this.OnRequestedByChanging(value);
 					this.SendPropertyChanging();
 					this._RequestedBy = value;
@@ -3548,6 +3636,26 @@ namespace DAL
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Note", DbType="NVarChar(500)")]
+		public string Note
+		{
+			get
+			{
+				return this._Note;
+			}
+			set
+			{
+				if ((this._Note != value))
+				{
+					this.OnNoteChanging(value);
+					this.SendPropertyChanging();
+					this._Note = value;
+					this.SendPropertyChanged("Note");
+					this.OnNoteChanged();
+				}
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="ProductionRequest_ProductionRequestDetail", Storage="_ProductionRequestDetails", ThisKey="Id", OtherKey="Id")]
 		public EntitySet<ProductionRequestDetail> ProductionRequestDetails
 		{
@@ -3558,6 +3666,40 @@ namespace DAL
 			set
 			{
 				this._ProductionRequestDetails.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="SystemUser_ProductionRequest", Storage="_SystemUser", ThisKey="RequestedBy", OtherKey="Id", IsForeignKey=true)]
+		public SystemUser SystemUser
+		{
+			get
+			{
+				return this._SystemUser.Entity;
+			}
+			set
+			{
+				SystemUser previousValue = this._SystemUser.Entity;
+				if (((previousValue != value) 
+							|| (this._SystemUser.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._SystemUser.Entity = null;
+						previousValue.ProductionRequests.Remove(this);
+					}
+					this._SystemUser.Entity = value;
+					if ((value != null))
+					{
+						value.ProductionRequests.Add(this);
+						this._RequestedBy = value.Id;
+					}
+					else
+					{
+						this._RequestedBy = default(int);
+					}
+					this.SendPropertyChanged("SystemUser");
+				}
 			}
 		}
 		
@@ -3604,9 +3746,19 @@ namespace DAL
 		
 		private int _ProductId;
 		
-		private System.Nullable<int> _NumberUnit;
+		private int _NumberUnit;
 		
 		private System.Nullable<short> _Origin;
+		
+		private int _AttributeId;
+		
+		private string _Note;
+		
+		private int _ProductionRequestId;
+		
+		private bool _Direction;
+		
+		private EntityRef<BaseAttribute> _BaseAttribute;
 		
 		private EntityRef<Product> _Product;
 		
@@ -3620,20 +3772,29 @@ namespace DAL
     partial void OnIdChanged();
     partial void OnProductIdChanging(int value);
     partial void OnProductIdChanged();
-    partial void OnNumberUnitChanging(System.Nullable<int> value);
+    partial void OnNumberUnitChanging(int value);
     partial void OnNumberUnitChanged();
     partial void OnOriginChanging(System.Nullable<short> value);
     partial void OnOriginChanged();
+    partial void OnAttributeIdChanging(int value);
+    partial void OnAttributeIdChanged();
+    partial void OnNoteChanging(string value);
+    partial void OnNoteChanged();
+    partial void OnProductionRequestIdChanging(int value);
+    partial void OnProductionRequestIdChanged();
+    partial void OnDirectionChanging(bool value);
+    partial void OnDirectionChanged();
     #endregion
 		
 		public ProductionRequestDetail()
 		{
+			this._BaseAttribute = default(EntityRef<BaseAttribute>);
 			this._Product = default(EntityRef<Product>);
 			this._ProductionRequest = default(EntityRef<ProductionRequest>);
 			OnCreated();
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
 		public int Id
 		{
 			get
@@ -3657,7 +3818,7 @@ namespace DAL
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ProductId", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ProductId", DbType="Int NOT NULL")]
 		public int ProductId
 		{
 			get
@@ -3681,8 +3842,8 @@ namespace DAL
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_NumberUnit", DbType="Int")]
-		public System.Nullable<int> NumberUnit
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_NumberUnit", DbType="Int NOT NULL")]
+		public int NumberUnit
 		{
 			get
 			{
@@ -3717,6 +3878,124 @@ namespace DAL
 					this._Origin = value;
 					this.SendPropertyChanged("Origin");
 					this.OnOriginChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AttributeId", DbType="Int NOT NULL")]
+		public int AttributeId
+		{
+			get
+			{
+				return this._AttributeId;
+			}
+			set
+			{
+				if ((this._AttributeId != value))
+				{
+					if (this._BaseAttribute.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnAttributeIdChanging(value);
+					this.SendPropertyChanging();
+					this._AttributeId = value;
+					this.SendPropertyChanged("AttributeId");
+					this.OnAttributeIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Note", DbType="NVarChar(250)")]
+		public string Note
+		{
+			get
+			{
+				return this._Note;
+			}
+			set
+			{
+				if ((this._Note != value))
+				{
+					this.OnNoteChanging(value);
+					this.SendPropertyChanging();
+					this._Note = value;
+					this.SendPropertyChanged("Note");
+					this.OnNoteChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ProductionRequestId", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int ProductionRequestId
+		{
+			get
+			{
+				return this._ProductionRequestId;
+			}
+			set
+			{
+				if ((this._ProductionRequestId != value))
+				{
+					this.OnProductionRequestIdChanging(value);
+					this.SendPropertyChanging();
+					this._ProductionRequestId = value;
+					this.SendPropertyChanged("ProductionRequestId");
+					this.OnProductionRequestIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Direction", DbType="Bit NOT NULL")]
+		public bool Direction
+		{
+			get
+			{
+				return this._Direction;
+			}
+			set
+			{
+				if ((this._Direction != value))
+				{
+					this.OnDirectionChanging(value);
+					this.SendPropertyChanging();
+					this._Direction = value;
+					this.SendPropertyChanged("Direction");
+					this.OnDirectionChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="BaseAttribute_ProductionRequestDetail", Storage="_BaseAttribute", ThisKey="AttributeId", OtherKey="Id", IsForeignKey=true)]
+		public BaseAttribute BaseAttribute
+		{
+			get
+			{
+				return this._BaseAttribute.Entity;
+			}
+			set
+			{
+				BaseAttribute previousValue = this._BaseAttribute.Entity;
+				if (((previousValue != value) 
+							|| (this._BaseAttribute.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._BaseAttribute.Entity = null;
+						previousValue.ProductionRequestDetails.Remove(this);
+					}
+					this._BaseAttribute.Entity = value;
+					if ((value != null))
+					{
+						value.ProductionRequestDetails.Add(this);
+						this._AttributeId = value.Id;
+					}
+					else
+					{
+						this._AttributeId = default(int);
+					}
+					this.SendPropertyChanged("BaseAttribute");
 				}
 			}
 		}
@@ -3870,7 +4149,7 @@ namespace DAL
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ProductName", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ProductName", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
 		public string ProductName
 		{
 			get
@@ -3890,7 +4169,7 @@ namespace DAL
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Description", DbType="VarChar(500)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Description", DbType="NVarChar(500)")]
 		public string Description
 		{
 			get

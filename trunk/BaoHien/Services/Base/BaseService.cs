@@ -67,6 +67,8 @@ namespace BaoHien.Services.Base
 
         protected TItem OnGetItem<TItem>(string id)
         {
+            List<string> ids = new List<string>();
+            ids.Add(id);
             TItem item = default(TItem);
             try
             {
@@ -74,7 +76,7 @@ namespace BaoHien.Services.Base
                 MethodInfo methodInfo = typeofClassWithGenericStaticMethod.GetMethod("SelectByPK", System.Reflection.BindingFlags.Static | BindingFlags.Public);
                 Type[] genericArguments = new Type[] { typeof(TItem) };
                 MethodInfo genericMethodInfo = methodInfo.MakeGenericMethod(genericArguments);
-                item = (TItem)genericMethodInfo.Invoke(null, new object[] { id });
+                item = (TItem)genericMethodInfo.Invoke(null, new object[] { ids });
                 
 
 
@@ -85,7 +87,27 @@ namespace BaoHien.Services.Base
             }
             return item;
         }
+        protected TItem OnGetItem<TItem>(List<string> ids)
+        {
+           
+            TItem item = default(TItem);
+            try
+            {
+                Type typeofClassWithGenericStaticMethod = typeof(BaoHienRepository);
+                MethodInfo methodInfo = typeofClassWithGenericStaticMethod.GetMethod("SelectByPK", System.Reflection.BindingFlags.Static | BindingFlags.Public);
+                Type[] genericArguments = new Type[] { typeof(TItem) };
+                MethodInfo genericMethodInfo = methodInfo.MakeGenericMethod(genericArguments);
+                item = (TItem)genericMethodInfo.Invoke(null, new object[] { ids });
 
+
+
+            }
+            catch (Exception)
+            {
+
+            }
+            return item;
+        }
 
         protected bool OnAddItem<TItem>(TItem initialValue)
         {
@@ -164,6 +186,28 @@ namespace BaoHien.Services.Base
             }
             return true;
         }
+        protected bool OnUpdateItem<TItem>(TItem newValue, List<string> ids)
+        {
+
+            try
+            {
+
+
+
+                Type typeofClassWithGenericStaticMethod = typeof(BaoHienRepository);
+                MethodInfo methodInfo = typeofClassWithGenericStaticMethod.GetMethod("Update", System.Reflection.BindingFlags.Static | BindingFlags.Public);
+                Type[] genericArguments = new Type[] { typeof(TItem) };
+                MethodInfo genericMethodInfo = methodInfo.MakeGenericMethod(genericArguments);
+                genericMethodInfo.Invoke(null, new object[] { newValue, ids });
+
+            }
+            catch (Exception)
+            {
+
+                return false;
+            }
+            return true;
+        }
         protected bool OnDeleteItem<TItem>(string id)
         {
             
@@ -202,7 +246,45 @@ namespace BaoHien.Services.Base
             }
             return true;
         }
-        
+
+        protected bool OnDeleteItem<TItem>(List<string> ids)
+        {
+
+            try
+            {
+                Type type = typeof(TItem);
+                TItem item = (TItem)OnGetItem<TItem>(ids);
+                if (type.GetProperties().Any(x => x.Name == Constant.DELETED_PROPERTY_NAME))
+                {
+                    //soft delete
+                    PropertyInfo property = type.GetProperty(Constant.DELETED_PROPERTY_NAME);
+
+                    if (type.GetProperties().Any(x => x.Name == Constant.DELETED_PROPERTY_NAME))
+                    {
+                        property = type.GetProperty(Constant.DELETED_PROPERTY_NAME);
+                        property.SetValue(item, new Nullable<byte>(Constant.DELETED_PROPERTY_VALUE), null);
+                    }
+                    OnUpdateItem<TItem>(item, ids);
+                }
+                else
+                {
+                    //hard delete
+                    Type typeofClassWithGenericStaticMethod = typeof(BaoHienRepository);
+                    MethodInfo methodInfo = typeofClassWithGenericStaticMethod.GetMethod("Remove", System.Reflection.BindingFlags.Static | BindingFlags.Public);
+                    Type[] genericArguments = new Type[] { typeof(TItem) };
+                    MethodInfo genericMethodInfo = methodInfo.MakeGenericMethod(genericArguments);
+                    genericMethodInfo.Invoke(null, new object[] { item, "" });
+
+                }
+
+
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            return true;
+        }
         public List<TItem> SelectItemByWhere<TItem>(Expression<Func<TItem, bool>> func)
         {
             List<TItem> list = null;
