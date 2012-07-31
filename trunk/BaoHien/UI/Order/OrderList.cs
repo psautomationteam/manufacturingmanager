@@ -11,6 +11,7 @@ using BaoHien.Services.Orders;
 using BaoHien.Services.Customers;
 using DAL.Helper;
 using BaoHien.Services.SystemUsers;
+using BaoHien.Model;
 
 namespace BaoHien.UI
 {
@@ -227,6 +228,24 @@ namespace BaoHien.UI
 
             frmAddOrder.CallFromUserControll = this;
             frmAddOrder.ShowDialog();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            OrderSearchCriteria orderSearchCriteria = new OrderSearchCriteria
+            {
+                Code = txtCode.Text != null ? txtCode.Text : "",
+                CreatedBy = cbmCustomers.SelectedValue != null ? (int?)cbmCustomers.SelectedValue : (int?)null,
+                From = dtpFrom.Value != null ? dtpFrom.Value : (DateTime?)null,
+                To = dtpTo.Value != null ? dtpTo.Value : (DateTime?)null,
+            };
+            OrderService orderService = new OrderService();
+            List<Order> orders = orderService.SearchingOrder(orderSearchCriteria);
+            if (orders == null)
+            {
+                orders = new List<Order>();
+            }
+            setUpDataGrid(orders);
         }
         
     }
