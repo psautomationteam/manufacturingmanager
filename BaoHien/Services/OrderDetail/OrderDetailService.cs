@@ -5,6 +5,7 @@ using System.Text;
 using DAL;
 using BaoHien.Services.Base;
 using System.Linq.Expressions;
+using BaoHien.Model;
 
 namespace BaoHien.Services.OrderDetails
 {
@@ -39,5 +40,6 @@ namespace BaoHien.Services.OrderDetails
 
             return SelectItemByWhere<OrderDetail>(func);
         }
+        
     }
 }

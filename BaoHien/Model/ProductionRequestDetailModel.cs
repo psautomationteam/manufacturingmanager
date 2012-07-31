@@ -10,7 +10,27 @@ namespace BaoHien.Model
         int productId;
         int attributeId;
         int numberUnit;
+        double price;
 
+        public double Price
+        {
+            get { return price; }
+            set { price = value; }
+        }
+        double tax;
+
+        public double Tax
+        {
+            get { return tax; }
+            set { tax = value; }
+        }
+        double total;
+
+        public double Total
+        {
+            get { return total; }
+            set { total = value; }
+        }
         string note;
         public int ProductId
         {

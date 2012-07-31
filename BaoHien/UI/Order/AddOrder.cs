@@ -16,16 +16,18 @@ using DAL.Helper;
 using BaoHien.Services.OrderDetails;
 using BaoHien.Services.BaseAttributes;
 using BaoHien.Services.ProductAttributes;
+using BaoHien.Model;
 
 namespace BaoHien.UI
 {
     public partial class AddOrder : BaseForm
     {
+        bool isUpdating = false;
         Order order;
-        List<Customer> customers;
-        List<OrderDetail> orderDetails;
-        List<Product> products;
-        List<BaseAttribute> baseAttributesAtRow;
+        BindingList<Customer> customers;
+        BindingList<OrderDetail> orderDetails;
+        BindingList<Product> products;
+        BindingList<BaseAttribute> baseAttributesAtRow;
         public AddOrder()
         {
             InitializeComponent();
@@ -67,8 +69,41 @@ namespace BaoHien.UI
                 }
                 else
                 {
-                    MessageBox.Show("Sản phẩm đã được cập nhật thành công");
-                    ((OrderList)this.CallFromUserControll).loadOrderList();
+                    OrderDetailService orderDetailService = new OrderDetailService();
+                    foreach (OrderDetail od in orderDetails)
+                    {
+                        if (od.ProductId > 0 && od.AttributeId > 0)
+                        {
+                            if (od.Id == 0)
+                            {
+                                od.OrderId = order.Id;
+                                result = orderDetailService.AddOrderDetail(od);
+                            }
+                            else
+                            {
+                                result = orderDetailService.UpdateOrderDetail(od);
+                            }
+
+                            if (!result)
+                                break;
+                        }
+                        
+
+                    }
+                    if (!result)
+                    {
+                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                        return;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Sản phẩm đã được cập nhật thành công");
+                    }
+                    if (this.CallFromUserControll != null && this.CallFromUserControll is OrderList)
+                    {
+                        ((OrderList)this.CallFromUserControll).loadOrderList();
+                    }
+                    
                     this.Close();
                 }
             }
@@ -150,7 +185,7 @@ namespace BaoHien.UI
             if(customers == null)
             {
                 CustomerService customerService = new CustomerService();
-                customers = customerService.GetCustomers();
+                customers = new BindingList<Customer>(customerService.GetCustomers());
             }
             if (customers != null)
             {
@@ -165,53 +200,190 @@ namespace BaoHien.UI
                     cbxCustomer.Enabled = false;
                 }
             }
-            if (orderDetails == null && order != null)
+            
+            ProductService productService = new ProductService();
+            products = new BindingList<Product>(productService.GetProducts());
+            BaseAttributeService baseAttributeService = new BaseAttributeService();
+            baseAttributesAtRow = new BindingList<BaseAttribute>(baseAttributeService.GetBaseAttributes());
+            if (order != null)
             {
-                OrderDetailService orderService = new OrderDetailService();
+                if (customers != null)
+                {
+                    cbxCustomer.SelectedIndex = customers.ToList().FindIndex(cus => cus.Id == order.CustId);
+                }
+                txtDiscount.Text = order.Discount.HasValue ? order.Discount.Value.ToString() : "";
+                txtNote.Text = order.Note;
+                txtVAT.Text = order.VAT.HasValue ? order.VAT.Value.ToString() : "";
+                txtOrderCode.Text = order.OrderCode;
+                txtCreatedDate.Text = order.CreatedDate.ToShortDateString();
 
-                orderDetails = orderService.SelectOrderDetailByWhere(o => o.Id == order.Id);
             }
+        }
+        public void updateProductionRequestDetailCells()
+        {
+            if (isUpdating && order != null && orderDetails.Count < dgwOrderDetails.RowCount)
+            {
+
+                for (int i = 0; i < orderDetails.Count; i++)
+                {
+                    for (int j = 0; j < 2 && j < dgwOrderDetails.ColumnCount; j++)
+                    {
+                        if (dgwOrderDetails.Rows[i].Cells[j] is DataGridViewComboBoxCell)
+                        {
+                            if (j == 0)
+                            {
+                                DataGridViewComboBoxCell pkgBoxCell = (DataGridViewComboBoxCell)dgwOrderDetails.Rows[i].Cells[j];
+                                pkgBoxCell.Value = orderDetails[i].ProductId;
+                            }
+                            if (j == 1)
+                            {
+                                DataGridViewComboBoxCell pkgBoxCell = (DataGridViewComboBoxCell)dgwOrderDetails.Rows[i].Cells[j];
+                                pkgBoxCell.Value = orderDetails[i].AttributeId;
+                            }
+                        }
+                    }
+                }
+
+
+
+            }
+            
         }
         public void loadDataForEditOrder(int orderId)
         {
+            isUpdating = true;
             this.Text = "Chỉnh sửa  đơn hàng này";
             this.btnSave.Text = "Cập nhật";
-            
-
             OrderService orderService = new OrderService();
-
             order = orderService.GetOrder(orderId);
-            loadSomeData();
             if (order != null)
             {
-                if(customers != null)
+                if (orderDetails == null)
                 {
-                    cbxCustomer.SelectedIndex = customers.FindIndex(cus => cus.Id == order.CustId);
+                    OrderDetailService orderDetailService = new OrderDetailService();
+
+                    orderDetails = new BindingList<OrderDetail>(orderDetailService.SelectOrderDetailByWhere(o => o.OrderId == order.Id));
+
                 }
-                txtDiscount.Text = order.Discount.HasValue?order.Discount.Value.ToString(): "";
-                txtNote.Text = order.Note;
-                txtVAT.Text = order.VAT.HasValue?order.VAT.Value.ToString():"";
-                txtOrderCode.Text= order.OrderCode;
-                txtCreatedDate.Text = order.CreatedDate.ToShortDateString();  
-                    
             }
+            
         }
         private void AddOrder_Load(object sender, EventArgs e)
         {
-           
-            SetupColumns();
             loadSomeData();
+            SetupColumns();
+            updateProductionRequestDetailCells();
             calculateTotal();
+            
         }
         private void SetupColumns()
         {
-            bool isUpdating = false;
+            dgwOrderDetails.AutoGenerateColumns = false;
+
+            if (orderDetails == null)
+            {
+                orderDetails = new BindingList<OrderDetail>();
+
+
+            }
+            var query = from orderDetail in orderDetails
+
+                        select new ProductionRequestDetailModel
+                        {
+                            ProductId = orderDetail.ProductId,
+                            AttributeId = orderDetail.AttributeId,
+                            NumberUnit = orderDetail.NumberUnit,
+
+                           
+                            Price = orderDetail.Price,
+                            Note = orderDetail.Note,
+                            Total = (double)orderDetail.Price * orderDetail.NumberUnit
+                        };
+
+           
+            dgwOrderDetails.DataSource = new BindingList<ProductionRequestDetailModel>(query.ToList());
+
+            dgwOrderDetails.ReadOnly = false;
+
+            DataGridViewComboBoxColumn productColumn = new DataGridViewComboBoxColumn();
+            productColumn.Width = 150;
+            productColumn.AutoComplete = false;
+
+            productColumn.HeaderText = "Sản phẩm";
+            productColumn.DataSource = products;
+            productColumn.DisplayMember = "ProductName";
+            //productColumn.Frozen = true;
+            productColumn.ValueMember = "Id";
+
+            dgwOrderDetails.Columns.Add(productColumn);
+
+            DataGridViewComboBoxColumn productAttributeColumn = new DataGridViewComboBoxColumn();
+            productAttributeColumn.Width = 150;
+            productAttributeColumn.HeaderText = "Thuộc tính sản phẩm";
+
+            productAttributeColumn.DataSource = baseAttributesAtRow;
+
+            productAttributeColumn.DisplayMember = "AttributeName";
+            //productColumn.Frozen = true;
+            productAttributeColumn.ValueMember = "Id";
+
+            dgwOrderDetails.Columns.Add(productAttributeColumn);
+
+
+
+            DataGridViewTextBoxColumn numberUnitColumn = new DataGridViewTextBoxColumn();
+
+            numberUnitColumn.Width = 100;
+            numberUnitColumn.DataPropertyName = "NumberUnit";
+            numberUnitColumn.HeaderText = "Số lượng";
+            //numberUnitColumn.Frozen = true;
+            numberUnitColumn.ValueType = typeof(int);
+            dgwOrderDetails.Columns.Add(numberUnitColumn);
+
+            DataGridViewTextBoxColumn priceColumn = new DataGridViewTextBoxColumn();
+
+            priceColumn.Width = 100;
+            priceColumn.DataPropertyName = "Price";
+            priceColumn.HeaderText = "Số lượng";
+            //numberUnitColumn.Frozen = true;
+            priceColumn.ValueType = typeof(int);
+            dgwOrderDetails.Columns.Add(priceColumn);
+
+            DataGridViewTextBoxColumn totalColumn = new DataGridViewTextBoxColumn();
+
+            totalColumn.Width = 100;
+            totalColumn.DataPropertyName = "Total";
+            totalColumn.HeaderText = "Số lượng";
+            //numberUnitColumn.Frozen = true;
+            totalColumn.ValueType = typeof(int);
+            dgwOrderDetails.Columns.Add(totalColumn);
+
+            DataGridViewTextBoxColumn noteColumn = new DataGridViewTextBoxColumn();
+
+            noteColumn.DataPropertyName = "Note";
+            noteColumn.Width = 100;
+            noteColumn.HeaderText = "Ghi chú";
+            //numberUnitColumn.Frozen = true;
+            noteColumn.ValueType = typeof(string);
+            dgwOrderDetails.Columns.Add(noteColumn);
+
+            DataGridViewImageColumn deleteButton = new DataGridViewImageColumn();
+            deleteButton.DataPropertyName = "DeleteButton";
+            deleteButton.Image = Properties.Resources.erase;
+            deleteButton.Width = 100;
+            deleteButton.HeaderText = "Xóa";
+            deleteButton.ReadOnly = true;
+            deleteButton.ImageLayout = DataGridViewImageCellLayout.Normal;
+        }
+        private void SetupColumn2s()
+        {
+            
             dgwOrderDetails.AutoGenerateColumns = false;
             
             ProductService productService = new ProductService();
             if (products == null)
             {
-                products = productService.GetProducts();
+                products = new BindingList<Product>(productService.GetProducts());
             }
             
             List<object> objects = new List<object>
@@ -228,7 +400,7 @@ namespace BaoHien.UI
             };
             if (orderDetails == null)
             {
-                orderDetails = new List<OrderDetail>();
+                orderDetails = new BindingList<OrderDetail>();
                 OrderDetail orderDetail = new OrderDetail();
                 orderDetails.Add(orderDetail);
 
@@ -394,7 +566,7 @@ namespace BaoHien.UI
             DataGridView dgv = (DataGridView)sender;
             if (orderDetails == null)
             {
-                orderDetails = new List<OrderDetail>();
+                orderDetails = new BindingList<OrderDetail>();
             }
             if (orderDetails.Count < dgwOrderDetails.RowCount)
             {
@@ -409,21 +581,19 @@ namespace BaoHien.UI
                     orderDetails[e.RowIndex].ProductId = (int)dgv.CurrentCell.Value;
                     ProductAttributeService productAttributeService = new ProductAttributeService();
                     List<ProductAttribute> productAttributes = productAttributeService.SelectProductAttributeByWhere(ba => ba.Id == orderDetails[e.RowIndex].ProductId);
-                    baseAttributesAtRow = new List<BaseAttribute>();
+                    baseAttributesAtRow = new BindingList<BaseAttribute>();
                     foreach(ProductAttribute pa in productAttributes)
                     {
                         baseAttributesAtRow.Add(pa.BaseAttribute);
                     }
                     DataGridViewComboBoxCell currentCell = (DataGridViewComboBoxCell)dgwOrderDetails.Rows[e.RowIndex].Cells[1];
-                    if (baseAttributesAtRow.Count > 0)
+                    currentCell.DataSource = baseAttributesAtRow;
+                    if (baseAttributesAtRow.Count > e.RowIndex && baseAttributesAtRow.Count > 0)
                     {
-                        currentCell.DataSource = baseAttributesAtRow;
+                        orderDetails[e.RowIndex].AttributeId = baseAttributesAtRow[0].Id;
                         currentCell.Value = baseAttributesAtRow[0].Id;
                     }
                     
-                    //currentCell.DisplayMember = "AttributeName";
-                    //currentCell.ValueMember = "Id";
-                    //currentCell.
 
                 }
                 else if (e.ColumnIndex == 1)
@@ -497,7 +667,6 @@ namespace BaoHien.UI
 
         private void dgwOrderDetails_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
         {
-           
 
             if (dgwOrderDetails.CurrentCell.ColumnIndex == 0)
             {
@@ -513,7 +682,7 @@ namespace BaoHien.UI
                     prodCode.AutoCompleteCustomSource = source;
                     prodCode.AutoCompleteSource = AutoCompleteSource.CustomSource;
                     prodCode.MaxDropDownItems = 5;
-                   
+
                 }
             }
             else if (dgwOrderDetails.CurrentCell.ColumnIndex == 1)
@@ -535,82 +704,53 @@ namespace BaoHien.UI
 
                     }
                 }
-                
+
             }
+            //if (dgwOrderDetails.CurrentCell.ColumnIndex == 0)
+            //{
+            //    var source = new AutoCompleteStringCollection();
+            //    String[] stringArray = Array.ConvertAll<Product, String>(products.ToArray(), delegate(Product row) { return (String)row.ProductName; });
+            //    source.AddRange(stringArray);
+
+            //    ComboBox prodCode = e.Control as ComboBox;
+            //    if (prodCode != null)
+            //    {
+            //        prodCode.DropDownStyle = ComboBoxStyle.DropDown;
+            //        prodCode.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            //        prodCode.AutoCompleteCustomSource = source;
+            //        prodCode.AutoCompleteSource = AutoCompleteSource.CustomSource;
+            //        prodCode.MaxDropDownItems = 5;
+                   
+            //    }
+            //}
+            //else if (dgwOrderDetails.CurrentCell.ColumnIndex == 1)
+            //{
+            //    if (baseAttributesAtRow != null)
+            //    {
+            //        var source = new AutoCompleteStringCollection();
+            //        String[] stringArray = Array.ConvertAll<BaseAttribute, String>(baseAttributesAtRow.ToArray(), delegate(BaseAttribute row) { return (String)row.AttributeName; });
+            //        source.AddRange(stringArray);
+
+            //        ComboBox prodCode = e.Control as ComboBox;
+            //        if (prodCode != null)
+            //        {
+            //            prodCode.DropDownStyle = ComboBoxStyle.DropDown;
+            //            prodCode.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            //            prodCode.AutoCompleteCustomSource = source;
+            //            prodCode.AutoCompleteSource = AutoCompleteSource.CustomSource;
+            //            prodCode.MaxDropDownItems = 5;
+
+            //        }
+            //    }
+                
+            //}
             
 
         }
 
         private void dgwOrderDetails_CellEnter(object sender, DataGridViewCellEventArgs e)
         {
-            DataGridView dgv = (DataGridView)sender;
-            if (orderDetails == null)
-            {
-                orderDetails = new List<OrderDetail>();
-            }
-            if (orderDetails.Count < dgwOrderDetails.RowCount)
-            {
-                OrderDetail orderDetail = new OrderDetail
-                {
-                    //ProductId = (int)dgwOrderDetails.Rows[dgwOrderDetails.RowCount - 1].Cells[0].Value,
-                    //NumberUnit = (int)dgwOrderDetails.Rows[dgwOrderDetails.RowCount - 1].Cells[1].Value,
-                    //Price = (double)dgwOrderDetails.Rows[dgwOrderDetails.RowCount - 1].Cells[2].Value,
-                    //Tax = (double)dgwOrderDetails.Rows[dgwOrderDetails.RowCount - 1].Cells[3].Value,
-                    //Note = (string)dgwOrderDetails.Rows[dgwOrderDetails.RowCount - 1].Cells[4].Value,
-                };
-                orderDetails.Add(orderDetail);
-            }
-            if (dgv.CurrentCell.Value != null)
-            {
-                if (e.ColumnIndex == 0)
-                {
-
-                    orderDetails[e.RowIndex].ProductId = (int)dgv.CurrentCell.Value;
-                    ProductAttributeService productAttributeService = new ProductAttributeService();
-                    List<ProductAttribute> productAttributes = productAttributeService.SelectProductAttributeByWhere(ba => ba.Id == orderDetails[e.RowIndex].ProductId);
-                    List<BaseAttribute> baseAttributesAtRow = new List<BaseAttribute>();
-                    foreach (ProductAttribute pa in productAttributes)
-                    {
-                        baseAttributesAtRow.Add(pa.BaseAttribute);
-                    }
-                    DataGridViewComboBoxCell currentCell = (DataGridViewComboBoxCell)dgwOrderDetails.Rows[e.RowIndex].Cells[1];
-                    if (baseAttributesAtRow.Count > 0)
-                    {
-                        currentCell.DataSource = baseAttributesAtRow;
-                        currentCell.Value = baseAttributesAtRow[0].Id;
-                    }
-
-                    //currentCell.DisplayMember = "AttributeName";
-                    //currentCell.ValueMember = "Id";
-                    //currentCell.
-
-                }
-                else if (e.ColumnIndex == 1)
-                {
-                    orderDetails[e.RowIndex].AttributeId = (int)dgv.CurrentCell.Value;
-                }
-                else if (e.ColumnIndex == 2)
-                {
-                    orderDetails[e.RowIndex].NumberUnit = (int)dgv.CurrentCell.Value;
-                }
-                else if (e.ColumnIndex == 3)
-                {
-                    orderDetails[e.RowIndex].Price = (double)dgv.CurrentCell.Value;
-                }
-                else if (e.ColumnIndex == 4)
-                {
-                    if (dgv.CurrentCell.Value != null)
-                    {
-                        orderDetails[e.RowIndex].Cost = (double)dgv.CurrentCell.Value;
-                    }
-
-                }
-                else if (e.ColumnIndex == 5)
-                {
-                    orderDetails[e.RowIndex].Note = (string)dgv.CurrentCell.Value;
-                }
-            }
-            calculateTotal();
+            
         }
 
         
