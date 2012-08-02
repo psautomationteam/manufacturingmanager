@@ -1,6 +1,6 @@
 ﻿namespace BaoHien.UI
 {
-    partial class AddProductionRequest
+    partial class EntranceStock
     {
         /// <summary>
         /// Required designer variable.
@@ -37,17 +37,13 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.dgvMaterial = new System.Windows.Forms.DataGridView();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.dgvProduct = new System.Windows.Forms.DataGridView();
             this.btnSave = new System.Windows.Forms.Button();
+            this.dgvStockEntranceDetails = new System.Windows.Forms.DataGridView();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.btnDelete = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvStockEntranceDetails)).BeginInit();
             this.groupBox2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvMaterial)).BeginInit();
-            this.groupBox3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvProduct)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -60,12 +56,12 @@
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Location = new System.Drawing.Point(12, 12);
+            this.groupBox1.Location = new System.Drawing.Point(16, 2);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(726, 80);
-            this.groupBox1.TabIndex = 0;
+            this.groupBox1.TabIndex = 5;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Thông tin phiếu sản xuất";
+            this.groupBox1.Text = "Thông tin phiếu nhập kho";
             // 
             // txtNote
             // 
@@ -99,11 +95,11 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(35, 52);
+            this.label4.Location = new System.Drawing.Point(24, 55);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(36, 13);
+            this.label4.Size = new System.Drawing.Size(48, 13);
             this.label4.TabIndex = 3;
-            this.label4.Text = "Lý do:";
+            this.label4.Text = "Ghi Chú:";
             // 
             // label3
             // 
@@ -117,11 +113,11 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(295, 26);
+            this.label2.Location = new System.Drawing.Point(317, 25);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(67, 13);
+            this.label2.Size = new System.Drawing.Size(45, 13);
             this.label2.TabIndex = 1;
-            this.label2.Text = "Yêu cầu bởi:";
+            this.label2.Text = "Lập bởi:";
             // 
             // label1
             // 
@@ -132,87 +128,57 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Mã phiếu:";
             // 
-            // groupBox2
-            // 
-            this.groupBox2.Controls.Add(this.dgvMaterial);
-            this.groupBox2.Location = new System.Drawing.Point(13, 99);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(443, 319);
-            this.groupBox2.TabIndex = 1;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Nguyên Liệu";
-            // 
-            // dgvMaterial
-            // 
-            this.dgvMaterial.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvMaterial.Location = new System.Drawing.Point(6, 19);
-            this.dgvMaterial.Name = "dgvMaterial";
-            this.dgvMaterial.Size = new System.Drawing.Size(431, 294);
-            this.dgvMaterial.TabIndex = 0;
-            this.dgvMaterial.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvMaterial_CellEndEdit);
-            this.dgvMaterial.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dgvMaterial_DataError);
-            this.dgvMaterial.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.dgvMaterial_EditingControlShowing);
-            // 
-            // groupBox3
-            // 
-            this.groupBox3.Controls.Add(this.dgvProduct);
-            this.groupBox3.Location = new System.Drawing.Point(462, 99);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(475, 319);
-            this.groupBox3.TabIndex = 2;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Thành Phẩm";
-            // 
-            // dgvProduct
-            // 
-            this.dgvProduct.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvProduct.Location = new System.Drawing.Point(6, 19);
-            this.dgvProduct.Name = "dgvProduct";
-            this.dgvProduct.Size = new System.Drawing.Size(463, 294);
-            this.dgvProduct.TabIndex = 0;
-            this.dgvProduct.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvProduct_CellEndEdit);
-            this.dgvProduct.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvProduct_CellEnter);
-            this.dgvProduct.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dgvProduct_DataError);
-            this.dgvProduct.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.dgvProduct_EditingControlShowing);
-            // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(862, 424);
+            this.btnSave.Location = new System.Drawing.Point(866, 414);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
-            this.btnSave.TabIndex = 3;
+            this.btnSave.TabIndex = 8;
             this.btnSave.Text = "Lưu";
             this.btnSave.UseVisualStyleBackColor = true;
-            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
+            // 
+            // dgvStockEntranceDetails
+            // 
+            this.dgvStockEntranceDetails.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvStockEntranceDetails.Location = new System.Drawing.Point(6, 19);
+            this.dgvStockEntranceDetails.Name = "dgvStockEntranceDetails";
+            this.dgvStockEntranceDetails.Size = new System.Drawing.Size(912, 294);
+            this.dgvStockEntranceDetails.TabIndex = 0;
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.dgvStockEntranceDetails);
+            this.groupBox2.Location = new System.Drawing.Point(17, 89);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(924, 319);
+            this.groupBox2.TabIndex = 6;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Chi tiết phiếu nhập kho";
             // 
             // btnDelete
             // 
-            this.btnDelete.Location = new System.Drawing.Point(777, 425);
+            this.btnDelete.Location = new System.Drawing.Point(781, 415);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(75, 23);
-            this.btnDelete.TabIndex = 4;
+            this.btnDelete.TabIndex = 9;
             this.btnDelete.Text = "Hủy";
             this.btnDelete.UseVisualStyleBackColor = true;
             // 
-            // AddProductionRequest
+            // EntranceStock
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(949, 458);
-            this.Controls.Add(this.btnDelete);
-            this.Controls.Add(this.btnSave);
-            this.Controls.Add(this.groupBox3);
-            this.Controls.Add(this.groupBox2);
+            this.ClientSize = new System.Drawing.Size(964, 465);
             this.Controls.Add(this.groupBox1);
-            this.Name = "AddProductionRequest";
-            this.Text = "Lập phiếu sản xuất";
-            this.Load += new System.EventHandler(this.AddProductionRequest_Load);
+            this.Controls.Add(this.btnSave);
+            this.Controls.Add(this.groupBox2);
+            this.Controls.Add(this.btnDelete);
+            this.Name = "EntranceStock";
+            this.Text = "Phiếu nhập kho";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvStockEntranceDetails)).EndInit();
             this.groupBox2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dgvMaterial)).EndInit();
-            this.groupBox3.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dgvProduct)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -228,11 +194,9 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.DataGridView dgvMaterial;
-        private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.Button btnSave;
+        private System.Windows.Forms.DataGridView dgvStockEntranceDetails;
+        private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Button btnDelete;
-        private System.Windows.Forms.DataGridView dgvProduct;
     }
 }
