@@ -42,6 +42,7 @@
             this.menuProductionRequest = new System.Windows.Forms.ToolStripMenuItem();
             this.menuOrder = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStockIn = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuBilling = new System.Windows.Forms.ToolStripMenuItem();
             this.menuConfiguration = new System.Windows.Forms.ToolStripMenuItem();
             this.menuAttribute = new System.Windows.Forms.ToolStripMenuItem();
             this.menuMeasurementUnit = new System.Windows.Forms.ToolStripMenuItem();
@@ -49,26 +50,29 @@
             this.menuReport = new System.Windows.Forms.ToolStripMenuItem();
             this.menuInventory = new System.Windows.Forms.ToolStripMenuItem();
             this.menuInvoice = new System.Windows.Forms.ToolStripMenuItem();
+            this.hoaHồngNVToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuSystem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuSystemUser = new System.Windows.Forms.ToolStripMenuItem();
             this.menuHelp = new System.Windows.Forms.ToolStripMenuItem();
             this.menuGuide = new System.Windows.Forms.ToolStripMenuItem();
             this.menuAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.tsbAddOrder = new System.Windows.Forms.ToolStripButton();
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
+            this.tsbAddProductionRequest = new System.Windows.Forms.ToolStripButton();
             this.toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
+            this.tsbAddProduct = new System.Windows.Forms.ToolStripButton();
             this.toolStripLabel3 = new System.Windows.Forms.ToolStripLabel();
+            this.tsbAddCustomer = new System.Windows.Forms.ToolStripButton();
             this.toolStripLabel4 = new System.Windows.Forms.ToolStripLabel();
+            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripLabel5 = new System.Windows.Forms.ToolStripLabel();
+            this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripLabel6 = new System.Windows.Forms.ToolStripLabel();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.lblMessage = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
             this.pnlMain = new System.Windows.Forms.Panel();
-            this.toolStripLabel5 = new System.Windows.Forms.ToolStripLabel();
-            this.tsbAddOrder = new System.Windows.Forms.ToolStripButton();
-            this.tsbAddProductionRequest = new System.Windows.Forms.ToolStripButton();
-            this.tsbAddProduct = new System.Windows.Forms.ToolStripButton();
-            this.tsbAddCustomer = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.menuMain.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -159,7 +163,8 @@
             this.menuOperation.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuProductionRequest,
             this.menuOrder,
-            this.menuStockIn});
+            this.menuStockIn,
+            this.menuBilling});
             this.menuOperation.Name = "menuOperation";
             this.menuOperation.Size = new System.Drawing.Size(75, 20);
             this.menuOperation.Text = "Nghiệp Vụ";
@@ -168,7 +173,7 @@
             // 
             this.menuProductionRequest.Name = "menuProductionRequest";
             this.menuProductionRequest.ShortcutKeys = System.Windows.Forms.Keys.F2;
-            this.menuProductionRequest.Size = new System.Drawing.Size(179, 22);
+            this.menuProductionRequest.Size = new System.Drawing.Size(190, 22);
             this.menuProductionRequest.Text = "Phiếu Sản Xuất";
             this.menuProductionRequest.Click += new System.EventHandler(this.menuProductionRequest_Click);
             // 
@@ -176,7 +181,7 @@
             // 
             this.menuOrder.Name = "menuOrder";
             this.menuOrder.ShortcutKeys = System.Windows.Forms.Keys.F3;
-            this.menuOrder.Size = new System.Drawing.Size(179, 22);
+            this.menuOrder.Size = new System.Drawing.Size(190, 22);
             this.menuOrder.Text = "Phiếu Bán Hàng";
             this.menuOrder.Click += new System.EventHandler(this.menuOrder_Click);
             // 
@@ -184,8 +189,17 @@
             // 
             this.menuStockIn.Name = "menuStockIn";
             this.menuStockIn.ShortcutKeys = System.Windows.Forms.Keys.F4;
-            this.menuStockIn.Size = new System.Drawing.Size(179, 22);
+            this.menuStockIn.Size = new System.Drawing.Size(190, 22);
             this.menuStockIn.Text = "Phiếu Nhập Kho";
+            this.menuStockIn.Click += new System.EventHandler(this.menuStockIn_Click);
+            // 
+            // menuBilling
+            // 
+            this.menuBilling.Name = "menuBilling";
+            this.menuBilling.ShortcutKeys = System.Windows.Forms.Keys.F5;
+            this.menuBilling.Size = new System.Drawing.Size(190, 22);
+            this.menuBilling.Text = "Phiếu Thanh Toán";
+            this.menuBilling.Click += new System.EventHandler(this.menuBilling_Click);
             // 
             // menuConfiguration
             // 
@@ -222,7 +236,8 @@
             // 
             this.menuReport.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuInventory,
-            this.menuInvoice});
+            this.menuInvoice,
+            this.hoaHồngNVToolStripMenuItem});
             this.menuReport.Name = "menuReport";
             this.menuReport.Size = new System.Drawing.Size(63, 20);
             this.menuReport.Text = "Báo Cáo";
@@ -238,6 +253,12 @@
             this.menuInvoice.Name = "menuInvoice";
             this.menuInvoice.Size = new System.Drawing.Size(181, 22);
             this.menuInvoice.Text = "Công Nợ";
+            // 
+            // hoaHồngNVToolStripMenuItem
+            // 
+            this.hoaHồngNVToolStripMenuItem.Name = "hoaHồngNVToolStripMenuItem";
+            this.hoaHồngNVToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.hoaHồngNVToolStripMenuItem.Text = "Hoa Hồng NV";
             // 
             // menuSystem
             // 
@@ -288,12 +309,25 @@
             this.tsbAddCustomer,
             this.toolStripLabel4,
             this.toolStripButton1,
-            this.toolStripLabel5});
+            this.toolStripLabel5,
+            this.toolStripButton2,
+            this.toolStripLabel6});
             this.toolStrip1.Location = new System.Drawing.Point(0, 24);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(1084, 25);
             this.toolStrip1.TabIndex = 1;
             this.toolStrip1.Text = "toolStrip1";
+            // 
+            // tsbAddOrder
+            // 
+            this.tsbAddOrder.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbAddOrder.Image = ((System.Drawing.Image)(resources.GetObject("tsbAddOrder.Image")));
+            this.tsbAddOrder.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbAddOrder.Name = "tsbAddOrder";
+            this.tsbAddOrder.Size = new System.Drawing.Size(23, 22);
+            this.tsbAddOrder.Text = "toolStripButton1";
+            this.tsbAddOrder.ToolTipText = "Lập phiếu bán hàng";
+            this.tsbAddOrder.Click += new System.EventHandler(this.tsbAddOrder_Click);
             // 
             // toolStripLabel1
             // 
@@ -301,11 +335,33 @@
             this.toolStripLabel1.Size = new System.Drawing.Size(90, 22);
             this.toolStripLabel1.Text = "Phiếu bán hàng";
             // 
+            // tsbAddProductionRequest
+            // 
+            this.tsbAddProductionRequest.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbAddProductionRequest.Image = ((System.Drawing.Image)(resources.GetObject("tsbAddProductionRequest.Image")));
+            this.tsbAddProductionRequest.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbAddProductionRequest.Name = "tsbAddProductionRequest";
+            this.tsbAddProductionRequest.Size = new System.Drawing.Size(23, 22);
+            this.tsbAddProductionRequest.Text = "toolStripButton2";
+            this.tsbAddProductionRequest.ToolTipText = "Lập phiếu sản xuất";
+            this.tsbAddProductionRequest.Click += new System.EventHandler(this.tsbAddProductionRequest_Click);
+            // 
             // toolStripLabel2
             // 
             this.toolStripLabel2.Name = "toolStripLabel2";
             this.toolStripLabel2.Size = new System.Drawing.Size(83, 22);
             this.toolStripLabel2.Text = "Phiếu sản xuất";
+            // 
+            // tsbAddProduct
+            // 
+            this.tsbAddProduct.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbAddProduct.Image = ((System.Drawing.Image)(resources.GetObject("tsbAddProduct.Image")));
+            this.tsbAddProduct.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbAddProduct.Name = "tsbAddProduct";
+            this.tsbAddProduct.Size = new System.Drawing.Size(23, 22);
+            this.tsbAddProduct.Text = "toolStripButton2";
+            this.tsbAddProduct.ToolTipText = "Tạo sản phẩm";
+            this.tsbAddProduct.Click += new System.EventHandler(this.tsbAddProduct_Click);
             // 
             // toolStripLabel3
             // 
@@ -313,11 +369,54 @@
             this.toolStripLabel3.Size = new System.Drawing.Size(82, 22);
             this.toolStripLabel3.Text = "Tạo sản phẩm";
             // 
+            // tsbAddCustomer
+            // 
+            this.tsbAddCustomer.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbAddCustomer.Image = ((System.Drawing.Image)(resources.GetObject("tsbAddCustomer.Image")));
+            this.tsbAddCustomer.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbAddCustomer.Name = "tsbAddCustomer";
+            this.tsbAddCustomer.Size = new System.Drawing.Size(23, 22);
+            this.tsbAddCustomer.Text = "toolStripButton3";
+            this.tsbAddCustomer.ToolTipText = "Thêm khách hàng";
+            this.tsbAddCustomer.Click += new System.EventHandler(this.tsbAddCustomer_Click);
+            // 
             // toolStripLabel4
             // 
             this.toolStripLabel4.Name = "toolStripLabel4";
             this.toolStripLabel4.Size = new System.Drawing.Size(103, 22);
             this.toolStripLabel4.Text = "Thêm khách hàng";
+            // 
+            // toolStripButton1
+            // 
+            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
+            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton1.Name = "toolStripButton1";
+            this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton1.ToolTipText = "tsbAddBill";
+            this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
+            // 
+            // toolStripLabel5
+            // 
+            this.toolStripLabel5.Name = "toolStripLabel5";
+            this.toolStripLabel5.Size = new System.Drawing.Size(90, 22);
+            this.toolStripLabel5.Text = "KH Thanh Toán";
+            // 
+            // toolStripButton2
+            // 
+            this.toolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton2.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton2.Image")));
+            this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton2.Name = "toolStripButton2";
+            this.toolStripButton2.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton2.Text = "tbsAddStockEntrance";
+            this.toolStripButton2.Click += new System.EventHandler(this.toolStripButton2_Click);
+            // 
+            // toolStripLabel6
+            // 
+            this.toolStripLabel6.Name = "toolStripLabel6";
+            this.toolStripLabel6.Size = new System.Drawing.Size(90, 22);
+            this.toolStripLabel6.Text = "Phiếu nhập kho";
             // 
             // statusStrip1
             // 
@@ -352,66 +451,6 @@
             this.pnlMain.Size = new System.Drawing.Size(1084, 622);
             this.pnlMain.TabIndex = 3;
             // 
-            // toolStripLabel5
-            // 
-            this.toolStripLabel5.Name = "toolStripLabel5";
-            this.toolStripLabel5.Size = new System.Drawing.Size(90, 22);
-            this.toolStripLabel5.Text = "KH Thanh Toán";
-            // 
-            // tsbAddOrder
-            // 
-            this.tsbAddOrder.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsbAddOrder.Image = ((System.Drawing.Image)(resources.GetObject("tsbAddOrder.Image")));
-            this.tsbAddOrder.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbAddOrder.Name = "tsbAddOrder";
-            this.tsbAddOrder.Size = new System.Drawing.Size(23, 22);
-            this.tsbAddOrder.Text = "toolStripButton1";
-            this.tsbAddOrder.ToolTipText = "Lập phiếu bán hàng";
-            this.tsbAddOrder.Click += new System.EventHandler(this.tsbAddOrder_Click);
-            // 
-            // tsbAddProductionRequest
-            // 
-            this.tsbAddProductionRequest.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsbAddProductionRequest.Image = ((System.Drawing.Image)(resources.GetObject("tsbAddProductionRequest.Image")));
-            this.tsbAddProductionRequest.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbAddProductionRequest.Name = "tsbAddProductionRequest";
-            this.tsbAddProductionRequest.Size = new System.Drawing.Size(23, 22);
-            this.tsbAddProductionRequest.Text = "toolStripButton2";
-            this.tsbAddProductionRequest.ToolTipText = "Lập phiếu sản xuất";
-            this.tsbAddProductionRequest.Click += new System.EventHandler(this.tsbAddProductionRequest_Click);
-            // 
-            // tsbAddProduct
-            // 
-            this.tsbAddProduct.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsbAddProduct.Image = ((System.Drawing.Image)(resources.GetObject("tsbAddProduct.Image")));
-            this.tsbAddProduct.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbAddProduct.Name = "tsbAddProduct";
-            this.tsbAddProduct.Size = new System.Drawing.Size(23, 22);
-            this.tsbAddProduct.Text = "toolStripButton2";
-            this.tsbAddProduct.ToolTipText = "Tạo sản phẩm";
-            this.tsbAddProduct.Click += new System.EventHandler(this.tsbAddProduct_Click);
-            // 
-            // tsbAddCustomer
-            // 
-            this.tsbAddCustomer.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsbAddCustomer.Image = ((System.Drawing.Image)(resources.GetObject("tsbAddCustomer.Image")));
-            this.tsbAddCustomer.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbAddCustomer.Name = "tsbAddCustomer";
-            this.tsbAddCustomer.Size = new System.Drawing.Size(23, 22);
-            this.tsbAddCustomer.Text = "toolStripButton3";
-            this.tsbAddCustomer.ToolTipText = "Thêm khách hàng";
-            this.tsbAddCustomer.Click += new System.EventHandler(this.tsbAddCustomer_Click);
-            // 
-            // toolStripButton1
-            // 
-            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
-            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton1.Text = "toolStripButton1";
-            this.toolStripButton1.ToolTipText = "Khách hàng thanh toán";
-            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -423,7 +462,6 @@
             this.Controls.Add(this.menuMain);
             this.MainMenuStrip = this.menuMain;
             this.MaximizeBox = false;
-            this.MinimizeBox = false;
             this.Name = "Main";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Bao Hien Ltd - He Thong Quan Ly Kinh Doanh";
@@ -481,6 +519,10 @@
         private System.Windows.Forms.ToolStripMenuItem menuStockIn;
         private System.Windows.Forms.ToolStripButton toolStripButton1;
         private System.Windows.Forms.ToolStripLabel toolStripLabel5;
+        private System.Windows.Forms.ToolStripMenuItem hoaHồngNVToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem menuBilling;
+        private System.Windows.Forms.ToolStripButton toolStripButton2;
+        private System.Windows.Forms.ToolStripLabel toolStripLabel6;
 
     }
 }

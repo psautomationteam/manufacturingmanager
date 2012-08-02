@@ -105,6 +105,21 @@ namespace BaoHien.UI
             pnlMain.Controls.Clear();
             pnlMain.Controls.Add(ucRequestList);
         }
+
+        private void menuStockIn_Click(object sender, EventArgs e)
+        {
+            StockEntranceList ucStockList = new StockEntranceList();
+            pnlMain.Controls.Clear();
+            pnlMain.Controls.Add(ucStockList);
+        }
+
+        private void menuBilling_Click(object sender, EventArgs e)
+        {
+            BillList ucBillList = new BillList();
+            pnlMain.Controls.Clear();
+            pnlMain.Controls.Add(ucBillList);
+        }
+
         #endregion 
 
 #region toolbar action
@@ -132,6 +147,19 @@ namespace BaoHien.UI
             AddProductionRequest frmRequest = new AddProductionRequest();
             frmRequest.ShowDialog();
         }
+
+        private void toolStripButton1_Click(object sender, EventArgs e)
+        {
+            AddBill frm = new AddBill();
+            frm.ShowDialog();
+        }
+
+        private void toolStripButton2_Click(object sender, EventArgs e)
+        {
+            EntranceStock frm = new EntranceStock();
+            frm.ShowDialog();
+        }
+
 #endregion
 
         private void Main_Load(object sender, EventArgs e)
@@ -145,6 +173,12 @@ namespace BaoHien.UI
             }
         }
 
+       
+        
+
+       
+
+       
         
 
         
