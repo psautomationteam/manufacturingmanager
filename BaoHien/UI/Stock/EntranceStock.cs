@@ -15,5 +15,10 @@ namespace BaoHien.UI
         {
             InitializeComponent();
         }
+
+        private void btnDelete_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 }
