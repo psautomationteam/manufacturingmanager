@@ -59,12 +59,14 @@
     <Compile Include="Services\Base\BaseService.cs" />
     <Compile Include="Services\Customer\CustomerService.cs" />
     <Compile Include="Services\Employee\EmployeeService.cs" />
+    <Compile Include="Services\EntranceStock\EntranceStock.cs" />
     <Compile Include="Services\MeasurementUnit\MeasurementUnitService.cs" />
     <Compile Include="Services\MeterialInStock\MaterialInStockService.cs" />
     <Compile Include="Services\OrderDetail\OrderDetailService.cs" />
     <Compile Include="Services\Order\OrderService.cs" />
     <Compile Include="Services\Price\PriceService.cs" />
     <Compile Include="Services\ProductAttribute\ProductAttributeService.cs" />
+    <Compile Include="Services\EntranceStock\EntranceStockDetailService.cs" />
     <Compile Include="Services\ProductInStock\ProductInStockService.cs" />
     <Compile Include="Services\ProductionRequestDetail\ProductionRequestDetailService.cs" />
     <Compile Include="Services\ProductionRequest\ProductionRequestService.cs" />
@@ -184,11 +186,11 @@
     <Compile Include="UI\Product\ProductType.Designer.cs">
       <DependentUpon>ProductType.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\Stock\EntranceStock.cs">
+    <Compile Include="UI\Stock\AddEntranceStock.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UI\Stock\EntranceStock.Designer.cs">
-      <DependentUpon>EntranceStock.cs</DependentUpon>
+    <Compile Include="UI\Stock\AddEntranceStock.Designer.cs">
+      <DependentUpon>AddEntranceStock.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\Stock\StockEntranceList.cs">
       <SubType>UserControl</SubType>
@@ -293,8 +295,8 @@
     <EmbeddedResource Include="UI\Product\ProductType.resx">
       <DependentUpon>ProductType.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\Stock\EntranceStock.resx">
-      <DependentUpon>EntranceStock.cs</DependentUpon>
+    <EmbeddedResource Include="UI\Stock\AddEntranceStock.resx">
+      <DependentUpon>AddEntranceStock.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Stock\StockEntranceList.resx">
       <DependentUpon>StockEntranceList.cs</DependentUpon>

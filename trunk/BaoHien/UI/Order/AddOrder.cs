@@ -344,7 +344,7 @@ namespace BaoHien.UI
 
             priceColumn.Width = 100;
             priceColumn.DataPropertyName = "Price";
-            priceColumn.HeaderText = "Số lượng";
+            priceColumn.HeaderText = "Giá";
             //numberUnitColumn.Frozen = true;
             priceColumn.ValueType = typeof(int);
             dgwOrderDetails.Columns.Add(priceColumn);
@@ -353,7 +353,7 @@ namespace BaoHien.UI
 
             totalColumn.Width = 100;
             totalColumn.DataPropertyName = "Total";
-            totalColumn.HeaderText = "Số lượng";
+            totalColumn.HeaderText = "Tổng";
             //numberUnitColumn.Frozen = true;
             totalColumn.ValueType = typeof(int);
             dgwOrderDetails.Columns.Add(totalColumn);
