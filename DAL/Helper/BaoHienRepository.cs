@@ -101,7 +101,7 @@ namespace DAL.Helper
 
 
         }
-        public static T SelectByPK<T>(List<String> ids) where T : class
+        public static T jSelectByPK<T>(List<String> ids) where T : class
         {
             try
             {

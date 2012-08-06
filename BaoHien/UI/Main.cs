@@ -156,7 +156,7 @@ namespace BaoHien.UI
 
         private void toolStripButton2_Click(object sender, EventArgs e)
         {
-            EntranceStock frm = new EntranceStock();
+            AddEntranceStock frm = new AddEntranceStock();
             frm.ShowDialog();
         }
 
