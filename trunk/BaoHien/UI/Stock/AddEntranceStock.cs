@@ -297,7 +297,7 @@ namespace BaoHien.UI
 
             }
         }
-        public void loadDataForEditOrder(int entranceId)
+        public void loadDataForEditEntranceStock(int entranceId)
         {
             isUpdating = true;
             this.Text = "Chỉnh sửa  đơn hàng này";
@@ -381,9 +381,9 @@ namespace BaoHien.UI
                     {
                         MessageBox.Show("Sản phẩm đã được cập nhật thành công");
                     }
-                    if (this.CallFromUserControll != null && this.CallFromUserControll is OrderList)
+                    if (this.CallFromUserControll != null && this.CallFromUserControll is StockEntranceList)
                     {
-                        ((OrderList)this.CallFromUserControll).loadOrderList();
+                        ((StockEntranceList)this.CallFromUserControll).loadEntranceStockList();
                     }
 
                     this.Close();
@@ -405,13 +405,13 @@ namespace BaoHien.UI
                 };
                 EntranceStockService entranceStockService = new EntranceStockService();
                 bool result = entranceStockService.AddEntranceStock(entranceStock);
-                long newOrderId = BaoHienRepository.GetMaxId<Order>();
+                long newOrderId = BaoHienRepository.GetMaxId<EntranceStock>();
                 EntranceStockDetailService entranceStockDetailService = new EntranceStockDetailService();
                 foreach (EntranceStockDetail od in entranceStockDetails)
                 {
                     if (od.ProductId > 0)
                     {
-                        od.Id = (int)newOrderId;
+                        od.EntranceStockId = (int)newOrderId;
                         bool ret = entranceStockDetailService.AddEntranceStockDetail(od);
                         if (!ret)
                         {

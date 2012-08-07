@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using DAL;
 using BaoHien.Services.Base;
+using BaoHien.Model;
 
 namespace BaoHien.Services
 {
@@ -32,6 +33,35 @@ namespace BaoHien.Services
         public bool UpdateEntranceStock(EntranceStock entranceStock)
         {
             return OnUpdateItem<EntranceStock>(entranceStock, entranceStock.Id.ToString());
+        }
+        public List<EntranceStock> SearchingEntranceStock(EntranceStockSearchCriteria entranceStockSearchCriteria)
+        {
+            List<EntranceStock> entranceStocks = OnGetItems<EntranceStock>();
+
+            if (entranceStockSearchCriteria != null)
+            {
+                if (entranceStockSearchCriteria.CreatedBy.HasValue)
+                {
+                    entranceStocks = entranceStocks.Where(pr => pr.EntrancedBy == entranceStockSearchCriteria.CreatedBy.Value).ToList();
+                }
+                if (entranceStockSearchCriteria.Code != "")
+                {
+                    entranceStocks = entranceStocks.Where(pr => pr.EntranceCode.Contains(entranceStockSearchCriteria.Code)).ToList();
+                }
+                if (entranceStockSearchCriteria.To.HasValue && entranceStockSearchCriteria.From.HasValue)
+                {
+                    entranceStocks = entranceStocks.
+                        Where(pr => pr.EntrancedDate.CompareTo(entranceStockSearchCriteria.From.Value) >= 0
+                            && pr.EntrancedDate.CompareTo(entranceStockSearchCriteria.To.Value) <= 0)
+                            .ToList();
+                }
+            }
+            else
+            {
+                return entranceStocks;
+            }
+
+            return entranceStocks;
         }
     }
 }

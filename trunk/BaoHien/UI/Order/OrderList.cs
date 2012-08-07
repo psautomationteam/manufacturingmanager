@@ -26,9 +26,9 @@ namespace BaoHien.UI
 
         private void OrderList_Load(object sender, EventArgs e)
         {
-            SetupColumns();
-            loadOrderList();
             
+            loadOrderList();
+            SetupColumns();
         }
         public void loadOrderList()
         {
@@ -74,6 +74,7 @@ namespace BaoHien.UI
         }
         private void setUpDataGrid(List<Order> orders)
         {
+            dgwOrderList.AutoGenerateColumns = false;
             if (orders != null)
             {
                 int index = 0;
