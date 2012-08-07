@@ -134,7 +134,7 @@ namespace BaoHien.UI
                 {
                     if (od.ProductId > 0)
                     {
-                        od.Id = (int)newOrderId;
+                        od.OrderId = (int)newOrderId;
                         bool ret = orderDetailService.AddOrderDetail(od);
                         if (!ret)
                         {

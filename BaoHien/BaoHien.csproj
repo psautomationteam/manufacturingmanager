@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="Common\BHConstant.cs" />
     <Compile Include="Common\Global.cs" />
+    <Compile Include="Model\EntranceStockSearchCriteria.cs" />
     <Compile Include="Model\OrderSearchCriteria.cs" />
     <Compile Include="Model\ProductionRequestSearchCriteria.cs" />
     <Compile Include="Model\ProductionRequestDetailModel.cs" />
