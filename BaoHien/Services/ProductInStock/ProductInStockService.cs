@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using DAL;
 using BaoHien.Services.Base;
+using System.Linq.Expressions;
 
 namespace BaoHien.Services.ProductInStocks
 {
@@ -15,6 +16,13 @@ namespace BaoHien.Services.ProductInStocks
 
             return productInStock;
         }
+
+        public List<ProductInStock> SelectProductByWhere(Expression<Func<ProductInStock, bool>> func)
+        {
+
+            return SelectItemByWhere<ProductInStock>(func);
+        }
+
         public List<ProductInStock> GetProductInStocks()
         {
             List<ProductInStock> productInStocks = OnGetItems<ProductInStock>();
