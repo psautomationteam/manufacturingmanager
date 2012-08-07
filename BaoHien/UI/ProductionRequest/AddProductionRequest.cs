@@ -17,7 +17,7 @@ using BaoHien.Services.ProductionRequestDetails;
 using BaoHien.UI.Base;
 using BaoHien.Services.BaseAttributes;
 using BaoHien.Model;
-
+using BaoHien.Services.MaterialInStocks;
 namespace BaoHien.UI
 {
     public partial class AddProductionRequest : BaseForm
@@ -97,8 +97,8 @@ namespace BaoHien.UI
             numberUnitColumn.HeaderText = "Số lượng";
             //numberUnitColumn.Frozen = true;
             numberUnitColumn.ValueType = typeof(int);
+            numberUnitColumn.ReadOnly = true;
             dgvMaterial.Columns.Add(numberUnitColumn);
-
 
 
             DataGridViewTextBoxColumn noteColumn = new DataGridViewTextBoxColumn();
@@ -293,11 +293,12 @@ namespace BaoHien.UI
                 productionRequestDetail.Direction = false;
                 productionRequestDetailInMaterials.Add(productionRequestDetail);
             }
+
+
             if (dgv.CurrentCell.Value != null)
             {
                 if (e.ColumnIndex == 0)
                 {
-
                     productionRequestDetailInMaterials[e.RowIndex].ProductId = (int)dgv.CurrentCell.Value;
                     ProductAttributeService productAttributeService = new ProductAttributeService();
                     List<ProductAttribute> productAttributes = productAttributeService.SelectProductAttributeByWhere(ba => ba.Id == (int)dgv.CurrentCell.Value);
@@ -313,7 +314,8 @@ namespace BaoHien.UI
                         productionRequestDetailInMaterials[e.RowIndex].AttributeId = baseAttributesAtRowForMaterial[0].Id;
                         currentCell.Value = baseAttributesAtRowForMaterial[0].Id;
                     }
-
+                    if (baseAttributesAtRowForMaterial.Count > 0)
+                        dgv.Rows[e.RowIndex].Cells[2].ReadOnly = false;
 
 
                 }
@@ -323,18 +325,30 @@ namespace BaoHien.UI
                 }
                 else if (e.ColumnIndex == 2)
                 {
-                    productionRequestDetailInMaterials[e.RowIndex].NumberUnit = (int)dgv.CurrentCell.Value;
+                    MaterialInStockService mis = new MaterialInStockService();
+                    List<MaterialInStock> lstMaterial = mis.SelectMaterialInStockByWhere(pt => pt.Id == productionRequestDetailInMaterials[e.RowIndex].ProductId && pt.AttributeId == productionRequestDetailInMaterials[e.RowIndex].AttributeId);
+                    if (lstMaterial.Count == 0 || lstMaterial.First<MaterialInStock>().NumberOfItem == 0)
+                    {
+                        MessageBox.Show("Số lượng vật liệu trong kho đã hết");
+                        dgv.Rows[e.RowIndex].Cells[2].Value=0;
+
+                    }
+                    else if (lstMaterial.First<MaterialInStock>().NumberOfItem < (int)dgv.Rows[e.RowIndex].Cells[2].Value)
+                    {
+                        MessageBox.Show("Số lượng vật liệu trong kho còn lại là: " + lstMaterial.First<MaterialInStock>().NumberOfItem.ToString());
+                        dgv.Rows[e.RowIndex].Cells[2].Value=0;
+                    }
                 }
                 else if (e.ColumnIndex == 3)
                 {
                     productionRequestDetailInMaterials[e.RowIndex].Note = (string)dgv.CurrentCell.Value;
                 }
-
-
             }
             
             calculateTotalForMaterialGrid();
         }
+
+
         private void calculateTotalForMaterialGrid()
         {
             
@@ -420,7 +434,7 @@ namespace BaoHien.UI
                     {
                         baseAttributesAtRowForProduct.Add(pa.BaseAttribute);
                     }
-                    DataGridViewComboBoxCell currentCell = (DataGridViewComboBoxCell)dgvProduct.Rows[e.RowIndex].Cells[1];
+                DataGridViewComboBoxCell currentCell = (DataGridViewComboBoxCell)dgvProduct.Rows[e.RowIndex].Cells[1];
                     currentCell.DataSource = baseAttributesAtRowForProduct;
                     if (baseAttributesAtRowForProduct.Count > e.RowIndex && baseAttributesAtRowForProduct.Count > 0)
                     {
@@ -428,7 +442,8 @@ namespace BaoHien.UI
                         currentCell.Value = baseAttributesAtRowForProduct[0].Id;
                     }
 
-                    
+                    if (baseAttributesAtRowForProduct.Count > 0)
+                        dgvProduct.Rows[e.RowIndex].Cells[2].ReadOnly = false;
 
                 }
                 else if (e.ColumnIndex == 1)
@@ -463,7 +478,8 @@ namespace BaoHien.UI
         {
             ProductionRequestService prs = new ProductionRequestService();
             ProductionRequestDetailService productionRequestDetailService = new ProductionRequestDetailService();
-            
+            MaterialInStockService mis = new MaterialInStockService();
+
             if (productionRequest != null)
             {
                 bool result = prs.UpdateProductionRequest(productionRequest);
