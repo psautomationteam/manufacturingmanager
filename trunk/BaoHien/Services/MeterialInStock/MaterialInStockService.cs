@@ -4,16 +4,28 @@ using System.Linq;
 using System.Text;
 using DAL;
 using BaoHien.Services.Base;
+using System.Linq.Expressions;
 
 namespace BaoHien.Services.MaterialInStocks
 {
     public class MaterialInStockService : BaseService<MaterialInStock>
     {
-        public MaterialInStock GetMaterialInStock(System.Int32 id)
+        public MaterialInStock GetMaterialInStock(List<System.Int32> ids)
         {
-            MaterialInStock materialInStock = OnGetItem<MaterialInStock>(id.ToString());
+            List<string> idsInString = new List<string>();
+            foreach (System.Int32 id in ids)
+            {
+                idsInString.Add(id.ToString());
+            }
+            MaterialInStock materialInStock = OnGetItem<MaterialInStock>(idsInString);
 
             return materialInStock;
+        }
+
+        public List<MaterialInStock> SelectMaterialInStockByWhere(Expression<Func<MaterialInStock, bool>> func)
+        {
+
+            return SelectItemByWhere<MaterialInStock>(func);
         }
         public List<MaterialInStock> GetMaterialInStocks()
         {
