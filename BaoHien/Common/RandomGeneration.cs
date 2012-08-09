@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using DAL;
+using DAL.Helper;
 
 namespace BaoHien.Common
 {
@@ -37,7 +39,20 @@ namespace BaoHien.Common
             builder.Append(RandomNumber(1000, 9999));
             builder.Append(RandomString(2, false));
             return builder.ToString();
-        } 
+        }
+        public static string GeneratingCode()
+        {
+            StringBuilder builder = new StringBuilder();
+            DateTime nowDate = DateTime.Now;
+            builder.Append(BHConstant.PREFIX_FOR_CODE);
+            builder.Append(nowDate.Day.ToString()+nowDate.Month.ToString()+nowDate.Year.ToString());
+
+            BaoHienDBDataContext context = BaoHienRepository.GetBaoHienDBDataContext();
+            GenerateRandomStringResult randomString = context.GenerateRandomString(BHConstant.SIZE_OF_CODE).FirstOrDefault();
+            
+            builder.Append(randomString.RandomString);
+            return builder.ToString();
+        }
     }
 
 }

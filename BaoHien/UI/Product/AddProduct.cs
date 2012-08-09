@@ -223,11 +223,7 @@ namespace BaoHien.UI
         private void chkAuto_CheckedChanged(object sender, EventArgs e)
         {
             txtCode.Enabled = !chkAuto.Checked;
-            if (chkAuto.Checked)
-            {
-                txtCode.Text = RandomGeneration.DefaultRandomString();
-            }
-            
+           
         }
         private void SetupColumns()
         {

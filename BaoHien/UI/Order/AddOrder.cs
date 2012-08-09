@@ -218,6 +218,10 @@ namespace BaoHien.UI
                 txtCreatedDate.Text = order.CreatedDate.ToShortDateString();
 
             }
+            else
+            {
+                txtOrderCode.Text = RandomGeneration.GeneratingCode();
+            }
         }
         public void updateProductionRequestDetailCells()
         {
