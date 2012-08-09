@@ -14,6 +14,7 @@ using DAL.Helper;
 using BaoHien.Services.BaseAttributes;
 using BaoHien.UI.Base;
 using BaoHien.Services.ProductAttributes;
+using BaoHien.Common;
 
 
 namespace BaoHien.UI
@@ -197,10 +198,11 @@ namespace BaoHien.UI
             this.Text = "Chỉnh sửa  sản phẩm này";
             this.btnAdd.Text = "Cập nhật";
 
-            loadSomeData();
+            
             ProductService productTypeService = new ProductService();
 
             product = productTypeService.GetProduct(productId);
+            loadSomeData();
             if (product != null)
             {
                 if (measurementUnits != null && product.BaseUnit.HasValue)
@@ -221,6 +223,11 @@ namespace BaoHien.UI
         private void chkAuto_CheckedChanged(object sender, EventArgs e)
         {
             txtCode.Enabled = !chkAuto.Checked;
+            if (chkAuto.Checked)
+            {
+                txtCode.Text = RandomGeneration.DefaultRandomString();
+            }
+            
         }
         private void SetupColumns()
         {
