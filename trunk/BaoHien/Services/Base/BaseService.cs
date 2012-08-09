@@ -285,7 +285,7 @@ namespace BaoHien.Services.Base
             }
             return true;
         }
-        public List<TItem> SelectItemByWhere<TItem>(Expression<Func<TItem, bool>> func)
+        protected List<TItem> SelectItemByWhere<TItem>(Expression<Func<TItem, bool>> func)
         {
             List<TItem> list = null;
             try
@@ -310,5 +310,6 @@ namespace BaoHien.Services.Base
             }
             return list;
         }
+        
     }
 }

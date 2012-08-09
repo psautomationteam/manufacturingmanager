@@ -67,6 +67,9 @@ namespace BaoHien.UI
                 }
                 
                 txtUser.Enabled = false;
+                
+                txtCode.Text = RandomGeneration.GeneratingCode();
+            
             }
             txtDate.Enabled = false;
             txtUser.Enabled = false;

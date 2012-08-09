@@ -18,6 +18,7 @@ namespace BaoHien.Common
         public const bool PRODUCTION_REQUEST_DETAIL_IN = false;
         public const bool PRODUCTION_REQUEST_DETAIL_OUT = true;
 
-        public const short SIZE_OF_CODE = 6;
+        public const short SIZE_OF_CODE = 4;
+        public const string PREFIX_FOR_CODE = "BH";
     }
 }
