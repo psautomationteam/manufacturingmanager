@@ -65,79 +65,83 @@ namespace BaoHien.UI
         }
         private void btnSave_Click(object sender, EventArgs e)
         {
-            BillService billService = new BillService();
-            if (bill == null)
+            if (validator1.Validate())
             {
-                double amount = 0;
-                double.TryParse(txtAmount.Text, out amount);
-                int userId = 0;
-                if (Global.CurrentUser != null)
+                BillService billService = new BillService();
+                if (bill == null)
                 {
-                    userId = Global.CurrentUser.Id;
-                }
-                else
-                {
-                    MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
-                    return;
-                }
-                
-                bill = new Bill
-                {
-                    BillCode = txtOrderCode.Text,
-                    Note = txtNote.Text,
-                    CreatedDate = DateTime.Now,
-                    Amount = amount,
-                    CustId = cbxCustomer.SelectedValue != null ? (int)cbxCustomer.SelectedValue : 0,
-                    UserId = userId
-                };
-                
-                bool result = billService.AddBill(bill);
-                if (result)
-                {
-                    MessageBox.Show("Phiếu thanh toán đã được thêm!");
-                }
-                else
-                {
-                    MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
-                    return;
-                }
-            }
-            else
-            {
-                double amount = 0;
-                double.TryParse(txtAmount.Text, out amount);
-                int userId = 0;
-                if (Global.CurrentUser != null)
-                {
-                    userId = Global.CurrentUser.Id;
-                }
-                else
-                {
-                    MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
-                    return;
-                }
-                bill.BillCode = txtOrderCode.Text;
-                bill.Note = txtNote.Text;
-                bill.Amount = amount;
-                bill.CustId = cbxCustomer.SelectedValue != null ? (int)cbxCustomer.SelectedValue : 0;
-                bill.UserId = userId;
-                bool result = billService.UpdateBill(bill);
-                if (result)
-                {
-                    MessageBox.Show("Phiếu thanh toán đã được cập nhật!");
-                }
-                else
-                {
-                    MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
-                    return;
-                }
-            }
-            if (this.CallFromUserControll != null && this.CallFromUserControll is BillList)
-            {
-                ((BillList)this.CallFromUserControll).loadBillList();
-            }
+                    double amount = 0;
+                    double.TryParse(txtAmount.Text, out amount);
+                    int userId = 0;
+                    if (Global.CurrentUser != null)
+                    {
+                        userId = Global.CurrentUser.Id;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                        return;
+                    }
 
-            this.Close();
+                    bill = new Bill
+                    {
+                        BillCode = txtOrderCode.Text,
+                        Note = txtNote.Text,
+                        CreatedDate = DateTime.Now,
+                        Amount = amount,
+                        CustId = cbxCustomer.SelectedValue != null ? (int)cbxCustomer.SelectedValue : 0,
+                        UserId = userId
+                    };
+
+                    bool result = billService.AddBill(bill);
+                    if (result)
+                    {
+                        MessageBox.Show("Phiếu thanh toán đã được thêm!");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                        return;
+                    }
+                }
+                else
+                {
+                    double amount = 0;
+                    double.TryParse(txtAmount.Text, out amount);
+                    int userId = 0;
+                    if (Global.CurrentUser != null)
+                    {
+                        userId = Global.CurrentUser.Id;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                        return;
+                    }
+                    bill.BillCode = txtOrderCode.Text;
+                    bill.Note = txtNote.Text;
+                    bill.Amount = amount;
+                    bill.CustId = cbxCustomer.SelectedValue != null ? (int)cbxCustomer.SelectedValue : 0;
+                    bill.UserId = userId;
+                    bool result = billService.UpdateBill(bill);
+                    if (result)
+                    {
+                        MessageBox.Show("Phiếu thanh toán đã được cập nhật!");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                        return;
+                    }
+                }
+                if (this.CallFromUserControll != null && this.CallFromUserControll is BillList)
+                {
+                    ((BillList)this.CallFromUserControll).loadBillList();
+                }
+
+                this.Close();
+            }
+            
         }
 
         private void AddBill_Load(object sender, EventArgs e)

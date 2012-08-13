@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.lblErrorMessage = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.btnCancel = new System.Windows.Forms.Button();
@@ -39,6 +40,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
+            this.validator1 = new Itboy.Components.Validator(this.components);
             this.SuspendLayout();
             // 
             // lblErrorMessage
@@ -94,6 +96,7 @@
             this.txtCode.Name = "txtCode";
             this.txtCode.Size = new System.Drawing.Size(220, 20);
             this.txtCode.TabIndex = 15;
+            this.validator1.SetType(this.txtCode, Itboy.Components.ValidationType.Required);
             // 
             // txtName
             // 
@@ -101,6 +104,7 @@
             this.txtName.Name = "txtName";
             this.txtName.Size = new System.Drawing.Size(220, 20);
             this.txtName.TabIndex = 14;
+            this.validator1.SetType(this.txtName, Itboy.Components.ValidationType.Required);
             // 
             // label3
             // 
@@ -140,6 +144,10 @@
             this.label4.TabIndex = 21;
             this.label4.Text = "Ví dụ: Rộng - QCR; Dài - QCD; Thể Tích - QCTT";
             // 
+            // validator1
+            // 
+            this.validator1.Form = this;
+            // 
             // AddProductAttribute
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 14F);
@@ -176,5 +184,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label4;
+        private Itboy.Components.Validator validator1;
     }
 }

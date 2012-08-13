@@ -48,67 +48,71 @@ namespace BaoHien.UI
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            if (customer != null && customer.Id > 0)
+            if (validator1.Validate())
             {
-                customer.Description = txtDescription.Text;
-                customer.CustCode = txtCode.Text;
-                customer.Address = txtAddress.Text;
-                customer.BankAcc = txtBankAcc.Text;
-                customer.BankName = txtBankName.Text;
-                customer.ContactPersonEmail = txtContactPersonEmail.Text;
-                customer.ContactPersonPhone = txtContactPersonName.Text;
-                customer.Email = txtEmail.Text;
-                customer.Fax = txtFax.Text;
-                customer.Phone = txtPhoneNumber.Text;
-                customer.CustomerName = txtName.Text;
-                customer.SalerId = cmbSaler.SelectedValue != null ? (int?)cmbSaler.SelectedValue : null;
-                CustomerService customerService = new CustomerService();
-                bool result = customerService.UpdateCustomer(customer);
-                if (result)
+                if (customer != null && customer.Id > 0)
                 {
-                    MessageBox.Show("Khách hàng được cập nhật thành công");
-                    if (this.CallFromUserControll != null && this.CallFromUserControll is CustomerList)
+                    customer.Description = txtDescription.Text;
+                    customer.CustCode = txtCode.Text;
+                    customer.Address = txtAddress.Text;
+                    customer.BankAcc = txtBankAcc.Text;
+                    customer.BankName = txtBankName.Text;
+                    customer.ContactPersonEmail = txtContactPersonEmail.Text;
+                    customer.ContactPersonPhone = txtContactPersonName.Text;
+                    customer.Email = txtEmail.Text;
+                    customer.Fax = txtFax.Text;
+                    customer.Phone = txtPhoneNumber.Text;
+                    customer.CustomerName = txtName.Text;
+                    customer.SalerId = cmbSaler.SelectedValue != null ? (int?)cmbSaler.SelectedValue : null;
+                    CustomerService customerService = new CustomerService();
+                    bool result = customerService.UpdateCustomer(customer);
+                    if (result)
                     {
-                        ((CustomerList)this.CallFromUserControll).loadCustomerList();
+                        MessageBox.Show("Khách hàng được cập nhật thành công");
+                        if (this.CallFromUserControll != null && this.CallFromUserControll is CustomerList)
+                        {
+                            ((CustomerList)this.CallFromUserControll).loadCustomerList();
+                        }
+
+                        this.Close();
                     }
-                    
-                    this.Close();
+                    else
+                    {
+                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                    }
                 }
                 else
                 {
-                    MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                    customer = new Customer
+                    {
+                        Description = txtDescription.Text,
+                        CustCode = txtCode.Text,
+                        Address = txtAddress.Text,
+                        BankAcc = txtBankAcc.Text,
+                        BankName = txtBankName.Text,
+                        ContactPersonEmail = txtContactPersonEmail.Text,
+                        ContactPersonPhone = txtContactPersonName.Text,
+                        Email = txtEmail.Text,
+                        Fax = txtFax.Text,
+                        Phone = txtPhoneNumber.Text,
+                        CustomerName = txtName.Text,
+                        SalerId = cmbSaler.SelectedValue != null ? (int?)cmbSaler.SelectedValue : (int?)null,
+                    };
+                    CustomerService customerService = new CustomerService();
+                    bool result = customerService.AddCustomer(customer);
+                    if (result)
+                    {
+                        MessageBox.Show("Khách hàng được tạo thành công");
+                        ((CustomerList)this.CallFromUserControll).loadCustomerList();
+                        this.Close();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                    }
                 }
             }
-            else
-            {
-                customer = new Customer
-                {
-                    Description = txtDescription.Text,
-                    CustCode = txtCode.Text,
-                    Address = txtAddress.Text,
-                    BankAcc = txtBankAcc.Text,
-                    BankName = txtBankName.Text,
-                    ContactPersonEmail = txtContactPersonEmail.Text,
-                    ContactPersonPhone = txtContactPersonName.Text,
-                    Email = txtEmail.Text,
-                    Fax = txtFax.Text,
-                    Phone = txtPhoneNumber.Text,
-                    CustomerName = txtName.Text,
-                    SalerId = cmbSaler.SelectedValue != null ? (int?)cmbSaler.SelectedValue : (int?)null,
-                };
-                CustomerService customerService = new CustomerService();
-                bool result = customerService.AddCustomer(customer);
-                if (result)
-                {
-                    MessageBox.Show("Khách hàng được tạo thành công");
-                    ((CustomerList)this.CallFromUserControll).loadCustomerList();
-                    this.Close();
-                }
-                else
-                {
-                    MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
-                }
-            }
+            
         }
         private void loadSomeData()
         {

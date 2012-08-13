@@ -37,108 +37,112 @@ namespace BaoHien.UI
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            if (product != null)//update
+            if (validator1.Validate())
             {
-                product.Description = txtDescription.Text;
-                product.ProductName = txtName.Text;
-                //product.BaseUnit = cmbUnit.SelectedValue != null ? (int)cmbUnit.SelectedValue : (int?)null;
-                product.ProductCode = txtCode.Text;
-                //product.ProductType = (int)cmbType.SelectedValue;
-                if (cmbUnit.SelectedValue != null)
+                if (product != null)//update
                 {
-                    MeasurementUnit refMeasurementUnit = measurementUnits.Single(mu => mu.Id == (int)cmbUnit.SelectedValue);
-                    product.MeasurementUnit = refMeasurementUnit;
-                }
-                ProductType refProductType = productTypes.Single(pt => pt.Id == (int)cmbType.SelectedValue);
-                product.ProductType1 = refProductType;
-                ProductService productService = new ProductService();
-                bool result = productService.UpdateProduct(product);
-                if (result)
-                {
-                    MessageBox.Show("Sản phẩm đã được cập nhật thành công");
-                    ((ProductList)this.CallFromUserControll).loadProductList();
-                    this.Close();
-                }
-                else
-                {
-                    MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
-                }
-            }
-            else//add new
-            {
-                product = new Product
-                {
-
-                    Description = txtDescription.Text,
-                    ProductName = txtName.Text,
-                    BaseUnit = cmbUnit.SelectedValue != null ? (int)cmbUnit.SelectedValue : (int?)null,
-                    ProductCode = txtCode.Text,
-                    ProductType = (int)cmbType.SelectedValue,
-
-                };
-                ProductService productService = new ProductService();
-                bool result = productService.AddProduct(product);
-
-                long newProductId = BaoHienRepository.GetMaxId<Product>();
-                PriceService priceService = new PriceService();
-                double price = 0;
-                Double.TryParse(txtPrice.Text, out price);
-                Price newPrice = new Price
-                {
-                    Id = (int)newProductId,
-                    Price1 = price,
-                    UpdatedDate = DateTime.Now
-                };
-                result = priceService.AddPrice(newPrice);
-
-                DataGridViewRowCollection selectedRows = dgvBaseAttributes.Rows;
-                ProductAttributeService productAttributeService = new ProductAttributeService();
-                foreach (DataGridViewRow dgv in selectedRows)
-                {
-                    DataGridViewCheckBoxCell checkbox = (DataGridViewCheckBoxCell)dgv.Cells[0];
-                    if (checkbox.Value != null && checkbox.Value.ToString().Equals(bool.TrueString) && dgv.DataBoundItem != null)
+                    product.Description = txtDescription.Text;
+                    product.ProductName = txtName.Text;
+                    //product.BaseUnit = cmbUnit.SelectedValue != null ? (int)cmbUnit.SelectedValue : (int?)null;
+                    product.ProductCode = txtCode.Text;
+                    //product.ProductType = (int)cmbType.SelectedValue;
+                    if (cmbUnit.SelectedValue != null)
                     {
-                        ProductAttribute productAttribute = new ProductAttribute
-                        {
-                            AttributeId = ((BaseAttribute)dgv.DataBoundItem).Id,
-                            Id = (int)newProductId
-                        };
-                        result = productAttributeService.AddProductAttribute(productAttribute);
-                        if (!result)
-                        {
-                            MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
-                            return;
-                        }
+                        MeasurementUnit refMeasurementUnit = measurementUnits.Single(mu => mu.Id == (int)cmbUnit.SelectedValue);
+                        product.MeasurementUnit = refMeasurementUnit;
+                    }
+                    ProductType refProductType = productTypes.Single(pt => pt.Id == (int)cmbType.SelectedValue);
+                    product.ProductType1 = refProductType;
+                    ProductService productService = new ProductService();
+                    bool result = productService.UpdateProduct(product);
+                    if (result)
+                    {
+                        MessageBox.Show("Sản phẩm đã được cập nhật thành công");
+                        ((ProductList)this.CallFromUserControll).loadProductList();
+                        this.Close();
                     }
                     else
                     {
-                        if (dgv.DataBoundItem == null)
-                        {
-                            result = false;
-                            break;
-                        }
-                        
+                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
                     }
-
-                    
-
                 }
-
-                if (result)
+                else//add new
                 {
-                    MessageBox.Show("Sản phẩm đã được tạo thành công");
-                    if (this.CallFromUserControll != null && this.CallFromUserControll is ProductList)
+                    product = new Product
                     {
-                        ((ProductList)this.CallFromUserControll).loadProductList();
+
+                        Description = txtDescription.Text,
+                        ProductName = txtName.Text,
+                        BaseUnit = cmbUnit.SelectedValue != null ? (int)cmbUnit.SelectedValue : (int?)null,
+                        ProductCode = txtCode.Text,
+                        ProductType = (int)cmbType.SelectedValue,
+
+                    };
+                    ProductService productService = new ProductService();
+                    bool result = productService.AddProduct(product);
+
+                    long newProductId = BaoHienRepository.GetMaxId<Product>();
+                    PriceService priceService = new PriceService();
+                    double price = 0;
+                    Double.TryParse(txtPrice.Text, out price);
+                    Price newPrice = new Price
+                    {
+                        Id = (int)newProductId,
+                        Price1 = price,
+                        UpdatedDate = DateTime.Now
+                    };
+                    result = priceService.AddPrice(newPrice);
+
+                    DataGridViewRowCollection selectedRows = dgvBaseAttributes.Rows;
+                    ProductAttributeService productAttributeService = new ProductAttributeService();
+                    foreach (DataGridViewRow dgv in selectedRows)
+                    {
+                        DataGridViewCheckBoxCell checkbox = (DataGridViewCheckBoxCell)dgv.Cells[0];
+                        if (checkbox.Value != null && checkbox.Value.ToString().Equals(bool.TrueString) && dgv.DataBoundItem != null)
+                        {
+                            ProductAttribute productAttribute = new ProductAttribute
+                            {
+                                AttributeId = ((BaseAttribute)dgv.DataBoundItem).Id,
+                                Id = (int)newProductId
+                            };
+                            result = productAttributeService.AddProductAttribute(productAttribute);
+                            if (!result)
+                            {
+                                MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                                return;
+                            }
+                        }
+                        else
+                        {
+                            if (dgv.DataBoundItem == null)
+                            {
+                                result = false;
+                                break;
+                            }
+
+                        }
+
+
+
                     }
-                    
-                    this.Close();
-                }
-                else
-                {
-                    MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+
+                    if (result)
+                    {
+                        MessageBox.Show("Sản phẩm đã được tạo thành công");
+                        if (this.CallFromUserControll != null && this.CallFromUserControll is ProductList)
+                        {
+                            ((ProductList)this.CallFromUserControll).loadProductList();
+                        }
+
+                        this.Close();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                    }
                 }
             }
+            
             
         }
 

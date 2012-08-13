@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -38,6 +39,7 @@
             this.btnCancel = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
             this.lblErrorMessage = new System.Windows.Forms.Label();
+            this.validator1 = new Itboy.Components.Validator(this.components);
             this.SuspendLayout();
             // 
             // label1
@@ -73,6 +75,7 @@
             this.txtName.Name = "txtName";
             this.txtName.Size = new System.Drawing.Size(220, 20);
             this.txtName.TabIndex = 3;
+            this.validator1.SetType(this.txtName, Itboy.Components.ValidationType.Required);
             // 
             // txtCode
             // 
@@ -80,6 +83,7 @@
             this.txtCode.Name = "txtCode";
             this.txtCode.Size = new System.Drawing.Size(220, 20);
             this.txtCode.TabIndex = 4;
+            this.validator1.SetType(this.txtCode, Itboy.Components.ValidationType.Required);
             // 
             // txtDescription
             // 
@@ -128,6 +132,10 @@
             this.lblErrorMessage.Size = new System.Drawing.Size(0, 14);
             this.lblErrorMessage.TabIndex = 10;
             // 
+            // validator1
+            // 
+            this.validator1.Form = this;
+            // 
             // AddMeasurementUnit
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 14F);
@@ -162,5 +170,6 @@
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label lblErrorMessage;
+        private Itboy.Components.Validator validator1;
     }
 }

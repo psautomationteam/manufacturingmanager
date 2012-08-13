@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -37,6 +38,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.btnAdd = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
+            this.validator1 = new Itboy.Components.Validator(this.components);
             this.SuspendLayout();
             // 
             // label1
@@ -80,6 +82,7 @@
             this.txtName.Name = "txtName";
             this.txtName.Size = new System.Drawing.Size(313, 20);
             this.txtName.TabIndex = 4;
+            this.validator1.SetType(this.txtName, Itboy.Components.ValidationType.Required);
             // 
             // txtCode
             // 
@@ -87,6 +90,7 @@
             this.txtCode.Name = "txtCode";
             this.txtCode.Size = new System.Drawing.Size(110, 20);
             this.txtCode.TabIndex = 5;
+            this.validator1.SetType(this.txtCode, Itboy.Components.ValidationType.Required);
             // 
             // label4
             // 
@@ -118,6 +122,10 @@
             this.label5.Size = new System.Drawing.Size(210, 14);
             this.label5.TabIndex = 8;
             this.label5.Text = "Các trường với \"(*)\" không được bỏ trống";
+            // 
+            // validator1
+            // 
+            this.validator1.Form = this;
             // 
             // AddProductType
             // 
@@ -153,5 +161,6 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button btnAdd;
         private System.Windows.Forms.Label label5;
+        private Itboy.Components.Validator validator1;
     }
 }

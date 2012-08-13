@@ -35,61 +35,37 @@ namespace BaoHien.UI
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            double discount = 0;
-            Double.TryParse(txtDiscount.Text, out discount);
-            DateTime createdDate = DateTime.Now;
-            if (!DateTime.TryParse(txtCreatedDate.Text, out createdDate))
+            if (validator1.Validate())
             {
-                createdDate = DateTime.Now;
-            };
+                double discount = 0;
+                Double.TryParse(txtDiscount.Text, out discount);
+                DateTime createdDate = DateTime.Now;
+                if (!DateTime.TryParse(txtCreatedDate.Text, out createdDate))
+                {
+                    createdDate = DateTime.Now;
+                };
 
-            double vat = 0;
-            Double.TryParse(txtVAT.Text, out vat);
-            int userId = 0;
-            if(Global.CurrentUser != null)
-            {
-                userId = Global.CurrentUser.Id;
-            }else{
-                MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
-                return;
-            }
-            if (order != null)//update
-            {
-                order.CustId = (int)cbxCustomer.SelectedValue;
-                order.Discount = discount;
-                order.Note = txtNote.Text;
-                order.VAT = vat;
-                order.OrderCode = txtOrderCode.Text;
-                OrderService orderService = new OrderService();
-                bool result = orderService.UpdateOrder(order);
-                if (!result)
+                double vat = 0;
+                Double.TryParse(txtVAT.Text, out vat);
+                int userId = 0;
+                if (Global.CurrentUser != null)
+                {
+                    userId = Global.CurrentUser.Id;
+                }
+                else
                 {
                     MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
                     return;
                 }
-                else
+                if (order != null)//update
                 {
-                    OrderDetailService orderDetailService = new OrderDetailService();
-                    foreach (OrderDetail od in orderDetails)
-                    {
-                        if (od.ProductId > 0 && od.AttributeId > 0)
-                        {
-                            if (od.Id == 0)
-                            {
-                                od.OrderId = order.Id;
-                                result = orderDetailService.AddOrderDetail(od);
-                            }
-                            else
-                            {
-                                result = orderDetailService.UpdateOrderDetail(od);
-                            }
-
-                            if (!result)
-                                break;
-                        }
-                        
-
-                    }
+                    order.CustId = (int)cbxCustomer.SelectedValue;
+                    order.Discount = discount;
+                    order.Note = txtNote.Text;
+                    order.VAT = vat;
+                    order.OrderCode = txtOrderCode.Text;
+                    OrderService orderService = new OrderService();
+                    bool result = orderService.UpdateOrder(order);
                     if (!result)
                     {
                         MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
@@ -97,88 +73,118 @@ namespace BaoHien.UI
                     }
                     else
                     {
-                        MessageBox.Show("Sản phẩm đã được cập nhật thành công");
-                    }
-                    if (this.CallFromUserControll != null && this.CallFromUserControll is OrderList)
-                    {
-                        ((OrderList)this.CallFromUserControll).loadOrderList();
-                    }
-                    
-                    this.Close();
-                }
-            }
-            else//add new
-            {
-                if (cbxCustomer.SelectedValue == null)
-                {
-                    MessageBox.Show("Bạn cần có một khách hành cho phiếu này!");
-                    return;
-                }
-                order = new Order
-                {
-                    CustId = cbxCustomer.SelectedValue != null?(int)cbxCustomer.SelectedValue: 0,
-                    Discount = discount,
-                    Note = txtNote.Text,
-                    VAT = vat,
-                    OrderCode = txtOrderCode.Text,
-                    CreatedDate = createdDate,
-                    CreateBy = userId
+                        OrderDetailService orderDetailService = new OrderDetailService();
+                        foreach (OrderDetail od in orderDetails)
+                        {
+                            if (od.ProductId > 0 && od.AttributeId > 0)
+                            {
+                                if (od.Id == 0)
+                                {
+                                    od.OrderId = order.Id;
+                                    result = orderDetailService.AddOrderDetail(od);
+                                }
+                                else
+                                {
+                                    result = orderDetailService.UpdateOrderDetail(od);
+                                }
+
+                                if (!result)
+                                    break;
+                            }
 
 
-                };
-                OrderService orderService = new OrderService();
-                bool result = orderService.AddOrder(order);
-                long newOrderId = BaoHienRepository.GetMaxId<Order>();
-                OrderDetailService orderDetailService = new OrderDetailService();
-                foreach (OrderDetail od in orderDetails)
-                {
-                    if (od.ProductId > 0)
-                    {
-                        od.OrderId = (int)newOrderId;
-                        bool ret = orderDetailService.AddOrderDetail(od);
-                        if (!ret)
+                        }
+                        if (!result)
                         {
                             MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
                             return;
                         }
+                        else
+                        {
+                            MessageBox.Show("Sản phẩm đã được cập nhật thành công");
+                        }
+                        if (this.CallFromUserControll != null && this.CallFromUserControll is OrderList)
+                        {
+                            ((OrderList)this.CallFromUserControll).loadOrderList();
+                        }
+
+                        this.Close();
                     }
                 }
-
-            //    foreach (DataGridViewRow dgv in rows)
-            //{
-
-            //    ProductTypeService productTypeService = new ProductTypeService();
-            //    int id = ObjectHelper.GetValueFromAnonymousType<int>(dgv.DataBoundItem, "Id");
-            //    ProductService productService = new ProductService();
-            //    List<Product> productList = productService.SelectProductByWhere(pt => pt.ProductType == id);
-            //    bool deleteAllProductForThisType = true;
-            //    foreach (Product p in productList)
-            //    {
-            //        if (!productService.DeleteProduct(p.Id))
-            //        {
-            //            deleteAllProductForThisType = false;
-            //            MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
-            //            break;
-            //        }
-            //    }
-            //    if (!deleteAllProductForThisType || !productTypeService.DeleteProductType(id))
-            //    {
-            //        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
-            //        break;
-            //    }
-
-            //}
-                if (result)
+                else//add new
                 {
-                    MessageBox.Show("Sản phẩm đã được tạo thành công");
-                    //((OrderList)this.CallFromUserControll).loadOrderList();
-                    this.Close();
-                }
-                else
-                {
-                    MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                    if (cbxCustomer.SelectedValue == null)
+                    {
+                        MessageBox.Show("Bạn cần có một khách hành cho phiếu này!");
+                        return;
+                    }
+                    order = new Order
+                    {
+                        CustId = cbxCustomer.SelectedValue != null ? (int)cbxCustomer.SelectedValue : 0,
+                        Discount = discount,
+                        Note = txtNote.Text,
+                        VAT = vat,
+                        OrderCode = txtOrderCode.Text,
+                        CreatedDate = createdDate,
+                        CreateBy = userId
+
+
+                    };
+                    OrderService orderService = new OrderService();
+                    bool result = orderService.AddOrder(order);
+                    long newOrderId = BaoHienRepository.GetMaxId<Order>();
+                    OrderDetailService orderDetailService = new OrderDetailService();
+                    foreach (OrderDetail od in orderDetails)
+                    {
+                        if (od.ProductId > 0)
+                        {
+                            od.OrderId = (int)newOrderId;
+                            bool ret = orderDetailService.AddOrderDetail(od);
+                            if (!ret)
+                            {
+                                MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                                return;
+                            }
+                        }
+                    }
+
+                    //    foreach (DataGridViewRow dgv in rows)
+                    //{
+
+                    //    ProductTypeService productTypeService = new ProductTypeService();
+                    //    int id = ObjectHelper.GetValueFromAnonymousType<int>(dgv.DataBoundItem, "Id");
+                    //    ProductService productService = new ProductService();
+                    //    List<Product> productList = productService.SelectProductByWhere(pt => pt.ProductType == id);
+                    //    bool deleteAllProductForThisType = true;
+                    //    foreach (Product p in productList)
+                    //    {
+                    //        if (!productService.DeleteProduct(p.Id))
+                    //        {
+                    //            deleteAllProductForThisType = false;
+                    //            MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                    //            break;
+                    //        }
+                    //    }
+                    //    if (!deleteAllProductForThisType || !productTypeService.DeleteProductType(id))
+                    //    {
+                    //        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                    //        break;
+                    //    }
+
+                    //}
+                    if (result)
+                    {
+                        MessageBox.Show("Sản phẩm đã được tạo thành công");
+                        //((OrderList)this.CallFromUserControll).loadOrderList();
+                        this.Close();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                    }
                 }
             }
+            
         }
         private void loadSomeData()
         {

@@ -23,22 +23,26 @@ namespace BaoHien.UI
 
         private void btnLogin_Click(object sender, EventArgs e)
         {
-            if (txtUsername.Text == DUMMY_USERNAME && txtPassword.Text == DUMMY_PASSWORD)
+            if (validator1.Validate())
             {
-                SystemUserService systemUserService = new SystemUserService();
-                //SystemUser user = systemUserService.GetSystemUsers().Single(u => (u.username == DUMMY_USERNAME) && (u.password == DUMMY_PASSWORD));
-                SystemUser user = systemUserService.GetSystemUser(1);
-                this.Hide();
-                Main main = new Main();
-                Global.CurrentUser = user;
-                main.ShowDialog();
-                this.Close();
+                if (txtUsername.Text == DUMMY_USERNAME && txtPassword.Text == DUMMY_PASSWORD)
+                {
+                    SystemUserService systemUserService = new SystemUserService();
+                    //SystemUser user = systemUserService.GetSystemUsers().Single(u => (u.username == DUMMY_USERNAME) && (u.password == DUMMY_PASSWORD));
+                    SystemUser user = systemUserService.GetSystemUser(1);
+                    this.Hide();
+                    Main main = new Main();
+                    Global.CurrentUser = user;
+                    main.ShowDialog();
+                    this.Close();
+                }
+                else
+                {
+                    lblErrorMessage.Text = "(*) Tên đăng nhập không đúng hoặc mật mã sai. Vui long thử lại.";
+                    txtPassword.Text = "";
+                }
             }
-            else
-            {
-                lblErrorMessage.Text = "(*) Tên đăng nhập không đúng hoặc mật mã sai. Vui long thử lại.";
-                txtPassword.Text = "";
-            }
+            
 
         }
 
