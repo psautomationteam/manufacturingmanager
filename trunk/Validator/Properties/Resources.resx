@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="NONE" xml:space="preserve">
     <value>None</value>
@@ -151,10 +151,10 @@
     <value>This feild value out of range.</value>
   </data>
   <data name="VALIDATOR_DEFAULT_REGULAREXPRESSIONMESSAGE" xml:space="preserve">
-    <value>This feild do not match it is content.</value>
+    <value>Dữ liệu nhập chưa đúng</value>
   </data>
   <data name="VALIDATOR_DEFAULT_REQUIREMESSAGE" xml:space="preserve">
-    <value>This feild is required.</value>
+    <value>Bắt buộc nhập</value>
   </data>
   <data name="VALIDATOR_DESCRIPTION_BEHAVIOR_FORM" xml:space="preserve">
     <value>Validate all configured validation information controls which lay onto the specified container, when the container is closing.</value>
