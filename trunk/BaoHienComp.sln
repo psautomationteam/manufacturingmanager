@@ -10,7 +10,11 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{664DFEF1-0CAA-446F-97CE-1EA5FEB2C3A5}"
 	ProjectSection(SolutionItems) = preProject
 		BaoHienComp.vsmdi = BaoHienComp.vsmdi
+		Local.testsettings = Local.testsettings
+		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Validator", "Validator\Validator.csproj", "{87D24BFF-5031-4716-BF01-3EA42C791538}"
 EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
@@ -55,6 +59,16 @@ Global
 		{0D2446EE-D677-4395-94CF-43E290B98E6B}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{0D2446EE-D677-4395-94CF-43E290B98E6B}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{0D2446EE-D677-4395-94CF-43E290B98E6B}.Release|x86.ActiveCfg = Release|Any CPU
+		{87D24BFF-5031-4716-BF01-3EA42C791538}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87D24BFF-5031-4716-BF01-3EA42C791538}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87D24BFF-5031-4716-BF01-3EA42C791538}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{87D24BFF-5031-4716-BF01-3EA42C791538}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{87D24BFF-5031-4716-BF01-3EA42C791538}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{87D24BFF-5031-4716-BF01-3EA42C791538}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87D24BFF-5031-4716-BF01-3EA42C791538}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87D24BFF-5031-4716-BF01-3EA42C791538}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{87D24BFF-5031-4716-BF01-3EA42C791538}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{87D24BFF-5031-4716-BF01-3EA42C791538}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

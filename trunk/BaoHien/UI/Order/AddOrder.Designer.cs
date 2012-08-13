@@ -29,6 +29,7 @@ namespace BaoHien.UI
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.txtNote = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
@@ -55,6 +56,7 @@ namespace BaoHien.UI
             this.btnSave = new System.Windows.Forms.Button();
             this.btnPrintOrder = new System.Windows.Forms.Button();
             this.btnPrintXK = new System.Windows.Forms.Button();
+            this.validator1 = new Itboy.Components.Validator(this.components);
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgwOrderDetails)).BeginInit();
@@ -130,8 +132,10 @@ namespace BaoHien.UI
             // 
             this.txtDiscount.Location = new System.Drawing.Point(481, 54);
             this.txtDiscount.Name = "txtDiscount";
+            this.validator1.SetRegularExpression(this.txtDiscount, "[0-9].[0-9]");
             this.txtDiscount.Size = new System.Drawing.Size(183, 20);
             this.txtDiscount.TabIndex = 8;
+            this.validator1.SetType(this.txtDiscount, Itboy.Components.ValidationType.RegularExpression);
             // 
             // label5
             // 
@@ -155,8 +159,10 @@ namespace BaoHien.UI
             // 
             this.txtVAT.Location = new System.Drawing.Point(94, 55);
             this.txtVAT.Name = "txtVAT";
+            this.validator1.SetRegularExpression(this.txtVAT, "[0-9].[0-9]");
             this.txtVAT.Size = new System.Drawing.Size(159, 20);
             this.txtVAT.TabIndex = 5;
+            this.validator1.SetType(this.txtVAT, Itboy.Components.ValidationType.RegularExpression);
             // 
             // label3
             // 
@@ -174,6 +180,7 @@ namespace BaoHien.UI
             this.cbxCustomer.Name = "cbxCustomer";
             this.cbxCustomer.Size = new System.Drawing.Size(221, 22);
             this.cbxCustomer.TabIndex = 3;
+            this.validator1.SetType(this.cbxCustomer, Itboy.Components.ValidationType.Required);
             // 
             // label2
             // 
@@ -315,6 +322,10 @@ namespace BaoHien.UI
             this.btnPrintXK.Text = "In phiễu XK";
             this.btnPrintXK.UseVisualStyleBackColor = true;
             // 
+            // validator1
+            // 
+            this.validator1.Form = this;
+            // 
             // AddOrder
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 14F);
@@ -372,5 +383,6 @@ namespace BaoHien.UI
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.Button btnPrintOrder;
         private System.Windows.Forms.Button btnPrintXK;
+        private Itboy.Components.Validator validator1;
     }
 }

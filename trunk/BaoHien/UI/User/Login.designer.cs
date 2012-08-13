@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.label1 = new System.Windows.Forms.Label();
             this.txtUsername = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -35,38 +36,40 @@
             this.btnExit = new System.Windows.Forms.Button();
             this.lblErrorMessage = new System.Windows.Forms.Label();
             this.txtPassword = new System.Windows.Forms.TextBox();
+            this.validator1 = new Itboy.Components.Validator(this.components);
             this.SuspendLayout();
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(27, 26);
+            this.label1.Location = new System.Drawing.Point(27, 28);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(84, 13);
+            this.label1.Size = new System.Drawing.Size(82, 14);
             this.label1.TabIndex = 5;
             this.label1.Text = "Tên đăng nhập:";
             // 
             // txtUsername
             // 
-            this.txtUsername.Location = new System.Drawing.Point(117, 23);
+            this.txtUsername.Location = new System.Drawing.Point(117, 25);
             this.txtUsername.Name = "txtUsername";
             this.txtUsername.Size = new System.Drawing.Size(234, 20);
             this.txtUsername.TabIndex = 0;
+            this.validator1.SetType(this.txtUsername, Itboy.Components.ValidationType.Required);
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(56, 66);
+            this.label2.Location = new System.Drawing.Point(56, 71);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(55, 13);
+            this.label2.Size = new System.Drawing.Size(53, 14);
             this.label2.TabIndex = 4;
             this.label2.Text = "Mật khẩu:";
             // 
             // btnLogin
             // 
-            this.btnLogin.Location = new System.Drawing.Point(275, 110);
+            this.btnLogin.Location = new System.Drawing.Point(275, 118);
             this.btnLogin.Name = "btnLogin";
-            this.btnLogin.Size = new System.Drawing.Size(75, 23);
+            this.btnLogin.Size = new System.Drawing.Size(75, 25);
             this.btnLogin.TabIndex = 2;
             this.btnLogin.Text = "Đăng Nhập";
             this.btnLogin.UseVisualStyleBackColor = true;
@@ -74,9 +77,9 @@
             // 
             // btnExit
             // 
-            this.btnExit.Location = new System.Drawing.Point(175, 110);
+            this.btnExit.Location = new System.Drawing.Point(175, 118);
             this.btnExit.Name = "btnExit";
-            this.btnExit.Size = new System.Drawing.Size(75, 23);
+            this.btnExit.Size = new System.Drawing.Size(75, 25);
             this.btnExit.TabIndex = 3;
             this.btnExit.Text = "Tắt";
             this.btnExit.UseVisualStyleBackColor = true;
@@ -86,24 +89,29 @@
             // 
             this.lblErrorMessage.AutoSize = true;
             this.lblErrorMessage.ForeColor = System.Drawing.Color.Red;
-            this.lblErrorMessage.Location = new System.Drawing.Point(27, 91);
+            this.lblErrorMessage.Location = new System.Drawing.Point(27, 98);
             this.lblErrorMessage.Name = "lblErrorMessage";
-            this.lblErrorMessage.Size = new System.Drawing.Size(0, 13);
+            this.lblErrorMessage.Size = new System.Drawing.Size(0, 14);
             this.lblErrorMessage.TabIndex = 6;
             // 
             // txtPassword
             // 
-            this.txtPassword.Location = new System.Drawing.Point(118, 58);
+            this.txtPassword.Location = new System.Drawing.Point(118, 62);
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.PasswordChar = '*';
             this.txtPassword.Size = new System.Drawing.Size(232, 20);
             this.txtPassword.TabIndex = 1;
+            this.validator1.SetType(this.txtPassword, Itboy.Components.ValidationType.Required);
+            // 
+            // validator1
+            // 
+            this.validator1.Form = this;
             // 
             // Login
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(399, 139);
+            this.ClientSize = new System.Drawing.Size(399, 150);
             this.Controls.Add(this.txtPassword);
             this.Controls.Add(this.lblErrorMessage);
             this.Controls.Add(this.btnExit);
@@ -128,5 +136,6 @@
         private System.Windows.Forms.Button btnExit;
         private System.Windows.Forms.Label lblErrorMessage;
         private System.Windows.Forms.TextBox txtPassword;
+        private Itboy.Components.Validator validator1;
     }
 }

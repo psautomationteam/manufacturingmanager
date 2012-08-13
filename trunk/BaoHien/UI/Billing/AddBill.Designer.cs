@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.txtNote = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.txtCreatedDate = new System.Windows.Forms.TextBox();
@@ -40,6 +41,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.btnSave = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
+            this.validator1 = new Itboy.Components.Validator(this.components);
             this.SuspendLayout();
             // 
             // txtNote
@@ -83,6 +85,7 @@
             this.cbxCustomer.Name = "cbxCustomer";
             this.cbxCustomer.Size = new System.Drawing.Size(214, 22);
             this.cbxCustomer.TabIndex = 17;
+            this.validator1.SetType(this.cbxCustomer, Itboy.Components.ValidationType.Required);
             // 
             // label2
             // 
@@ -114,8 +117,10 @@
             // 
             this.txtAmount.Location = new System.Drawing.Point(92, 42);
             this.txtAmount.Name = "txtAmount";
+            this.validator1.SetRegularExpression(this.txtAmount, "[0-9].[0-9]");
             this.txtAmount.Size = new System.Drawing.Size(151, 20);
             this.txtAmount.TabIndex = 23;
+            this.validator1.SetType(this.txtAmount, Itboy.Components.ValidationType.RegularExpression);
             // 
             // label3
             // 
@@ -145,6 +150,10 @@
             this.btnCancel.Text = "Hủy";
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+            // 
+            // validator1
+            // 
+            this.validator1.Form = this;
             // 
             // AddBill
             // 
@@ -185,5 +194,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.Button btnCancel;
+        private Itboy.Components.Validator validator1;
     }
 }

@@ -41,54 +41,57 @@ namespace BaoHien.UI
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            if (employee != null && employee.Id > 0)//edit
+            if (validator1.Validate())
             {
-                employee.Address = txtAddress.Text;
-                employee.Description = txtDescription.Text;
-                employee.Email = txtEmail.Text;
-                employee.FullName = txtFullName.Text;
-                employee.MobilePhone = txtMobilePhone.Text;
-                employee.NickName = txtNickName.Text;
-                employee.Code = txtEmployeeCode.Text;
-                employee.Type = cbType.SelectedValue != null ? (short)cbType.SelectedValue : (short)0;
+                if (employee != null && employee.Id > 0)//edit
+                {
+                    employee.Address = txtAddress.Text;
+                    employee.Description = txtDescription.Text;
+                    employee.Email = txtEmail.Text;
+                    employee.FullName = txtFullName.Text;
+                    employee.MobilePhone = txtMobilePhone.Text;
+                    employee.NickName = txtNickName.Text;
+                    employee.Code = txtEmployeeCode.Text;
+                    employee.Type = cbType.SelectedValue != null ? (short)cbType.SelectedValue : (short)0;
 
-                EmployeeService employeeService = new EmployeeService();
-                bool result = employeeService.UpdateEmployee(employee);
-                if (result)
-                {
-                    MessageBox.Show("Nhân viên mới đã được cập nhật vào hệ thống");
-                    ((EmployeeList)this.CallFromUserControll).loadEmployeeList();
-                    this.Close();
+                    EmployeeService employeeService = new EmployeeService();
+                    bool result = employeeService.UpdateEmployee(employee);
+                    if (result)
+                    {
+                        MessageBox.Show("Nhân viên mới đã được cập nhật vào hệ thống");
+                        ((EmployeeList)this.CallFromUserControll).loadEmployeeList();
+                        this.Close();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                    }
                 }
-                else
+                else//add new
                 {
-                    MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
-                }
-            }
-            else//add new
-            {
-                employee = new Employee
-                {
-                    Address = txtAddress.Text,
-                    Description = txtDescription.Text,
-                   Email = txtEmail.Text,
-                   FullName = txtFullName.Text,
-                   MobilePhone = txtMobilePhone.Text,
-                   NickName = txtNickName.Text,
-                   Code = txtEmployeeCode.Text,
-                   Type = cbType.SelectedValue != null? (short)cbType.SelectedValue: (short)0
-                };
-                EmployeeService employeeService = new EmployeeService();
-                bool result = employeeService.AddEmployee(employee);
-                if (result)
-                {
-                    MessageBox.Show("Loại sản phẩm đã được thêm mới vào hệ thống");
-                    ((EmployeeList)this.CallFromUserControll).loadEmployeeList();
-                    this.Close();
-                }
-                else
-                {
-                    MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                    employee = new Employee
+                    {
+                        Address = txtAddress.Text,
+                        Description = txtDescription.Text,
+                        Email = txtEmail.Text,
+                        FullName = txtFullName.Text,
+                        MobilePhone = txtMobilePhone.Text,
+                        NickName = txtNickName.Text,
+                        Code = txtEmployeeCode.Text,
+                        Type = cbType.SelectedValue != null ? (short)cbType.SelectedValue : (short)0
+                    };
+                    EmployeeService employeeService = new EmployeeService();
+                    bool result = employeeService.AddEmployee(employee);
+                    if (result)
+                    {
+                        MessageBox.Show("Loại sản phẩm đã được thêm mới vào hệ thống");
+                        ((EmployeeList)this.CallFromUserControll).loadEmployeeList();
+                        this.Close();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                    }
                 }
             }
         }

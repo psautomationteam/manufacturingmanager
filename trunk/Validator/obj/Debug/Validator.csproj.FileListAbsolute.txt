@@ -1,0 +1,8 @@
+C:\Documents and Settings\Nguyen Tinh Luong\My Documents\Downloads\source\Validator\bin\Debug\Validator.dll
+C:\Documents and Settings\Nguyen Tinh Luong\My Documents\Downloads\source\Validator\bin\Debug\Validator.pdb
+C:\Documents and Settings\Nguyen Tinh Luong\My Documents\Downloads\source\Validator\obj\Debug\ResolveAssemblyReference.cache
+C:\Documents and Settings\Nguyen Tinh Luong\My Documents\Downloads\source\Validator\obj\Debug\Itboy.Properties.Resources.resources
+C:\Documents and Settings\Nguyen Tinh Luong\My Documents\Downloads\source\Validator\obj\Debug\GenerateResource-ResGen.read.1.tlog
+C:\Documents and Settings\Nguyen Tinh Luong\My Documents\Downloads\source\Validator\obj\Debug\GenerateResource-ResGen.write.1.tlog
+C:\Documents and Settings\Nguyen Tinh Luong\My Documents\Downloads\source\Validator\obj\Debug\Validator.dll
+C:\Documents and Settings\Nguyen Tinh Luong\My Documents\Downloads\source\Validator\obj\Debug\Validator.pdb

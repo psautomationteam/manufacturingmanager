@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.txtDescription = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
@@ -60,6 +61,7 @@
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnAdd = new System.Windows.Forms.Button();
             this.lblErrorMessage = new System.Windows.Forms.Label();
+            this.validator1 = new Itboy.Components.Validator(this.components);
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -114,8 +116,10 @@
             // 
             this.txtEmail.Location = new System.Drawing.Point(444, 109);
             this.txtEmail.Name = "txtEmail";
+            this.validator1.SetRegularExpression(this.txtEmail, "^([\\w\\-\\.]+)@((\\[([0-9]{1,3}\\.){3}[0-9]{1,3}\\])|(([\\w\\-]+\\.)+)([a-zA-Z]{2,4}))$");
             this.txtEmail.Size = new System.Drawing.Size(254, 20);
             this.txtEmail.TabIndex = 17;
+            this.validator1.SetType(this.txtEmail, Itboy.Components.ValidationType.RegularExpression);
             // 
             // label9
             // 
@@ -197,6 +201,7 @@
             this.txtCode.Name = "txtCode";
             this.txtCode.Size = new System.Drawing.Size(254, 20);
             this.txtCode.TabIndex = 7;
+            this.validator1.SetType(this.txtCode, Itboy.Components.ValidationType.Required);
             // 
             // label4
             // 
@@ -213,6 +218,7 @@
             this.txtAddress.Name = "txtAddress";
             this.txtAddress.Size = new System.Drawing.Size(573, 20);
             this.txtAddress.TabIndex = 5;
+            this.validator1.SetType(this.txtAddress, Itboy.Components.ValidationType.Required);
             // 
             // label3
             // 
@@ -227,8 +233,10 @@
             // 
             this.txtPhoneNumber.Location = new System.Drawing.Point(108, 84);
             this.txtPhoneNumber.Name = "txtPhoneNumber";
+            this.validator1.SetRegularExpression(this.txtPhoneNumber, "[0-9]");
             this.txtPhoneNumber.Size = new System.Drawing.Size(218, 20);
             this.txtPhoneNumber.TabIndex = 3;
+            this.validator1.SetType(this.txtPhoneNumber, ((Itboy.Components.ValidationType)((Itboy.Components.ValidationType.Required | Itboy.Components.ValidationType.RegularExpression))));
             // 
             // label2
             // 
@@ -245,6 +253,7 @@
             this.txtName.Name = "txtName";
             this.txtName.Size = new System.Drawing.Size(219, 20);
             this.txtName.TabIndex = 1;
+            this.validator1.SetType(this.txtName, Itboy.Components.ValidationType.Required);
             // 
             // label1
             // 
@@ -356,6 +365,10 @@
             this.lblErrorMessage.Size = new System.Drawing.Size(0, 14);
             this.lblErrorMessage.TabIndex = 20;
             // 
+            // validator1
+            // 
+            this.validator1.Form = this;
+            // 
             // AddCustomer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 14F);
@@ -413,5 +426,6 @@
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnAdd;
         private System.Windows.Forms.Label lblErrorMessage;
+        private Itboy.Components.Validator validator1;
     }
 }

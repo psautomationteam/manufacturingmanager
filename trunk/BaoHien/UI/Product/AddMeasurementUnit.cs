@@ -27,47 +27,51 @@ namespace BaoHien.UI
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            if (measurementUnit != null && measurementUnit.Id > 0)
+            if (validator1.Validate())
             {
-                measurementUnit.Description = txtDescription.Text;
-                measurementUnit.Name = txtName.Text;
-                measurementUnit.UnitCode = txtCode.Text;
-
-                MeasurementUnitService measurementUnitService = new MeasurementUnitService();
-                bool result = measurementUnitService.UpdateMeasurementUnit(measurementUnit);
-                if (result)
+                if (measurementUnit != null && measurementUnit.Id > 0)
                 {
-                    MessageBox.Show("Loại đơn vị đã được cập nhật vào hệ thống");
-                    ((BaseUnitList)this.CallFromUserControll).loadMeasurementUnitList();
-                    this.Close();
+                    measurementUnit.Description = txtDescription.Text;
+                    measurementUnit.Name = txtName.Text;
+                    measurementUnit.UnitCode = txtCode.Text;
+
+                    MeasurementUnitService measurementUnitService = new MeasurementUnitService();
+                    bool result = measurementUnitService.UpdateMeasurementUnit(measurementUnit);
+                    if (result)
+                    {
+                        MessageBox.Show("Loại đơn vị đã được cập nhật vào hệ thống");
+                        ((BaseUnitList)this.CallFromUserControll).loadMeasurementUnitList();
+                        this.Close();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                    }
                 }
                 else
                 {
-                    MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
-                }
-            }
-            else
-            {
-                measurementUnit = new MeasurementUnit
-                {
+                    measurementUnit = new MeasurementUnit
+                    {
 
-                    Description = txtDescription.Text,
-                    Name = txtName.Text,
-                    UnitCode = txtCode.Text
-                };
-                MeasurementUnitService measurementUnitService = new MeasurementUnitService();
-                bool result = measurementUnitService.AddMeasurementUnit(measurementUnit);
-                if (result)
-                {
-                    MessageBox.Show("Đơn vị tính đã được thêm mới vào hệ thống");
-                    ((BaseUnitList)this.CallFromUserControll).loadMeasurementUnitList();
-                    this.Close();
-                }
-                else
-                {
-                    MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                        Description = txtDescription.Text,
+                        Name = txtName.Text,
+                        UnitCode = txtCode.Text
+                    };
+                    MeasurementUnitService measurementUnitService = new MeasurementUnitService();
+                    bool result = measurementUnitService.AddMeasurementUnit(measurementUnit);
+                    if (result)
+                    {
+                        MessageBox.Show("Đơn vị tính đã được thêm mới vào hệ thống");
+                        ((BaseUnitList)this.CallFromUserControll).loadMeasurementUnitList();
+                        this.Close();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                    }
                 }
             }
+            
             
         }
         public void loadDataForEditMeasurementUnit(int measurementUnitId)

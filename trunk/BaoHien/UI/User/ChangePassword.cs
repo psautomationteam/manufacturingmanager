@@ -15,5 +15,12 @@ namespace BaoHien.UI
         {
             InitializeComponent();
         }
+
+        private void btnChange_Click(object sender, EventArgs e)
+        {
+            if (validator1.Validate())
+            {
+            }
+        }
     }
 }
