@@ -224,6 +224,7 @@ namespace BaoHien.UI
                 txtDate.Enabled = false;
                 txtUser.Text = (Global.CurrentUser != null) ? Global.CurrentUser.FullName : "";
                 txtUser.Enabled = false;
+                txtCode.Text = RandomGeneration.GeneratingCode(BHConstant.PREFIX_FOR_PRODUCTION);
             }
             
             BaseAttributeService baseAttributeService = new BaseAttributeService();
