@@ -226,7 +226,7 @@ namespace BaoHien.UI
             }
             else
             {
-                txtOrderCode.Text = RandomGeneration.GeneratingCode();
+                txtOrderCode.Text = RandomGeneration.GeneratingCode(BHConstant.PREFIX_FOR_ORDER);
             }
         }
         public void updateProductionRequestDetailCells()

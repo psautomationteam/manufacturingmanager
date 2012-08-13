@@ -59,7 +59,7 @@ namespace BaoHien.UI
             else
             {
                 txtCreatedDate.Text = DateTime.Now.ToShortDateString();
-                txtOrderCode.Text = RandomGeneration.GeneratingCode();
+                txtOrderCode.Text = RandomGeneration.GeneratingCode(BHConstant.PREFIX_FOR_BILLING);
             }
             txtCreatedDate.Enabled = false;
         }

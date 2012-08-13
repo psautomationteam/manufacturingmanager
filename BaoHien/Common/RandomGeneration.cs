@@ -40,11 +40,11 @@ namespace BaoHien.Common
             builder.Append(RandomString(2, false));
             return builder.ToString();
         }
-        public static string GeneratingCode()
+        public static string GeneratingCode(string prefix)
         {
             StringBuilder builder = new StringBuilder();
             DateTime nowDate = DateTime.Now;
-            builder.Append(BHConstant.PREFIX_FOR_CODE);
+            builder.Append(prefix);
             builder.Append(nowDate.Day.ToString()+nowDate.Month.ToString()+nowDate.Year.ToString());
 
             BaoHienDBDataContext context = BaoHienRepository.GetBaoHienDBDataContext();
