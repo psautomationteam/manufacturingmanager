@@ -259,7 +259,7 @@ namespace BaoHien.UI
 
         private void dgvStockEntranceDetails_DataError(object sender, DataGridViewDataErrorEventArgs e)
         {
-            MessageBox.Show("Có lỗi nhập liệu xảy ra,vui lòng kiểm tra lại!");
+            //MessageBox.Show("Có lỗi nhập liệu xảy ra,vui lòng kiểm tra lại!");
         }
 
         private void dgvStockEntranceDetails_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
