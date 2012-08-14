@@ -6,3 +6,11 @@ C:\Documents and Settings\Nguyen Tinh Luong\My Documents\Downloads\source\Valida
 C:\Documents and Settings\Nguyen Tinh Luong\My Documents\Downloads\source\Validator\obj\Debug\GenerateResource-ResGen.write.1.tlog
 C:\Documents and Settings\Nguyen Tinh Luong\My Documents\Downloads\source\Validator\obj\Debug\Validator.dll
 C:\Documents and Settings\Nguyen Tinh Luong\My Documents\Downloads\source\Validator\obj\Debug\Validator.pdb
+G:\Working\VS10\manufacturingmanager\Validator\bin\Debug\Validator.dll
+G:\Working\VS10\manufacturingmanager\Validator\bin\Debug\Validator.pdb
+G:\Working\VS10\manufacturingmanager\Validator\obj\Debug\ResolveAssemblyReference.cache
+G:\Working\VS10\manufacturingmanager\Validator\obj\Debug\Itboy.Properties.Resources.resources
+G:\Working\VS10\manufacturingmanager\Validator\obj\Debug\GenerateResource.read.1.tlog
+G:\Working\VS10\manufacturingmanager\Validator\obj\Debug\GenerateResource.write.1.tlog
+G:\Working\VS10\manufacturingmanager\Validator\obj\Debug\Validator.dll
+G:\Working\VS10\manufacturingmanager\Validator\obj\Debug\Validator.pdb

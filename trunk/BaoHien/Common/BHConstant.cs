@@ -23,5 +23,8 @@ namespace BaoHien.Common
         public const string PREFIX_FOR_PRODUCTION = "SX";
         public const string PREFIX_FOR_ENTRANCE = "NK";
         public const string PREFIX_FOR_BILLING = "TT";
+
+        public const string REGULAR_EXPRESSION_FOR_NUMBER = "[0-9]";
+        public const string REGULAR_EXPRESSION_FOR_CURRENCY = "[0-9].[0-9]";
     }
 }

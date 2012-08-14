@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.txtNote = new System.Windows.Forms.TextBox();
             this.txtDate = new System.Windows.Forms.TextBox();
@@ -41,6 +42,7 @@
             this.dgvStockEntranceDetails = new System.Windows.Forms.DataGridView();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.btnDelete = new System.Windows.Forms.Button();
+            this.validator1 = new Itboy.Components.Validator(this.components);
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvStockEntranceDetails)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -169,6 +171,10 @@
             this.btnDelete.UseVisualStyleBackColor = true;
             this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
             // 
+            // validator1
+            // 
+            this.validator1.Form = this;
+            // 
             // AddEntranceStock
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 14F);
@@ -204,5 +210,6 @@
         private System.Windows.Forms.DataGridView dgvStockEntranceDetails;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Button btnDelete;
+        private Itboy.Components.Validator validator1;
     }
 }
