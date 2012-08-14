@@ -347,7 +347,7 @@ namespace BaoHien.UI
             numberUnitColumn.DataPropertyName = "NumberUnit";
             numberUnitColumn.HeaderText = "Số lượng";
             //numberUnitColumn.Frozen = true;
-            numberUnitColumn.ValueType = typeof(int);
+            //numberUnitColumn.ValueType = typeof(int);
             dgwOrderDetails.Columns.Add(numberUnitColumn);
 
             DataGridViewTextBoxColumn priceColumn = new DataGridViewTextBoxColumn();
@@ -356,7 +356,7 @@ namespace BaoHien.UI
             priceColumn.DataPropertyName = "Price";
             priceColumn.HeaderText = "Giá";
             //numberUnitColumn.Frozen = true;
-            priceColumn.ValueType = typeof(int);
+            //priceColumn.ValueType = typeof(int);
             dgwOrderDetails.Columns.Add(priceColumn);
 
             DataGridViewTextBoxColumn totalColumn = new DataGridViewTextBoxColumn();
@@ -365,7 +365,7 @@ namespace BaoHien.UI
             totalColumn.DataPropertyName = "Total";
             totalColumn.HeaderText = "Tổng";
             //numberUnitColumn.Frozen = true;
-            totalColumn.ValueType = typeof(int);
+            //totalColumn.ValueType = typeof(int);
             dgwOrderDetails.Columns.Add(totalColumn);
 
             DataGridViewTextBoxColumn noteColumn = new DataGridViewTextBoxColumn();
@@ -385,190 +385,11 @@ namespace BaoHien.UI
             deleteButton.ReadOnly = true;
             deleteButton.ImageLayout = DataGridViewImageCellLayout.Normal;
         }
-        private void SetupColumn2s()
-        {
-            
-            dgwOrderDetails.AutoGenerateColumns = false;
-            
-            ProductService productService = new ProductService();
-            if (products == null)
-            {
-                products = new BindingList<Product>(productService.GetProducts());
-            }
-            
-            List<object> objects = new List<object>
-            {
-                new {
-                    Product = "", 
-                    AttributeName = "",
-                    NumberUnit = 0,
-                    Price = 0.0,
-                    Tax = 0.0,
-                    Note = "",
-                    DeleteButton = ""
-                }
-            };
-            if (orderDetails == null)
-            {
-                orderDetails = new BindingList<OrderDetail>();
-                OrderDetail orderDetail = new OrderDetail();
-                orderDetails.Add(orderDetail);
-
-                dgwOrderDetails.ReadOnly = false;
-                dgwOrderDetails.AllowUserToAddRows = true;
-                dgwOrderDetails.EditMode = DataGridViewEditMode.EditOnEnter;
-            }
-            else
-            {
-                
-                var query = from orderDetail in orderDetails
-
-                            select new
-                            {
-                                ProductName = orderDetail.Product.ProductName,
-                                AttributeName = orderDetail.BaseAttribute != null ? orderDetail.BaseAttribute.AttributeName : "",
-                                NumberUnit = orderDetail.NumberUnit,
-                                Price = orderDetail.Price,
-                                Note = orderDetail.Note,
-                                Total = (double)orderDetail.Price * orderDetail.NumberUnit
-                            };
-                dgwOrderDetails.DataSource = query.ToList();
-                isUpdating = true;
-            }
-            
-           // dgwOrderDetails.DataSource = query.ToList();
-            //dgwOrderDetails.DataSource = objects;
-            if (isUpdating)
-            {
-                DataGridViewTextBoxColumn productColumn = new DataGridViewTextBoxColumn();
-                productColumn.Width = 150;
-                productColumn.DataPropertyName = "ProductName";
-
-                productColumn.HeaderText = "Sản phẩm";
-
-
-                dgwOrderDetails.Columns.Add(productColumn);
-            }
-            else
-            {
-                /*
-                DataGridViewTextBoxColumn productColumn = new DataGridViewTextBoxColumn();
-                productColumn.Width = 150;
-                productColumn.DataPropertyName = "ProductName";
-
-                productColumn.HeaderText = "Sản phẩm";
-
-
-                dgwOrderDetails.Columns.Add(productColumn);*/
-                
-                DataGridViewComboBoxColumn productColumn = new DataGridViewComboBoxColumn();
-                productColumn.Width = 150;
-                productColumn.AutoComplete = false;
-                
-                productColumn.HeaderText = "Sản phẩm";
-                productColumn.DataSource = products;
-                productColumn.DisplayMember = "ProductName";
-                //productColumn.Frozen = true;
-                productColumn.ValueMember = "Id";
-
-                dgwOrderDetails.Columns.Add(productColumn);
-            }
-            if (isUpdating)
-            {
-
-                DataGridViewTextBoxColumn productAttributeColumn = new DataGridViewTextBoxColumn();
-
-                productAttributeColumn.Width = 150;
-                productAttributeColumn.DataPropertyName = "AttributeName";
-
-                productAttributeColumn.HeaderText = "Thuộc tính sản phẩm";
-
-
-                dgwOrderDetails.Columns.Add(productAttributeColumn);
-            }
-            else
-            {
-                List<BaseAttribute> baseAttributes = new List<BaseAttribute>();
-                DataGridViewComboBoxColumn productAttributeColumn = new DataGridViewComboBoxColumn();
-                productAttributeColumn.Width = 150;
-                productAttributeColumn.HeaderText = "Thuộc tính sản phẩm";
-
-                productAttributeColumn.DataSource = baseAttributes;
-
-                productAttributeColumn.DisplayMember = "AttributeName";
-                //productColumn.Frozen = true;
-                productAttributeColumn.ValueMember = "Id";
-
-                dgwOrderDetails.Columns.Add(productAttributeColumn);
-            }
-
-            
-
-            DataGridViewTextBoxColumn numberUnitColumn = new DataGridViewTextBoxColumn();
-            
-            numberUnitColumn.Width = 100;
-            if (isUpdating)
-            {
-                numberUnitColumn.DataPropertyName = "NumberUnit";
-            }
-            //numberUnitColumn.DataPropertyName = "NumberUnit";
-            numberUnitColumn.HeaderText = "Số lượng";
-            //numberUnitColumn.Frozen = true;
-            numberUnitColumn.ValueType = typeof(int);
-            dgwOrderDetails.Columns.Add(numberUnitColumn);
-
-            DataGridViewTextBoxColumn priceColumn = new DataGridViewTextBoxColumn();
-            //priceColumn.DataPropertyName = "Price";
-            if (isUpdating)
-            {
-                priceColumn.DataPropertyName = "Price";
-            }
-            priceColumn.Width = 100;
-            priceColumn.HeaderText = "Giá";
-           // numberUnitColumn.Frozen = true;
-            priceColumn.ValueType = typeof(double);
-            dgwOrderDetails.Columns.Add(priceColumn);
-
-            DataGridViewTextBoxColumn totalColumn = new DataGridViewTextBoxColumn();
-            //priceColumn.DataPropertyName = "Price";
-            if (isUpdating)
-            {
-                totalColumn.DataPropertyName = "Total";
-            }
-            totalColumn.Width = 100;
-            totalColumn.HeaderText = "Thành Tiền";
-            // numberUnitColumn.Frozen = true;
-            totalColumn.ValueType = typeof(double);
-            dgwOrderDetails.Columns.Add(totalColumn);
-
-            DataGridViewTextBoxColumn noteColumn = new DataGridViewTextBoxColumn();
-            if (isUpdating)
-            {
-                noteColumn.DataPropertyName = "Note";
-            }
-            //noteColumn.DataPropertyName = "Note";
-            noteColumn.Width = 100;
-            noteColumn.HeaderText = "Ghi chú";
-            //numberUnitColumn.Frozen = true;
-            noteColumn.ValueType = typeof(string);
-            dgwOrderDetails.Columns.Add(noteColumn);
-
-            //DataGridViewImageColumn deleteButton = new DataGridViewImageColumn();
-            //deleteButton.DataPropertyName = "DeleteButton";
-            //deleteButton.Image = Properties.Resources.erase;
-            //deleteButton.Width = 100;
-            //deleteButton.HeaderText = "Xóa";
-            //deleteButton.ReadOnly = true;
-            //deleteButton.ImageLayout = DataGridViewImageCellLayout.Normal;
-
-
-
-            //dgwOrderDetails.Columns.Add(deleteButton);
-        }
+        
 
         private void dgwOrderDetails_DataError(object sender, DataGridViewDataErrorEventArgs e)
         {
-            MessageBox.Show("Có lỗi nhập liệu xảy ra,vui lòng kiểm tra lại!");
+            //MessageBox.Show("Có lỗi nhập liệu xảy ra,vui lòng kiểm tra lại!");
         }
 
         private void dgwOrderDetails_CellEndEdit(object sender, DataGridViewCellEventArgs e)
@@ -694,6 +515,7 @@ namespace BaoHien.UI
                     prodCode.MaxDropDownItems = 5;
 
                 }
+                this.validator1.SetType(prodCode, Itboy.Components.ValidationType.Required);
             }
             else if (dgwOrderDetails.CurrentCell.ColumnIndex == 1)
             {
@@ -713,47 +535,28 @@ namespace BaoHien.UI
                         prodCode.MaxDropDownItems = 5;
 
                     }
+                    this.validator1.SetType(prodCode, Itboy.Components.ValidationType.Required);
                 }
 
             }
-            //if (dgwOrderDetails.CurrentCell.ColumnIndex == 0)
-            //{
-            //    var source = new AutoCompleteStringCollection();
-            //    String[] stringArray = Array.ConvertAll<Product, String>(products.ToArray(), delegate(Product row) { return (String)row.ProductName; });
-            //    source.AddRange(stringArray);
-
-            //    ComboBox prodCode = e.Control as ComboBox;
-            //    if (prodCode != null)
-            //    {
-            //        prodCode.DropDownStyle = ComboBoxStyle.DropDown;
-            //        prodCode.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-            //        prodCode.AutoCompleteCustomSource = source;
-            //        prodCode.AutoCompleteSource = AutoCompleteSource.CustomSource;
-            //        prodCode.MaxDropDownItems = 5;
-                   
-            //    }
-            //}
-            //else if (dgwOrderDetails.CurrentCell.ColumnIndex == 1)
-            //{
-            //    if (baseAttributesAtRow != null)
-            //    {
-            //        var source = new AutoCompleteStringCollection();
-            //        String[] stringArray = Array.ConvertAll<BaseAttribute, String>(baseAttributesAtRow.ToArray(), delegate(BaseAttribute row) { return (String)row.AttributeName; });
-            //        source.AddRange(stringArray);
-
-            //        ComboBox prodCode = e.Control as ComboBox;
-            //        if (prodCode != null)
-            //        {
-            //            prodCode.DropDownStyle = ComboBoxStyle.DropDown;
-            //            prodCode.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-            //            prodCode.AutoCompleteCustomSource = source;
-            //            prodCode.AutoCompleteSource = AutoCompleteSource.CustomSource;
-            //            prodCode.MaxDropDownItems = 5;
-
-            //        }
-            //    }
-                
-            //}
+            else if (dgwOrderDetails.CurrentCell.ColumnIndex == 2)
+            {
+                TextBox numberOfUnit = e.Control as TextBox;
+                this.validator1.SetRegularExpression(numberOfUnit, BHConstant.REGULAR_EXPRESSION_FOR_NUMBER);
+                this.validator1.SetType(numberOfUnit, Itboy.Components.ValidationType.RegularExpression);
+            }
+            else if (dgwOrderDetails.CurrentCell.ColumnIndex == 3)
+            {
+                TextBox price = e.Control as TextBox;
+                this.validator1.SetRegularExpression(price, BHConstant.REGULAR_EXPRESSION_FOR_CURRENCY);
+                this.validator1.SetType(price, Itboy.Components.ValidationType.RegularExpression);
+            }
+            else if (dgwOrderDetails.CurrentCell.ColumnIndex == 4)
+            {
+                TextBox total = e.Control as TextBox;
+                this.validator1.SetRegularExpression(total, BHConstant.REGULAR_EXPRESSION_FOR_CURRENCY);
+                this.validator1.SetType(total, Itboy.Components.ValidationType.RegularExpression);
+            }
             
 
         }

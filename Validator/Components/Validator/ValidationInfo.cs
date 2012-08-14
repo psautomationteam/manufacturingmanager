@@ -18,7 +18,13 @@ namespace Itboy.Components
         {
             private ErrorProvider errorProvider;
             private Control control;
+            private string errorMessage;
 
+            public string ErrorMessage
+            {
+                get { return errorMessage; }
+                set { errorMessage = value; }
+            }
             private bool error;
             /// <summary>
             /// Gets a value indicating current control whether has exist error.
@@ -718,7 +724,27 @@ namespace Itboy.Components
                         message = null;
                         break;
                 }
-                this.errorProvider.SetError(control, message);
+                if (control is DataGridViewComboBoxEditingControl || control is DataGridViewTextBoxEditingControl)
+                {
+                    DataGridView dgv = null;
+                    if (control is DataGridViewComboBoxEditingControl)
+                    {
+                        dgv = ((DataGridViewComboBoxEditingControl)control).EditingControlDataGridView;
+                    }
+                    if (control is DataGridViewTextBoxEditingControl)
+                    {
+                        dgv = ((DataGridViewTextBoxEditingControl)control).EditingControlDataGridView;
+                    }
+                    if (dgv != null)
+                    {
+                        dgv.CurrentCell.ErrorText = message;
+                    }
+                }
+                else
+                {
+                    this.errorProvider.SetError(control, message);
+                }
+                
 
                 if (message == null)
                 {
@@ -726,6 +752,7 @@ namespace Itboy.Components
                 }
                 else
                 {
+                    ErrorMessage = message;
                     this.error = true;
                 }
             }

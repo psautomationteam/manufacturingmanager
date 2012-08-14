@@ -31,6 +31,7 @@ namespace BaoHien.UI
         BindingList<Product> productForMaterials;
         BindingList<BaseAttribute> baseAttributesAtRowForMaterial;
         BindingList<BaseAttribute> baseAttributesAtRowForProduct;
+       
         public AddProductionRequest()
         {
             InitializeComponent();
@@ -96,7 +97,7 @@ namespace BaoHien.UI
             numberUnitColumn.DataPropertyName = "NumberUnit";
             numberUnitColumn.HeaderText = "Số lượng";
             //numberUnitColumn.Frozen = true;
-            numberUnitColumn.ValueType = typeof(int);
+            //numberUnitColumn.ValueType = typeof(int);
             numberUnitColumn.ReadOnly = true;
             dgvMaterial.Columns.Add(numberUnitColumn);
 
@@ -176,7 +177,7 @@ namespace BaoHien.UI
             numberUnitColumn.DataPropertyName = "NumberUnit";
             numberUnitColumn.HeaderText = "Số lượng";
             //numberUnitColumn.Frozen = true;
-            numberUnitColumn.ValueType = typeof(int);
+            //numberUnitColumn.ValueType = typeof(int);
             dgvProduct.Columns.Add(numberUnitColumn);
 
 
@@ -252,6 +253,7 @@ namespace BaoHien.UI
                     prodCode.MaxDropDownItems = 5;
 
                 }
+                this.validator1.SetType(prodCode, Itboy.Components.ValidationType.Required);
             }
             else if (dgvMaterial.CurrentCell.ColumnIndex == 1)
             {
@@ -271,82 +273,93 @@ namespace BaoHien.UI
                         prodCode.MaxDropDownItems = 5;
 
                     }
+                    this.validator1.SetType(prodCode, Itboy.Components.ValidationType.Required);
                 }
 
+            }
+            else if (dgvProduct.CurrentCell.ColumnIndex == 2)
+            {
+                TextBox numberOfUnit = e.Control as TextBox;
+                this.validator1.SetRegularExpression(numberOfUnit, BHConstant.REGULAR_EXPRESSION_FOR_NUMBER);
+                this.validator1.SetType(numberOfUnit, Itboy.Components.ValidationType.RegularExpression);
             }
         }
 
         private void dgvMaterial_CellEnter(object sender, DataGridViewCellEventArgs e)
         {
-
+             
         }
 
         private void dgvMaterial_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
-            DataGridView dgv = (DataGridView)sender;
-            if (productionRequestDetailInMaterials == null)
+            if (this.validator1.Validate())
             {
-                productionRequestDetailInMaterials = new BindingList<ProductionRequestDetail>();
-            }
-            if (productionRequestDetailInMaterials.Count < dgvMaterial.RowCount)
-            {
-                ProductionRequestDetail productionRequestDetail = new ProductionRequestDetail();
-                productionRequestDetail.Direction = false;
-                productionRequestDetailInMaterials.Add(productionRequestDetail);
-            }
-
-
-            if (dgv.CurrentCell.Value != null)
-            {
-                if (e.ColumnIndex == 0)
+                DataGridView dgv = (DataGridView)sender;
+                if (productionRequestDetailInMaterials == null)
                 {
-                    productionRequestDetailInMaterials[e.RowIndex].ProductId = (int)dgv.CurrentCell.Value;
-                    ProductAttributeService productAttributeService = new ProductAttributeService();
-                    List<ProductAttribute> productAttributes = productAttributeService.SelectProductAttributeByWhere(ba => ba.Id == (int)dgv.CurrentCell.Value);
-                    baseAttributesAtRowForMaterial = new BindingList<BaseAttribute>();
-                    foreach (ProductAttribute pa in productAttributes)
-                    {
-                        baseAttributesAtRowForMaterial.Add(pa.BaseAttribute);
-                    }
-                    DataGridViewComboBoxCell currentCell = (DataGridViewComboBoxCell)dgvMaterial.Rows[e.RowIndex].Cells[1];
-                    currentCell.DataSource = baseAttributesAtRowForMaterial;
-                    if (productionRequestDetailInMaterials.Count > e.RowIndex && baseAttributesAtRowForMaterial.Count > 0)
-                    {
-                        productionRequestDetailInMaterials[e.RowIndex].AttributeId = baseAttributesAtRowForMaterial[0].Id;
-                        currentCell.Value = baseAttributesAtRowForMaterial[0].Id;
-                    }
-                    if (baseAttributesAtRowForMaterial.Count > 0)
-                        dgv.Rows[e.RowIndex].Cells[2].ReadOnly = false;
-
-
+                    productionRequestDetailInMaterials = new BindingList<ProductionRequestDetail>();
                 }
-                else if (e.ColumnIndex == 1)
+                if (productionRequestDetailInMaterials.Count < dgvMaterial.RowCount)
                 {
-                    productionRequestDetailInMaterials[e.RowIndex].AttributeId = (int)dgv.CurrentCell.Value;
+                    ProductionRequestDetail productionRequestDetail = new ProductionRequestDetail();
+                    productionRequestDetail.Direction = false;
+                    productionRequestDetailInMaterials.Add(productionRequestDetail);
                 }
-                else if (e.ColumnIndex == 2)
+
+
+                if (dgv.CurrentCell.Value != null)
                 {
-                    MaterialInStockService mis = new MaterialInStockService();
-                    List<MaterialInStock> lstMaterial = mis.SelectMaterialInStockByWhere(pt => pt.Id == productionRequestDetailInMaterials[e.RowIndex].ProductId && pt.AttributeId == productionRequestDetailInMaterials[e.RowIndex].AttributeId);
-                    if (lstMaterial.Count == 0 || lstMaterial.First<MaterialInStock>().NumberOfItem == 0)
+                    if (e.ColumnIndex == 0)
                     {
-                        MessageBox.Show("Số lượng vật liệu trong kho đã hết");
-                        dgv.Rows[e.RowIndex].Cells[2].Value=0;
+                        productionRequestDetailInMaterials[e.RowIndex].ProductId = (int)dgv.CurrentCell.Value;
+                        ProductAttributeService productAttributeService = new ProductAttributeService();
+                        List<ProductAttribute> productAttributes = productAttributeService.SelectProductAttributeByWhere(ba => ba.Id == (int)dgv.CurrentCell.Value);
+                        baseAttributesAtRowForMaterial = new BindingList<BaseAttribute>();
+                        foreach (ProductAttribute pa in productAttributes)
+                        {
+                            baseAttributesAtRowForMaterial.Add(pa.BaseAttribute);
+                        }
+                        DataGridViewComboBoxCell currentCell = (DataGridViewComboBoxCell)dgvMaterial.Rows[e.RowIndex].Cells[1];
+                        currentCell.DataSource = baseAttributesAtRowForMaterial;
+                        if (productionRequestDetailInMaterials.Count > e.RowIndex && baseAttributesAtRowForMaterial.Count > 0)
+                        {
+                            productionRequestDetailInMaterials[e.RowIndex].AttributeId = baseAttributesAtRowForMaterial[0].Id;
+                            currentCell.Value = baseAttributesAtRowForMaterial[0].Id;
+                        }
+                        if (baseAttributesAtRowForMaterial.Count > 0)
+                            dgv.Rows[e.RowIndex].Cells[2].ReadOnly = false;
+
 
                     }
-                    else if (lstMaterial.First<MaterialInStock>().NumberOfItem < (int)dgv.Rows[e.RowIndex].Cells[2].Value)
+                    else if (e.ColumnIndex == 1)
                     {
-                        MessageBox.Show("Số lượng vật liệu trong kho còn lại là: " + lstMaterial.First<MaterialInStock>().NumberOfItem.ToString());
-                        dgv.Rows[e.RowIndex].Cells[2].Value=0;
+                        productionRequestDetailInMaterials[e.RowIndex].AttributeId = (int)dgv.CurrentCell.Value;
+                    }
+                    else if (e.ColumnIndex == 2)
+                    {
+                        MaterialInStockService mis = new MaterialInStockService();
+                        List<MaterialInStock> lstMaterial = mis.SelectMaterialInStockByWhere(pt => pt.Id == productionRequestDetailInMaterials[e.RowIndex].ProductId && pt.AttributeId == productionRequestDetailInMaterials[e.RowIndex].AttributeId);
+                        if (lstMaterial.Count == 0 || lstMaterial.First<MaterialInStock>().NumberOfItem == 0)
+                        {
+                            MessageBox.Show("Số lượng vật liệu trong kho đã hết");
+                            dgv.Rows[e.RowIndex].Cells[2].Value = 0;
+
+                        }
+                        else if (lstMaterial.First<MaterialInStock>().NumberOfItem < (int)dgv.Rows[e.RowIndex].Cells[2].Value)
+                        {
+                            MessageBox.Show("Số lượng vật liệu trong kho còn lại là: " + lstMaterial.First<MaterialInStock>().NumberOfItem.ToString());
+                            dgv.Rows[e.RowIndex].Cells[2].Value = 0;
+                        }
+                    }
+                    else if (e.ColumnIndex == 3)
+                    {
+                        productionRequestDetailInMaterials[e.RowIndex].Note = (string)dgv.CurrentCell.Value;
                     }
                 }
-                else if (e.ColumnIndex == 3)
-                {
-                    productionRequestDetailInMaterials[e.RowIndex].Note = (string)dgv.CurrentCell.Value;
-                }
+
+                calculateTotalForMaterialGrid();
             }
             
-            calculateTotalForMaterialGrid();
         }
 
 
@@ -364,7 +377,7 @@ namespace BaoHien.UI
         }
         private void dgvMaterial_DataError(object sender, DataGridViewDataErrorEventArgs e)
         {
-            MessageBox.Show("Có lỗi nhập liệu xảy ra,vui lòng kiểm tra lại!");
+            //MessageBox.Show("Có lỗi nhập liệu xảy ra,vui lòng kiểm tra lại!");
         }
 
         private void dgvProduct_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
@@ -383,8 +396,11 @@ namespace BaoHien.UI
                     prodCode.AutoCompleteCustomSource = source;
                     prodCode.AutoCompleteSource = AutoCompleteSource.CustomSource;
                     prodCode.MaxDropDownItems = 5;
-
+                   
                 }
+                
+                this.validator1.SetType(prodCode, Itboy.Components.ValidationType.Required);
+
             }
             else if (dgvProduct.CurrentCell.ColumnIndex == 1)
             {
@@ -404,200 +420,216 @@ namespace BaoHien.UI
                         prodCode.MaxDropDownItems = 5;
 
                     }
+                    this.validator1.SetType(prodCode, Itboy.Components.ValidationType.Required);
                 }
 
+            }
+            else if (dgvProduct.CurrentCell.ColumnIndex == 2)
+            {
+                TextBox numberOfUnit = e.Control as TextBox;
+                this.validator1.SetRegularExpression(numberOfUnit,BHConstant.REGULAR_EXPRESSION_FOR_NUMBER);
+                this.validator1.SetType(numberOfUnit, Itboy.Components.ValidationType.RegularExpression);
             }
         }
 
         private void dgvProduct_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
-            DataGridView dgv = (DataGridView)sender;
-            if (productionRequestDetailInProductions == null)
+            
+            if (this.validator1.Validate())
             {
-                productionRequestDetailInProductions = new BindingList<ProductionRequestDetail>();
-            }
-            if (productionRequestDetailInProductions.Count < dgvProduct.RowCount)
-            {
-                ProductionRequestDetail productionRequestDetail = new ProductionRequestDetail();
-                productionRequestDetail.Direction = true;
-                productionRequestDetailInProductions.Add(productionRequestDetail);
-            }
-            if (dgv.CurrentCell.Value != null)
-            {
-                if (e.ColumnIndex == 0)
+                DataGridView dgv = (DataGridView)sender;
+                if (productionRequestDetailInProductions == null)
                 {
-
-                    productionRequestDetailInProductions[e.RowIndex].ProductId = (int)dgv.CurrentCell.Value;
-                    ProductAttributeService productAttributeService = new ProductAttributeService();
-                    List<ProductAttribute> productAttributes = productAttributeService.SelectProductAttributeByWhere(ba => ba.Id == (int)dgv.CurrentCell.Value);
-                    baseAttributesAtRowForProduct = new BindingList<BaseAttribute>();
-                    foreach (ProductAttribute pa in productAttributes)
+                    productionRequestDetailInProductions = new BindingList<ProductionRequestDetail>();
+                }
+                if (productionRequestDetailInProductions.Count < dgvProduct.RowCount)
+                {
+                    ProductionRequestDetail productionRequestDetail = new ProductionRequestDetail();
+                    productionRequestDetail.Direction = true;
+                    productionRequestDetailInProductions.Add(productionRequestDetail);
+                }
+                if (dgv.CurrentCell.Value != null)
+                {
+                    if (e.ColumnIndex == 0)
                     {
-                        baseAttributesAtRowForProduct.Add(pa.BaseAttribute);
+
+                        productionRequestDetailInProductions[e.RowIndex].ProductId = (int)dgv.CurrentCell.Value;
+                        ProductAttributeService productAttributeService = new ProductAttributeService();
+                        List<ProductAttribute> productAttributes = productAttributeService.SelectProductAttributeByWhere(ba => ba.Id == (int)dgv.CurrentCell.Value);
+                        baseAttributesAtRowForProduct = new BindingList<BaseAttribute>();
+                        foreach (ProductAttribute pa in productAttributes)
+                        {
+                            baseAttributesAtRowForProduct.Add(pa.BaseAttribute);
+                        }
+                        DataGridViewComboBoxCell currentCell = (DataGridViewComboBoxCell)dgvProduct.Rows[e.RowIndex].Cells[1];
+                        currentCell.DataSource = baseAttributesAtRowForProduct;
+                        if (baseAttributesAtRowForProduct.Count > e.RowIndex && baseAttributesAtRowForProduct.Count > 0)
+                        {
+                            productionRequestDetailInProductions[e.RowIndex].AttributeId = baseAttributesAtRowForProduct[0].Id;
+                            currentCell.Value = baseAttributesAtRowForProduct[0].Id;
+                        }
+
+                        if (baseAttributesAtRowForProduct.Count > 0)
+                            dgvProduct.Rows[e.RowIndex].Cells[2].ReadOnly = false;
+
                     }
-                DataGridViewComboBoxCell currentCell = (DataGridViewComboBoxCell)dgvProduct.Rows[e.RowIndex].Cells[1];
-                    currentCell.DataSource = baseAttributesAtRowForProduct;
-                    if (baseAttributesAtRowForProduct.Count > e.RowIndex && baseAttributesAtRowForProduct.Count > 0)
+                    else if (e.ColumnIndex == 1)
                     {
-                        productionRequestDetailInProductions[e.RowIndex].AttributeId = baseAttributesAtRowForProduct[0].Id;
-                        currentCell.Value = baseAttributesAtRowForProduct[0].Id;
+                        productionRequestDetailInProductions[e.RowIndex].AttributeId = (int)dgv.CurrentCell.Value;
+                    }
+                    else if (e.ColumnIndex == 2)
+                    {
+                        productionRequestDetailInProductions[e.RowIndex].NumberUnit = (int)dgv.CurrentCell.Value;
+                    }
+                    else if (e.ColumnIndex == 3)
+                    {
+                        productionRequestDetailInProductions[e.RowIndex].Note = (string)dgv.CurrentCell.Value;
                     }
 
-                    if (baseAttributesAtRowForProduct.Count > 0)
-                        dgvProduct.Rows[e.RowIndex].Cells[2].ReadOnly = false;
 
                 }
-                else if (e.ColumnIndex == 1)
-                {
-                    productionRequestDetailInProductions[e.RowIndex].AttributeId = (int)dgv.CurrentCell.Value;
-                }
-                else if (e.ColumnIndex == 2)
-                {
-                    productionRequestDetailInProductions[e.RowIndex].NumberUnit = (int)dgv.CurrentCell.Value;
-                }
-                else if (e.ColumnIndex == 3)
-                {
-                    productionRequestDetailInProductions[e.RowIndex].Note = (string)dgv.CurrentCell.Value;
-                }
-                
-
+                calculateTotalForProductGrid();
             }
-            calculateTotalForProductGrid();
+            
         }
 
         private void dgvProduct_CellEnter(object sender, DataGridViewCellEventArgs e)
         {
-
+            
         }
 
         private void dgvProduct_DataError(object sender, DataGridViewDataErrorEventArgs e)
         {
-            MessageBox.Show("Có lỗi nhập liệu xảy ra,vui lòng kiểm tra lại!");
+            //MessageBox.Show("Có lỗi nhập liệu xảy ra,vui lòng kiểm tra lại!");
         }
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            ProductionRequestService prs = new ProductionRequestService();
-            ProductionRequestDetailService productionRequestDetailService = new ProductionRequestDetailService();
-            MaterialInStockService mis = new MaterialInStockService();
-
-            if (productionRequest != null)
+            if (this.validator1.Validate())
             {
-                bool result = prs.UpdateProductionRequest(productionRequest);
-                if (result)
+                ProductionRequestService prs = new ProductionRequestService();
+                ProductionRequestDetailService productionRequestDetailService = new ProductionRequestDetailService();
+                MaterialInStockService mis = new MaterialInStockService();
+
+                if (productionRequest != null)
                 {
-                    foreach (ProductionRequestDetail prd in productionRequestDetailInProductions)
+                    bool result = prs.UpdateProductionRequest(productionRequest);
+                    if (result)
                     {
-                        if (prd.ProductId > 0 && prd.AttributeId > 0)
+                        foreach (ProductionRequestDetail prd in productionRequestDetailInProductions)
                         {
-                            if (prd.Id == 0)
+                            if (prd.ProductId > 0 && prd.AttributeId > 0)
                             {
-                                prd.ProductionRequestId = productionRequest.Id;
-                                result = productionRequestDetailService.AddProductionRequestDetail(prd);
+                                if (prd.Id == 0)
+                                {
+                                    prd.ProductionRequestId = productionRequest.Id;
+                                    result = productionRequestDetailService.AddProductionRequestDetail(prd);
+                                }
+                                else
+                                {
+                                    result = productionRequestDetailService.UpdateProductionRequestDetail(prd);
+                                }
                             }
-                            else
-                            {
-                                result = productionRequestDetailService.UpdateProductionRequestDetail(prd);
-                            }
-                        }
-                        
 
-                    }
-                    foreach (ProductionRequestDetail prd in productionRequestDetailInMaterials)
-                    {
-                        if (prd.ProductId > 0 && prd.AttributeId > 0)
+
+                        }
+                        foreach (ProductionRequestDetail prd in productionRequestDetailInMaterials)
                         {
-                            if (prd.Id == 0)
+                            if (prd.ProductId > 0 && prd.AttributeId > 0)
                             {
-                                prd.ProductionRequestId = productionRequest.Id;
-                                result = productionRequestDetailService.AddProductionRequestDetail(prd);
+                                if (prd.Id == 0)
+                                {
+                                    prd.ProductionRequestId = productionRequest.Id;
+                                    result = productionRequestDetailService.AddProductionRequestDetail(prd);
+                                }
+                                else
+                                {
+                                    result = productionRequestDetailService.UpdateProductionRequestDetail(prd);
+                                }
                             }
-                            else
-                            {
-                                result = productionRequestDetailService.UpdateProductionRequestDetail(prd);
-                            }
+
+
                         }
-
-
                     }
-                }
-                
-                if (result)
-                {
-                    MessageBox.Show("Phiếu sản xuất đã được cập nhật thành công");
-                    if (this.CallFromUserControll != null && this.CallFromUserControll is ProductionRequestList)
+
+                    if (result)
                     {
-                        ((ProductionRequestList)this.CallFromUserControll).loadProductionRequestList();
+                        MessageBox.Show("Phiếu sản xuất đã được cập nhật thành công");
+                        if (this.CallFromUserControll != null && this.CallFromUserControll is ProductionRequestList)
+                        {
+                            ((ProductionRequestList)this.CallFromUserControll).loadProductionRequestList();
+                        }
+                        this.Close();
                     }
-                    this.Close();
+                    else
+                    {
+                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                        return;
+                    }
                 }
                 else
                 {
-                    MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
-                    return;
+                    int userId = 0;
+                    if (Global.CurrentUser != null)
+                    {
+                        userId = Global.CurrentUser.Id;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                        return;
+                    }
+                    productionRequest = new ProductionRequest
+                    {
+                        Note = txtNote.Text,
+                        ReqCode = txtCode.Text,
+                        RequestedDate = DateTime.Now,
+                        RequestedBy = userId,
+
+                    };
+
+                    bool result = prs.AddProductionRequest(productionRequest);
+                    if (result)
+                    {
+                        long newProductionRequestId = BaoHienRepository.GetMaxId<ProductionRequest>();
+
+                        foreach (ProductionRequestDetail prd in productionRequestDetailInProductions)
+                        {
+                            if (prd.ProductId > 0 && prd.AttributeId > 0)
+                            {
+                                prd.ProductionRequestId = (int)newProductionRequestId;
+                                bool ret = productionRequestDetailService.AddProductionRequestDetail(prd);
+                                if (!ret)
+                                {
+                                    MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                                    return;
+                                }
+                            }
+                        }
+                        foreach (ProductionRequestDetail prd in productionRequestDetailInMaterials)
+                        {
+                            if (prd.ProductId > 0 && prd.AttributeId > 0)
+                            {
+                                prd.ProductionRequestId = (int)newProductionRequestId;
+                                bool ret = productionRequestDetailService.AddProductionRequestDetail(prd);
+                                if (!ret)
+                                {
+                                    MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                                    return;
+                                }
+                            }
+                        }
+                        MessageBox.Show("Phiếu sản xuất đã được cập nhật thành công");
+                        this.Close();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                        return;
+                    }
                 }
             }
-            else
-            {
-                int userId = 0;
-                if (Global.CurrentUser != null)
-                {
-                    userId = Global.CurrentUser.Id;
-                }
-                else
-                {
-                    MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
-                    return;
-                }
-                productionRequest = new ProductionRequest
-                {
-                    Note = txtNote.Text,
-                    ReqCode = txtCode.Text,
-                    RequestedDate = DateTime.Now,
-                    RequestedBy = userId,
-
-                };
-                
-                bool result = prs.AddProductionRequest(productionRequest);
-                if (result)
-                {
-                    long newProductionRequestId = BaoHienRepository.GetMaxId<ProductionRequest>();
-                    
-                    foreach (ProductionRequestDetail prd in productionRequestDetailInProductions)
-                    {
-                        if (prd.ProductId > 0 && prd.AttributeId > 0)
-                        {
-                            prd.ProductionRequestId = (int)newProductionRequestId;
-                            bool ret = productionRequestDetailService.AddProductionRequestDetail(prd);
-                            if (!ret)
-                            {
-                                MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
-                                return;
-                            }
-                        }
-                    }
-                    foreach (ProductionRequestDetail prd in productionRequestDetailInMaterials)
-                    {
-                        if (prd.ProductId > 0 && prd.AttributeId > 0)
-                        {
-                            prd.ProductionRequestId = (int)newProductionRequestId;
-                            bool ret = productionRequestDetailService.AddProductionRequestDetail(prd);
-                            if (!ret)
-                            {
-                                MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
-                                return;
-                            }
-                        }
-                    }
-                    MessageBox.Show("Phiếu sản xuất đã được cập nhật thành công");
-                    this.Close();
-                }
-                else
-                {
-                    MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
-                    return;
-                }
-            }
+            
             
         }
 
@@ -669,6 +701,18 @@ namespace BaoHien.UI
 
 
             }
+        }
+
+        private void dgvMaterial_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
+        {
+           
+            
+            //this.validator1.SetType(sender, Itboy.Components.ValidationType.Required);
+        }
+
+        private void dgvProduct_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
+        {
+            
         }
         
     }
