@@ -59,6 +59,9 @@
     <Compile Include="Model\ProductionRequestModel.cs" />
     <Compile Include="Model\ProductTypeSearchCriteria.cs" />
     <Compile Include="Model\ProductSearchCriteria.cs" />
+    <Compile Include="UI\PrintPreviewCustom\PCPrint.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Services\Attribute\BaseAttributeService.cs" />
     <Compile Include="Services\Base\BaseService.cs" />
     <Compile Include="Services\Bill\BillService.cs" />
@@ -131,6 +134,16 @@
     <Compile Include="UI\Order\OrderList.Designer.cs">
       <DependentUpon>OrderList.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\PrintPreviewCustom\CoolPrintPreviewControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\PrintPreviewCustom\CoolPrintPreviewDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\PrintPreviewCustom\CoolPrintPreviewDialog.designer.cs">
+      <DependentUpon>CoolPrintPreviewDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\PrintPreviewCustom\PageImageList.cs" />
     <Compile Include="UI\ProductionRequest\AddProductionRequest.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -269,6 +282,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Order\OrderList.resx">
       <DependentUpon>OrderList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\PrintPreviewCustom\CoolPrintPreviewDialog.resx">
+      <DependentUpon>CoolPrintPreviewDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\ProductionRequest\AddProductionRequest.resx">
       <DependentUpon>AddProductionRequest.cs</DependentUpon>

@@ -57,6 +57,7 @@ namespace BaoHien.UI
             this.btnPrintOrder = new System.Windows.Forms.Button();
             this.btnPrintXK = new System.Windows.Forms.Button();
             this.validator1 = new Itboy.Components.Validator(this.components);
+            this.printDoc = new System.Drawing.Printing.PrintDocument();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgwOrderDetails)).BeginInit();
@@ -312,6 +313,7 @@ namespace BaoHien.UI
             this.btnPrintOrder.TabIndex = 9;
             this.btnPrintOrder.Text = "In phiếu BH";
             this.btnPrintOrder.UseVisualStyleBackColor = true;
+            this.btnPrintOrder.Click += new System.EventHandler(this.btnPrintOrder_Click);
             // 
             // btnPrintXK
             // 
@@ -325,6 +327,10 @@ namespace BaoHien.UI
             // validator1
             // 
             this.validator1.Form = this;
+            // 
+            // printDoc
+            // 
+            this.printDoc.PrintPage += new System.Drawing.Printing.PrintPageEventHandler(this.printDoc_PrintPage);
             // 
             // AddOrder
             // 
@@ -384,5 +390,6 @@ namespace BaoHien.UI
         private System.Windows.Forms.Button btnPrintOrder;
         private System.Windows.Forms.Button btnPrintXK;
         private Itboy.Components.Validator validator1;
+        private System.Drawing.Printing.PrintDocument printDoc;
     }
 }
