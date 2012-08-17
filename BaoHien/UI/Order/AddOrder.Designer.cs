@@ -323,6 +323,7 @@ namespace BaoHien.UI
             this.btnPrintXK.TabIndex = 10;
             this.btnPrintXK.Text = "In phiễu XK";
             this.btnPrintXK.UseVisualStyleBackColor = true;
+            this.btnPrintXK.Click += new System.EventHandler(this.btnPrintXK_Click);
             // 
             // validator1
             // 

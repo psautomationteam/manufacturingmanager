@@ -21,6 +21,8 @@ using System.Drawing.Imaging;
 using System.Drawing.Printing;
 using System.IO;
 using CoolPrintPreview;
+using System.Reflection;
+using Word = Microsoft.Office.Interop.Word;
 namespace BaoHien.UI
 {
     public partial class AddOrder : BaseForm
@@ -619,26 +621,15 @@ namespace BaoHien.UI
         }
         private void btnPrintOrder_Click(object sender, EventArgs e)
         {
-
-            CaptureScreen();
-            using (var dlg = new CoolPrintPreviewDialog())
-            {
-                dlg.Document = this.printDoc;
-                dlg.ShowDialog(this);
-            }
-           
-            //FileStream fileStream = new FileStream(@"c:\PrintPage.jpg", FileMode.Open, FileAccess.Read);
-
-            //StartPrint(fileStream, "Image");
-
-            //fileStream.Close();
-
-            //if (System.IO.File.Exists(@"c:\PrintPage.jpg"))
+            printOrder();
+            //CaptureScreen();
+            //using (var dlg = new CoolPrintPreviewDialog())
             //{
-
-            //    System.IO.File.Delete(@"c:\PrintPage.jpg");
-
+            //    dlg.Document = this.printDoc;
+            //    dlg.ShowDialog(this);
             //}
+           
+            
         }
         public void StartPrint(Stream streamToPrint, string streamType)
         {
@@ -704,7 +695,306 @@ namespace BaoHien.UI
             e.Graphics.DrawImage(MyImage, 0, 0);
             MyImage.Save(@"c:\PrintPage.jpg", ImageFormat.Jpeg);
         }
-    
+
+        private void btnPrintXK_Click(object sender, EventArgs e)
+        {
+            
+        }
+        private void printOrder()
+        {
+            object oMissing = System.Reflection.Missing.Value;
+            object oEndOfDoc = "\\endofdoc"; /* \endofdoc is a predefined bookmark */
+
+            //Start Word and create a new document.
+            Microsoft.Office.Interop.Word._Application oWord;
+            Word._Document oDoc;
+            oWord = new Word.Application();
+            oWord.Visible = true;
+            oDoc = oWord.Documents.Add(ref oMissing, ref oMissing,
+                ref oMissing, ref oMissing);
+
+            //Insert a paragraph at the beginning of the document.
+            Word.Paragraph oPara1;
+            oPara1 = oDoc.Content.Paragraphs.Add(ref oMissing);
+            oPara1.Range.Text = "Phiếu bán hàng";
+            oPara1.Range.Font.Bold = 1;
+            oPara1.Range.Font.Size = 30;
+            oPara1.Format.SpaceAfter = 24;    //24 pt spacing after paragraph.
+            oPara1.Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+            oPara1.Range.InsertParagraphAfter();
+
+            Word.Paragraph oPara3;
+            object oRng3 = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
+            oPara3 = oDoc.Content.Paragraphs.Add(ref oRng3);
+            oPara3.Range.Text = "Thông tin phiếu bán hàng";
+            oPara3.Format.SpaceAfter = 6;
+            oPara3.Range.Font.Size = 12;
+            oPara3.Range.InsertParagraphAfter();
+
+            Word.Table oTable2;
+            Word.Range wrdRng2 = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
+            oTable2 = oDoc.Tables.Add(wrdRng2, 3, 4, ref oMissing, ref oMissing);
+            oTable2.Range.ParagraphFormat.SpaceAfter = 6;
+            //oTable2.Borders.Enable = 1;
+
+            oTable2.Cell(1, 1).Range.Text = "Mã phiếu:";
+            oTable2.Cell(1, 1).Range.Bold = 1;
+            oTable2.Cell(1, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
+            oTable2.Cell(1, 2).Range.Text = txtOrderCode.Text != null ? txtOrderCode.Text : "";
+            oTable2.Cell(1, 2).Range.Bold = 0;
+            oTable2.Cell(1, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
+
+            oTable2.Cell(1, 3).Range.Text = "Khách hàng:";
+            oTable2.Cell(1, 3).Range.Bold = 1;
+            oTable2.Cell(1, 3).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
+
+            if (cbxCustomer.SelectedValue != null)
+            {
+                oTable2.Cell(1, 4).Range.Text = customers.Where(cus => cus.Id == (int)cbxCustomer.SelectedValue).FirstOrDefault().CustomerName;
+            }
+            oTable2.Cell(1, 4).Range.Bold = 0;
+            oTable2.Cell(1, 4).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
+
+            oTable2.Cell(2, 1).Range.Text = "Ngày lập:";
+            oTable2.Cell(2, 1).Range.Bold = 1;
+            oTable2.Cell(2, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
+
+            oTable2.Cell(2, 2).Range.Text = txtCreatedDate.Text;
+            oTable2.Cell(2, 2).Range.Bold = 0;
+            oTable2.Cell(2, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
+
+            oTable2.Cell(2, 3).Range.Text = "Khấu chi:";
+            oTable2.Cell(2, 3).Range.Bold = 1;
+            oTable2.Cell(2, 3).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
+
+            oTable2.Cell(2, 4).Range.Text = txtDiscount.Text != null ? txtDiscount.Text : "";
+            oTable2.Cell(2, 4).Range.Bold = 0;
+            oTable2.Cell(2, 4).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
+
+            oTable2.Cell(3, 1).Range.Text = "VAT:";
+            oTable2.Cell(3, 1).Range.Bold = 1;
+            oTable2.Cell(3, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
+
+            oTable2.Cell(3, 2).Range.Text = txtVAT.Text != null ? txtVAT.Text : "";
+            oTable2.Cell(3, 2).Range.Bold = 0;
+            oTable2.Cell(3, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
+
+            //Insert a paragraph at the end of the document.
+            Word.Paragraph oPara2;
+            object oRng = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
+            oPara2 = oDoc.Content.Paragraphs.Add(ref oRng);
+            oPara2.Range.Text = "Chi tiết phiếu bán hàng";
+            oPara2.Format.SpaceAfter = 6;
+            oPara3.Range.Font.Size = 12;
+            oPara2.Range.InsertParagraphAfter();
+
+
+
+            //Insert a table, fill it with data, and make the first row
+            //bold and italic.
+            Word.Table oTable;
+            Word.Range wrdRng = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
+            oTable = oDoc.Tables.Add(wrdRng, dgwOrderDetails.RowCount + 1, dgwOrderDetails.ColumnCount, ref oMissing, ref oMissing);
+            oTable.Range.ParagraphFormat.SpaceAfter = 6;
+            oTable.Borders.Enable = 1;
+            int r, c;
+
+
+            for (r = 1; r <= dgwOrderDetails.RowCount; r++)
+                for (c = 1; c <= dgwOrderDetails.ColumnCount; c++)
+                {
+                    if (r == 1)
+                    {
+                        oTable.Cell(r, c).Range.Text = dgwOrderDetails.Columns[c - 1].HeaderText;
+                    }
+                    else
+                    {
+                        oTable.Cell(r, c).Range.Font.Bold = 0;
+                        if (c - 1 == 0)
+                        {
+                            if (dgwOrderDetails.Rows[r - 2].Cells[c - 1].Value != null)
+                            {
+                                oTable.Cell(r, c).Range.Text = products.ToList().Where(p => p.Id == orderDetails[r - 2].ProductId).FirstOrDefault().ProductName;
+                            }
+
+
+
+
+                        }
+                        else if (c - 1 == 1)
+                        {
+                            if (dgwOrderDetails.Rows[r - 2].Cells[c - 1].Value != null)
+                            {
+                                oTable.Cell(r, c).Range.Text = baseAttributesAtRow.ToList().Where(a => a.Id == (int)dgwOrderDetails.Rows[r - 2].Cells[c - 1].Value).FirstOrDefault().AttributeName;
+                            }
+
+                        }
+                        else if (c - 1 == 2)
+                        {
+                            if (dgwOrderDetails.Rows[r - 2].Cells[c - 1].Value != null)
+                            {
+                                oTable.Cell(r, c).Range.Text = ((int)dgwOrderDetails.Rows[r - 2].Cells[c - 1].Value).ToString();
+                            }
+
+                        }
+                        else if (c - 1 == 3)
+                        {
+                            if (dgwOrderDetails.Rows[r - 2].Cells[c - 1].Value != null)
+                            {
+                                oTable.Cell(r, c).Range.Text = ((double)dgwOrderDetails.Rows[r - 2].Cells[c - 1].Value).ToString();
+                            }
+                        }
+                        else if (c - 1 == 4)
+                        {
+                            if (dgwOrderDetails.Rows[r - 2].Cells[c - 1].Value != null)
+                            {
+                                oTable.Cell(r, c).Range.Text = ((double)dgwOrderDetails.Rows[r - 2].Cells[c - 1].Value).ToString();
+                            }
+
+                        }
+                        else if (c - 1 == 5)
+                        {
+                            if (dgwOrderDetails.Rows[r - 2].Cells[c - 1].Value != null)
+                            {
+                                oTable.Cell(r, c).Range.Text = ((string)dgwOrderDetails.Rows[r - 2].Cells[c - 1].Value);
+                            }
+
+                        }
+                    }
+
+
+                }
+            oTable.Rows[1].Range.Font.Bold = 1;
+            oTable.Rows[1].Range.Font.Italic = 1;
+
+            Word.Paragraph oPara4;
+            object oRng4 = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
+            oPara4 = oDoc.Content.Paragraphs.Add(ref oRng4);
+            oPara4.Format.SpaceAfter = 6;
+            oPara4.Range.Font.Size = 12;
+            oPara4.Range.InsertParagraphAfter();
+            Word.Table oTable3;
+            Word.Range wrdRng3 = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
+            oTable3 = oDoc.Tables.Add(wrdRng3, 2, 2, ref oMissing, ref oMissing);
+            oTable3.Range.ParagraphFormat.SpaceAfter = 6;
+            oTable2.Borders.Enable = 1;
+
+            oTable3.Cell(1, 1).Range.Text = "Giá trị phiếu hàng trước thuế và khấu hao:";
+            oTable3.Cell(1, 1).Range.Bold = 1;
+            oTable3.Cell(1, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
+            oTable3.Cell(1, 2).Range.Text = lblSubTotal.Text != null ? lblSubTotal.Text : "";
+            oTable3.Cell(1, 2).Range.Bold = 0;
+            oTable3.Cell(1, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
+
+            oTable3.Cell(2, 1).Range.Text = "Giá trị phiếu hàng sau thuế và khấu hao:";
+            oTable3.Cell(2, 1).Range.Bold = 1;
+            oTable3.Cell(2, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
+
+            oTable3.Cell(2, 2).Range.Text = lblGrantTotal.Text != null ? lblGrantTotal.Text : "";
+            oTable3.Cell(2, 2).Range.Bold = 0;
+            oTable3.Cell(2, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
+
+            Word.Paragraph oPara5;
+            object oRng5 = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
+            oPara5 = oDoc.Content.Paragraphs.Add(ref oRng5);
+            oPara5.Format.SpaceAfter = 6;
+            string createdBy = Global.CurrentUser.FullName;
+            if (order != null)
+            {
+                createdBy = order.SystemUser.FullName;
+            }
+            oPara5.Range.Text = "Người lập phiếu: " + createdBy;
+            oPara5.Range.Font.Size = 12;
+            oPara5.Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
+            oPara5.Range.InsertParagraphAfter();
+            ////Add some text after the table.
+            //Word.Paragraph oPara4;
+            //oRng = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
+            //oPara4 = oDoc.Content.Paragraphs.Add(ref oRng);
+            //oPara4.Range.InsertParagraphBefore();
+            //oPara4.Range.Text = "And here's another table:";
+            //oPara4.Format.SpaceAfter = 24;
+            //oPara4.Range.InsertParagraphAfter();
+
+            ////Insert a 5 x 2 table, fill it with data, and change the column widths.
+            //wrdRng = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
+            //oTable = oDoc.Tables.Add(wrdRng, 5, 2, ref oMissing, ref oMissing);
+            //oTable.Range.ParagraphFormat.SpaceAfter = 6;
+            //for (r = 1; r <= 5; r++)
+            //    for (c = 1; c <= 2; c++)
+            //    {
+            //        strText = "r" + r + "c" + c;
+            //        oTable.Cell(r, c).Range.Text = strText;
+            //    }
+            //oTable.Columns[1].Width = oWord.InchesToPoints(2); //Change width of columns 1 & 2
+            //oTable.Columns[2].Width = oWord.InchesToPoints(3);
+
+            ////Keep inserting text. When you get to 7 inches from top of the
+            ////document, insert a hard page break.
+            //object oPos;
+            //double dPos = oWord.InchesToPoints(7);
+            //oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range.InsertParagraphAfter();
+            //do
+            //{
+            //    wrdRng = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
+            //    wrdRng.ParagraphFormat.SpaceAfter = 6;
+            //    wrdRng.InsertAfter("A line of text");
+            //    wrdRng.InsertParagraphAfter();
+            //    oPos = wrdRng.get_Information
+            //                   (Word.WdInformation.wdVerticalPositionRelativeToPage);
+            //}
+            //while (dPos >= Convert.ToDouble(oPos));
+            //object oCollapseEnd = Microsoft.Office.Interop.Word.WdCollapseDirection.wdCollapseEnd;
+            //object oPageBreak = Microsoft.Office.Interop.Word.WdBreakType.wdPageBreak;
+            //wrdRng.Collapse(ref oCollapseEnd);
+            //wrdRng.InsertBreak(ref oPageBreak);
+            //wrdRng.Collapse(ref oCollapseEnd);
+            //wrdRng.InsertAfter("We're now on page 2. Here's my chart:");
+            //wrdRng.InsertParagraphAfter();
+
+            ////Insert a chart.
+            //Word.InlineShape oShape;
+            //object oClassType = "MSGraph.Chart.8";
+            //wrdRng = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
+            //oShape = wrdRng.InlineShapes.AddOLEObject(ref oClassType, ref oMissing,
+            //    ref oMissing, ref oMissing, ref oMissing,
+            //    ref oMissing, ref oMissing, ref oMissing);
+
+            ////Demonstrate use of late bound oChart and oChartApp objects to
+            ////manipulate the chart object with MSGraph.
+            //object oChart;
+            //object oChartApp;
+            //oChart = oShape.OLEFormat.Object;
+            //oChartApp = oChart.GetType().InvokeMember("Application",
+            //    BindingFlags.GetProperty, null, oChart, null);
+
+            ////Change the chart type to Line.
+            //object[] Parameters = new Object[1];
+            //Parameters[0] = 4; //xlLine = 4
+            //oChart.GetType().InvokeMember("ChartType", BindingFlags.SetProperty,
+            //    null, oChart, Parameters);
+
+            ////Update the chart image and quit MSGraph.
+            //oChartApp.GetType().InvokeMember("Update",
+            //    BindingFlags.InvokeMethod, null, oChartApp, null);
+            //oChartApp.GetType().InvokeMember("Quit",
+            //    BindingFlags.InvokeMethod, null, oChartApp, null);
+            ////... If desired, you can proceed from here using the Microsoft Graph 
+            ////Object model on the oChart and oChartApp objects to make additional
+            ////changes to the chart.
+
+            ////Set the width of the chart.
+            //oShape.Width = oWord.InchesToPoints(6.25f);
+            //oShape.Height = oWord.InchesToPoints(3.57f);
+
+            ////Add text after the chart.
+            //wrdRng = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
+            //wrdRng.InsertParagraphAfter();
+            //wrdRng.InsertAfter("THE END.");
+            oDoc.PrintPreview();
+            //Close this form.
+            //this.Close();
+        }
 
         
     }
