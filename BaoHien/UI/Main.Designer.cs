@@ -53,6 +53,7 @@
             this.hoaHồngNVToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuSystem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuSystemUser = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuDBConfig = new System.Windows.Forms.ToolStripMenuItem();
             this.menuHelp = new System.Windows.Forms.ToolStripMenuItem();
             this.menuGuide = new System.Windows.Forms.ToolStripMenuItem();
             this.menuAbout = new System.Windows.Forms.ToolStripMenuItem();
@@ -264,7 +265,8 @@
             // menuSystem
             // 
             this.menuSystem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.menuSystemUser});
+            this.menuSystemUser,
+            this.menuDBConfig});
             this.menuSystem.Name = "menuSystem";
             this.menuSystem.Size = new System.Drawing.Size(72, 20);
             this.menuSystem.Text = "Hệ Thống";
@@ -272,9 +274,16 @@
             // menuSystemUser
             // 
             this.menuSystemUser.Name = "menuSystemUser";
-            this.menuSystemUser.Size = new System.Drawing.Size(139, 22);
+            this.menuSystemUser.Size = new System.Drawing.Size(167, 22);
             this.menuSystemUser.Text = "Người Dùng";
             this.menuSystemUser.Click += new System.EventHandler(this.menuSystemUser_Click);
+            // 
+            // menuDBConfig
+            // 
+            this.menuDBConfig.Name = "menuDBConfig";
+            this.menuDBConfig.Size = new System.Drawing.Size(167, 22);
+            this.menuDBConfig.Text = "Cấu Hình Dữ Liệu";
+            this.menuDBConfig.Click += new System.EventHandler(this.menuDBConfig_Click);
             // 
             // menuHelp
             // 
@@ -524,6 +533,7 @@
         private System.Windows.Forms.ToolStripMenuItem menuBilling;
         private System.Windows.Forms.ToolStripButton toolStripButton2;
         private System.Windows.Forms.ToolStripLabel toolStripLabel6;
+        private System.Windows.Forms.ToolStripMenuItem menuDBConfig;
 
     }
 }
