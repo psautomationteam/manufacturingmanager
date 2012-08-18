@@ -247,6 +247,7 @@
             this.menuInventory.Name = "menuInventory";
             this.menuInventory.Size = new System.Drawing.Size(181, 22);
             this.menuInventory.Text = "Kho và Thành Phẩm";
+            this.menuInventory.Click += new System.EventHandler(this.menuInventory_Click);
             // 
             // menuInvoice
             // 
