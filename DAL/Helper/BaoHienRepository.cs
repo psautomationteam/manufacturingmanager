@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Data.Linq.Mapping;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Data.Common;
 
 namespace DAL.Helper
 {
@@ -30,9 +31,64 @@ namespace DAL.Helper
         {
             if (context == null)
             {
-                context = new BaoHienDBDataContext();
+                context = new BaoHienDBDataContext(SettingManager.BuildStringConnection());
+                
             }
             return context != null;
+        }
+        public static bool testDBConnection(string DBServerName, string DatabaseName, string DatabaseUserID, string DatabasePwd)
+        {
+            try
+            {
+                if (context != null)
+                {
+                    if (context.Connection != null)
+                    {
+                        context.Connection.Close();
+                    }
+                    context = new BaoHienDBDataContext(SettingManager.BuildStringConnectionForTest(DBServerName, DatabaseName, DatabaseUserID, DatabasePwd));
+                    if (context != null)
+                    {
+                        if (context.Connection != null)
+                        {
+                            
+                            if (!context.DatabaseExists())
+                            {
+                                return false;
+                            }
+                            
+                        }
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    context = new BaoHienDBDataContext(SettingManager.BuildStringConnectionForTest(DBServerName, DatabaseName, DatabaseUserID, DatabasePwd));
+                    if (context != null)
+                    {
+                        if (context.Connection != null)
+                        {
+                            if (!context.DatabaseExists())
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                context = null;
+                return false;
+            }
+            return true;
         }
         static Expression<Func<T, T2>> CreateLambdaForDeletedField<T, T2>()
         {
