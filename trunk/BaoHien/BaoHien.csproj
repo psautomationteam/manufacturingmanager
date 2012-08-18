@@ -59,6 +59,12 @@
     <Compile Include="Model\ProductionRequestModel.cs" />
     <Compile Include="Model\ProductTypeSearchCriteria.cs" />
     <Compile Include="Model\ProductSearchCriteria.cs" />
+    <Compile Include="UI\Configuration\DBConfiguration.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Configuration\DBConfiguration.designer.cs">
+      <DependentUpon>DBConfiguration.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\PrintPreviewCustom\PCPrint.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -204,6 +210,12 @@
     <Compile Include="UI\Product\ProductType.Designer.cs">
       <DependentUpon>ProductType.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\Report\ProductAndMaterialReport.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\Report\ProductAndMaterialReport.designer.cs">
+      <DependentUpon>ProductAndMaterialReport.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\Stock\AddEntranceStock.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -268,6 +280,9 @@
     <EmbeddedResource Include="UI\Billing\BillList.resx">
       <DependentUpon>BillList.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UI\Configuration\DBConfiguration.resx">
+      <DependentUpon>DBConfiguration.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\Customer\AddCustomer.resx">
       <DependentUpon>AddCustomer.cs</DependentUpon>
     </EmbeddedResource>
@@ -316,6 +331,9 @@
     <EmbeddedResource Include="UI\Product\ProductType.resx">
       <DependentUpon>ProductType.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UI\Report\ProductAndMaterialReport.resx">
+      <DependentUpon>ProductAndMaterialReport.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\Stock\AddEntranceStock.resx">
       <DependentUpon>AddEntranceStock.cs</DependentUpon>
     </EmbeddedResource>
@@ -353,9 +371,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Services\User\" />
-    <Folder Include="UI\Configuration\" />
     <Folder Include="UI\Other\" />
-    <Folder Include="UI\Report\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DAL\DAL.csproj">

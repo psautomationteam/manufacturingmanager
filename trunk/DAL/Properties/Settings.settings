@@ -34,5 +34,17 @@
 &lt;/SerializableConnectionString&gt;</DesignTimeValue>
       <Value Profile="(Default)">Data Source=stephen\sqlexpress;Initial Catalog=BaoHienCompany;Integrated Security=True</Value>
     </Setting>
+    <Setting Name="DBServerName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">stephen\sqlexpress</Value>
+    </Setting>
+    <Setting Name="DatabaseName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">BaoHienCompany</Value>
+    </Setting>
+    <Setting Name="DatabaseUserID" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="DatabasePwd" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
   </Settings>
 </SettingsFile>

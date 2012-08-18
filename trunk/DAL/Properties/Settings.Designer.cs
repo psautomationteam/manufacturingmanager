@@ -66,5 +66,53 @@ namespace DAL.Properties {
                 return ((string)(this["BaoHienCompanyConnectionString1"]));
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("stephen\\sqlexpress")]
+        public string DBServerName {
+            get {
+                return ((string)(this["DBServerName"]));
+            }
+            set {
+                this["DBServerName"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("BaoHienCompany")]
+        public string DatabaseName {
+            get {
+                return ((string)(this["DatabaseName"]));
+            }
+            set {
+                this["DatabaseName"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string DatabaseUserID {
+            get {
+                return ((string)(this["DatabaseUserID"]));
+            }
+            set {
+                this["DatabaseUserID"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string DatabasePwd {
+            get {
+                return ((string)(this["DatabasePwd"]));
+            }
+            set {
+                this["DatabasePwd"] = value;
+            }
+        }
     }
 }
