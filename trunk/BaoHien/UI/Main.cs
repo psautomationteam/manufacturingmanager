@@ -120,6 +120,12 @@ namespace BaoHien.UI
             pnlMain.Controls.Add(ucBillList);
         }
 
+        private void menuInventory_Click(object sender, EventArgs e)
+        {
+            ProductAndMaterialReport ucReport = new ProductAndMaterialReport();
+            pnlMain.Controls.Clear();
+            pnlMain.Controls.Add(ucReport);
+        }
         #endregion 
 
 #region toolbar action
@@ -172,6 +178,8 @@ namespace BaoHien.UI
                 Global.CurrentUser = user;
             }
         }
+
+        
 
        
         

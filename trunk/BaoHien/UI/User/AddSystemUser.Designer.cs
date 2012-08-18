@@ -41,6 +41,7 @@
             this.lblErrorMessage = new System.Windows.Forms.Label();
             this.txtConfirmPass = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
+            this.btnCancel = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label5
@@ -160,11 +161,22 @@
             this.label6.TabIndex = 22;
             this.label6.Text = "Xác nhận mật khẩu (*):";
             // 
+            // btnCancel
+            // 
+            this.btnCancel.Location = new System.Drawing.Point(240, 187);
+            this.btnCancel.Name = "btnCancel";
+            this.btnCancel.Size = new System.Drawing.Size(75, 23);
+            this.btnCancel.TabIndex = 24;
+            this.btnCancel.Text = "Hủy";
+            this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+            // 
             // AddSystemUser
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(455, 234);
+            this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.txtConfirmPass);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.lblErrorMessage);
@@ -200,5 +212,6 @@
         private System.Windows.Forms.Label lblErrorMessage;
         private System.Windows.Forms.TextBox txtConfirmPass;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Button btnCancel;
     }
 }
