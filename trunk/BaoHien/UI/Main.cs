@@ -179,6 +179,13 @@ namespace BaoHien.UI
             }
         }
 
+        private void menuDBConfig_Click(object sender, EventArgs e)
+        {
+            DBConfiguration frm = new DBConfiguration();
+            frm.ShowDialog();
+        }
+
+      
         
 
        
