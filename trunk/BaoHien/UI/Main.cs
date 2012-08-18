@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using DAL;
 using BaoHien.Common;
 using BaoHien.Services.SystemUsers;
+using BaoHien.Properties;
 
 namespace BaoHien.UI
 {
@@ -170,12 +171,10 @@ namespace BaoHien.UI
 
         private void Main_Load(object sender, EventArgs e)
         {
-            if (Global.CurrentUser == null)
+            if (Settings.Default.FirstRun == 1)
             {
-                SystemUserService systemUserService = new SystemUserService();
-                //SystemUser user = systemUserService.GetSystemUsers().Single(u => (u.username == DUMMY_USERNAME) && (u.password == DUMMY_PASSWORD));
-                SystemUser user = systemUserService.GetSystemUser(1);
-                Global.CurrentUser = user;
+                DBConfiguration dBConfiguration = new DBConfiguration();
+                dBConfiguration.Show();
             }
         }
 
