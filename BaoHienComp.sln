@@ -16,6 +16,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Validator", "Validator\Validator.csproj", "{87D24BFF-5031-4716-BF01-3EA42C791538}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "BaoHienInstaller", "BaoHienInstaller\BaoHienInstaller.vdproj", "{B354982C-C6D5-458D-839E-5EA47AD26516}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = BaoHienComp.vsmdi
@@ -69,6 +71,12 @@ Global
 		{87D24BFF-5031-4716-BF01-3EA42C791538}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{87D24BFF-5031-4716-BF01-3EA42C791538}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{87D24BFF-5031-4716-BF01-3EA42C791538}.Release|x86.ActiveCfg = Release|Any CPU
+		{B354982C-C6D5-458D-839E-5EA47AD26516}.Debug|Any CPU.ActiveCfg = Debug
+		{B354982C-C6D5-458D-839E-5EA47AD26516}.Debug|Mixed Platforms.ActiveCfg = Debug
+		{B354982C-C6D5-458D-839E-5EA47AD26516}.Debug|x86.ActiveCfg = Debug
+		{B354982C-C6D5-458D-839E-5EA47AD26516}.Release|Any CPU.ActiveCfg = Release
+		{B354982C-C6D5-458D-839E-5EA47AD26516}.Release|Mixed Platforms.ActiveCfg = Release
+		{B354982C-C6D5-458D-839E-5EA47AD26516}.Release|x86.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

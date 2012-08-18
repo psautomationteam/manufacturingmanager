@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using BaoHien.UI;
+using BaoHien.Properties;
 namespace Com.Baohien
 {
     static class Program
@@ -15,6 +16,7 @@ namespace Com.Baohien
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+           
             Application.Run(new Main());//To do: will replace by login form
         }
     }
