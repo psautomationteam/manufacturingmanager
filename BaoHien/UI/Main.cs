@@ -127,6 +127,12 @@ namespace BaoHien.UI
             pnlMain.Controls.Clear();
             pnlMain.Controls.Add(ucReport);
         }
+        private void menuArrear_Click(object sender, EventArgs e)
+        {
+            ArrearReport arrearReport = new ArrearReport();
+            pnlMain.Controls.Clear();
+            pnlMain.Controls.Add(arrearReport);
+        }
         #endregion 
 
 #region toolbar action
@@ -185,6 +191,10 @@ namespace BaoHien.UI
             DBConfiguration frm = new DBConfiguration();
             frm.ShowDialog();
         }
+
+        
+
+       
 
       
         
