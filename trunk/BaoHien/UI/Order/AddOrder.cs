@@ -23,7 +23,9 @@ using System.IO;
 using CoolPrintPreview;
 using System.Reflection;
 using Word = Microsoft.Office.Interop.Word;
+using BaoHien.Services.ProductInStocks;
 using Microsoft.Office.Interop.Word;
+
 namespace BaoHien.UI
 {
     public partial class AddOrder : BaseForm
@@ -34,6 +36,7 @@ namespace BaoHien.UI
         BindingList<OrderDetail> orderDetails;
         BindingList<Product> products;
         BindingList<BaseAttribute> baseAttributesAtRow;
+        BindingList<ProductionRequestDetailModel> originalProductions;
 
         private System.IO.Stream streamToPrint;
         Image MyImage;
@@ -71,6 +74,7 @@ namespace BaoHien.UI
         {
             if (validator1.Validate())
             {
+                ProductInStockService pis = new ProductInStockService();
                 double discount = 0;
                 Double.TryParse(txtDiscount.Text, out discount);
                 DateTime createdDate = DateTime.Now;
@@ -116,17 +120,70 @@ namespace BaoHien.UI
                                 {
                                     od.OrderId = order.Id;
                                     result = orderDetailService.AddOrderDetail(od);
+
+                                    //Save in Production In Stock
+                                    ProductInStock productInStock = new ProductInStock();
+                                    List<ProductInStock> lstProductInStock = pis.SelectProductByWhere(pt => pt.ProductId == od.ProductId && pt.AttributeId == od.AttributeId);
+                                    productInStock.AttributeId = od.AttributeId;
+                                    productInStock.ProductId = od.ProductId;
+                                    productInStock.LatestUpdate = DateTime.Now;
+                                    productInStock.StatusOfData = false;
+
+                                    productInStock.NumberOfInput = lstProductInStock.Last<ProductInStock>().NumberOfInput;
+                                    productInStock.NumberOfOutput = lstProductInStock.Last<ProductInStock>().NumberOfOutput - od.NumberUnit;
+                                    productInStock.NumberOfItem = (int)lstProductInStock.Last<ProductInStock>().NumberOfItem - od.NumberUnit;
+
+                                    pis.AddProductInStock(productInStock);
                                 }
                                 else
                                 {
+                                    ProductionRequestDetailModel original = new ProductionRequestDetailModel();
+                                    original = originalProductions.Where(p => p.Id == od.Id).ToList().FirstOrDefault();
                                     result = orderDetailService.UpdateOrderDetail(od);
+
+                                    //Update so luong
+                                    if (od.ProductId == original.ProductId && od.AttributeId == original.AttributeId && od.NumberUnit != original.NumberUnit)
+                                    {
+                                        ProductInStock productInStock = new ProductInStock();
+                                        List<ProductInStock> lstProductInStock = pis.SelectProductByWhere(pt => pt.ProductId == od.ProductId && pt.AttributeId == od.AttributeId);
+
+                                        productInStock.AttributeId = od.AttributeId;
+                                        productInStock.ProductId = od.ProductId;
+                                        productInStock.LatestUpdate = DateTime.Now;
+                                        productInStock.NumberOfInput = lstProductInStock.Last<ProductInStock>().NumberOfInput;
+                                        productInStock.NumberOfOutput = lstProductInStock.Last<ProductInStock>().NumberOfOutput + original.NumberUnit - od.NumberUnit;
+                                        productInStock.NumberOfItem = lstProductInStock.Last<ProductInStock>().NumberOfItem + original.NumberUnit - od.NumberUnit;
+                                        productInStock.StatusOfData = false;
+                                        pis.UpdateProductInStock(productInStock);
+
+                                    }
+
+                                    //Sua chi tiet phieu
+                                    else if (od.ProductId != original.ProductId || od.AttributeId != original.AttributeId)
+                                    {
+                                        //Tao moi
+                                        List<ProductInStock> lstNewProduct = pis.SelectProductByWhere(pt => pt.ProductId == od.ProductId && pt.AttributeId == od.AttributeId);
+                                        ProductInStock newProductInStock = new ProductInStock();
+                                        newProductInStock.AttributeId = od.AttributeId;
+                                        newProductInStock.ProductId = od.ProductId;
+                                        newProductInStock.LatestUpdate = DateTime.Now;
+                                        newProductInStock.StatusOfData = true;
+
+                                        newProductInStock.NumberOfInput = lstNewProduct.Last<ProductInStock>().NumberOfInput;
+                                        newProductInStock.NumberOfOutput = lstNewProduct.Last<ProductInStock>().NumberOfOutput - od.NumberUnit;
+                                        newProductInStock.NumberOfItem += lstNewProduct.Last<ProductInStock>().NumberOfItem - od.NumberUnit;
+
+                                        pis.AddProductInStock(newProductInStock);
+
+                                        //Xoa cu
+                                        pis.DeleteProductInStock(original.Id);
+                                    }
+
                                 }
 
                                 if (!result)
                                     break;
                             }
-
-
                         }
                         if (!result)
                         {
@@ -174,6 +231,21 @@ namespace BaoHien.UI
                         {
                             od.OrderId = (int)newOrderId;
                             bool ret = orderDetailService.AddOrderDetail(od);
+
+                            //Save in Production In Stock
+                            ProductInStock productInStock = new ProductInStock();
+                            List<ProductInStock> lstProductInStock = pis.SelectProductByWhere(pt => pt.ProductId == od.ProductId && pt.AttributeId == od.AttributeId);
+                            productInStock.AttributeId = od.AttributeId;
+                            productInStock.ProductId = od.ProductId;
+                            productInStock.LatestUpdate = DateTime.Now;
+                            productInStock.StatusOfData = false;
+
+                            productInStock.NumberOfInput = lstProductInStock.Last<ProductInStock>().NumberOfInput;
+                            productInStock.NumberOfOutput = lstProductInStock.Last<ProductInStock>().NumberOfOutput - od.NumberUnit;
+                            productInStock.NumberOfItem = (int)lstProductInStock.Last<ProductInStock>().NumberOfItem - od.NumberUnit;
+
+                            pis.AddProductInStock(productInStock);
+
                             if (!ret)
                             {
                                 MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
@@ -344,7 +416,7 @@ namespace BaoHien.UI
                             Total = (double)orderDetail.Price * orderDetail.NumberUnit
                         };
 
-           
+            originalProductions = new BindingList<ProductionRequestDetailModel>(query.ToList());
             dgwOrderDetails.DataSource = new BindingList<ProductionRequestDetailModel>(query.ToList());
 
             dgwOrderDetails.ReadOnly = false;

@@ -41,6 +41,7 @@ namespace BaoHien.Services.MaterialInStocks
         {
             return OnDeleteItem<MaterialInStock>(id.ToString());
         }
+
         public bool UpdateMaterialInStock(MaterialInStock materialInStock)
         {
             return OnUpdateItem<MaterialInStock>(materialInStock, materialInStock.Id.ToString());

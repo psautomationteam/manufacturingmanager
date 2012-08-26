@@ -343,7 +343,7 @@ namespace BaoHien.UI
                     else if (e.ColumnIndex == 2)
                     {
                         MaterialInStockService mis = new MaterialInStockService();
-                        List<MaterialInStock> lstMaterial = mis.SelectMaterialInStockByWhere(pt => pt.Id == productionRequestDetailInMaterials[e.RowIndex].ProductId && pt.AttributeId == productionRequestDetailInMaterials[e.RowIndex].AttributeId);
+                        List<MaterialInStock> lstMaterial = mis.SelectMaterialInStockByWhere(pt => pt.ProductId == productionRequestDetailInMaterials[e.RowIndex].ProductId && pt.AttributeId == productionRequestDetailInMaterials[e.RowIndex].AttributeId);
                         if (lstMaterial.Count == 0 || lstMaterial.First<MaterialInStock>().NumberOfItem == 0)
                         {
                             MessageBox.Show("Số lượng vật liệu trong kho đã hết");
@@ -522,6 +522,7 @@ namespace BaoHien.UI
                     bool result = prs.UpdateProductionRequest(productionRequest);
                     if (result)
                     {
+                        // ProductInStock
                         foreach (ProductionRequestDetail prd in productionRequestDetailInProductions)
                         {
                             if (prd.ProductId > 0 && prd.AttributeId > 0)
@@ -532,16 +533,25 @@ namespace BaoHien.UI
                                     result = productionRequestDetailService.AddProductionRequestDetail(prd);
 
                                     //Save in Production In Stock
-                                    ProductInStock productlInStock = new ProductInStock();
-                                    List<ProductInStock> lstProductInStock = pis.SelectProductByWhere(pt => pt.Id == prd.ProductId && pt.AttributeId == prd.AttributeId);
-
-                                    productlInStock.AttributeId = prd.AttributeId;
-                                    productlInStock.Id = prd.ProductId;
-                                    productlInStock.NumberOfItem = prd.NumberUnit;
-                                    productlInStock.LatestUpdate = DateTime.Now;
+                                    ProductInStock productInStock = new ProductInStock();
+                                    List<ProductInStock> lstProductInStock = pis.SelectProductByWhere(pt => pt.ProductId == prd.ProductId && pt.AttributeId == prd.AttributeId);
+                                    productInStock.AttributeId = prd.AttributeId;
+                                    productInStock.ProductId = prd.ProductId;
+                                    productInStock.LatestUpdate = DateTime.Now;
+                                    productInStock.StatusOfData = true;
                                     if (lstProductInStock.Count > 0)
-                                        productlInStock.NumberOfItem += lstProductInStock.Last<ProductInStock>().NumberOfItem;
-                                    pis.AddProductInStock(productlInStock);
+                                    {
+                                        productInStock.NumberOfInput = lstProductInStock.Last<ProductInStock>().NumberOfInput + prd.NumberUnit;
+                                        productInStock.NumberOfOutput = lstProductInStock.Last<ProductInStock>().NumberOfOutput;
+                                        productInStock.NumberOfItem = (int)productInStock.NumberOfInput;
+                                    }
+                                    else
+                                    {
+                                        productInStock.NumberOfInput = prd.NumberUnit;
+                                        productInStock.NumberOfOutput = 0;
+                                        productInStock.NumberOfItem = (int)prd.NumberUnit;
+                                    }
+                                    pis.AddProductInStock(productInStock);
                                 }
                                 else
                                 {
@@ -549,43 +559,56 @@ namespace BaoHien.UI
                                     original = originalProductions.Where(p => p.Id == prd.Id).ToList().FirstOrDefault();
                                     result = productionRequestDetailService.UpdateProductionRequestDetail(prd);
 
+                                    //Update so luong
                                     if (prd.ProductId == original.ProductId && prd.AttributeId == original.AttributeId && prd.NumberUnit != original.NumberUnit)
                                     {
-                                        ProductInStock productlInStock = new ProductInStock();
-                                        List<ProductInStock> lstProductInStock = pis.SelectProductByWhere(pt => pt.Id == prd.ProductId && pt.AttributeId == prd.AttributeId);
+                                        ProductInStock productInStock = new ProductInStock();
+                                        List<ProductInStock> lstProductInStock = pis.SelectProductByWhere(pt => pt.ProductId == prd.ProductId && pt.AttributeId == prd.AttributeId);
 
-                                        productlInStock.AttributeId = prd.AttributeId;
-                                        productlInStock.Id = prd.ProductId;
-                                        productlInStock.LatestUpdate = DateTime.Now;
-                                        productlInStock.NumberOfItem = lstProductInStock.Last<ProductInStock>().NumberOfItem + prd.NumberUnit - original.NumberUnit;
-                                        pis.AddProductInStock(productlInStock);
+                                        productInStock.AttributeId = prd.AttributeId;
+                                        productInStock.ProductId = prd.ProductId;
+                                        productInStock.LatestUpdate = DateTime.Now;
+                                        productInStock.NumberOfInput = lstProductInStock.Last<ProductInStock>().NumberOfInput + prd.NumberUnit - original.NumberUnit;
+                                        productInStock.NumberOfOutput = lstProductInStock.Last<ProductInStock>().NumberOfOutput;
+                                        productInStock.NumberOfItem = lstProductInStock.Last<ProductInStock>().NumberOfItem + prd.NumberUnit - original.NumberUnit;
+                                        productInStock.StatusOfData = true;
+                                        pis.UpdateProductInStock(productInStock);
                                     }
+
+                                    //Sua chi tiet phieu
                                     else if (prd.ProductId != original.ProductId || prd.AttributeId != original.AttributeId)
                                     {
-                                        List<ProductInStock> lstNewProduct = pis.SelectProductByWhere(pt => pt.Id == prd.ProductId && pt.AttributeId == prd.AttributeId);
+                                        //Tao moi
+                                        List<ProductInStock> lstNewProduct = pis.SelectProductByWhere(pt => pt.ProductId == prd.ProductId && pt.AttributeId == prd.AttributeId);
                                         ProductInStock newProductInStock = new ProductInStock();
                                         newProductInStock.AttributeId = prd.AttributeId;
-                                        newProductInStock.Id = prd.ProductId;
-                                        newProductInStock.NumberOfItem = prd.NumberUnit;
+                                        newProductInStock.ProductId = prd.ProductId;
                                         newProductInStock.LatestUpdate = DateTime.Now;
+                                        newProductInStock.StatusOfData = true;
+
                                         if (lstNewProduct.Count > 0)
-                                            newProductInStock.NumberOfItem += lstNewProduct.Last<ProductInStock>().NumberOfItem;
+                                        {
+                                            newProductInStock.NumberOfInput = lstNewProduct.Last<ProductInStock>().NumberOfInput + prd.NumberUnit;
+                                            newProductInStock.NumberOfOutput = lstNewProduct.Last<ProductInStock>().NumberOfOutput;
+                                            newProductInStock.NumberOfItem = lstNewProduct.Last<ProductInStock>().NumberOfItem + prd.NumberUnit;
+                                        }
+                                        else
+                                        {
+                                            newProductInStock.NumberOfInput = prd.NumberUnit;
+                                            newProductInStock.NumberOfOutput = 0;
+                                            newProductInStock.NumberOfItem = prd.NumberUnit;
+                                        }
                                         pis.AddProductInStock(newProductInStock);
 
-                                        List<ProductInStock> lstoldProduct = pis.SelectProductByWhere(pt => pt.Id == original.ProductId && pt.AttributeId == original.AttributeId);
-                                        ProductInStock oldProductInStock = new ProductInStock();
-                                        oldProductInStock.AttributeId = original.AttributeId;
-                                        oldProductInStock.Id = original.ProductId;
-                                        oldProductInStock.LatestUpdate = DateTime.Now;
-                                        oldProductInStock.NumberOfItem = lstoldProduct.Last<ProductInStock>().NumberOfItem - original.NumberUnit;
-                                        pis.AddProductInStock(newProductInStock);
+                                        //Xoa cu
+                                        pis.DeleteProductInStock(original.Id);
                                     }
                                 }
                                 
                             }
-
-
                         }
+
+                        //MaterialInStock
                         foreach (ProductionRequestDetail prd in productionRequestDetailInMaterials)
                         {
                             if (prd.ProductId > 0 && prd.AttributeId > 0)
@@ -597,12 +620,15 @@ namespace BaoHien.UI
 
                                     //Save in Materail In Stock
                                     MaterialInStock materialInStock = new MaterialInStock();
-                                    List<MaterialInStock> lstMaterial = mis.SelectMaterialInStockByWhere(pt => pt.Id == prd.ProductId && pt.AttributeId == prd.AttributeId);
+                                    List<MaterialInStock> lstMaterial = mis.SelectMaterialInStockByWhere(pt => pt.ProductId == prd.ProductId && pt.AttributeId == prd.AttributeId);
 
                                     materialInStock.AttributeId = prd.AttributeId;
-                                    materialInStock.Id = prd.ProductId;
+                                    materialInStock.ProductId = prd.ProductId;
                                     materialInStock.LatestUpdate = DateTime.Now;
+                                    materialInStock.NumberOfInput = lstMaterial.Last<MaterialInStock>().NumberOfInput;
+                                    materialInStock.NumberOfOutput = lstMaterial.Last<MaterialInStock>().NumberOfOutput - prd.NumberUnit;
                                     materialInStock.NumberOfItem = lstMaterial.Last<MaterialInStock>().NumberOfItem - prd.NumberUnit;
+                                    materialInStock.StatusOfData = false;
                                     mis.AddMaterialInStock(materialInStock);
                                 }
                                 else
@@ -610,34 +636,38 @@ namespace BaoHien.UI
                                     ProductionRequestDetailModel original = new ProductionRequestDetailModel();
                                     original = originalProductions.Where(p => p.Id == prd.Id).ToList().FirstOrDefault();
                                     result = productionRequestDetailService.UpdateProductionRequestDetail(prd);
-
                                     if (prd.ProductId == original.ProductId && prd.AttributeId == original.AttributeId && prd.NumberUnit != original.NumberUnit)
                                     {
-                                        List<MaterialInStock> lstMaterial = mis.SelectMaterialInStockByWhere(pt => pt.Id == prd.ProductId && pt.AttributeId == prd.AttributeId);
-                                        MaterialInStock materialInStock = new MaterialInStock();
-                                        materialInStock.AttributeId = prd.AttributeId;
-                                        materialInStock.Id = prd.ProductId;
-                                        materialInStock.LatestUpdate = DateTime.Now;
-                                        materialInStock.NumberOfItem = lstMaterial.Last<MaterialInStock>().NumberOfItem + original.NumberUnit - prd.NumberUnit;
-                                        mis.AddMaterialInStock(materialInStock);
-                                    }
-                                    else if (prd.ProductId != original.ProductId || prd.AttributeId != original.AttributeId)
-                                    {
-                                        List<MaterialInStock> lstNewMaterial = mis.SelectMaterialInStockByWhere(pt => pt.Id == prd.ProductId && pt.AttributeId == prd.AttributeId);
+
+                                        //Update Qty
+                                        List<MaterialInStock> lstNewMaterial = mis.SelectMaterialInStockByWhere(pt => pt.ProductId == prd.ProductId && pt.AttributeId == prd.AttributeId);
                                         MaterialInStock newMaterialInStock = new MaterialInStock();
                                         newMaterialInStock.AttributeId = prd.AttributeId;
-                                        newMaterialInStock.Id = prd.ProductId;
+                                        newMaterialInStock.ProductId = prd.ProductId;
                                         newMaterialInStock.LatestUpdate = DateTime.Now;
+                                        newMaterialInStock.NumberOfInput = lstNewMaterial.Last<MaterialInStock>().NumberOfInput;
+                                        newMaterialInStock.NumberOfOutput = lstNewMaterial.Last<MaterialInStock>().NumberOfOutput - prd.NumberUnit;
                                         newMaterialInStock.NumberOfItem = lstNewMaterial.Last<MaterialInStock>().NumberOfItem - prd.NumberUnit;
+                                        newMaterialInStock.StatusOfData = false;
+                                        mis.UpdateMaterialInStock(newMaterialInStock);
+                                    }
+                                    else if (prd.ProductId != original.ProductId || prd.AttributeId != original.AttributeId || prd.NumberUnit != original.NumberUnit)
+                                    {
+                                        
+                                        //Tao moi
+                                        List<MaterialInStock> lstNewMaterial = mis.SelectMaterialInStockByWhere(pt => pt.ProductId == prd.ProductId && pt.AttributeId == prd.AttributeId);
+                                        MaterialInStock newMaterialInStock = new MaterialInStock();
+                                        newMaterialInStock.AttributeId = prd.AttributeId;
+                                        newMaterialInStock.ProductId = prd.ProductId;
+                                        newMaterialInStock.LatestUpdate = DateTime.Now;
+                                        newMaterialInStock.NumberOfInput = lstNewMaterial.Last<MaterialInStock>().NumberOfInput;
+                                        newMaterialInStock.NumberOfOutput = lstNewMaterial.Last<MaterialInStock>().NumberOfOutput - prd.NumberUnit;
+                                        newMaterialInStock.NumberOfItem = lstNewMaterial.Last<MaterialInStock>().NumberOfItem - prd.NumberUnit;
+                                        newMaterialInStock.StatusOfData = false;
                                         mis.AddMaterialInStock(newMaterialInStock);
 
-                                        List<MaterialInStock> lstoldMaterial = mis.SelectMaterialInStockByWhere(pt => pt.Id == original.ProductId && pt.AttributeId == original.AttributeId);
-                                        MaterialInStock oldMaterialInStock = new MaterialInStock();
-                                        newMaterialInStock.AttributeId = original.AttributeId;
-                                        newMaterialInStock.Id = original.ProductId;
-                                        newMaterialInStock.LatestUpdate = DateTime.Now;
-                                        newMaterialInStock.NumberOfItem = lstNewMaterial.Last<MaterialInStock>().NumberOfItem + original.NumberUnit;
-                                        mis.AddMaterialInStock(newMaterialInStock);
+                                        //Xoa Cu
+                                        mis.DeleteMaterialInStock(original.Id);
 
                                     }
                                 }
@@ -699,16 +729,26 @@ namespace BaoHien.UI
                                 }
 
                                 //Save in Production In Stock
-                                ProductInStock productlInStock = new ProductInStock();
-                                List<ProductInStock> lstProductInStock = pis.SelectProductByWhere(pt => pt.Id == prd.ProductId && pt.AttributeId == prd.AttributeId);
-
-                                productlInStock.AttributeId = prd.AttributeId;
-                                productlInStock.Id = prd.ProductId;
-                                productlInStock.NumberOfItem = prd.NumberUnit;
-                                productlInStock.LatestUpdate = DateTime.Now;
+                                ProductInStock productInStock = new ProductInStock();
+                                List<ProductInStock> lstProductInStock = pis.SelectProductByWhere(pt => pt.ProductId == prd.ProductId && pt.AttributeId == prd.AttributeId);
+                                productInStock.AttributeId = prd.AttributeId;
+                                productInStock.ProductId = prd.ProductId;
+                                productInStock.LatestUpdate = DateTime.Now;
+                                productInStock.StatusOfData = true;
                                 if (lstProductInStock.Count > 0)
-                                    productlInStock.NumberOfItem += lstProductInStock.Last<ProductInStock>().NumberOfItem;
-                                pis.AddProductInStock(productlInStock);
+                                {
+                                    productInStock.NumberOfInput = lstProductInStock.Last<ProductInStock>().NumberOfInput + prd.NumberUnit;
+                                    productInStock.NumberOfOutput = lstProductInStock.Last<ProductInStock>().NumberOfOutput;
+                                    productInStock.NumberOfItem = (int)productInStock.NumberOfInput;
+                                }
+                                else
+                                {
+                                    productInStock.NumberOfInput = prd.NumberUnit;
+                                    productInStock.NumberOfOutput = 0;
+                                    productInStock.NumberOfItem = (int)prd.NumberUnit;
+
+                                }
+                                pis.AddProductInStock(productInStock);
                             }
 
                         }
@@ -726,12 +766,15 @@ namespace BaoHien.UI
 
                                 //Save in Materail In Stock
                                 MaterialInStock materialInStock = new MaterialInStock();
-                                List<MaterialInStock> lstMaterial = mis.SelectMaterialInStockByWhere(pt => pt.Id == prd.ProductId && pt.AttributeId == prd.AttributeId);
+                                List<MaterialInStock> lstMaterial = mis.SelectMaterialInStockByWhere(pt => pt.ProductId == prd.ProductId && pt.AttributeId == prd.AttributeId);
 
                                 materialInStock.AttributeId = prd.AttributeId;
-                                materialInStock.Id = prd.ProductId;
+                                materialInStock.ProductId = prd.ProductId;
                                 materialInStock.LatestUpdate = DateTime.Now;
+                                materialInStock.NumberOfInput = lstMaterial.Last<MaterialInStock>().NumberOfInput;
+                                materialInStock.NumberOfOutput = lstMaterial.Last<MaterialInStock>().NumberOfOutput - prd.NumberUnit;
                                 materialInStock.NumberOfItem = lstMaterial.Last<MaterialInStock>().NumberOfItem - prd.NumberUnit;
+                                materialInStock.StatusOfData = false;
                                 mis.AddMaterialInStock(materialInStock);
                             }
                         }
