@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using DAL;
 using BaoHien.Services.Products;
 using BaoHien.Model;
+using BaoHien.Services.MaterialInStocks;
 
 namespace BaoHien.UI
 {
@@ -19,9 +20,44 @@ namespace BaoHien.UI
         public ProductAndMaterialReport()
         {
             InitializeComponent();
-            loadProductType();
+            LoadProductType();
+            
         }
-        void loadProductType()
+        private void setUpDataGrid(List<MaterialInStock> materialInStocks)
+        {
+            int index = 0;
+            var query = from materialInStock in materialInStocks
+                        select new EntranceStockReport
+                        {
+                            ProductCode = materialInStock.Product.ProductCode,
+                            ProductName = materialInStock.Product.ProductName,
+                            AttributeName = materialInStock.BaseAttribute.AttributeName,
+                            NumberOfInput = (materialInStock.NumberOfInput != null) ? (int)materialInStock.NumberOfInput : 0,
+                            NumberOfOutput = (materialInStock.NumberOfOutput != null) ? (int)materialInStock.NumberOfOutput : 0,
+                            NumberOfRemaining = ((materialInStock.NumberOfInput != null) ? (int)materialInStock.NumberOfInput : 0) - ((materialInStock.NumberOfOutput != null) ? (int)materialInStock.NumberOfOutput : 0),
+                            BaseUnitName = (materialInStock.Product.MeasurementUnit != null) ? materialInStock.Product.MeasurementUnit.Name : "",
+                            Index = index++
+                        };
+            dgwStockEntranceList.DataSource = query.ToList();
+        }
+        void LoadReport()
+        {
+            if (cbmProductTypes.SelectedValue != null)
+            {
+                int productTyeId = (int)cbmProductTypes.SelectedValue;
+                MaterialInStockService materialInStockService = new MaterialInStockService();
+                List<MaterialInStock> materialInStocks = materialInStockService.GetMaterialInStocks();
+                materialInStocks = materialInStocks.Where(mis=>mis.Product.ProductType == productTyeId).ToList();
+                setUpDataGrid(materialInStocks);
+            }
+            else
+            {
+                MessageBox.Show("Vui lòng chọn loại sản phẩm");
+            }
+            
+            
+        }
+        void LoadProductType()
         {
             ProductTypeService productTypeService = new ProductTypeService();
             productTypes = productTypeService.GetProductTypes();
@@ -39,13 +75,14 @@ namespace BaoHien.UI
         
         private void SetupColumns()
         {
+            dgwStockEntranceList.Columns.Clear();
             dgwStockEntranceList.AutoGenerateColumns = false;
             DataGridViewTextBoxColumn indexColumn = new DataGridViewTextBoxColumn();
             indexColumn.Width = 30;
             indexColumn.DataPropertyName = "Index";
             indexColumn.HeaderText = "STT";
             indexColumn.ValueType = typeof(string);
-            indexColumn.Frozen = true;
+            //indexColumn.Frozen = true;
             dgwStockEntranceList.Columns.Add(indexColumn);
 
             DataGridViewTextBoxColumn productCodeColumn = new DataGridViewTextBoxColumn();
@@ -53,7 +90,7 @@ namespace BaoHien.UI
             productCodeColumn.DataPropertyName = "ProductCode";
             productCodeColumn.HeaderText = "Mã sản phẩm";
             productCodeColumn.ValueType = typeof(string);
-            productCodeColumn.Frozen = true;
+            //productCodeColumn.Frozen = true;
             dgwStockEntranceList.Columns.Add(productCodeColumn);
 
             DataGridViewTextBoxColumn productNameColumn = new DataGridViewTextBoxColumn();
@@ -61,7 +98,7 @@ namespace BaoHien.UI
             productNameColumn.DataPropertyName = "ProductName";
             productNameColumn.HeaderText = "Tên sản phẩm";
             productNameColumn.ValueType = typeof(string);
-            productNameColumn.Frozen = true;
+            //productNameColumn.Frozen = true;
             dgwStockEntranceList.Columns.Add(productNameColumn);
 
 
@@ -72,7 +109,7 @@ namespace BaoHien.UI
             attributeNameColumn.DataPropertyName = "AttributeName";
             attributeNameColumn.Width = 100;
             attributeNameColumn.HeaderText = "Quy cách";
-            attributeNameColumn.Frozen = true;
+            //attributeNameColumn.Frozen = true;
             attributeNameColumn.ValueType = typeof(string);
             dgwStockEntranceList.Columns.Add(attributeNameColumn);
 
@@ -80,7 +117,7 @@ namespace BaoHien.UI
             baseUnitColumn.DataPropertyName = "BaseUnit";
             baseUnitColumn.Width = 100;
             baseUnitColumn.HeaderText = "Đơn vị tính";
-            baseUnitColumn.Frozen = true;
+            //baseUnitColumn.Frozen = true;
             baseUnitColumn.ValueType = typeof(string);
             dgwStockEntranceList.Columns.Add(baseUnitColumn);
 
@@ -88,7 +125,7 @@ namespace BaoHien.UI
             numberOfInputColumn.DataPropertyName = "NumberOfInput";
             numberOfInputColumn.Width = 100;
             numberOfInputColumn.HeaderText = "Nhập";
-            numberOfInputColumn.Frozen = true;
+            //numberOfInputColumn.Frozen = true;
             numberOfInputColumn.ValueType = typeof(string);
             dgwStockEntranceList.Columns.Add(numberOfInputColumn);
 
@@ -96,7 +133,7 @@ namespace BaoHien.UI
             numberOfOutputColumn.DataPropertyName = "NumberOfOutput";
             numberOfOutputColumn.Width = 100;
             numberOfOutputColumn.HeaderText = "Xuất";
-            numberOfOutputColumn.Frozen = true;
+            //numberOfOutputColumn.Frozen = true;
             numberOfOutputColumn.ValueType = typeof(string);
             dgwStockEntranceList.Columns.Add(numberOfOutputColumn);
 
@@ -104,26 +141,18 @@ namespace BaoHien.UI
             numberOfRemainingColumn.DataPropertyName = "NumberOfRemaining";
             numberOfRemainingColumn.Width = 100;
             numberOfRemainingColumn.HeaderText = "Số lượng tồn";
-            numberOfRemainingColumn.Frozen = true;
+            //numberOfRemainingColumn.Frozen = true;
             numberOfRemainingColumn.ValueType = typeof(string);
-            dgwStockEntranceList.Columns.Add(numberOfOutputColumn);
+            dgwStockEntranceList.Columns.Add(numberOfRemainingColumn);
 
-            DataGridViewImageColumn deleteButton = new DataGridViewImageColumn();
-            deleteButton.Image = Properties.Resources.erase;
-            deleteButton.Width = 100;
-            deleteButton.HeaderText = "Xóa";
-            deleteButton.ReadOnly = true;
-            deleteButton.ImageLayout = DataGridViewImageCellLayout.Normal;
+            
+        }
 
-            DataGridViewTextBoxColumn descriptionColumn = new DataGridViewTextBoxColumn();
-            descriptionColumn.Width = 170;// dgvProductList.Width - productNameColumn.Width - typeCodeColumn.Width - deleteButton.Width;
-            descriptionColumn.DataPropertyName = "Description";
-            descriptionColumn.HeaderText = "Đặc tả";
-            descriptionColumn.Frozen = true;
-            descriptionColumn.ValueType = typeof(string);
-            dgwStockEntranceList.Columns.Add(descriptionColumn);
-
-            dgwStockEntranceList.Columns.Add(deleteButton);
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
+            dgwStockEntranceList.AutoGenerateColumns = false;
+            LoadReport();
+            SetupColumns();
         }
     }
 }

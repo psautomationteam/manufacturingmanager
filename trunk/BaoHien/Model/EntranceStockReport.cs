@@ -7,19 +7,26 @@ namespace BaoHien.Model
 {
     public class EntranceStockReport
     {
-        int codeProduct;
+        int index;
 
-        public int CodeProduct
+        public int Index
         {
-            get { return codeProduct; }
-            set { codeProduct = value; }
+            get { return index; }
+            set { index = value; }
         }
-        string name;
+        string productCode;
 
-        public string Name
+        public string ProductCode
         {
-            get { return name; }
-            set { name = value; }
+            get { return productCode; }
+            set { productCode = value; }
+        }
+        string productName;
+
+        public string ProductName
+        {
+            get { return productName; }
+            set { productName = value; }
         }
         string attributeName;
 
