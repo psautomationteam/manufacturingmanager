@@ -171,6 +171,8 @@ namespace BaoHien.UI
 
         private void Main_Load(object sender, EventArgs e)
         {
+            Settings.Default.FirstRun = 1;
+            Settings.Default.Save();
             if (Settings.Default.FirstRun == 1)
             {
                 DBConfiguration dBConfiguration = new DBConfiguration();
