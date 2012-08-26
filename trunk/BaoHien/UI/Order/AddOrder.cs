@@ -23,6 +23,7 @@ using System.IO;
 using CoolPrintPreview;
 using System.Reflection;
 using Word = Microsoft.Office.Interop.Word;
+using Microsoft.Office.Interop.Word;
 namespace BaoHien.UI
 {
     public partial class AddOrder : BaseForm
@@ -81,9 +82,9 @@ namespace BaoHien.UI
                 double vat = 0;
                 Double.TryParse(txtVAT.Text, out vat);
                 int userId = 0;
-                if (Global.CurrentUser != null)
+                if (BaoHien.Common.Global.CurrentUser != null)
                 {
-                    userId = Global.CurrentUser.Id;
+                    userId = BaoHien.Common.Global.CurrentUser.Id;
                 }
                 else
                 {
@@ -713,66 +714,100 @@ namespace BaoHien.UI
             oDoc = oWord.Documents.Add(ref oMissing, ref oMissing,
                 ref oMissing, ref oMissing);
 
+            Word.Table oTableForHeader;
+            Word.Range ForHeader = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
+            oTableForHeader = oDoc.Tables.Add(ForHeader, 3, 4, ref oMissing, ref oMissing);
+            oTableForHeader.Range.ParagraphFormat.SpaceAfter = 6;
+            oTableForHeader.Range.Font.Size = 12;
+            oTableForHeader.Cell(1, 1).Range.Text = BHConstant.COMPANY_NAME;
+            oTableForHeader.Cell(1, 1).Range.Bold = 0;
+            oTableForHeader.Cell(1, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
+
+
+
+            oTableForHeader.Cell(1, 3).Range.Text = "Mã phiếu:";
+            oTableForHeader.Cell(1, 3).Range.Bold = 1;
+            oTableForHeader.Cell(1, 3).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
+            oTableForHeader.Cell(1, 4).Range.Text = txtOrderCode.Text != null ? txtOrderCode.Text : "không tồn tại";
+            oTableForHeader.Cell(1, 4).Range.Bold = 0;
+            oTableForHeader.Cell(1, 4).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
+
+            oTableForHeader.Cell(2, 1).Range.Text = "Đ/C";
+            oTableForHeader.Cell(2, 1).Range.Bold = 0;
+            oTableForHeader.Cell(2, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
+
+            oTableForHeader.Cell(2, 2).Range.Text = ":TBD";
+            oTableForHeader.Cell(2, 2).Range.Bold = 0;
+            oTableForHeader.Cell(2, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
+
+            oTableForHeader.Cell(2, 3).Range.Text = "Ngày lập:";
+            oTableForHeader.Cell(2, 3).Range.Bold = 1;
+            oTableForHeader.Cell(2, 3).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
+
+            oTableForHeader.Cell(2, 4).Range.Text = txtCreatedDate.Text;
+            oTableForHeader.Cell(2, 4).Range.Bold = 0;
+            oTableForHeader.Cell(2, 4).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
+
+            oTableForHeader.Cell(3, 1).Range.Text = "Điện thoại:";
+            oTableForHeader.Cell(3, 1).Range.Bold = 0;
+            oTableForHeader.Cell(3, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
+
+            oTableForHeader.Cell(3, 2).Range.Text = ":TBD";
+            oTableForHeader.Cell(3, 2).Range.Bold = 0;
+            oTableForHeader.Cell(3, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
+
+
             //Insert a paragraph at the beginning of the document.
             Word.Paragraph oPara1;
             oPara1 = oDoc.Content.Paragraphs.Add(ref oMissing);
-            oPara1.Range.Text = "Phiếu bán hàng";
+            oPara1.Range.Text = "PHIẾU XUẤT KHO";
             oPara1.Range.Font.Bold = 1;
             oPara1.Range.Font.Size = 30;
             oPara1.Format.SpaceAfter = 24;    //24 pt spacing after paragraph.
             oPara1.Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
             oPara1.Range.InsertParagraphAfter();
 
-            Word.Paragraph oPara3;
-            object oRng3 = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
-            oPara3 = oDoc.Content.Paragraphs.Add(ref oRng3);
-            oPara3.Range.Text = "Thông tin phiếu bán hàng";
-            oPara3.Format.SpaceAfter = 6;
-            oPara3.Range.Font.Size = 12;
-            oPara3.Range.InsertParagraphAfter();
+            Word.Table oTableForCustomerInfo;
+            Word.Range ForCustomerInfo = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
+            oTableForCustomerInfo = oDoc.Tables.Add(ForCustomerInfo, 3, 4, ref oMissing, ref oMissing);
+            oTableForCustomerInfo.Range.ParagraphFormat.SpaceAfter = 6;
 
-            Word.Table oTable2;
-            Word.Range wrdRng2 = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
-            oTable2 = oDoc.Tables.Add(wrdRng2, 3, 4, ref oMissing, ref oMissing);
-            oTable2.Range.ParagraphFormat.SpaceAfter = 6;
-            //oTable2.Borders.Enable = 1;
-
-            oTable2.Cell(1, 1).Range.Text = "Mã phiếu:";
-            oTable2.Cell(1, 1).Range.Bold = 1;
-            oTable2.Cell(1, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
-            oTable2.Cell(1, 2).Range.Text = txtOrderCode.Text != null ? txtOrderCode.Text : "";
-            oTable2.Cell(1, 2).Range.Bold = 0;
-            oTable2.Cell(1, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
-
-            oTable2.Cell(1, 3).Range.Text = "Khách hàng:";
-            oTable2.Cell(1, 3).Range.Bold = 1;
-            oTable2.Cell(1, 3).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
+            oTableForCustomerInfo.Range.Font.Size = 13;
+            oTableForCustomerInfo.Cell(1, 1).Range.Text = "Khách hàng:";
+            oTableForCustomerInfo.Cell(1, 1).Range.Bold = 1;
+            oTableForCustomerInfo.Cell(1, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
 
             if (cbxCustomer.SelectedValue != null)
             {
-                oTable2.Cell(1, 4).Range.Text = customers.Where(cus => cus.Id == (int)cbxCustomer.SelectedValue).FirstOrDefault().CustomerName;
+                oTableForCustomerInfo.Cell(1, 2).Range.Text = customers.Where(cus => cus.Id == (int)cbxCustomer.SelectedValue).FirstOrDefault().CustomerName;
+                oTableForCustomerInfo.Cell(1, 2).Range.Bold = 0;
+                oTableForCustomerInfo.Cell(1, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
             }
-            oTable2.Cell(1, 4).Range.Bold = 0;
-            oTable2.Cell(1, 4).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
 
-            oTable2.Cell(2, 1).Range.Text = "Ngày lập:";
-            oTable2.Cell(2, 1).Range.Bold = 1;
-            oTable2.Cell(2, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
+            oTableForCustomerInfo.Cell(2, 1).Range.Text = "Địa chỉ:";
+            oTableForCustomerInfo.Cell(2, 1).Range.Bold = 1;
+            oTableForCustomerInfo.Cell(2, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
 
-            oTable2.Cell(2, 2).Range.Text = txtCreatedDate.Text;
-            oTable2.Cell(2, 2).Range.Bold = 0;
-            oTable2.Cell(2, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
+            if (cbxCustomer.SelectedValue != null)
+            {
+                oTableForCustomerInfo.Cell(2, 2).Range.Text = customers.Where(cus => cus.Id == (int)cbxCustomer.SelectedValue).FirstOrDefault().Address;
+                oTableForCustomerInfo.Cell(2, 2).Range.Bold = 0;
+                oTableForCustomerInfo.Cell(2, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
+            }
 
-            
 
-            //Insert a paragraph at the end of the document.
-            Word.Paragraph oPara2;
-            object oRng = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
-            oPara2 = oDoc.Content.Paragraphs.Add(ref oRng);
-            oPara2.Range.Text = "Chi tiết phiếu bán hàng";
-            oPara2.Format.SpaceAfter = 6;
-            oPara3.Range.Font.Size = 12;
-            oPara2.Range.InsertParagraphAfter();
+            oTableForCustomerInfo.Cell(3, 1).Range.Text = "Ghi chú:";
+            oTableForCustomerInfo.Cell(3, 1).Range.Bold = 1;
+            oTableForCustomerInfo.Cell(3, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
+
+            oTableForCustomerInfo.Cell(3, 2).Range.Text = txtNote.Text;
+            oTableForCustomerInfo.Cell(3, 2).Range.Bold = 0;
+            oTableForCustomerInfo.Cell(3, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
+
+            Microsoft.Office.Interop.Word.InlineShape line3 = oDoc.Paragraphs.Last.Range.InlineShapes.AddHorizontalLineStandard(ref oMissing);
+            line3.Height = 1;
+            line3.HorizontalLineFormat.NoShade = true;
+            line3.Fill.ForeColor.RGB = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Transparent);
 
 
 
@@ -780,99 +815,113 @@ namespace BaoHien.UI
             //bold and italic.
             Word.Table oTable;
             Word.Range wrdRng = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
-            oTable = oDoc.Tables.Add(wrdRng, dgwOrderDetails.RowCount + 1, dgwOrderDetails.ColumnCount - 2, ref oMissing, ref oMissing);
+            oTable = oDoc.Tables.Add(wrdRng, dgwOrderDetails.RowCount + 1, 5, ref oMissing, ref oMissing);
             oTable.Range.ParagraphFormat.SpaceAfter = 6;
             oTable.Borders.Enable = 1;
+            oTable.Range.Font.Size = 12;
+            oTable.Range.Font.Bold = 1;
             int r, c;
 
 
             for (r = 1; r <= dgwOrderDetails.RowCount; r++)
-                for (c = 1; c <= dgwOrderDetails.ColumnCount - 2; c++)
+                for (c = 1; c <= dgwOrderDetails.ColumnCount; c++)
                 {
                     if (r == 1)
                     {
-                        if (c == dgwOrderDetails.ColumnCount - 2)
-                        {
-                            oTable.Cell(r, c).Range.Text = dgwOrderDetails.Columns[dgwOrderDetails.ColumnCount - 1].HeaderText;
-                        }
-                        else
-                        {
-                            oTable.Cell(r, c).Range.Text = dgwOrderDetails.Columns[c - 1].HeaderText;
-                        }
+                        if (c == 1)
+                            oTable.Cell(r, c).Range.Text = "STT";
+                        else if (c == 2)
+                            oTable.Cell(r, c).Range.Text = "Tên hàng";
+                        else if (c == 3)
+                            oTable.Cell(r, c).Range.Text = "Quy cách";
+                        else if (c == 4)
+                            oTable.Cell(r, c).Range.Text = "Số lượng";
+                        else if (c == 5)
+                            oTable.Cell(r, c).Range.Text = "Ghi chú";
+                        
                     }
                     else
                     {
-                        oTable.Cell(r, c).Range.Font.Bold = 0;
-                        if (c - 1 == 0)
+                        if (c == 1)
                         {
-                            if (dgwOrderDetails.Rows[r - 2].Cells[c - 1].Value != null)
-                            {
-                                oTable.Cell(r, c).Range.Text = products.ToList().Where(p => p.Id == orderDetails[r - 2].ProductId).FirstOrDefault().ProductName;
-                            }
-
-
-
-
+                            oTable.Cell(r, c).Range.Text = (r - 1).ToString();
                         }
-                        else if (c - 1 == 1)
+                        else if (c == 2)
                         {
-                            if (dgwOrderDetails.Rows[r - 2].Cells[c - 1].Value != null)
-                            {
-                                oTable.Cell(r, c).Range.Text = baseAttributesAtRow.ToList().Where(a => a.Id == (int)dgwOrderDetails.Rows[r - 2].Cells[c - 1].Value).FirstOrDefault().AttributeName;
-                            }
-
+                            oTable.Cell(r, c).Range.Text = products.ToList().Where(p => p.Id == orderDetails[r - 2].ProductId).FirstOrDefault().ProductName;
                         }
-                        else if (c - 1 == 2)
+                        else if (c == 3)
                         {
-                            if (dgwOrderDetails.Rows[r - 2].Cells[c - 1].Value != null)
-                            {
-                                oTable.Cell(r, c).Range.Text = ((int)dgwOrderDetails.Rows[r - 2].Cells[c - 1].Value).ToString();
-                            }
-
+                            oTable.Cell(r, c).Range.Text = baseAttributesAtRow.ToList().Where(a => a.Id == (int)dgwOrderDetails.Rows[r - 2].Cells[c - 2].Value).FirstOrDefault().AttributeName;
+                        }
+                        else if (c == 4)
+                        {
+                            oTable.Cell(r, c).Range.Text = ((int)dgwOrderDetails.Rows[r - 2].Cells[c - 2].Value).ToString();
+                        }
+                        else if (c == 5)
+                        {
+                            oTable.Cell(r, c).Range.Text = (string)dgwOrderDetails.Rows[r - 2].Cells[dgwOrderDetails.ColumnCount - 1].Value;
                         }
                         
-                        else if (c - 1 == 3)
-                        {
-                            if (dgwOrderDetails.Rows[r - 2].Cells[dgwOrderDetails.ColumnCount - 1].Value != null)
-                            {
-                                oTable.Cell(r, c).Range.Text = ((string)dgwOrderDetails.Rows[r - 2].Cells[dgwOrderDetails.ColumnCount - 1].Value);
-                            }
 
-                        }
                     }
 
 
                 }
-            oTable.Rows[1].Range.Font.Bold = 1;
-            oTable.Rows[1].Range.Font.Italic = 1;
 
-            Word.Paragraph oPara4;
-            object oRng4 = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
-            oPara4 = oDoc.Content.Paragraphs.Add(ref oRng4);
-            oPara4.Format.SpaceAfter = 6;
-            oPara4.Range.Font.Size = 12;
-            oPara4.Range.InsertParagraphAfter();
-            Word.Table oTable3;
-            Word.Range wrdRng3 = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
+            oTable.Rows[1].Range.Font.Italic = 1;
+            oTable.Rows[1].Range.Font.Bold = 0;
             
-            Word.Paragraph oPara5;
-            object oRng5 = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
-            oPara5 = oDoc.Content.Paragraphs.Add(ref oRng5);
-            oPara5.Format.SpaceAfter = 6;
-            string createdBy = Global.CurrentUser.FullName;
-            if (order != null)
-            {
-                createdBy = order.SystemUser.FullName;
-            }
-            oPara5.Range.Text = "Người lập phiếu: " + createdBy;
-            oPara5.Range.Font.Size = 12;
-            oPara5.Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
-            oPara5.Range.InsertParagraphAfter();
-            
+
+            Microsoft.Office.Interop.Word.InlineShape line2 = oDoc.Paragraphs.Last.Range.InlineShapes.AddHorizontalLineStandard(ref oMissing);
+            line2.Height = 1;
+            line2.HorizontalLineFormat.NoShade = true;
+            line2.Fill.ForeColor.RGB = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Transparent);
+
+            Word.Table oTableForFooter;
+            Word.Range wrdRngForFooter = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
+            oTableForFooter = oDoc.Tables.Add(wrdRngForFooter, 1, 3, ref oMissing, ref oMissing);
+            oTableForFooter.Range.ParagraphFormat.SpaceAfter = 6;
+            oTableForFooter.Borders.Enable = 0;
+            oTableForFooter.Range.Font.Size = 12;
+            oTableForFooter.Cell(1, 1).Range.Text = "Khách hàng";
+            oTableForFooter.Cell(1, 1).Range.Bold = 0;
+            oTableForFooter.Cell(1, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+
+            oTableForFooter.Cell(1, 2).Range.Text = "Người lập phiếu";
+            oTableForFooter.Cell(1, 2).Range.Bold = 0;
+            oTableForFooter.Cell(1, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+
+            oTableForFooter.Cell(1, 3).Range.Text = "Kế toán";
+            oTableForFooter.Cell(1, 3).Range.Bold = 0;
+            oTableForFooter.Cell(1, 3).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+
+            oTableForFooter.Rows[1].Range.Font.Italic = 1;
+
+            Word.Paragraph oPara6;
+            object oRng6 = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
+            oPara6 = oDoc.Content.Paragraphs.Add(ref oRng6);
+            oPara6.Format.SpaceAfter = 6;
+            oPara6.Range.InsertParagraphAfter();
+
             oDoc.PrintPreview();
         }
         private void printOrder()
         {
+            double totalNoTax = 0.0;
+            for (int i = 0; i < dgwOrderDetails.RowCount; i++)
+            {
+                if (dgwOrderDetails.ColumnCount > 4)
+                {
+                    if (dgwOrderDetails.Rows[i].Cells[2].Value != null && dgwOrderDetails.Rows[i].Cells[3].Value != null)
+                    {
+                        dgwOrderDetails.Rows[i].Cells[4].Value = (int)dgwOrderDetails.Rows[i].Cells[2].Value * (double)dgwOrderDetails.Rows[i].Cells[3].Value;
+                        
+                        totalNoTax += (double)dgwOrderDetails.Rows[i].Cells[4].Value;
+                    }
+                }
+            }
+
             object oMissing = System.Reflection.Missing.Value;
             object oEndOfDoc = "\\endofdoc"; /* \endofdoc is a predefined bookmark */
 
@@ -884,80 +933,100 @@ namespace BaoHien.UI
             oDoc = oWord.Documents.Add(ref oMissing, ref oMissing,
                 ref oMissing, ref oMissing);
 
+            Word.Table oTableForHeader;
+            Word.Range ForHeader = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
+            oTableForHeader = oDoc.Tables.Add(ForHeader, 3, 4, ref oMissing, ref oMissing);
+            oTableForHeader.Range.ParagraphFormat.SpaceAfter = 6;
+            oTableForHeader.Range.Font.Size = 12;
+            oTableForHeader.Cell(1, 1).Range.Text = BHConstant.COMPANY_NAME;
+            oTableForHeader.Cell(1, 1).Range.Bold = 0;
+            oTableForHeader.Cell(1, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
+
+            
+
+            oTableForHeader.Cell(1, 3).Range.Text = "Mã phiếu:";
+            oTableForHeader.Cell(1, 3).Range.Bold = 1;
+            oTableForHeader.Cell(1, 3).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
+            oTableForHeader.Cell(1, 4).Range.Text = txtOrderCode.Text != null ? txtOrderCode.Text : "không tồn tại";
+            oTableForHeader.Cell(1, 4).Range.Bold = 0;
+            oTableForHeader.Cell(1, 4).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
+
+            oTableForHeader.Cell(2, 1).Range.Text = "Đ/C";
+            oTableForHeader.Cell(2, 1).Range.Bold = 0;
+            oTableForHeader.Cell(2, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
+
+            oTableForHeader.Cell(2, 2).Range.Text = ":TBD";
+            oTableForHeader.Cell(2, 2).Range.Bold = 0;
+            oTableForHeader.Cell(2, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
+
+            oTableForHeader.Cell(2, 3).Range.Text = "Ngày lập:";
+            oTableForHeader.Cell(2, 3).Range.Bold = 1;
+            oTableForHeader.Cell(2, 3).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
+
+            oTableForHeader.Cell(2, 4).Range.Text = txtCreatedDate.Text;
+            oTableForHeader.Cell(2, 4).Range.Bold = 0;
+            oTableForHeader.Cell(2, 4).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
+
+            oTableForHeader.Cell(3, 1).Range.Text = "Điện thoại:";
+            oTableForHeader.Cell(3, 1).Range.Bold = 0;
+            oTableForHeader.Cell(3, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
+
+            oTableForHeader.Cell(3, 2).Range.Text = ":TBD";
+            oTableForHeader.Cell(3, 2).Range.Bold = 0;
+            oTableForHeader.Cell(3, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
+
+
             //Insert a paragraph at the beginning of the document.
             Word.Paragraph oPara1;
             oPara1 = oDoc.Content.Paragraphs.Add(ref oMissing);
-            oPara1.Range.Text = "Phiếu bán hàng";
+            oPara1.Range.Text = "PHIẾU BÁN HÀNG";
             oPara1.Range.Font.Bold = 1;
             oPara1.Range.Font.Size = 30;
             oPara1.Format.SpaceAfter = 24;    //24 pt spacing after paragraph.
             oPara1.Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
             oPara1.Range.InsertParagraphAfter();
 
-            Word.Paragraph oPara3;
-            object oRng3 = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
-            oPara3 = oDoc.Content.Paragraphs.Add(ref oRng3);
-            oPara3.Range.Text = "Thông tin phiếu bán hàng";
-            oPara3.Format.SpaceAfter = 6;
-            oPara3.Range.Font.Size = 12;
-            oPara3.Range.InsertParagraphAfter();
+            Word.Table oTableForCustomerInfo;
+            Word.Range ForCustomerInfo = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
+            oTableForCustomerInfo = oDoc.Tables.Add(ForCustomerInfo, 3, 4, ref oMissing, ref oMissing);
+            oTableForCustomerInfo.Range.ParagraphFormat.SpaceAfter = 6;
 
-            Word.Table oTable2;
-            Word.Range wrdRng2 = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
-            oTable2 = oDoc.Tables.Add(wrdRng2, 3, 4, ref oMissing, ref oMissing);
-            oTable2.Range.ParagraphFormat.SpaceAfter = 6;
-            //oTable2.Borders.Enable = 1;
-
-            oTable2.Cell(1, 1).Range.Text = "Mã phiếu:";
-            oTable2.Cell(1, 1).Range.Bold = 1;
-            oTable2.Cell(1, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
-            oTable2.Cell(1, 2).Range.Text = txtOrderCode.Text != null ? txtOrderCode.Text : "";
-            oTable2.Cell(1, 2).Range.Bold = 0;
-            oTable2.Cell(1, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
-
-            oTable2.Cell(1, 3).Range.Text = "Khách hàng:";
-            oTable2.Cell(1, 3).Range.Bold = 1;
-            oTable2.Cell(1, 3).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
+            oTableForCustomerInfo.Range.Font.Size = 13;
+            oTableForCustomerInfo.Cell(1, 1).Range.Text = "Khách hàng:";
+            oTableForCustomerInfo.Cell(1, 1).Range.Bold = 1;
+            oTableForCustomerInfo.Cell(1, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
 
             if (cbxCustomer.SelectedValue != null)
             {
-                oTable2.Cell(1, 4).Range.Text = customers.Where(cus => cus.Id == (int)cbxCustomer.SelectedValue).FirstOrDefault().CustomerName;
+                oTableForCustomerInfo.Cell(1, 2).Range.Text = customers.Where(cus => cus.Id == (int)cbxCustomer.SelectedValue).FirstOrDefault().CustomerName;
+                oTableForCustomerInfo.Cell(1, 2).Range.Bold = 0;
+                oTableForCustomerInfo.Cell(1, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
             }
-            oTable2.Cell(1, 4).Range.Bold = 0;
-            oTable2.Cell(1, 4).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
 
-            oTable2.Cell(2, 1).Range.Text = "Ngày lập:";
-            oTable2.Cell(2, 1).Range.Bold = 1;
-            oTable2.Cell(2, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
+            oTableForCustomerInfo.Cell(2, 1).Range.Text = "Địa chỉ:";
+            oTableForCustomerInfo.Cell(2, 1).Range.Bold = 1;
+            oTableForCustomerInfo.Cell(2, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
 
-            oTable2.Cell(2, 2).Range.Text = txtCreatedDate.Text;
-            oTable2.Cell(2, 2).Range.Bold = 0;
-            oTable2.Cell(2, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
+            if (cbxCustomer.SelectedValue != null)
+            {
+                oTableForCustomerInfo.Cell(2, 2).Range.Text = customers.Where(cus => cus.Id == (int)cbxCustomer.SelectedValue).FirstOrDefault().Address;
+                oTableForCustomerInfo.Cell(2, 2).Range.Bold = 0;
+                oTableForCustomerInfo.Cell(2, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
+            }
 
-            oTable2.Cell(2, 3).Range.Text = "Khấu chi:";
-            oTable2.Cell(2, 3).Range.Bold = 1;
-            oTable2.Cell(2, 3).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
+           
+            oTableForCustomerInfo.Cell(3, 1).Range.Text = "Ghi chú:";
+            oTableForCustomerInfo.Cell(3, 1).Range.Bold = 1;
+            oTableForCustomerInfo.Cell(3, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
 
-            oTable2.Cell(2, 4).Range.Text = txtDiscount.Text != null ? txtDiscount.Text : "";
-            oTable2.Cell(2, 4).Range.Bold = 0;
-            oTable2.Cell(2, 4).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
+            oTableForCustomerInfo.Cell(3, 2).Range.Text = txtNote.Text;
+            oTableForCustomerInfo.Cell(3, 2).Range.Bold = 0;
+            oTableForCustomerInfo.Cell(3, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
 
-            oTable2.Cell(3, 1).Range.Text = "VAT:";
-            oTable2.Cell(3, 1).Range.Bold = 1;
-            oTable2.Cell(3, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
-
-            oTable2.Cell(3, 2).Range.Text = txtVAT.Text != null ? txtVAT.Text : "";
-            oTable2.Cell(3, 2).Range.Bold = 0;
-            oTable2.Cell(3, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
-
-            //Insert a paragraph at the end of the document.
-            Word.Paragraph oPara2;
-            object oRng = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
-            oPara2 = oDoc.Content.Paragraphs.Add(ref oRng);
-            oPara2.Range.Text = "Chi tiết phiếu bán hàng";
-            oPara2.Format.SpaceAfter = 6;
-            oPara3.Range.Font.Size = 12;
-            oPara2.Range.InsertParagraphAfter();
+            Microsoft.Office.Interop.Word.InlineShape line3 = oDoc.Paragraphs.Last.Range.InlineShapes.AddHorizontalLineStandard(ref oMissing);
+            line3.Height = 1;
+            line3.HorizontalLineFormat.NoShade = true;
+            line3.Fill.ForeColor.RGB = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Transparent);
 
 
 
@@ -965,9 +1034,11 @@ namespace BaoHien.UI
             //bold and italic.
             Word.Table oTable;
             Word.Range wrdRng = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
-            oTable = oDoc.Tables.Add(wrdRng, dgwOrderDetails.RowCount + 1, dgwOrderDetails.ColumnCount, ref oMissing, ref oMissing);
+            oTable = oDoc.Tables.Add(wrdRng, dgwOrderDetails.RowCount + 1, 6, ref oMissing, ref oMissing);
             oTable.Range.ParagraphFormat.SpaceAfter = 6;
             oTable.Borders.Enable = 1;
+            oTable.Range.Font.Size = 12;
+            oTable.Range.Font.Bold = 1;
             int r, c;
 
 
@@ -976,113 +1047,158 @@ namespace BaoHien.UI
                 {
                     if (r == 1)
                     {
-                        oTable.Cell(r, c).Range.Text = dgwOrderDetails.Columns[c - 1].HeaderText;
+                        if(c == 1)
+                            oTable.Cell(r, c).Range.Text = "STT";
+                        else if(c == 2)
+                            oTable.Cell(r, c).Range.Text = "Tên hàng";
+                        else if (c == 3)
+                            oTable.Cell(r, c).Range.Text = "Quy cách";
+                        else if (c == 4)
+                            oTable.Cell(r, c).Range.Text = "Số lượng";
+                        else if (c == 5)
+                            oTable.Cell(r, c).Range.Text = "Giá(VNĐ)";
+                        else if (c == 6)
+                            oTable.Cell(r, c).Range.Text = "Thành tiền(VNĐ)";
+                        //oTable.Cell(r, c).Range.Text = dgwOrderDetails.Columns[c - 1].HeaderText;
                     }
                     else
                     {
-                        oTable.Cell(r, c).Range.Font.Bold = 0;
-                        if (c - 1 == 0)
+                        if (c == 1)
                         {
-                            if (dgwOrderDetails.Rows[r - 2].Cells[c - 1].Value != null)
-                            {
-                                oTable.Cell(r, c).Range.Text = products.ToList().Where(p => p.Id == orderDetails[r - 2].ProductId).FirstOrDefault().ProductName;
-                            }
-
-
-
-
+                            oTable.Cell(r, c).Range.Text = (r - 1).ToString();
                         }
-                        else if (c - 1 == 1)
+                        else if (c == 2)
                         {
-                            if (dgwOrderDetails.Rows[r - 2].Cells[c - 1].Value != null)
-                            {
-                                oTable.Cell(r, c).Range.Text = baseAttributesAtRow.ToList().Where(a => a.Id == (int)dgwOrderDetails.Rows[r - 2].Cells[c - 1].Value).FirstOrDefault().AttributeName;
-                            }
-
+                            oTable.Cell(r, c).Range.Text = products.ToList().Where(p => p.Id == orderDetails[r - 2].ProductId).FirstOrDefault().ProductName;
                         }
-                        else if (c - 1 == 2)
+                        else if (c == 3)
                         {
-                            if (dgwOrderDetails.Rows[r - 2].Cells[c - 1].Value != null)
-                            {
-                                oTable.Cell(r, c).Range.Text = ((int)dgwOrderDetails.Rows[r - 2].Cells[c - 1].Value).ToString();
-                            }
-
+                            oTable.Cell(r, c).Range.Text = baseAttributesAtRow.ToList().Where(a => a.Id == (int)dgwOrderDetails.Rows[r - 2].Cells[c - 2].Value).FirstOrDefault().AttributeName;
                         }
-                        else if (c - 1 == 3)
+                        else if (c == 4)
                         {
-                            if (dgwOrderDetails.Rows[r - 2].Cells[c - 1].Value != null)
-                            {
-                                oTable.Cell(r, c).Range.Text = ((double)dgwOrderDetails.Rows[r - 2].Cells[c - 1].Value).ToString();
-                            }
+                            oTable.Cell(r, c).Range.Text = ((int)dgwOrderDetails.Rows[r - 2].Cells[c - 2].Value).ToString();
                         }
-                        else if (c - 1 == 4)
+                        else if (c == 5)
                         {
-                            if (dgwOrderDetails.Rows[r - 2].Cells[c - 1].Value != null)
-                            {
-                                oTable.Cell(r, c).Range.Text = ((double)dgwOrderDetails.Rows[r - 2].Cells[c - 1].Value).ToString();
-                            }
-
+                            oTable.Cell(r, c).Range.Text = ((double)dgwOrderDetails.Rows[r - 2].Cells[c - 2].Value).ToString();
                         }
-                        else if (c - 1 == 5)
+                        else if (c == 6)
                         {
-                            if (dgwOrderDetails.Rows[r - 2].Cells[c - 1].Value != null)
-                            {
-                                oTable.Cell(r, c).Range.Text = ((string)dgwOrderDetails.Rows[r - 2].Cells[c - 1].Value);
-                            }
-
+                            oTable.Cell(r, c).Range.Text = (((double)dgwOrderDetails.Rows[r - 2].Cells[c - 2].Value)).ToString();
                         }
+                        
                     }
 
 
                 }
-            oTable.Rows[1].Range.Font.Bold = 1;
+            
             oTable.Rows[1].Range.Font.Italic = 1;
-
-            Word.Paragraph oPara4;
-            object oRng4 = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
-            oPara4 = oDoc.Content.Paragraphs.Add(ref oRng4);
-            oPara4.Format.SpaceAfter = 6;
-            oPara4.Range.Font.Size = 12;
-            oPara4.Range.InsertParagraphAfter();
+            oTable.Rows[1].Range.Font.Bold = 0;
+            Microsoft.Office.Interop.Word.InlineShape line = oDoc.Paragraphs.Last.Range.InlineShapes.AddHorizontalLineStandard(ref oMissing);
+            line.Height = 1;
+            line.HorizontalLineFormat.NoShade = true;
+            line.Fill.ForeColor.RGB = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Transparent);
+        
             Word.Table oTable3;
             Word.Range wrdRng3 = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
-            oTable3 = oDoc.Tables.Add(wrdRng3, 2, 2, ref oMissing, ref oMissing);
+            oTable3 = oDoc.Tables.Add(wrdRng3, 4, 3, ref oMissing, ref oMissing);
             oTable3.Range.ParagraphFormat.SpaceAfter = 6;
-            oTable2.Borders.Enable = 1;
+            oTable3.Borders.Enable = 0;
+            oTable3.Range.Font.Size = 12;
+            oTable3.Cell(1, 1).Width = 150;
+            oTable3.Cell(2, 1).Width = 150;
+            oTable3.Cell(3, 1).Width = 150;
+            oTable3.Cell(4, 1).Width = 150;
 
-            oTable3.Cell(1, 1).Range.Text = "Giá trị phiếu hàng trước thuế và khấu hao:";
-            oTable3.Cell(1, 1).Range.Bold = 1;
-            oTable3.Cell(1, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
-            oTable3.Cell(1, 2).Range.Text = lblSubTotal.Text != null ? lblSubTotal.Text : "";
+            oTable3.Cell(1, 2).Width = 250;
+            oTable3.Cell(1, 2).Range.Text = "Giá trị hàng:";
             oTable3.Cell(1, 2).Range.Bold = 0;
-            oTable3.Cell(1, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
+            oTable3.Cell(1, 2).Range.Italic = 1;
+            oTable3.Cell(1, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
 
-            oTable3.Cell(2, 1).Range.Text = "Giá trị phiếu hàng sau thuế và khấu hao:";
-            oTable3.Cell(2, 1).Range.Bold = 1;
-            oTable3.Cell(2, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
+            oTable3.Cell(1, 3).Width = 250;
+            oTable3.Cell(1, 3).Range.Text = totalNoTax.ToString();
+            oTable3.Cell(1, 3).Range.Bold = 0;
+            oTable3.Cell(1, 3).Range.Italic = 0;
+            oTable3.Cell(1, 3).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
 
-            oTable3.Cell(2, 2).Range.Text = lblGrantTotal.Text != null ? lblGrantTotal.Text : "";
+            oTable3.Cell(2, 2).Width = 250;
+            oTable3.Cell(2, 2).Range.Text = "VAT:";
             oTable3.Cell(2, 2).Range.Bold = 0;
-            oTable3.Cell(2, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
+            oTable3.Cell(2, 2).Range.Italic = 1;
+            oTable3.Cell(2, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
 
-            Word.Paragraph oPara5;
-            object oRng5 = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
-            oPara5 = oDoc.Content.Paragraphs.Add(ref oRng5);
-            oPara5.Format.SpaceAfter = 6;
-            string createdBy = Global.CurrentUser.FullName;
-            if (order != null)
-            {
-                createdBy = order.SystemUser.FullName;
-            }
-            oPara5.Range.Text = "Người lập phiếu: " + createdBy;
-            oPara5.Range.Font.Size = 12;
-            oPara5.Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
-            oPara5.Range.InsertParagraphAfter();
+            oTable3.Cell(2, 3).Width = 250;
+            oTable3.Cell(2, 3).Range.Text = txtVAT.Text;
+            oTable3.Cell(2, 3).Range.Bold = 0;
+            oTable3.Cell(2, 3).Range.Italic = 0;
+            oTable3.Cell(2, 3).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
+
+            oTable3.Cell(3, 2).Width = 250;
+            oTable3.Cell(3, 2).Range.Text = "Chiết khấu:";
+            oTable3.Cell(3, 2).Range.Bold = 0;
+            oTable3.Cell(3, 2).Range.Italic = 1;
+            oTable3.Cell(3, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
+
+            oTable3.Cell(3, 3).Width = 250;
+            oTable3.Cell(3, 3).Range.Text = txtDiscount.Text;
+            oTable3.Cell(3, 3).Range.Bold = 0;
+            oTable3.Cell(3, 3).Range.Italic = 0;
+            oTable3.Cell(3, 3).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
+
+            oTable3.Cell(4, 2).Width = 250;
+            oTable3.Cell(4, 2).Range.Text = "Tổng tiền:";
+            oTable3.Cell(4, 2).Range.Bold = 0;
+            oTable3.Cell(4, 2).Range.Italic = 1;
+            oTable3.Cell(4, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
+
+            oTable3.Cell(4, 3).Width = 250;
+            oTable3.Cell(4, 3).Range.Text = lblGrantTotal.Text;
+            oTable3.Cell(4, 3).Range.Bold = 1;
+            oTable3.Cell(4, 3).Range.Italic = 0;
+            oTable3.Cell(4, 3).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
+
+
+            Microsoft.Office.Interop.Word.InlineShape line2 = oDoc.Paragraphs.Last.Range.InlineShapes.AddHorizontalLineStandard(ref oMissing);
+            line2.Height = 1;
+            line2.HorizontalLineFormat.NoShade = true;
+            line2.Fill.ForeColor.RGB = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Transparent);
+
+            Word.Table oTableForFooter;
+            Word.Range wrdRngForFooter = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
+            oTableForFooter = oDoc.Tables.Add(wrdRngForFooter, 1, 3, ref oMissing, ref oMissing);
+            oTableForFooter.Range.ParagraphFormat.SpaceAfter = 6;
+            oTableForFooter.Borders.Enable = 0;
+            oTableForFooter.Range.Font.Size = 12;
+            oTableForFooter.Cell(1, 1).Range.Text = "Khách hàng";
+            oTableForFooter.Cell(1, 1).Range.Bold = 0;
+            oTableForFooter.Cell(1, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+
+            oTableForFooter.Cell(1, 2).Range.Text = "Người lập phiếu";
+            oTableForFooter.Cell(1, 2).Range.Bold = 0;
+            oTableForFooter.Cell(1, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
             
+            oTableForFooter.Cell(1, 3).Range.Text = "Kế toán";
+            oTableForFooter.Cell(1, 3).Range.Bold = 0;
+            oTableForFooter.Cell(1, 3).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+
+            oTableForFooter.Rows[1].Range.Font.Italic = 1;
+
+            Word.Paragraph oPara6;
+            object oRng6 = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
+            oPara6 = oDoc.Content.Paragraphs.Add(ref oRng6);
+            oPara6.Format.SpaceAfter = 6;
+            oPara6.Range.InsertParagraphAfter();
+
             oDoc.PrintPreview();
             
         }
+        private void InsertLine()
+        {
+            
 
+        }
         private void btnCancel_Click(object sender, EventArgs e)
         {
             this.Close();

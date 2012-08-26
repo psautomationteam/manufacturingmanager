@@ -7,6 +7,7 @@ namespace BaoHien.Common
 {
     public class BHConstant
     {
+        public const string COMPANY_NAME = "Cty TNHH BẢO HIẾN";
         public const string DATABASE_NAME = "BaoHienCompany";
         public const string USER_TYPE_NAME1 = "Kế Toán";
         public const string USER_TYPE_NAME2 = "Quản Trị";

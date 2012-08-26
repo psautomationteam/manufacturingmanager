@@ -67,6 +67,7 @@
     <Compile Include="Common\Global.cs" />
     <Compile Include="Common\RandomGeneration.cs" />
     <Compile Include="Model\BillSearchCriteria.cs" />
+    <Compile Include="Model\ArrearReportModel.cs" />
     <Compile Include="Model\EntranceStockReport.cs" />
     <Compile Include="Model\EntranceStockSearchCriteria.cs" />
     <Compile Include="Model\OrderSearchCriteria.cs" />
@@ -226,6 +227,12 @@
     <Compile Include="UI\Product\ProductType.Designer.cs">
       <DependentUpon>ProductType.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\Report\ArrearReport.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\Report\ArrearReport.designer.cs">
+      <DependentUpon>ArrearReport.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\Report\ProductAndMaterialReport.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -346,6 +353,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Product\ProductType.resx">
       <DependentUpon>ProductType.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Report\ArrearReport.resx">
+      <DependentUpon>ArrearReport.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Report\ProductAndMaterialReport.resx">
       <DependentUpon>ProductAndMaterialReport.cs</DependentUpon>
