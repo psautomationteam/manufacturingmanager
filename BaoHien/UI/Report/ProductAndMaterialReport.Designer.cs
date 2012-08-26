@@ -30,7 +30,7 @@
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.btnSearch = new System.Windows.Forms.Button();
-            this.cbmUsers = new System.Windows.Forms.ComboBox();
+            this.cbmProductTypes = new System.Windows.Forms.ComboBox();
             this.label5 = new System.Windows.Forms.Label();
             this.dtpFrom = new System.Windows.Forms.DateTimePicker();
             this.label1 = new System.Windows.Forms.Label();
@@ -43,47 +43,47 @@
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.btnSearch);
-            this.groupBox1.Controls.Add(this.cbmUsers);
+            this.groupBox1.Controls.Add(this.cbmProductTypes);
             this.groupBox1.Controls.Add(this.label5);
             this.groupBox1.Controls.Add(this.dtpFrom);
             this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Location = new System.Drawing.Point(19, 16);
+            this.groupBox1.Location = new System.Drawing.Point(19, 17);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(696, 63);
+            this.groupBox1.Size = new System.Drawing.Size(696, 68);
             this.groupBox1.TabIndex = 17;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Thông tin tạo báo cáo";
             // 
             // btnSearch
             // 
-            this.btnSearch.Location = new System.Drawing.Point(597, 19);
+            this.btnSearch.Location = new System.Drawing.Point(597, 20);
             this.btnSearch.Name = "btnSearch";
-            this.btnSearch.Size = new System.Drawing.Size(75, 35);
+            this.btnSearch.Size = new System.Drawing.Size(75, 38);
             this.btnSearch.TabIndex = 1;
             this.btnSearch.Text = "Báo Cáo";
             this.btnSearch.UseVisualStyleBackColor = true;
             // 
-            // cbmUsers
+            // cbmProductTypes
             // 
-            this.cbmUsers.FormattingEnabled = true;
-            this.cbmUsers.Location = new System.Drawing.Point(383, 19);
-            this.cbmUsers.Name = "cbmUsers";
-            this.cbmUsers.Size = new System.Drawing.Size(166, 21);
-            this.cbmUsers.TabIndex = 9;
+            this.cbmProductTypes.FormattingEnabled = true;
+            this.cbmProductTypes.Location = new System.Drawing.Point(383, 20);
+            this.cbmProductTypes.Name = "cbmProductTypes";
+            this.cbmProductTypes.Size = new System.Drawing.Size(166, 22);
+            this.cbmProductTypes.TabIndex = 9;
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(298, 27);
+            this.label5.Location = new System.Drawing.Point(298, 29);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(79, 13);
+            this.label5.Size = new System.Drawing.Size(80, 14);
             this.label5.TabIndex = 8;
             this.label5.Text = "Loại sản phẩm:";
             // 
             // dtpFrom
             // 
             this.dtpFrom.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dtpFrom.Location = new System.Drawing.Point(116, 21);
+            this.dtpFrom.Location = new System.Drawing.Point(116, 23);
             this.dtpFrom.Name = "dtpFrom";
             this.dtpFrom.Size = new System.Drawing.Size(124, 20);
             this.dtpFrom.TabIndex = 1;
@@ -91,25 +91,25 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(39, 27);
+            this.label1.Location = new System.Drawing.Point(39, 29);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(71, 13);
+            this.label1.Size = new System.Drawing.Size(70, 14);
             this.label1.TabIndex = 0;
             this.label1.Text = "Tại thời điểm:";
             // 
             // dgwStockEntranceList
             // 
             this.dgwStockEntranceList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgwStockEntranceList.Location = new System.Drawing.Point(19, 120);
+            this.dgwStockEntranceList.Location = new System.Drawing.Point(19, 129);
             this.dgwStockEntranceList.Name = "dgwStockEntranceList";
-            this.dgwStockEntranceList.Size = new System.Drawing.Size(1053, 501);
+            this.dgwStockEntranceList.Size = new System.Drawing.Size(1053, 540);
             this.dgwStockEntranceList.TabIndex = 21;
             // 
             // label8
             // 
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.Location = new System.Drawing.Point(16, 92);
+            this.label8.Location = new System.Drawing.Point(16, 99);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(324, 14);
             this.label8.TabIndex = 20;
@@ -117,13 +117,13 @@
             // 
             // ProductAndMaterialReport
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.dgwStockEntranceList);
             this.Controls.Add(this.label8);
             this.Name = "ProductAndMaterialReport";
-            this.Size = new System.Drawing.Size(1084, 641);
+            this.Size = new System.Drawing.Size(1084, 690);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgwStockEntranceList)).EndInit();
@@ -136,7 +136,7 @@
 
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Button btnSearch;
-        private System.Windows.Forms.ComboBox cbmUsers;
+        private System.Windows.Forms.ComboBox cbmProductTypes;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.DateTimePicker dtpFrom;
         private System.Windows.Forms.Label label1;

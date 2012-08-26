@@ -39,8 +39,8 @@ namespace BaoHien.UI
                 MessageBox.Show("Cơ sở dữ liệu đã được chuyển");
                 if (Settings.Default.FirstRun == 1)
                 {
-                    Settings.Default.FirstRun = 0;
-                    Settings.Default.Save();
+                    //Settings.Default.FirstRun = 0;
+                    //Settings.Default.Save();
                     
                 }
                 

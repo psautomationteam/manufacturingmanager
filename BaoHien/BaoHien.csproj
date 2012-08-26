@@ -67,6 +67,7 @@
     <Compile Include="Common\Global.cs" />
     <Compile Include="Common\RandomGeneration.cs" />
     <Compile Include="Model\BillSearchCriteria.cs" />
+    <Compile Include="Model\EntranceStockReport.cs" />
     <Compile Include="Model\EntranceStockSearchCriteria.cs" />
     <Compile Include="Model\OrderSearchCriteria.cs" />
     <Compile Include="Model\ProductionRequestSearchCriteria.cs" />
