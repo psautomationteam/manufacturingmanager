@@ -242,30 +242,12 @@ namespace BaoHien.UI
         }
         private void dgvMaterial_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
         {
-            if (dgvMaterial.CurrentCell.ColumnIndex == 0)
+            if (dgvMaterial.CurrentCell != null)
             {
-                var source = new AutoCompleteStringCollection();
-                String[] stringArray = Array.ConvertAll<Product, String>(productForProducts.ToArray(), delegate(Product row) { return (String)row.ProductName; });
-                source.AddRange(stringArray);
-
-                ComboBox prodCode = e.Control as ComboBox;
-                if (prodCode != null)
-                {
-                    prodCode.DropDownStyle = ComboBoxStyle.DropDown;
-                    prodCode.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-                    prodCode.AutoCompleteCustomSource = source;
-                    prodCode.AutoCompleteSource = AutoCompleteSource.CustomSource;
-                    prodCode.MaxDropDownItems = 5;
-
-                }
-                this.validator1.SetType(prodCode, Itboy.Components.ValidationType.Required);
-            }
-            else if (dgvMaterial.CurrentCell.ColumnIndex == 1)
-            {
-                if (baseAttributesAtRowForMaterial != null)
+                if (dgvMaterial.CurrentCell.ColumnIndex == 0)
                 {
                     var source = new AutoCompleteStringCollection();
-                    String[] stringArray = Array.ConvertAll<BaseAttribute, String>(baseAttributesAtRowForMaterial.ToArray(), delegate(BaseAttribute row) { return (String)row.AttributeName; });
+                    String[] stringArray = Array.ConvertAll<Product, String>(productForProducts.ToArray(), delegate(Product row) { return (String)row.ProductName; });
                     source.AddRange(stringArray);
 
                     ComboBox prodCode = e.Control as ComboBox;
@@ -280,14 +262,36 @@ namespace BaoHien.UI
                     }
                     this.validator1.SetType(prodCode, Itboy.Components.ValidationType.Required);
                 }
+                else if (dgvMaterial.CurrentCell.ColumnIndex == 1)
+                {
+                    if (baseAttributesAtRowForMaterial != null)
+                    {
+                        var source = new AutoCompleteStringCollection();
+                        String[] stringArray = Array.ConvertAll<BaseAttribute, String>(baseAttributesAtRowForMaterial.ToArray(), delegate(BaseAttribute row) { return (String)row.AttributeName; });
+                        source.AddRange(stringArray);
 
+                        ComboBox prodCode = e.Control as ComboBox;
+                        if (prodCode != null)
+                        {
+                            prodCode.DropDownStyle = ComboBoxStyle.DropDown;
+                            prodCode.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+                            prodCode.AutoCompleteCustomSource = source;
+                            prodCode.AutoCompleteSource = AutoCompleteSource.CustomSource;
+                            prodCode.MaxDropDownItems = 5;
+
+                        }
+                        this.validator1.SetType(prodCode, Itboy.Components.ValidationType.Required);
+                    }
+
+                }
+                else if (dgvMaterial.CurrentCell.ColumnIndex == 2)
+                {
+                    TextBox numberOfUnit = e.Control as TextBox;
+                    this.validator1.SetRegularExpression(numberOfUnit, BHConstant.REGULAR_EXPRESSION_FOR_NUMBER);
+                    this.validator1.SetType(numberOfUnit, Itboy.Components.ValidationType.RegularExpression);
+                }
             }
-            else if (dgvProduct.CurrentCell.ColumnIndex == 2)
-            {
-                TextBox numberOfUnit = e.Control as TextBox;
-                this.validator1.SetRegularExpression(numberOfUnit, BHConstant.REGULAR_EXPRESSION_FOR_NUMBER);
-                this.validator1.SetType(numberOfUnit, Itboy.Components.ValidationType.RegularExpression);
-            }
+            
         }
 
         private void dgvMaterial_CellEnter(object sender, DataGridViewCellEventArgs e)
@@ -387,32 +391,12 @@ namespace BaoHien.UI
 
         private void dgvProduct_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
         {
-            if (dgvProduct.CurrentCell.ColumnIndex == 0)
+            if (dgvProduct.CurrentCell != null)
             {
-                var source = new AutoCompleteStringCollection();
-                String[] stringArray = Array.ConvertAll<Product, String>(productForProducts.ToArray(), delegate(Product row) { return (String)row.ProductName; });
-                source.AddRange(stringArray);
-
-                ComboBox prodCode = e.Control as ComboBox;
-                if (prodCode != null)
-                {
-                    prodCode.DropDownStyle = ComboBoxStyle.DropDown;
-                    prodCode.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-                    prodCode.AutoCompleteCustomSource = source;
-                    prodCode.AutoCompleteSource = AutoCompleteSource.CustomSource;
-                    prodCode.MaxDropDownItems = 5;
-                   
-                }
-                
-                this.validator1.SetType(prodCode, Itboy.Components.ValidationType.Required);
-
-            }
-            else if (dgvProduct.CurrentCell.ColumnIndex == 1)
-            {
-                if (baseAttributesAtRowForProduct != null)
+                if (dgvProduct.CurrentCell.ColumnIndex == 0)
                 {
                     var source = new AutoCompleteStringCollection();
-                    String[] stringArray = Array.ConvertAll<BaseAttribute, String>(baseAttributesAtRowForProduct.ToArray(), delegate(BaseAttribute row) { return (String)row.AttributeName; });
+                    String[] stringArray = Array.ConvertAll<Product, String>(productForProducts.ToArray(), delegate(Product row) { return (String)row.ProductName; });
                     source.AddRange(stringArray);
 
                     ComboBox prodCode = e.Control as ComboBox;
@@ -425,16 +409,40 @@ namespace BaoHien.UI
                         prodCode.MaxDropDownItems = 5;
 
                     }
-                    this.validator1.SetType(prodCode, Itboy.Components.ValidationType.Required);
-                }
 
+                    this.validator1.SetType(prodCode, Itboy.Components.ValidationType.Required);
+
+                }
+                else if (dgvProduct.CurrentCell.ColumnIndex == 1)
+                {
+                    if (baseAttributesAtRowForProduct != null)
+                    {
+                        var source = new AutoCompleteStringCollection();
+                        String[] stringArray = Array.ConvertAll<BaseAttribute, String>(baseAttributesAtRowForProduct.ToArray(), delegate(BaseAttribute row) { return (String)row.AttributeName; });
+                        source.AddRange(stringArray);
+
+                        ComboBox prodCode = e.Control as ComboBox;
+                        if (prodCode != null)
+                        {
+                            prodCode.DropDownStyle = ComboBoxStyle.DropDown;
+                            prodCode.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+                            prodCode.AutoCompleteCustomSource = source;
+                            prodCode.AutoCompleteSource = AutoCompleteSource.CustomSource;
+                            prodCode.MaxDropDownItems = 5;
+
+                        }
+                        this.validator1.SetType(prodCode, Itboy.Components.ValidationType.Required);
+                    }
+
+                }
+                else if (dgvProduct.CurrentCell.ColumnIndex == 2)
+                {
+                    TextBox numberOfUnit = e.Control as TextBox;
+                    this.validator1.SetRegularExpression(numberOfUnit, BHConstant.REGULAR_EXPRESSION_FOR_NUMBER);
+                    this.validator1.SetType(numberOfUnit, Itboy.Components.ValidationType.RegularExpression);
+                }
             }
-            else if (dgvProduct.CurrentCell.ColumnIndex == 2)
-            {
-                TextBox numberOfUnit = e.Control as TextBox;
-                this.validator1.SetRegularExpression(numberOfUnit,BHConstant.REGULAR_EXPRESSION_FOR_NUMBER);
-                this.validator1.SetType(numberOfUnit, Itboy.Components.ValidationType.RegularExpression);
-            }
+            
         }
 
         private void dgvProduct_CellEndEdit(object sender, DataGridViewCellEventArgs e)
