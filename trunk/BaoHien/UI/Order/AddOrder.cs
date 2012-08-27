@@ -240,9 +240,9 @@ namespace BaoHien.UI
                             productInStock.LatestUpdate = DateTime.Now;
                             productInStock.StatusOfData = false;
 
-                            productInStock.NumberOfInput = lstProductInStock.Last<ProductInStock>().NumberOfInput;
-                            productInStock.NumberOfOutput = lstProductInStock.Last<ProductInStock>().NumberOfOutput - od.NumberUnit;
-                            productInStock.NumberOfItem = (int)lstProductInStock.Last<ProductInStock>().NumberOfItem - od.NumberUnit;
+                            productInStock.NumberOfInput = lstProductInStock.Last<ProductInStock>() != null?lstProductInStock.Last<ProductInStock>().NumberOfInput: 0;
+                            productInStock.NumberOfOutput = lstProductInStock.Last<ProductInStock>() != null?lstProductInStock.Last<ProductInStock>().NumberOfOutput - od.NumberUnit: 0;
+                            productInStock.NumberOfItem = lstProductInStock.Last<ProductInStock>() != null?(int)lstProductInStock.Last<ProductInStock>().NumberOfItem - od.NumberUnit: 0;
 
                             pis.AddProductInStock(productInStock);
 
