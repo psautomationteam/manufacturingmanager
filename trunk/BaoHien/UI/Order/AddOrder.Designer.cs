@@ -164,6 +164,8 @@ namespace BaoHien.UI
             this.txtVAT.Size = new System.Drawing.Size(159, 20);
             this.txtVAT.TabIndex = 5;
             this.validator1.SetType(this.txtVAT, Itboy.Components.ValidationType.RegularExpression);
+            this.txtVAT.TextChanged += new System.EventHandler(this.txtVAT_TextChanged);
+            this.txtVAT.Leave += new System.EventHandler(this.txtVAT_Leave);
             // 
             // label3
             // 
