@@ -280,7 +280,7 @@ namespace BaoHien.UI
                     prodCode.MaxDropDownItems = 5;
 
                 }
-                this.validator1.SetType(prodCode, Itboy.Components.ValidationType.Required);
+                //this.validator1.SetType(prodCode, Itboy.Components.ValidationType.Required);
             }
             else if (dgvStockEntranceDetails.CurrentCell.ColumnIndex == 1)
             {
@@ -300,7 +300,7 @@ namespace BaoHien.UI
                         prodCode.MaxDropDownItems = 5;
 
                     }
-                    this.validator1.SetType(prodCode, Itboy.Components.ValidationType.Required);
+                    //this.validator1.SetType(prodCode, Itboy.Components.ValidationType.Required);
                 }
 
             }
@@ -309,6 +309,14 @@ namespace BaoHien.UI
                 TextBox numberOfUnit = e.Control as TextBox;
                 this.validator1.SetRegularExpression(numberOfUnit, BHConstant.REGULAR_EXPRESSION_FOR_NUMBER);
                 this.validator1.SetType(numberOfUnit, Itboy.Components.ValidationType.RegularExpression);
+            }
+            else
+            {
+                if (e.Control is TextBox)
+                {
+                    TextBox other = e.Control as TextBox;
+                    this.validator1.SetType(other, Itboy.Components.ValidationType.None);
+                }
             }
         }
 
