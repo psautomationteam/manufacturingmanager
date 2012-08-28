@@ -25,6 +25,7 @@ using System.Reflection;
 using Word = Microsoft.Office.Interop.Word;
 using BaoHien.Services.ProductInStocks;
 using Microsoft.Office.Interop.Word;
+using System.Globalization;
 
 namespace BaoHien.UI
 {
@@ -802,6 +803,8 @@ namespace BaoHien.UI
             oTableForHeader = oDoc.Tables.Add(ForHeader, 3, 4, ref oMissing, ref oMissing);
             oTableForHeader.Range.ParagraphFormat.SpaceAfter = 1;
             oTableForHeader.Range.Font.Size = 12;
+            oTableForHeader.Range.Font.Name = "Times New Roman";
+
             oTableForHeader.Cell(1, 1).Range.Text = BHConstant.COMPANY_NAME;
             oTableForHeader.Cell(1, 1).Range.Bold = 0;
             oTableForHeader.Cell(1, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
@@ -846,6 +849,7 @@ namespace BaoHien.UI
             oPara1.Range.Text = "PHIẾU XUẤT KHO";
             oPara1.Range.Font.Bold = 1;
             oPara1.Range.Font.Size = 30;
+            oPara1.Range.Font.Name = "Times New Roman";
             oPara1.Format.SpaceAfter = 1;    //24 pt spacing after paragraph.
             oPara1.Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
             //oPara1.Range.InsertParagraphAfter();
@@ -854,7 +858,7 @@ namespace BaoHien.UI
             Word.Range ForCustomerInfo = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
             oTableForCustomerInfo = oDoc.Tables.Add(ForCustomerInfo, 3, 4, ref oMissing, ref oMissing);
             oTableForCustomerInfo.Range.ParagraphFormat.SpaceAfter = 6;
-
+            oTableForCustomerInfo.Range.Font.Name = "Times New Roman";
             oTableForCustomerInfo.Range.Font.Size = 13;
             oTableForCustomerInfo.Cell(1, 1).Range.Text = "Khách hàng:";
             oTableForCustomerInfo.Cell(1, 1).Range.Bold = 1;
@@ -889,7 +893,7 @@ namespace BaoHien.UI
 
             Word.Paragraph oPara2;
             oPara2 = oDoc.Content.Paragraphs.Add(ref oMissing);
-
+            oPara2.Range.Font.Name = "Times New Roman";
             oPara2.Range.Font.Bold = 1;
             oPara2.Range.Font.Size = 8;
             oPara2.Format.SpaceAfter = 1;    //24 pt spacing after paragraph.
@@ -905,6 +909,7 @@ namespace BaoHien.UI
             oTable.Borders.Enable = 1;
             oTable.Range.Font.Size = 12;
             oTable.Range.Font.Bold = 1;
+            oTable.Range.Font.Name = "Times New Roman";
             int r, c;
 
 
@@ -960,7 +965,7 @@ namespace BaoHien.UI
 
             Word.Paragraph oPara3;
             oPara3 = oDoc.Content.Paragraphs.Add(ref oMissing);
-
+            oPara3.Range.Font.Name = "Times New Roman";
             oPara3.Range.Font.Bold = 1;
             oPara3.Range.Font.Size = 8;
             oPara3.Format.SpaceAfter = 1;    //24 pt spacing after paragraph.
@@ -972,6 +977,8 @@ namespace BaoHien.UI
             oTableForFooter.Range.ParagraphFormat.SpaceAfter = 6;
             oTableForFooter.Borders.Enable = 0;
             oTableForFooter.Range.Font.Size = 12;
+            oTableForFooter.Range.Font.Name = "Times New Roman";
+
             oTableForFooter.Cell(1, 1).Range.Text = "Khách hàng";
             oTableForFooter.Cell(1, 1).Range.Bold = 0;
             oTableForFooter.Cell(1, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
@@ -988,7 +995,7 @@ namespace BaoHien.UI
 
             Word.Paragraph oPara4;
             oPara4 = oDoc.Content.Paragraphs.Add(ref oMissing);
-
+            oPara4.Range.Font.Name = "Times New Roman";
             oPara4.Range.Font.Bold = 1;
             oPara4.Range.Font.Size = 8;
             oPara4.Format.SpaceAfter = 1;    //24 pt spacing after paragraph.
@@ -1022,12 +1029,13 @@ namespace BaoHien.UI
             oWord.Visible = true;
             oDoc = oWord.Documents.Add(ref oMissing, ref oMissing,
                 ref oMissing, ref oMissing);
-
+            
             Word.Table oTableForHeader;
             Word.Range ForHeader = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
             oTableForHeader = oDoc.Tables.Add(ForHeader, 3, 4, ref oMissing, ref oMissing);
             oTableForHeader.Range.ParagraphFormat.SpaceAfter = 6;
             oTableForHeader.Range.Font.Size = 12;
+            oTableForHeader.Range.Font.Name = "Times New Roman";
             oTableForHeader.Cell(1, 1).Range.Text = BHConstant.COMPANY_NAME;
             oTableForHeader.Cell(1, 1).Range.Bold = 0;
             oTableForHeader.Cell(1, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
@@ -1071,6 +1079,7 @@ namespace BaoHien.UI
             oPara1 = oDoc.Content.Paragraphs.Add(ref oMissing);
             oPara1.Range.Text = "PHIẾU BÁN HÀNG";
             oPara1.Range.Font.Bold = 1;
+            oPara1.Range.Font.Name = "Times New Roman";
             oPara1.Range.Font.Size = 30;
             oPara1.Format.SpaceAfter = 1;    //24 pt spacing after paragraph.
             oPara1.Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
@@ -1080,7 +1089,7 @@ namespace BaoHien.UI
             Word.Range ForCustomerInfo = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
             oTableForCustomerInfo = oDoc.Tables.Add(ForCustomerInfo, 3, 4, ref oMissing, ref oMissing);
             oTableForCustomerInfo.Range.ParagraphFormat.SpaceAfter = 1;
-
+            oTableForCustomerInfo.Range.Font.Name = "Times New Roman";
             oTableForCustomerInfo.Range.Font.Size = 13;
             oTableForCustomerInfo.Cell(1, 1).Range.Text = "Khách hàng:";
             oTableForCustomerInfo.Cell(1, 1).Range.Bold = 1;
@@ -1120,7 +1129,7 @@ namespace BaoHien.UI
 
             Word.Paragraph oPara2;
             oPara2 = oDoc.Content.Paragraphs.Add(ref oMissing);
-
+            oPara2.Range.Font.Name = "Times New Roman";
             oPara2.Range.Font.Bold = 1;
             oPara2.Range.Font.Size = 8;
             oPara2.Format.SpaceAfter = 1;    //24 pt spacing after paragraph.
@@ -1134,6 +1143,7 @@ namespace BaoHien.UI
             oTable = oDoc.Tables.Add(wrdRng, dgwOrderDetails.RowCount + 1, 6, ref oMissing, ref oMissing);
             oTable.Range.ParagraphFormat.SpaceAfter = 1;
             oTable.Borders.Enable = 1;
+            oTable.Range.Font.Name = "Times New Roman";
             oTable.Range.Font.Size = 12;
             oTable.Range.Font.Bold = 1;
             oTable.Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
@@ -1179,11 +1189,13 @@ namespace BaoHien.UI
                         }
                         else if (c == 5)
                         {
-                            oTable.Cell(r, c).Range.Text = ((double)dgwOrderDetails.Rows[r - 2].Cells[c - 2].Value).ToString();
+                            string tmp = ((double)dgwOrderDetails.Rows[r - 2].Cells[c - 2].Value).ToString();
+                            oTable.Cell(r, c).Range.Text = BaoHien.Common.Global.convertToCurrency(tmp);
                         }
                         else if (c == 6)
                         {
-                            oTable.Cell(r, c).Range.Text = (((double)dgwOrderDetails.Rows[r - 2].Cells[c - 2].Value)).ToString();
+                            string tmp = (((double)dgwOrderDetails.Rows[r - 2].Cells[c - 2].Value)).ToString();
+                            oTable.Cell(r, c).Range.Text = BaoHien.Common.Global.convertToCurrency(tmp);
                         }
                         
                     }
@@ -1196,7 +1208,7 @@ namespace BaoHien.UI
 
             Word.Paragraph oPara3;
             oPara3 = oDoc.Content.Paragraphs.Add(ref oMissing);
-
+            oPara3.Range.Font.Name = "Times New Roman";
             oPara3.Range.Font.Bold = 1;
             oPara3.Range.Font.Size = 8;
             oPara3.Format.SpaceAfter = 1;    //24 pt spacing after paragraph.
@@ -1205,14 +1217,17 @@ namespace BaoHien.UI
 
             Word.Table oTable3;
             Word.Range wrdRng3 = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
-            oTable3 = oDoc.Tables.Add(wrdRng3, 4, 3, ref oMissing, ref oMissing);
+            oTable3 = oDoc.Tables.Add(wrdRng3, 5, 3, ref oMissing, ref oMissing);
             oTable3.Range.ParagraphFormat.SpaceAfter = 1;
             oTable3.Borders.Enable = 0;
             oTable3.Range.Font.Size = 12;
+            oTable3.Range.Font.Name = "Times New Roman";
+
             oTable3.Cell(1, 1).Width = 150;
             oTable3.Cell(2, 1).Width = 150;
             oTable3.Cell(3, 1).Width = 150;
             oTable3.Cell(4, 1).Width = 150;
+            oTable3.Cell(5, 1).Width = 150;
 
             oTable3.Cell(1, 2).Width = 250;
             oTable3.Cell(1, 2).Range.Text = "Giá trị hàng:";
@@ -1221,7 +1236,7 @@ namespace BaoHien.UI
             oTable3.Cell(1, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
 
             oTable3.Cell(1, 3).Width = 250;
-            oTable3.Cell(1, 3).Range.Text = totalNoTax.ToString();
+            oTable3.Cell(1, 3).Range.Text = BaoHien.Common.Global.convertToCurrency(totalNoTax.ToString());
             oTable3.Cell(1, 3).Range.Bold = 0;
             oTable3.Cell(1, 3).Range.Italic = 0;
             oTable3.Cell(1, 3).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
@@ -1233,7 +1248,7 @@ namespace BaoHien.UI
             oTable3.Cell(2, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
 
             oTable3.Cell(2, 3).Width = 250;
-            oTable3.Cell(2, 3).Range.Text = txtVAT.Text;
+            oTable3.Cell(2, 3).Range.Text = BaoHien.Common.Global.convertToCurrency(txtVAT.Text);
             oTable3.Cell(2, 3).Range.Bold = 0;
             oTable3.Cell(2, 3).Range.Italic = 0;
             oTable3.Cell(2, 3).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
@@ -1245,7 +1260,7 @@ namespace BaoHien.UI
             oTable3.Cell(3, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
 
             oTable3.Cell(3, 3).Width = 250;
-            oTable3.Cell(3, 3).Range.Text = txtDiscount.Text;
+            oTable3.Cell(3, 3).Range.Text = BaoHien.Common.Global.convertToCurrency(txtDiscount.Text);
             oTable3.Cell(3, 3).Range.Bold = 0;
             oTable3.Cell(3, 3).Range.Italic = 0;
             oTable3.Cell(3, 3).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
@@ -1257,15 +1272,26 @@ namespace BaoHien.UI
             oTable3.Cell(4, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
 
             oTable3.Cell(4, 3).Width = 250;
-            oTable3.Cell(4, 3).Range.Text = lblGrantTotal.Text;
+            oTable3.Cell(4, 3).Range.Text = BaoHien.Common.Global.convertToCurrency(lblGrantTotal.Text);
             oTable3.Cell(4, 3).Range.Bold = 1;
             oTable3.Cell(4, 3).Range.Italic = 0;
             oTable3.Cell(4, 3).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
 
+            oTable3.Cell(5, 2).Width = 250;
+            oTable3.Cell(5, 2).Range.Text = "Đơn vị:";
+            oTable3.Cell(5, 2).Range.Bold = 0;
+            oTable3.Cell(5, 2).Range.Italic = 1;
+            oTable3.Cell(5, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
+
+            oTable3.Cell(5, 3).Width = 250;
+            oTable3.Cell(5, 3).Range.Text = "VNĐ";
+            oTable3.Cell(5, 3).Range.Bold = 1;
+            oTable3.Cell(5, 3).Range.Italic = 0;
+            oTable3.Cell(5, 3).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
 
             Word.Paragraph oPara4;
             oPara4 = oDoc.Content.Paragraphs.Add(ref oMissing);
-
+            oPara4.Range.Font.Name = "Times New Roman";
             oPara4.Range.Font.Bold = 1;
             oPara4.Range.Font.Size = 8;
             oPara4.Format.SpaceAfter = 1;    //24 pt spacing after paragraph.
@@ -1278,6 +1304,8 @@ namespace BaoHien.UI
             oTableForFooter.Range.ParagraphFormat.SpaceAfter = 1;
             oTableForFooter.Borders.Enable = 0;
             oTableForFooter.Range.Font.Size = 12;
+            oTableForFooter.Range.Font.Name = "Times New Roman";
+
             oTableForFooter.Cell(1, 1).Range.Text = "Khách hàng";
             oTableForFooter.Cell(1, 1).Range.Bold = 0;
             oTableForFooter.Cell(1, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
@@ -1294,7 +1322,7 @@ namespace BaoHien.UI
 
             Word.Paragraph oPara5;
             oPara5 = oDoc.Content.Paragraphs.Add(ref oMissing);
-
+            oPara5.Range.Font.Name = "Times New Roman";
             oPara5.Range.Font.Bold = 1;
             oPara5.Range.Font.Size = 8;
             oPara5.Format.SpaceAfter = 1;    //24 pt spacing after paragraph.
@@ -1312,6 +1340,35 @@ namespace BaoHien.UI
         private void btnCancel_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void txtVAT_TextChanged(object sender, EventArgs e)
+        {
+           
+        }
+
+        private void txtVAT_Leave(object sender, EventArgs e)
+        {
+            if (txtVAT.Text != null)
+            {
+                //decimal total = 0;
+                //if (decimal.TryParse(txtVAT.Text, out total))
+                //{
+                //    CultureInfo vietnam = new CultureInfo(1066);
+                //    CultureInfo usa = new CultureInfo("en-US");
+
+                //    NumberFormatInfo nfi = usa.NumberFormat;
+                //    nfi = (NumberFormatInfo)nfi.Clone();
+                //    NumberFormatInfo vnfi = vietnam.NumberFormat;
+                //    //nfi.CurrencySymbol = vnfi.CurrencySymbol;
+                //    nfi.CurrencyNegativePattern = vnfi.CurrencyNegativePattern;
+                //    nfi.CurrencyPositivePattern = vnfi.CurrencyPositivePattern;
+                //    txtVAT.Text = total.ToString("c", nfi);
+                    
+                //}
+                
+
+            }
         }
 
         

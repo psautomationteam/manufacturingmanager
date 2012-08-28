@@ -5,6 +5,7 @@ using System.Text;
 using BaoHien.UI;
 using DAL;
 using BaoHien.Properties;
+using System.Globalization;
 
 namespace BaoHien.Common
 {
@@ -13,7 +14,23 @@ namespace BaoHien.Common
         static SystemUser currentUser = null;
         static string iPAddrress;
 
-        
+        public static string convertToCurrency(string valueInput)
+
+        {
+            decimal total = 0;
+            decimal.TryParse(valueInput, out total);
+            CultureInfo vietnam = new CultureInfo(1066);
+                CultureInfo usa = new CultureInfo("en-US");
+
+                NumberFormatInfo nfi = usa.NumberFormat;
+                nfi = (NumberFormatInfo)nfi.Clone();
+                NumberFormatInfo vnfi = vietnam.NumberFormat;
+                nfi.CurrencySymbol = vnfi.CurrencySymbol;
+                nfi.CurrencyNegativePattern = vnfi.CurrencyNegativePattern;
+                nfi.CurrencyPositivePattern = vnfi.CurrencyPositivePattern;
+                string tmp = total.ToString("c", nfi);
+                return tmp.Remove(tmp.ToString().Length - 1);
+        }
         public static SystemUser CurrentUser
         {
             get
