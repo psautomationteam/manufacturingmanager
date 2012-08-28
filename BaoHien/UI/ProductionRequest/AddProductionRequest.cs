@@ -260,7 +260,8 @@ namespace BaoHien.UI
                         prodCode.MaxDropDownItems = 5;
 
                     }
-                    this.validator1.SetType(prodCode, Itboy.Components.ValidationType.Required);
+                    //DataGridViewComboBoxEditingControl avcbe = e.Control as DataGridViewComboBoxEditingControl;
+                    //this.validator1.SetType(avcbe, Itboy.Components.ValidationType.Required);
                 }
                 else if (dgvMaterial.CurrentCell.ColumnIndex == 1)
                 {
@@ -280,7 +281,8 @@ namespace BaoHien.UI
                             prodCode.MaxDropDownItems = 5;
 
                         }
-                        this.validator1.SetType(prodCode, Itboy.Components.ValidationType.Required);
+                        //DataGridViewComboBoxEditingControl avcbe = e.Control as DataGridViewComboBoxEditingControl;
+                        //this.validator1.SetType(avcbe, Itboy.Components.ValidationType.Required);
                     }
 
                 }
@@ -289,6 +291,14 @@ namespace BaoHien.UI
                     TextBox numberOfUnit = e.Control as TextBox;
                     this.validator1.SetRegularExpression(numberOfUnit, BHConstant.REGULAR_EXPRESSION_FOR_NUMBER);
                     this.validator1.SetType(numberOfUnit, Itboy.Components.ValidationType.RegularExpression);
+                }
+                else
+                {
+                    if (e.Control is TextBox)
+                    {
+                        TextBox other = e.Control as TextBox;
+                        this.validator1.SetType(other, Itboy.Components.ValidationType.None);
+                    }
                 }
             }
             
@@ -301,73 +311,70 @@ namespace BaoHien.UI
 
         private void dgvMaterial_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
-            if (this.validator1.Validate())
+            DataGridView dgv = (DataGridView)sender;
+            if (productionRequestDetailInMaterials == null)
             {
-                DataGridView dgv = (DataGridView)sender;
-                if (productionRequestDetailInMaterials == null)
-                {
-                    productionRequestDetailInMaterials = new BindingList<ProductionRequestDetail>();
-                }
-                if (productionRequestDetailInMaterials.Count < dgvMaterial.RowCount)
-                {
-                    ProductionRequestDetail productionRequestDetail = new ProductionRequestDetail();
-                    productionRequestDetail.Direction = false;
-                    productionRequestDetailInMaterials.Add(productionRequestDetail);
-                }
-
-
-                if (dgv.CurrentCell.Value != null)
-                {
-                    if (e.ColumnIndex == 0)
-                    {
-                        productionRequestDetailInMaterials[e.RowIndex].ProductId = (int)dgv.CurrentCell.Value;
-                        ProductAttributeService productAttributeService = new ProductAttributeService();
-                        List<ProductAttribute> productAttributes = productAttributeService.SelectProductAttributeByWhere(ba => ba.Id == (int)dgv.CurrentCell.Value);
-                        baseAttributesAtRowForMaterial = new BindingList<BaseAttribute>();
-                        foreach (ProductAttribute pa in productAttributes)
-                        {
-                            baseAttributesAtRowForMaterial.Add(pa.BaseAttribute);
-                        }
-                        DataGridViewComboBoxCell currentCell = (DataGridViewComboBoxCell)dgvMaterial.Rows[e.RowIndex].Cells[1];
-                        currentCell.DataSource = baseAttributesAtRowForMaterial;
-                        if (productionRequestDetailInMaterials.Count > e.RowIndex && baseAttributesAtRowForMaterial.Count > 0)
-                        {
-                            productionRequestDetailInMaterials[e.RowIndex].AttributeId = baseAttributesAtRowForMaterial[0].Id;
-                            currentCell.Value = baseAttributesAtRowForMaterial[0].Id;
-                        }
-                        if (baseAttributesAtRowForMaterial.Count > 0)
-                            dgv.Rows[e.RowIndex].Cells[2].ReadOnly = false;
-
-
-                    }
-                    else if (e.ColumnIndex == 1)
-                    {
-                        productionRequestDetailInMaterials[e.RowIndex].AttributeId = (int)dgv.CurrentCell.Value;
-                    }
-                    else if (e.ColumnIndex == 2)
-                    {
-                        MaterialInStockService mis = new MaterialInStockService();
-                        List<MaterialInStock> lstMaterial = mis.SelectMaterialInStockByWhere(pt => pt.ProductId == productionRequestDetailInMaterials[e.RowIndex].ProductId && pt.AttributeId == productionRequestDetailInMaterials[e.RowIndex].AttributeId);
-                        if (lstMaterial.Count == 0 || lstMaterial.First<MaterialInStock>().NumberOfItem == 0)
-                        {
-                            MessageBox.Show("Số lượng vật liệu trong kho đã hết");
-                            dgv.Rows[e.RowIndex].Cells[2].Value = 0;
-
-                        }
-                        else if (lstMaterial.First<MaterialInStock>().NumberOfItem < (int)dgv.Rows[e.RowIndex].Cells[2].Value)
-                        {
-                            MessageBox.Show("Số lượng vật liệu trong kho còn lại là: " + lstMaterial.First<MaterialInStock>().NumberOfItem.ToString());
-                            dgv.Rows[e.RowIndex].Cells[2].Value = 0;
-                        }
-                    }
-                    else if (e.ColumnIndex == 3)
-                    {
-                        productionRequestDetailInMaterials[e.RowIndex].Note = (string)dgv.CurrentCell.Value;
-                    }
-                }
-
-                calculateTotalForMaterialGrid();
+                productionRequestDetailInMaterials = new BindingList<ProductionRequestDetail>();
             }
+            if (productionRequestDetailInMaterials.Count < dgvMaterial.RowCount)
+            {
+                ProductionRequestDetail productionRequestDetail = new ProductionRequestDetail();
+                productionRequestDetail.Direction = false;
+                productionRequestDetailInMaterials.Add(productionRequestDetail);
+            }
+
+
+            if (dgv.CurrentCell.Value != null)
+            {
+                if (e.ColumnIndex == 0)
+                {
+                    productionRequestDetailInMaterials[e.RowIndex].ProductId = (int)dgv.CurrentCell.Value;
+                    ProductAttributeService productAttributeService = new ProductAttributeService();
+                    List<ProductAttribute> productAttributes = productAttributeService.SelectProductAttributeByWhere(ba => ba.Id == (int)dgv.CurrentCell.Value);
+                    baseAttributesAtRowForMaterial = new BindingList<BaseAttribute>();
+                    foreach (ProductAttribute pa in productAttributes)
+                    {
+                        baseAttributesAtRowForMaterial.Add(pa.BaseAttribute);
+                    }
+                    DataGridViewComboBoxCell currentCell = (DataGridViewComboBoxCell)dgvMaterial.Rows[e.RowIndex].Cells[1];
+                    currentCell.DataSource = baseAttributesAtRowForMaterial;
+                    if (productionRequestDetailInMaterials.Count > e.RowIndex && baseAttributesAtRowForMaterial.Count > 0)
+                    {
+                        productionRequestDetailInMaterials[e.RowIndex].AttributeId = baseAttributesAtRowForMaterial[0].Id;
+                        currentCell.Value = baseAttributesAtRowForMaterial[0].Id;
+                    }
+                    if (baseAttributesAtRowForMaterial.Count > 0)
+                        dgv.Rows[e.RowIndex].Cells[2].ReadOnly = false;
+
+
+                }
+                else if (e.ColumnIndex == 1)
+                {
+                    productionRequestDetailInMaterials[e.RowIndex].AttributeId = (int)dgv.CurrentCell.Value;
+                }
+                else if (e.ColumnIndex == 2)
+                {
+                    MaterialInStockService mis = new MaterialInStockService();
+                    List<MaterialInStock> lstMaterial = mis.SelectMaterialInStockByWhere(pt => pt.ProductId == productionRequestDetailInMaterials[e.RowIndex].ProductId && pt.AttributeId == productionRequestDetailInMaterials[e.RowIndex].AttributeId);
+                    if (lstMaterial.Count == 0 || lstMaterial.First<MaterialInStock>().NumberOfItem == 0)
+                    {
+                        MessageBox.Show("Số lượng vật liệu trong kho đã hết");
+                        dgv.Rows[e.RowIndex].Cells[2].Value = 0;
+
+                    }
+                    else if (lstMaterial.First<MaterialInStock>().NumberOfItem < (int)dgv.Rows[e.RowIndex].Cells[2].Value)
+                    {
+                        MessageBox.Show("Số lượng vật liệu trong kho còn lại là: " + lstMaterial.First<MaterialInStock>().NumberOfItem.ToString());
+                        dgv.Rows[e.RowIndex].Cells[2].Value = 0;
+                    }
+                }
+                else if (e.ColumnIndex == 3)
+                {
+                    productionRequestDetailInMaterials[e.RowIndex].Note = (string)dgv.CurrentCell.Value;
+                }
+            }
+
+            calculateTotalForMaterialGrid();
             
         }
 
@@ -409,8 +416,8 @@ namespace BaoHien.UI
                         prodCode.MaxDropDownItems = 5;
 
                     }
-
-                    this.validator1.SetType(prodCode, Itboy.Components.ValidationType.Required);
+                    //DataGridViewComboBoxEditingControl avcbe = e.Control as DataGridViewComboBoxEditingControl;
+                    //this.validator1.SetType(avcbe, Itboy.Components.ValidationType.Required);
 
                 }
                 else if (dgvProduct.CurrentCell.ColumnIndex == 1)
@@ -431,7 +438,8 @@ namespace BaoHien.UI
                             prodCode.MaxDropDownItems = 5;
 
                         }
-                        this.validator1.SetType(prodCode, Itboy.Components.ValidationType.Required);
+                        //DataGridViewComboBoxEditingControl avcbe = e.Control as DataGridViewComboBoxEditingControl;
+                        //this.validator1.SetType(avcbe, Itboy.Components.ValidationType.Required);
                     }
 
                 }
@@ -441,68 +449,73 @@ namespace BaoHien.UI
                     this.validator1.SetRegularExpression(numberOfUnit, BHConstant.REGULAR_EXPRESSION_FOR_NUMBER);
                     this.validator1.SetType(numberOfUnit, Itboy.Components.ValidationType.RegularExpression);
                 }
+                else
+                {
+                    if (e.Control is TextBox)
+                    {
+                        TextBox other = e.Control as TextBox;
+                        this.validator1.SetType(other, Itboy.Components.ValidationType.None);
+                    }
+                }
             }
             
         }
 
         private void dgvProduct_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
-            
-            if (this.validator1.Validate())
+
+            DataGridView dgv = (DataGridView)sender;
+            if (productionRequestDetailInProductions == null)
             {
-                DataGridView dgv = (DataGridView)sender;
-                if (productionRequestDetailInProductions == null)
-                {
-                    productionRequestDetailInProductions = new BindingList<ProductionRequestDetail>();
-                }
-                if (productionRequestDetailInProductions.Count < dgvProduct.RowCount)
-                {
-                    ProductionRequestDetail productionRequestDetail = new ProductionRequestDetail();
-                    productionRequestDetail.Direction = true;
-                    productionRequestDetailInProductions.Add(productionRequestDetail);
-                }
-                if (dgv.CurrentCell.Value != null)
-                {
-                    if (e.ColumnIndex == 0)
-                    {
-
-                        productionRequestDetailInProductions[e.RowIndex].ProductId = (int)dgv.CurrentCell.Value;
-                        ProductAttributeService productAttributeService = new ProductAttributeService();
-                        List<ProductAttribute> productAttributes = productAttributeService.SelectProductAttributeByWhere(ba => ba.Id == (int)dgv.CurrentCell.Value);
-                        baseAttributesAtRowForProduct = new BindingList<BaseAttribute>();
-                        foreach (ProductAttribute pa in productAttributes)
-                        {
-                            baseAttributesAtRowForProduct.Add(pa.BaseAttribute);
-                        }
-                        DataGridViewComboBoxCell currentCell = (DataGridViewComboBoxCell)dgvProduct.Rows[e.RowIndex].Cells[1];
-                        currentCell.DataSource = baseAttributesAtRowForProduct;
-                        if (baseAttributesAtRowForProduct.Count > e.RowIndex && baseAttributesAtRowForProduct.Count > 0)
-                        {
-                            productionRequestDetailInProductions[e.RowIndex].AttributeId = baseAttributesAtRowForProduct[0].Id;
-                            currentCell.Value = baseAttributesAtRowForProduct[0].Id;
-                        }
-
-                        if (baseAttributesAtRowForProduct.Count > 0)
-                            dgvProduct.Rows[e.RowIndex].Cells[2].ReadOnly = false;
-
-                    }
-                    else if (e.ColumnIndex == 1)
-                    {
-                        productionRequestDetailInProductions[e.RowIndex].AttributeId = (int)dgv.CurrentCell.Value;
-                    }
-                    else if (e.ColumnIndex == 2)
-                    {
-                        productionRequestDetailInProductions[e.RowIndex].NumberUnit = (int)dgv.CurrentCell.Value;
-                    }
-                    else if (e.ColumnIndex == 3)
-                    {
-                        productionRequestDetailInProductions[e.RowIndex].Note = (string)dgv.CurrentCell.Value;
-                    }
-
-
-                }
-                calculateTotalForProductGrid();
+                productionRequestDetailInProductions = new BindingList<ProductionRequestDetail>();
             }
+            if (productionRequestDetailInProductions.Count < dgvProduct.RowCount)
+            {
+                ProductionRequestDetail productionRequestDetail = new ProductionRequestDetail();
+                productionRequestDetail.Direction = true;
+                productionRequestDetailInProductions.Add(productionRequestDetail);
+            }
+            if (dgv.CurrentCell.Value != null)
+            {
+                if (e.ColumnIndex == 0)
+                {
+
+                    productionRequestDetailInProductions[e.RowIndex].ProductId = (int)dgv.CurrentCell.Value;
+                    ProductAttributeService productAttributeService = new ProductAttributeService();
+                    List<ProductAttribute> productAttributes = productAttributeService.SelectProductAttributeByWhere(ba => ba.Id == (int)dgv.CurrentCell.Value);
+                    baseAttributesAtRowForProduct = new BindingList<BaseAttribute>();
+                    foreach (ProductAttribute pa in productAttributes)
+                    {
+                        baseAttributesAtRowForProduct.Add(pa.BaseAttribute);
+                    }
+                    DataGridViewComboBoxCell currentCell = (DataGridViewComboBoxCell)dgvProduct.Rows[e.RowIndex].Cells[1];
+                    currentCell.DataSource = baseAttributesAtRowForProduct;
+                    if (baseAttributesAtRowForProduct.Count > e.RowIndex && baseAttributesAtRowForProduct.Count > 0)
+                    {
+                        productionRequestDetailInProductions[e.RowIndex].AttributeId = baseAttributesAtRowForProduct[0].Id;
+                        currentCell.Value = baseAttributesAtRowForProduct[0].Id;
+                    }
+
+                    if (baseAttributesAtRowForProduct.Count > 0)
+                        dgvProduct.Rows[e.RowIndex].Cells[2].ReadOnly = false;
+
+                }
+                else if (e.ColumnIndex == 1)
+                {
+                    productionRequestDetailInProductions[e.RowIndex].AttributeId = (int)dgv.CurrentCell.Value;
+                }
+                else if (e.ColumnIndex == 2)
+                {
+                    productionRequestDetailInProductions[e.RowIndex].NumberUnit = (int)dgv.CurrentCell.Value;
+                }
+                else if (e.ColumnIndex == 3)
+                {
+                    productionRequestDetailInProductions[e.RowIndex].Note = (string)dgv.CurrentCell.Value;
+                }
+
+
+            }
+            calculateTotalForProductGrid();
             
         }
 

@@ -177,13 +177,13 @@ namespace BaoHien.UI
 
         private void Main_Load(object sender, EventArgs e)
         {
-            Settings.Default.FirstRun = 1;
-            Settings.Default.Save();
-            if (Settings.Default.FirstRun == 1)
-            {
-                DBConfiguration dBConfiguration = new DBConfiguration();
-                dBConfiguration.Show();
-            }
+            //Settings.Default.FirstRun = 1;
+            //Settings.Default.Save();
+            //if (Settings.Default.FirstRun == 1)
+            //{
+            //    DBConfiguration dBConfiguration = new DBConfiguration();
+            //    dBConfiguration.Show();
+            //}
         }
 
         private void menuDBConfig_Click(object sender, EventArgs e)

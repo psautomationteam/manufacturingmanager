@@ -25,11 +25,15 @@ namespace BaoHien.UI
         {
             if (validator1.Validate())
             {
-                if (txtUsername.Text == DUMMY_USERNAME && txtPassword.Text == DUMMY_PASSWORD)
+                SystemUserService systemUserService = new SystemUserService();
+                SystemUser user = systemUserService.GetSystemUsers().Where(u => u.username == txtUsername.Text && u.password == txtPassword.Text).FirstOrDefault();
+                //if (txtUsername.Text == DUMMY_USERNAME && txtPassword.Text == DUMMY_PASSWORD)
+
+                if (user != null)
                 {
-                    SystemUserService systemUserService = new SystemUserService();
+                    
                     //SystemUser user = systemUserService.GetSystemUsers().Single(u => (u.username == DUMMY_USERNAME) && (u.password == DUMMY_PASSWORD));
-                    SystemUser user = systemUserService.GetSystemUser(1);
+                    
                     this.Hide();
                     Main main = new Main();
                     Global.CurrentUser = user;

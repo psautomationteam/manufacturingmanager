@@ -737,7 +737,7 @@ namespace Itboy.Components
                     }
                     if (dgv != null)
                     {
-                        //dgv.CurrentCell.ErrorText = message;
+                        dgv.CurrentCell.ErrorText = message;
                     }
                 }
                 else

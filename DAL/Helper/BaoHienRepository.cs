@@ -36,6 +36,10 @@ namespace DAL.Helper
             }
             return context != null;
         }
+        public static bool testCurrentDBConnection()
+        {
+            return checkExistingContext();
+        }
         public static bool testDBConnection(string DBServerName, string DatabaseName, string DatabaseUserID, string DatabasePwd)
         {
             try
