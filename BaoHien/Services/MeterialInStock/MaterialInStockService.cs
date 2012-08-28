@@ -10,14 +10,9 @@ namespace BaoHien.Services.MaterialInStocks
 {
     public class MaterialInStockService : BaseService<MaterialInStock>
     {
-        public MaterialInStock GetMaterialInStock(List<System.Int32> ids)
+        public MaterialInStock GetEntranceStock(System.Int32 id)
         {
-            List<string> idsInString = new List<string>();
-            foreach (System.Int32 id in ids)
-            {
-                idsInString.Add(id.ToString());
-            }
-            MaterialInStock materialInStock = OnGetItem<MaterialInStock>(idsInString);
+            MaterialInStock materialInStock = OnGetItem<MaterialInStock>(id.ToString());
 
             return materialInStock;
         }
