@@ -800,7 +800,7 @@ namespace BaoHien.UI
             Word.Table oTableForHeader;
             Word.Range ForHeader = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
             oTableForHeader = oDoc.Tables.Add(ForHeader, 3, 4, ref oMissing, ref oMissing);
-            oTableForHeader.Range.ParagraphFormat.SpaceAfter = 6;
+            oTableForHeader.Range.ParagraphFormat.SpaceAfter = 1;
             oTableForHeader.Range.Font.Size = 12;
             oTableForHeader.Cell(1, 1).Range.Text = BHConstant.COMPANY_NAME;
             oTableForHeader.Cell(1, 1).Range.Bold = 0;
@@ -846,9 +846,9 @@ namespace BaoHien.UI
             oPara1.Range.Text = "PHIẾU XUẤT KHO";
             oPara1.Range.Font.Bold = 1;
             oPara1.Range.Font.Size = 30;
-            oPara1.Format.SpaceAfter = 24;    //24 pt spacing after paragraph.
+            oPara1.Format.SpaceAfter = 1;    //24 pt spacing after paragraph.
             oPara1.Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
-            oPara1.Range.InsertParagraphAfter();
+            //oPara1.Range.InsertParagraphAfter();
 
             Word.Table oTableForCustomerInfo;
             Word.Range ForCustomerInfo = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
@@ -887,11 +887,13 @@ namespace BaoHien.UI
             oTableForCustomerInfo.Cell(3, 2).Range.Bold = 0;
             oTableForCustomerInfo.Cell(3, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
 
-            Microsoft.Office.Interop.Word.InlineShape line3 = oDoc.Paragraphs.Last.Range.InlineShapes.AddHorizontalLineStandard(ref oMissing);
-            line3.Height = 1;
-            line3.HorizontalLineFormat.NoShade = true;
-            line3.Fill.ForeColor.RGB = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Transparent);
+            Word.Paragraph oPara2;
+            oPara2 = oDoc.Content.Paragraphs.Add(ref oMissing);
 
+            oPara2.Range.Font.Bold = 1;
+            oPara2.Range.Font.Size = 8;
+            oPara2.Format.SpaceAfter = 1;    //24 pt spacing after paragraph.
+            oPara2.Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
 
 
             //Insert a table, fill it with data, and make the first row
@@ -954,12 +956,15 @@ namespace BaoHien.UI
 
             oTable.Rows[1].Range.Font.Italic = 1;
             oTable.Rows[1].Range.Font.Bold = 0;
-            
 
-            Microsoft.Office.Interop.Word.InlineShape line2 = oDoc.Paragraphs.Last.Range.InlineShapes.AddHorizontalLineStandard(ref oMissing);
-            line2.Height = 1;
-            line2.HorizontalLineFormat.NoShade = true;
-            line2.Fill.ForeColor.RGB = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Transparent);
+
+            Word.Paragraph oPara3;
+            oPara3 = oDoc.Content.Paragraphs.Add(ref oMissing);
+
+            oPara3.Range.Font.Bold = 1;
+            oPara3.Range.Font.Size = 8;
+            oPara3.Format.SpaceAfter = 1;    //24 pt spacing after paragraph.
+            oPara3.Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
 
             Word.Table oTableForFooter;
             Word.Range wrdRngForFooter = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
@@ -981,11 +986,13 @@ namespace BaoHien.UI
 
             oTableForFooter.Rows[1].Range.Font.Italic = 1;
 
-            Word.Paragraph oPara6;
-            object oRng6 = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
-            oPara6 = oDoc.Content.Paragraphs.Add(ref oRng6);
-            oPara6.Format.SpaceAfter = 6;
-            oPara6.Range.InsertParagraphAfter();
+            Word.Paragraph oPara4;
+            oPara4 = oDoc.Content.Paragraphs.Add(ref oMissing);
+
+            oPara4.Range.Font.Bold = 1;
+            oPara4.Range.Font.Size = 8;
+            oPara4.Format.SpaceAfter = 1;    //24 pt spacing after paragraph.
+            oPara4.Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
 
             oDoc.PrintPreview();
         }
@@ -1065,14 +1072,14 @@ namespace BaoHien.UI
             oPara1.Range.Text = "PHIẾU BÁN HÀNG";
             oPara1.Range.Font.Bold = 1;
             oPara1.Range.Font.Size = 30;
-            oPara1.Format.SpaceAfter = 24;    //24 pt spacing after paragraph.
+            oPara1.Format.SpaceAfter = 1;    //24 pt spacing after paragraph.
             oPara1.Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
             oPara1.Range.InsertParagraphAfter();
 
             Word.Table oTableForCustomerInfo;
             Word.Range ForCustomerInfo = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
             oTableForCustomerInfo = oDoc.Tables.Add(ForCustomerInfo, 3, 4, ref oMissing, ref oMissing);
-            oTableForCustomerInfo.Range.ParagraphFormat.SpaceAfter = 6;
+            oTableForCustomerInfo.Range.ParagraphFormat.SpaceAfter = 1;
 
             oTableForCustomerInfo.Range.Font.Size = 13;
             oTableForCustomerInfo.Cell(1, 1).Range.Text = "Khách hàng:";
@@ -1106,22 +1113,30 @@ namespace BaoHien.UI
             oTableForCustomerInfo.Cell(3, 2).Range.Bold = 0;
             oTableForCustomerInfo.Cell(3, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
 
-            Microsoft.Office.Interop.Word.InlineShape line3 = oDoc.Paragraphs.Last.Range.InlineShapes.AddHorizontalLineStandard(ref oMissing);
-            line3.Height = 1;
-            line3.HorizontalLineFormat.NoShade = true;
-            line3.Fill.ForeColor.RGB = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Transparent);
+            //Microsoft.Office.Interop.Word.InlineShape line3 = oDoc.Paragraphs.Last.Range.InlineShapes.AddHorizontalLineStandard(ref oMissing);
+            //line3.Height = 1;
+            //line3.HorizontalLineFormat.NoShade = true;
+            //line3.Fill.ForeColor.RGB = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Transparent);
 
+            Word.Paragraph oPara2;
+            oPara2 = oDoc.Content.Paragraphs.Add(ref oMissing);
 
+            oPara2.Range.Font.Bold = 1;
+            oPara2.Range.Font.Size = 8;
+            oPara2.Format.SpaceAfter = 1;    //24 pt spacing after paragraph.
+            oPara2.Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+            //oPara2.Range.InsertParagraphAfter();
 
             //Insert a table, fill it with data, and make the first row
             //bold and italic.
             Word.Table oTable;
             Word.Range wrdRng = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
             oTable = oDoc.Tables.Add(wrdRng, dgwOrderDetails.RowCount + 1, 6, ref oMissing, ref oMissing);
-            oTable.Range.ParagraphFormat.SpaceAfter = 6;
+            oTable.Range.ParagraphFormat.SpaceAfter = 1;
             oTable.Borders.Enable = 1;
             oTable.Range.Font.Size = 12;
             oTable.Range.Font.Bold = 1;
+            oTable.Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
             int r, c;
 
 
@@ -1178,15 +1193,20 @@ namespace BaoHien.UI
             
             oTable.Rows[1].Range.Font.Italic = 1;
             oTable.Rows[1].Range.Font.Bold = 0;
-            Microsoft.Office.Interop.Word.InlineShape line = oDoc.Paragraphs.Last.Range.InlineShapes.AddHorizontalLineStandard(ref oMissing);
-            line.Height = 1;
-            line.HorizontalLineFormat.NoShade = true;
-            line.Fill.ForeColor.RGB = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Transparent);
-        
+
+            Word.Paragraph oPara3;
+            oPara3 = oDoc.Content.Paragraphs.Add(ref oMissing);
+
+            oPara3.Range.Font.Bold = 1;
+            oPara3.Range.Font.Size = 8;
+            oPara3.Format.SpaceAfter = 1;    //24 pt spacing after paragraph.
+            oPara3.Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+            //oPara3.Range.InsertParagraphAfter();
+
             Word.Table oTable3;
             Word.Range wrdRng3 = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
             oTable3 = oDoc.Tables.Add(wrdRng3, 4, 3, ref oMissing, ref oMissing);
-            oTable3.Range.ParagraphFormat.SpaceAfter = 6;
+            oTable3.Range.ParagraphFormat.SpaceAfter = 1;
             oTable3.Borders.Enable = 0;
             oTable3.Range.Font.Size = 12;
             oTable3.Cell(1, 1).Width = 150;
@@ -1243,15 +1263,19 @@ namespace BaoHien.UI
             oTable3.Cell(4, 3).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
 
 
-            Microsoft.Office.Interop.Word.InlineShape line2 = oDoc.Paragraphs.Last.Range.InlineShapes.AddHorizontalLineStandard(ref oMissing);
-            line2.Height = 1;
-            line2.HorizontalLineFormat.NoShade = true;
-            line2.Fill.ForeColor.RGB = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Transparent);
+            Word.Paragraph oPara4;
+            oPara4 = oDoc.Content.Paragraphs.Add(ref oMissing);
+
+            oPara4.Range.Font.Bold = 1;
+            oPara4.Range.Font.Size = 8;
+            oPara4.Format.SpaceAfter = 1;    //24 pt spacing after paragraph.
+            oPara4.Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+            //oPara4.Range.InsertParagraphAfter();
 
             Word.Table oTableForFooter;
             Word.Range wrdRngForFooter = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
             oTableForFooter = oDoc.Tables.Add(wrdRngForFooter, 1, 3, ref oMissing, ref oMissing);
-            oTableForFooter.Range.ParagraphFormat.SpaceAfter = 6;
+            oTableForFooter.Range.ParagraphFormat.SpaceAfter = 1;
             oTableForFooter.Borders.Enable = 0;
             oTableForFooter.Range.Font.Size = 12;
             oTableForFooter.Cell(1, 1).Range.Text = "Khách hàng";
@@ -1268,14 +1292,17 @@ namespace BaoHien.UI
 
             oTableForFooter.Rows[1].Range.Font.Italic = 1;
 
-            Word.Paragraph oPara6;
-            object oRng6 = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
-            oPara6 = oDoc.Content.Paragraphs.Add(ref oRng6);
-            oPara6.Format.SpaceAfter = 6;
-            oPara6.Range.InsertParagraphAfter();
+            Word.Paragraph oPara5;
+            oPara5 = oDoc.Content.Paragraphs.Add(ref oMissing);
+
+            oPara5.Range.Font.Bold = 1;
+            oPara5.Range.Font.Size = 8;
+            oPara5.Format.SpaceAfter = 1;    //24 pt spacing after paragraph.
+            oPara5.Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+            //oPara5.Range.InsertParagraphAfter();
 
             oDoc.PrintPreview();
-            
+            //oDoc.Close(ref oMissing, ref oMissing, ref oMissing);
         }
         private void InsertLine()
         {

@@ -71,7 +71,7 @@ namespace BaoHien.UI
                 txtUser.Enabled = false;
 
                 txtCode.Text = RandomGeneration.GeneratingCode(BHConstant.PREFIX_FOR_ENTRANCE);
-            
+                txtDate.Text = DateTime.Now.ToShortDateString();
             }
             txtDate.Enabled = false;
             txtUser.Enabled = false;
