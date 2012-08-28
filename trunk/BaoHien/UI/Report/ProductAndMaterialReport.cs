@@ -42,18 +42,30 @@ namespace BaoHien.UI
         }
         void LoadReport()
         {
-            if (cbmProductTypes.SelectedValue != null)
+            if (chkbSelectAll.Checked)
             {
-                int productTyeId = (int)cbmProductTypes.SelectedValue;
+                
                 MaterialInStockService materialInStockService = new MaterialInStockService();
                 List<MaterialInStock> materialInStocks = materialInStockService.GetMaterialInStocks();
-                materialInStocks = materialInStocks.Where(mis=>mis.Product.ProductType == productTyeId).ToList();
+                materialInStocks = materialInStocks.Where(mis => mis.LatestUpdate.CompareTo(dtpFrom.Value) > 0).ToList();
                 setUpDataGrid(materialInStocks);
             }
             else
             {
-                MessageBox.Show("Vui lòng chọn loại sản phẩm");
+                if (cbmProductTypes.SelectedValue != null)
+                {
+                    int productTyeId = (int)cbmProductTypes.SelectedValue;
+                    MaterialInStockService materialInStockService = new MaterialInStockService();
+                    List<MaterialInStock> materialInStocks = materialInStockService.GetMaterialInStocks();
+                    materialInStocks = materialInStocks.Where(mis => mis.Product.ProductType == productTyeId && mis.LatestUpdate.CompareTo(dtpFrom.Value) > 0).ToList();
+                    setUpDataGrid(materialInStocks);
+                }
+                else
+                {
+                    MessageBox.Show("Vui lòng chọn loại sản phẩm");
+                }
             }
+            
             
             
         }

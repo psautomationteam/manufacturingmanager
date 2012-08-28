@@ -36,12 +36,14 @@
             this.label1 = new System.Windows.Forms.Label();
             this.dgwStockEntranceList = new System.Windows.Forms.DataGridView();
             this.label8 = new System.Windows.Forms.Label();
+            this.chkbSelectAll = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgwStockEntranceList)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.chkbSelectAll);
             this.groupBox1.Controls.Add(this.btnSearch);
             this.groupBox1.Controls.Add(this.cbmProductTypes);
             this.groupBox1.Controls.Add(this.label5);
@@ -67,7 +69,7 @@
             // cbmProductTypes
             // 
             this.cbmProductTypes.FormattingEnabled = true;
-            this.cbmProductTypes.Location = new System.Drawing.Point(383, 20);
+            this.cbmProductTypes.Location = new System.Drawing.Point(378, 24);
             this.cbmProductTypes.Name = "cbmProductTypes";
             this.cbmProductTypes.Size = new System.Drawing.Size(166, 22);
             this.cbmProductTypes.TabIndex = 9;
@@ -75,7 +77,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(298, 29);
+            this.label5.Location = new System.Drawing.Point(294, 29);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(80, 14);
             this.label5.TabIndex = 8;
@@ -84,9 +86,9 @@
             // dtpFrom
             // 
             this.dtpFrom.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dtpFrom.Location = new System.Drawing.Point(116, 23);
+            this.dtpFrom.Location = new System.Drawing.Point(116, 24);
             this.dtpFrom.Name = "dtpFrom";
-            this.dtpFrom.Size = new System.Drawing.Size(124, 20);
+            this.dtpFrom.Size = new System.Drawing.Size(166, 20);
             this.dtpFrom.TabIndex = 1;
             // 
             // label1
@@ -116,6 +118,16 @@
             this.label8.TabIndex = 20;
             this.label8.Text = "Chú ý: mặc định sẽ là tình trạng hiện tại trong kho và thành phẩm";
             // 
+            // chkbSelectAll
+            // 
+            this.chkbSelectAll.AutoSize = true;
+            this.chkbSelectAll.Location = new System.Drawing.Point(379, 49);
+            this.chkbSelectAll.Name = "chkbSelectAll";
+            this.chkbSelectAll.Size = new System.Drawing.Size(81, 18);
+            this.chkbSelectAll.TabIndex = 10;
+            this.chkbSelectAll.Text = "Chọn tất cả";
+            this.chkbSelectAll.UseVisualStyleBackColor = true;
+            // 
             // ProductAndMaterialReport
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 14F);
@@ -143,5 +155,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.DataGridView dgwStockEntranceList;
         private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.CheckBox chkbSelectAll;
     }
 }
