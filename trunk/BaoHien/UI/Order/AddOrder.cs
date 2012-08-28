@@ -70,122 +70,43 @@ namespace BaoHien.UI
         {
             InitializeComponent();
         }
-
-        private void btnSave_Click(object sender, EventArgs e)
+        private void saveData()
         {
             if (validator1.Validate())
             {
-                ProductInStockService pis = new ProductInStockService();
-                double discount = 0;
-                Double.TryParse(txtDiscount.Text, out discount);
-                DateTime createdDate = DateTime.Now;
-                if (!DateTime.TryParse(txtCreatedDate.Text, out createdDate))
+                DialogResult dialogResult = MessageBox.Show("Bạn sẽ không thể chỉnh sửa sau khi lưu!Bạn muốn lưu?", "Xác nhận", MessageBoxButtons.YesNo);
+                if (dialogResult == System.Windows.Forms.DialogResult.Yes)
                 {
-                    createdDate = DateTime.Now;
-                };
+                    ProductInStockService pis = new ProductInStockService();
+                    double discount = 0;
+                    Double.TryParse(txtDiscount.Text, out discount);
+                    DateTime createdDate = DateTime.Now;
+                    if (!DateTime.TryParse(txtCreatedDate.Text, out createdDate))
+                    {
+                        createdDate = DateTime.Now;
+                    };
 
-                double vat = 0;
-                Double.TryParse(txtVAT.Text, out vat);
-                int userId = 0;
-                if (BaoHien.Common.Global.CurrentUser != null)
-                {
-                    userId = BaoHien.Common.Global.CurrentUser.Id;
-                }
-                else
-                {
-                    MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
-                    return;
-                }
-                if (order != null)//update
-                {
-                    order.CustId = (int)cbxCustomer.SelectedValue;
-                    order.Discount = discount;
-                    order.Note = txtNote.Text;
-                    order.VAT = vat;
-                    order.OrderCode = txtOrderCode.Text;
-                    OrderService orderService = new OrderService();
-                    bool result = orderService.UpdateOrder(order);
-                    if (!result)
+                    double vat = 0;
+                    Double.TryParse(txtVAT.Text, out vat);
+                    int userId = 0;
+                    if (BaoHien.Common.Global.CurrentUser != null)
+                    {
+                        userId = BaoHien.Common.Global.CurrentUser.Id;
+                    }
+                    else
                     {
                         MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
                         return;
                     }
-                    else
+                    if (order != null)//update
                     {
-                        OrderDetailService orderDetailService = new OrderDetailService();
-                        foreach (OrderDetail od in orderDetails)
-                        {
-                            if (od.ProductId > 0 && od.AttributeId > 0)
-                            {
-                                if (od.Id == 0)
-                                {
-                                    od.OrderId = order.Id;
-                                    result = orderDetailService.AddOrderDetail(od);
-
-                                    //Save in Production In Stock
-                                    ProductInStock productInStock = new ProductInStock();
-                                    List<ProductInStock> lstProductInStock = pis.SelectProductByWhere(pt => pt.ProductId == od.ProductId && pt.AttributeId == od.AttributeId);
-                                    productInStock.AttributeId = od.AttributeId;
-                                    productInStock.ProductId = od.ProductId;
-                                    productInStock.LatestUpdate = DateTime.Now;
-                                    productInStock.StatusOfData = false;
-
-                                    productInStock.NumberOfInput = lstProductInStock.Last<ProductInStock>().NumberOfInput;
-                                    productInStock.NumberOfOutput = lstProductInStock.Last<ProductInStock>().NumberOfOutput - od.NumberUnit;
-                                    productInStock.NumberOfItem = (int)lstProductInStock.Last<ProductInStock>().NumberOfItem - od.NumberUnit;
-
-                                    pis.AddProductInStock(productInStock);
-                                }
-                                else
-                                {
-                                    ProductionRequestDetailModel original = new ProductionRequestDetailModel();
-                                    original = originalProductions.Where(p => p.Id == od.Id).ToList().FirstOrDefault();
-                                    result = orderDetailService.UpdateOrderDetail(od);
-
-                                    //Update so luong
-                                    if (od.ProductId == original.ProductId && od.AttributeId == original.AttributeId && od.NumberUnit != original.NumberUnit)
-                                    {
-                                        ProductInStock productInStock = new ProductInStock();
-                                        List<ProductInStock> lstProductInStock = pis.SelectProductByWhere(pt => pt.ProductId == od.ProductId && pt.AttributeId == od.AttributeId);
-
-                                        productInStock.AttributeId = od.AttributeId;
-                                        productInStock.ProductId = od.ProductId;
-                                        productInStock.LatestUpdate = DateTime.Now;
-                                        productInStock.NumberOfInput = lstProductInStock.Last<ProductInStock>().NumberOfInput;
-                                        productInStock.NumberOfOutput = lstProductInStock.Last<ProductInStock>().NumberOfOutput + original.NumberUnit - od.NumberUnit;
-                                        productInStock.NumberOfItem = lstProductInStock.Last<ProductInStock>().NumberOfItem + original.NumberUnit - od.NumberUnit;
-                                        productInStock.StatusOfData = false;
-                                        pis.UpdateProductInStock(productInStock);
-
-                                    }
-
-                                    //Sua chi tiet phieu
-                                    else if (od.ProductId != original.ProductId || od.AttributeId != original.AttributeId)
-                                    {
-                                        //Tao moi
-                                        List<ProductInStock> lstNewProduct = pis.SelectProductByWhere(pt => pt.ProductId == od.ProductId && pt.AttributeId == od.AttributeId);
-                                        ProductInStock newProductInStock = new ProductInStock();
-                                        newProductInStock.AttributeId = od.AttributeId;
-                                        newProductInStock.ProductId = od.ProductId;
-                                        newProductInStock.LatestUpdate = DateTime.Now;
-                                        newProductInStock.StatusOfData = true;
-
-                                        newProductInStock.NumberOfInput = lstNewProduct.Last<ProductInStock>().NumberOfInput;
-                                        newProductInStock.NumberOfOutput = lstNewProduct.Last<ProductInStock>().NumberOfOutput - od.NumberUnit;
-                                        newProductInStock.NumberOfItem += lstNewProduct.Last<ProductInStock>().NumberOfItem - od.NumberUnit;
-
-                                        pis.AddProductInStock(newProductInStock);
-
-                                        //Xoa cu
-                                        pis.DeleteProductInStock(original.Id);
-                                    }
-
-                                }
-
-                                if (!result)
-                                    break;
-                            }
-                        }
+                        order.CustId = (int)cbxCustomer.SelectedValue;
+                        order.Discount = discount;
+                        order.Note = txtNote.Text;
+                        order.VAT = vat;
+                        order.OrderCode = txtOrderCode.Text;
+                        OrderService orderService = new OrderService();
+                        bool result = orderService.UpdateOrder(order);
                         if (!result)
                         {
                             MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
@@ -193,108 +114,172 @@ namespace BaoHien.UI
                         }
                         else
                         {
-                            MessageBox.Show("Sản phẩm đã được cập nhật thành công");
-                        }
-                        if (this.CallFromUserControll != null && this.CallFromUserControll is OrderList)
-                        {
-                            ((OrderList)this.CallFromUserControll).loadOrderList();
-                        }
-
-                        this.Close();
-                    }
-                }
-                else//add new
-                {
-                    if (cbxCustomer.SelectedValue == null)
-                    {
-                        MessageBox.Show("Bạn cần có một khách hành cho phiếu này!");
-                        return;
-                    }
-                    order = new Order
-                    {
-                        CustId = cbxCustomer.SelectedValue != null ? (int)cbxCustomer.SelectedValue : 0,
-                        Discount = discount,
-                        Note = txtNote.Text,
-                        VAT = vat,
-                        OrderCode = txtOrderCode.Text,
-                        CreatedDate = createdDate,
-                        CreateBy = userId
-
-
-                    };
-                    OrderService orderService = new OrderService();
-                    bool result = orderService.AddOrder(order);
-                    long newOrderId = BaoHienRepository.GetMaxId<Order>();
-                    OrderDetailService orderDetailService = new OrderDetailService();
-                    foreach (OrderDetail od in orderDetails)
-                    {
-                        if (od.ProductId > 0)
-                        {
-                            od.OrderId = (int)newOrderId;
-                            bool ret = orderDetailService.AddOrderDetail(od);
-
-                            //Save in Production In Stock
-                            ProductInStock productInStock = new ProductInStock();
-                            List<ProductInStock> lstProductInStock = pis.SelectProductByWhere(pt => pt.ProductId == od.ProductId && pt.AttributeId == od.AttributeId);
-                            productInStock.AttributeId = od.AttributeId;
-                            productInStock.ProductId = od.ProductId;
-                            productInStock.LatestUpdate = DateTime.Now;
-                            productInStock.StatusOfData = false;
-                            if (lstProductInStock.Count > 0)
+                            OrderDetailService orderDetailService = new OrderDetailService();
+                            foreach (OrderDetail od in orderDetails)
                             {
-                                productInStock.NumberOfInput = lstProductInStock.Last<ProductInStock>() != null ? lstProductInStock.Last<ProductInStock>().NumberOfInput : 0;
-                                productInStock.NumberOfOutput = lstProductInStock.Last<ProductInStock>() != null ? lstProductInStock.Last<ProductInStock>().NumberOfOutput - od.NumberUnit : 0;
-                                productInStock.NumberOfItem = lstProductInStock.Last<ProductInStock>() != null ? (int)lstProductInStock.Last<ProductInStock>().NumberOfItem - od.NumberUnit : 0;
+                                if (od.ProductId > 0 && od.AttributeId > 0)
+                                {
+                                    if (od.Id == 0)
+                                    {
+                                        od.OrderId = order.Id;
+                                        result = orderDetailService.AddOrderDetail(od);
+
+                                        //Save in Production In Stock
+                                        ProductInStock productInStock = new ProductInStock();
+                                        List<ProductInStock> lstProductInStock = pis.SelectProductByWhere(pt => pt.ProductId == od.ProductId && pt.AttributeId == od.AttributeId);
+                                        productInStock.AttributeId = od.AttributeId;
+                                        productInStock.ProductId = od.ProductId;
+                                        productInStock.LatestUpdate = DateTime.Now;
+                                        productInStock.StatusOfData = false;
+
+                                        productInStock.NumberOfInput = lstProductInStock.Last<ProductInStock>().NumberOfInput;
+                                        productInStock.NumberOfOutput = lstProductInStock.Last<ProductInStock>().NumberOfOutput - od.NumberUnit;
+                                        productInStock.NumberOfItem = (int)lstProductInStock.Last<ProductInStock>().NumberOfItem - od.NumberUnit;
+
+                                        pis.AddProductInStock(productInStock);
+                                    }
+                                    else
+                                    {
+                                        ProductionRequestDetailModel original = new ProductionRequestDetailModel();
+                                        original = originalProductions.Where(p => p.Id == od.Id).ToList().FirstOrDefault();
+                                        result = orderDetailService.UpdateOrderDetail(od);
+
+                                        //Update so luong
+                                        if (od.ProductId == original.ProductId && od.AttributeId == original.AttributeId && od.NumberUnit != original.NumberUnit)
+                                        {
+                                            ProductInStock productInStock = new ProductInStock();
+                                            List<ProductInStock> lstProductInStock = pis.SelectProductByWhere(pt => pt.ProductId == od.ProductId && pt.AttributeId == od.AttributeId);
+
+                                            productInStock.AttributeId = od.AttributeId;
+                                            productInStock.ProductId = od.ProductId;
+                                            productInStock.LatestUpdate = DateTime.Now;
+                                            productInStock.NumberOfInput = lstProductInStock.Last<ProductInStock>().NumberOfInput;
+                                            productInStock.NumberOfOutput = lstProductInStock.Last<ProductInStock>().NumberOfOutput + original.NumberUnit - od.NumberUnit;
+                                            productInStock.NumberOfItem = lstProductInStock.Last<ProductInStock>().NumberOfItem + original.NumberUnit - od.NumberUnit;
+                                            productInStock.StatusOfData = false;
+                                            pis.UpdateProductInStock(productInStock);
+
+                                        }
+
+                                        //Sua chi tiet phieu
+                                        else if (od.ProductId != original.ProductId || od.AttributeId != original.AttributeId)
+                                        {
+                                            //Tao moi
+                                            List<ProductInStock> lstNewProduct = pis.SelectProductByWhere(pt => pt.ProductId == od.ProductId && pt.AttributeId == od.AttributeId);
+                                            ProductInStock newProductInStock = new ProductInStock();
+                                            newProductInStock.AttributeId = od.AttributeId;
+                                            newProductInStock.ProductId = od.ProductId;
+                                            newProductInStock.LatestUpdate = DateTime.Now;
+                                            newProductInStock.StatusOfData = true;
+
+                                            newProductInStock.NumberOfInput = lstNewProduct.Last<ProductInStock>().NumberOfInput;
+                                            newProductInStock.NumberOfOutput = lstNewProduct.Last<ProductInStock>().NumberOfOutput - od.NumberUnit;
+                                            newProductInStock.NumberOfItem += lstNewProduct.Last<ProductInStock>().NumberOfItem - od.NumberUnit;
+
+                                            pis.AddProductInStock(newProductInStock);
+
+                                            //Xoa cu
+                                            pis.DeleteProductInStock(original.Id);
+                                        }
+
+                                    }
+
+                                    if (!result)
+                                        break;
+                                }
                             }
-                            
-
-                            pis.AddProductInStock(productInStock);
-
-                            if (!ret)
+                            if (!result)
                             {
                                 MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
                                 return;
                             }
+                            else
+                            {
+                                MessageBox.Show("Sản phẩm đã được cập nhật thành công");
+                            }
+                            if (this.CallFromUserControll != null && this.CallFromUserControll is OrderList)
+                            {
+                                ((OrderList)this.CallFromUserControll).loadOrderList();
+                            }
+
+                            this.Close();
                         }
                     }
-
-                    //    foreach (DataGridViewRow dgv in rows)
-                    //{
-
-                    //    ProductTypeService productTypeService = new ProductTypeService();
-                    //    int id = ObjectHelper.GetValueFromAnonymousType<int>(dgv.DataBoundItem, "Id");
-                    //    ProductService productService = new ProductService();
-                    //    List<Product> productList = productService.SelectProductByWhere(pt => pt.ProductType == id);
-                    //    bool deleteAllProductForThisType = true;
-                    //    foreach (Product p in productList)
-                    //    {
-                    //        if (!productService.DeleteProduct(p.Id))
-                    //        {
-                    //            deleteAllProductForThisType = false;
-                    //            MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
-                    //            break;
-                    //        }
-                    //    }
-                    //    if (!deleteAllProductForThisType || !productTypeService.DeleteProductType(id))
-                    //    {
-                    //        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
-                    //        break;
-                    //    }
-
-                    //}
-                    if (result)
+                    else//add new
                     {
-                        MessageBox.Show("Sản phẩm đã được tạo thành công");
-                        //((OrderList)this.CallFromUserControll).loadOrderList();
-                        this.Close();
-                    }
-                    else
-                    {
-                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                        if (cbxCustomer.SelectedValue == null)
+                        {
+                            MessageBox.Show("Bạn cần có một khách hành cho phiếu này!");
+                            return;
+                        }
+                        order = new Order
+                        {
+                            CustId = cbxCustomer.SelectedValue != null ? (int)cbxCustomer.SelectedValue : 0,
+                            Discount = discount,
+                            Note = txtNote.Text,
+                            VAT = vat,
+                            OrderCode = txtOrderCode.Text,
+                            CreatedDate = createdDate,
+                            CreateBy = userId
+
+
+                        };
+                        OrderService orderService = new OrderService();
+                        bool result = orderService.AddOrder(order);
+                        long newOrderId = BaoHienRepository.GetMaxId<Order>();
+                        OrderDetailService orderDetailService = new OrderDetailService();
+                        foreach (OrderDetail od in orderDetails)
+                        {
+                            if (od.ProductId > 0)
+                            {
+                                od.OrderId = (int)newOrderId;
+                                bool ret = orderDetailService.AddOrderDetail(od);
+
+                                //Save in Production In Stock
+                                ProductInStock productInStock = new ProductInStock();
+                                List<ProductInStock> lstProductInStock = pis.SelectProductByWhere(pt => pt.ProductId == od.ProductId && pt.AttributeId == od.AttributeId);
+                                productInStock.AttributeId = od.AttributeId;
+                                productInStock.ProductId = od.ProductId;
+                                productInStock.LatestUpdate = DateTime.Now;
+                                productInStock.StatusOfData = false;
+                                if (lstProductInStock.Count > 0)
+                                {
+                                    productInStock.NumberOfInput = lstProductInStock.Last<ProductInStock>() != null ? lstProductInStock.Last<ProductInStock>().NumberOfInput : 0;
+                                    productInStock.NumberOfOutput = lstProductInStock.Last<ProductInStock>() != null ? lstProductInStock.Last<ProductInStock>().NumberOfOutput - od.NumberUnit : 0;
+                                    productInStock.NumberOfItem = lstProductInStock.Last<ProductInStock>() != null ? (int)lstProductInStock.Last<ProductInStock>().NumberOfItem - od.NumberUnit : 0;
+                                }
+
+
+                                pis.AddProductInStock(productInStock);
+
+                                if (!ret)
+                                {
+                                    MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                                    return;
+                                }
+                            }
+                        }
+
+
+                        if (result)
+                        {
+                            MessageBox.Show("Sản phẩm đã được tạo thành công");
+                            //((OrderList)this.CallFromUserControll).loadOrderList();
+                            this.Close();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                        }
                     }
                 }
+
             }
-            
+        }
+        private void btnSave_Click(object sender, EventArgs e)
+        {
+
+            saveData();
         }
         private void loadSomeData()
         {
@@ -337,6 +322,7 @@ namespace BaoHien.UI
             else
             {
                 txtOrderCode.Text = RandomGeneration.GeneratingCode(BHConstant.PREFIX_FOR_ORDER);
+                txtCreatedDate.Text = DateTime.Now.ToShortDateString();
             }
         }
         public void updateProductionRequestDetailCells()
@@ -371,6 +357,7 @@ namespace BaoHien.UI
         }
         public void loadDataForEditOrder(int orderId)
         {
+            btnSave.Enabled = false;
             isUpdating = true;
             this.Text = "Chỉnh sửa  đơn hàng này";
             this.btnSave.Text = "Cập nhật";
@@ -707,6 +694,10 @@ namespace BaoHien.UI
         private void btnPrintOrder_Click(object sender, EventArgs e)
         {
             printOrder();
+            if (btnSave.Enabled)
+            {
+                saveData();
+            }
             //CaptureScreen();
             //using (var dlg = new CoolPrintPreviewDialog())
             //{
@@ -808,7 +799,7 @@ namespace BaoHien.UI
             oTableForHeader.Cell(1, 1).Range.Text = BHConstant.COMPANY_NAME;
             oTableForHeader.Cell(1, 1).Range.Bold = 0;
             oTableForHeader.Cell(1, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
-
+            oTableForHeader.Cell(1, 1).Width = 125;
 
 
             oTableForHeader.Cell(1, 3).Range.Text = "Mã phiếu:";
@@ -818,6 +809,7 @@ namespace BaoHien.UI
             oTableForHeader.Cell(1, 4).Range.Bold = 0;
             oTableForHeader.Cell(1, 4).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
 
+            oTableForHeader.Cell(2, 1).Width = 125;
             oTableForHeader.Cell(2, 1).Range.Text = "Đ/C";
             oTableForHeader.Cell(2, 1).Range.Bold = 0;
             oTableForHeader.Cell(2, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
@@ -834,6 +826,7 @@ namespace BaoHien.UI
             oTableForHeader.Cell(2, 4).Range.Bold = 0;
             oTableForHeader.Cell(2, 4).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
 
+            oTableForHeader.Cell(3, 1).Width = 125;
             oTableForHeader.Cell(3, 1).Range.Text = "Điện thoại:";
             oTableForHeader.Cell(3, 1).Range.Bold = 0;
             oTableForHeader.Cell(3, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
@@ -860,23 +853,27 @@ namespace BaoHien.UI
             oTableForCustomerInfo.Range.ParagraphFormat.SpaceAfter = 6;
             oTableForCustomerInfo.Range.Font.Name = "Times New Roman";
             oTableForCustomerInfo.Range.Font.Size = 13;
+            
             oTableForCustomerInfo.Cell(1, 1).Range.Text = "Khách hàng:";
             oTableForCustomerInfo.Cell(1, 1).Range.Bold = 1;
             oTableForCustomerInfo.Cell(1, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
 
             if (cbxCustomer.SelectedValue != null)
             {
+                oTableForCustomerInfo.Cell(1, 2).Width = 400;
                 oTableForCustomerInfo.Cell(1, 2).Range.Text = customers.Where(cus => cus.Id == (int)cbxCustomer.SelectedValue).FirstOrDefault().CustomerName;
                 oTableForCustomerInfo.Cell(1, 2).Range.Bold = 0;
                 oTableForCustomerInfo.Cell(1, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
             }
 
+            
             oTableForCustomerInfo.Cell(2, 1).Range.Text = "Địa chỉ:";
             oTableForCustomerInfo.Cell(2, 1).Range.Bold = 1;
             oTableForCustomerInfo.Cell(2, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
 
             if (cbxCustomer.SelectedValue != null)
             {
+                oTableForCustomerInfo.Cell(2, 2).Width = 400;
                 oTableForCustomerInfo.Cell(2, 2).Range.Text = customers.Where(cus => cus.Id == (int)cbxCustomer.SelectedValue).FirstOrDefault().Address;
                 oTableForCustomerInfo.Cell(2, 2).Range.Bold = 0;
                 oTableForCustomerInfo.Cell(2, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
@@ -887,6 +884,7 @@ namespace BaoHien.UI
             oTableForCustomerInfo.Cell(3, 1).Range.Bold = 1;
             oTableForCustomerInfo.Cell(3, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
 
+            oTableForCustomerInfo.Cell(3, 2).Width = 400;
             oTableForCustomerInfo.Cell(3, 2).Range.Text = txtNote.Text;
             oTableForCustomerInfo.Cell(3, 2).Range.Bold = 0;
             oTableForCustomerInfo.Cell(3, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
@@ -973,23 +971,20 @@ namespace BaoHien.UI
 
             Word.Table oTableForFooter;
             Word.Range wrdRngForFooter = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
-            oTableForFooter = oDoc.Tables.Add(wrdRngForFooter, 1, 3, ref oMissing, ref oMissing);
+            oTableForFooter = oDoc.Tables.Add(wrdRngForFooter, 1, 2, ref oMissing, ref oMissing);
             oTableForFooter.Range.ParagraphFormat.SpaceAfter = 6;
             oTableForFooter.Borders.Enable = 0;
             oTableForFooter.Range.Font.Size = 12;
             oTableForFooter.Range.Font.Name = "Times New Roman";
 
-            oTableForFooter.Cell(1, 1).Range.Text = "Khách hàng";
+            
+            oTableForFooter.Cell(1, 1).Range.Text = "Người lập phiếu";
             oTableForFooter.Cell(1, 1).Range.Bold = 0;
             oTableForFooter.Cell(1, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
 
-            oTableForFooter.Cell(1, 2).Range.Text = "Người lập phiếu";
+            oTableForFooter.Cell(1, 2).Range.Text = "Kế toán";
             oTableForFooter.Cell(1, 2).Range.Bold = 0;
             oTableForFooter.Cell(1, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
-
-            oTableForFooter.Cell(1, 3).Range.Text = "Kế toán";
-            oTableForFooter.Cell(1, 3).Range.Bold = 0;
-            oTableForFooter.Cell(1, 3).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
 
             oTableForFooter.Rows[1].Range.Font.Italic = 1;
 
@@ -1039,7 +1034,7 @@ namespace BaoHien.UI
             oTableForHeader.Cell(1, 1).Range.Text = BHConstant.COMPANY_NAME;
             oTableForHeader.Cell(1, 1).Range.Bold = 0;
             oTableForHeader.Cell(1, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
-
+            oTableForHeader.Cell(1, 1).Width = 125;
             
 
             oTableForHeader.Cell(1, 3).Range.Text = "Mã phiếu:";
@@ -1049,6 +1044,7 @@ namespace BaoHien.UI
             oTableForHeader.Cell(1, 4).Range.Bold = 0;
             oTableForHeader.Cell(1, 4).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
 
+            oTableForHeader.Cell(2, 1).Width = 125;
             oTableForHeader.Cell(2, 1).Range.Text = "Đ/C";
             oTableForHeader.Cell(2, 1).Range.Bold = 0;
             oTableForHeader.Cell(2, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
@@ -1065,6 +1061,7 @@ namespace BaoHien.UI
             oTableForHeader.Cell(2, 4).Range.Bold = 0;
             oTableForHeader.Cell(2, 4).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
 
+            oTableForHeader.Cell(3, 1).Width = 125;
             oTableForHeader.Cell(3, 1).Range.Text = "Điện thoại:";
             oTableForHeader.Cell(3, 1).Range.Bold = 0;
             oTableForHeader.Cell(3, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
@@ -1097,6 +1094,7 @@ namespace BaoHien.UI
 
             if (cbxCustomer.SelectedValue != null)
             {
+                oTableForCustomerInfo.Cell(1, 2).Width = 400;
                 oTableForCustomerInfo.Cell(1, 2).Range.Text = customers.Where(cus => cus.Id == (int)cbxCustomer.SelectedValue).FirstOrDefault().CustomerName;
                 oTableForCustomerInfo.Cell(1, 2).Range.Bold = 0;
                 oTableForCustomerInfo.Cell(1, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
@@ -1108,6 +1106,7 @@ namespace BaoHien.UI
 
             if (cbxCustomer.SelectedValue != null)
             {
+                oTableForCustomerInfo.Cell(2, 2).Width = 400;
                 oTableForCustomerInfo.Cell(2, 2).Range.Text = customers.Where(cus => cus.Id == (int)cbxCustomer.SelectedValue).FirstOrDefault().Address;
                 oTableForCustomerInfo.Cell(2, 2).Range.Bold = 0;
                 oTableForCustomerInfo.Cell(2, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
@@ -1118,6 +1117,7 @@ namespace BaoHien.UI
             oTableForCustomerInfo.Cell(3, 1).Range.Bold = 1;
             oTableForCustomerInfo.Cell(3, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
 
+            oTableForCustomerInfo.Cell(3, 2).Width = 400;
             oTableForCustomerInfo.Cell(3, 2).Range.Text = txtNote.Text;
             oTableForCustomerInfo.Cell(3, 2).Range.Bold = 0;
             oTableForCustomerInfo.Cell(3, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
