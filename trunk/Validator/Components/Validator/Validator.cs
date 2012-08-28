@@ -761,7 +761,7 @@ namespace Itboy.Components
         /// <returns>If all control validated successful return true, or else false.</returns>
         public bool Validate()
         {
-            return true;
+            
             if ((this.mode & ValidationMode.FocusChange) == ValidationMode.FocusChange)
             {
                 // Focus change mode.

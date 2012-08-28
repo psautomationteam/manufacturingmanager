@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows.Forms;
 using BaoHien.UI;
 using BaoHien.Properties;
+using DAL.Helper;
 namespace Com.Baohien
 {
     static class Program
@@ -16,8 +17,18 @@ namespace Com.Baohien
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-           
-            Application.Run(new Main());//To do: will replace by login form
+            
+            if (!BaoHienRepository.testCurrentDBConnection())
+            {
+                
+                Application.Run(new DBConfiguration());
+            }
+            else
+            {
+                Application.Run(new Login());//To do: will replace by login form
+            }
+            
+            
         }
     }
 }

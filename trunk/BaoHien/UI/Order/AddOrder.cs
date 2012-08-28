@@ -239,10 +239,13 @@ namespace BaoHien.UI
                             productInStock.ProductId = od.ProductId;
                             productInStock.LatestUpdate = DateTime.Now;
                             productInStock.StatusOfData = false;
-
-                            productInStock.NumberOfInput = lstProductInStock.Last<ProductInStock>() != null?lstProductInStock.Last<ProductInStock>().NumberOfInput: 0;
-                            productInStock.NumberOfOutput = lstProductInStock.Last<ProductInStock>() != null?lstProductInStock.Last<ProductInStock>().NumberOfOutput - od.NumberUnit: 0;
-                            productInStock.NumberOfItem = lstProductInStock.Last<ProductInStock>() != null?(int)lstProductInStock.Last<ProductInStock>().NumberOfItem - od.NumberUnit: 0;
+                            if (lstProductInStock.Count > 0)
+                            {
+                                productInStock.NumberOfInput = lstProductInStock.Last<ProductInStock>() != null ? lstProductInStock.Last<ProductInStock>().NumberOfInput : 0;
+                                productInStock.NumberOfOutput = lstProductInStock.Last<ProductInStock>() != null ? lstProductInStock.Last<ProductInStock>().NumberOfOutput - od.NumberUnit : 0;
+                                productInStock.NumberOfItem = lstProductInStock.Last<ProductInStock>() != null ? (int)lstProductInStock.Last<ProductInStock>().NumberOfItem - od.NumberUnit : 0;
+                            }
+                            
 
                             pis.AddProductInStock(productInStock);
 
@@ -621,7 +624,7 @@ namespace BaoHien.UI
                     prodCode.MaxDropDownItems = 5;
 
                 }
-                this.validator1.SetType(prodCode, Itboy.Components.ValidationType.Required);
+                //this.validator1.SetType(prodCode, Itboy.Components.ValidationType.Required);
             }
             else if (dgwOrderDetails.CurrentCell.ColumnIndex == 1)
             {
@@ -641,7 +644,7 @@ namespace BaoHien.UI
                         prodCode.MaxDropDownItems = 5;
 
                     }
-                    this.validator1.SetType(prodCode, Itboy.Components.ValidationType.Required);
+                    //this.validator1.SetType(prodCode, Itboy.Components.ValidationType.Required);
                 }
 
             }
@@ -662,6 +665,14 @@ namespace BaoHien.UI
                 TextBox total = e.Control as TextBox;
                 this.validator1.SetRegularExpression(total, BHConstant.REGULAR_EXPRESSION_FOR_CURRENCY);
                 this.validator1.SetType(total, Itboy.Components.ValidationType.RegularExpression);
+            }
+            else
+            {
+                if (e.Control is TextBox)
+                {
+                    TextBox other = e.Control as TextBox;
+                    this.validator1.SetType(other, Itboy.Components.ValidationType.None);
+                }
             }
             
 
