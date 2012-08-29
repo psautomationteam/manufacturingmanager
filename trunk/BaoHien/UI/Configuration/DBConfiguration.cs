@@ -30,22 +30,51 @@ namespace BaoHien.UI
         {
             if (BaoHienRepository.testDBConnection(txtIP.Text, BHConstant.DATABASE_NAME, txtUsername.Text, txtPass.Text))
             {
-                
+
                 SettingManager.UpdateSetting(txtIP.Text, BHConstant.DATABASE_NAME, txtUsername.Text, txtPass.Text);
-                //SystemUserService systemUserService = new SystemUserService();
-                ////SystemUser user = systemUserService.GetSystemUsers().Single(u => (u.username == DUMMY_USERNAME) && (u.password == DUMMY_PASSWORD));
-                //SystemUser user = systemUserService.GetSystemUser(1);
-                //Global.CurrentUser = user;
+                BaoHienRepository.ResetDBDataContext();
                 MessageBox.Show("Cơ sở dữ liệu đã được chuyển");
                 this.Hide();
-                //Application.Run(new Login());
-                Login frmLogin = new Login();
-                frmLogin.ShowDialog();
+                if (Global.CurrentUser == null)
+                {
+                    MessageBox.Show("Cơ sở dữ liệu đã được chuyển");
+                    SettingManager.UpdateSetting(txtIP.Text, BHConstant.DATABASE_NAME, txtUsername.Text, txtPass.Text);
+                    
+                    //Application.Run(new Login());
+                    Login frmLogin = new Login();
+                    frmLogin.ShowDialog();
+                    
+                }
+                else
+                {
+                    SystemUserService systemUserService = new SystemUserService();
+                    SystemUser user = systemUserService.GetSystemUsers().Single(u => (u.username == Global.CurrentUser.username) && (u.password == Global.CurrentUser.password));
+                    if (user == null)
+                    {
+                        MessageBox.Show("Cần đăng nhập lại!");
+                        
+                        //Application.Run(new Login());
+                        Login frmLogin = new Login();
+                        frmLogin.ShowDialog();
+                        
+                    }
+                    else
+                    {
+                        Global.CurrentUser = user;
+                        
+                    }
+                   
+                    
+                }
+
                 this.Close();
+               
             }
             else
             {
+                
                 MessageBox.Show("Không thể kết nối cơ sở dữ liệu");
+               
             }
             
         }

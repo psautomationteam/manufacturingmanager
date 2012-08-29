@@ -19,6 +19,12 @@ namespace DAL.Helper
 
         //public static string addr;
         private static BaoHienDBDataContext context = null;
+        public static void ResetDBDataContext()
+        {
+            context.Connection.Close();
+            context = null;
+            context = GetBaoHienDBDataContext();
+        }
         public static BaoHienDBDataContext GetBaoHienDBDataContext()
         {
             if (checkExistingContext())
@@ -42,49 +48,24 @@ namespace DAL.Helper
         }
         public static bool testDBConnection(string DBServerName, string DatabaseName, string DatabaseUserID, string DatabasePwd)
         {
+            BaoHienDBDataContext contextForTest = null;
             try
             {
-                if (context != null)
+                contextForTest = new BaoHienDBDataContext(SettingManager.BuildStringConnectionForTest(DBServerName, DatabaseName, DatabaseUserID, DatabasePwd));
+                if (contextForTest != null)
                 {
-                    if (context.Connection != null)
+                    if (contextForTest.Connection != null)
                     {
-                        context.Connection.Close();
-                    }
-                    context = new BaoHienDBDataContext(SettingManager.BuildStringConnectionForTest(DBServerName, DatabaseName, DatabaseUserID, DatabasePwd));
-                    if (context != null)
-                    {
-                        if (context.Connection != null)
+                        if (!contextForTest.DatabaseExists())
                         {
-                            
-                            if (!context.DatabaseExists())
-                            {
-                                return false;
-                            }
-                            
+                            return false;
                         }
-                    }
-                    else
-                    {
-                        return false;
+                        contextForTest.Connection.Close();
                     }
                 }
                 else
                 {
-                    context = new BaoHienDBDataContext(SettingManager.BuildStringConnectionForTest(DBServerName, DatabaseName, DatabaseUserID, DatabasePwd));
-                    if (context != null)
-                    {
-                        if (context.Connection != null)
-                        {
-                            if (!context.DatabaseExists())
-                            {
-                                return false;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        return false;
-                    }
+                    return false;
                 }
             }
             catch (Exception)
