@@ -7,7 +7,12 @@ namespace BaoHien.Common
 {
     public class BHConstant
     {
+        
         public const string COMPANY_NAME = "Cty TNHH BẢO HIẾN";
+        public const string COMPANY_ADDRESS = "341/42B Lạc Long Quân - P.5 - Q.11";
+        public const string COMPANY_PHONE = "08.38619903 - 39746346";
+        public const string COMPANY_FAX = "08.38600093";
+
         public const string DATABASE_NAME = "BaoHienCompany";
         public const string USER_TYPE_NAME1 = "Kế Toán";
         public const string USER_TYPE_NAME2 = "Quản Trị";

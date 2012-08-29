@@ -23,6 +23,12 @@ namespace BaoHien.UI
 
         private void btnLogin_Click(object sender, EventArgs e)
         {
+
+            processLogin();
+
+        }
+        private void processLogin()
+        {
             if (validator1.Validate())
             {
                 SystemUserService systemUserService = new SystemUserService();
@@ -31,9 +37,9 @@ namespace BaoHien.UI
 
                 if (user != null)
                 {
-                    
+
                     //SystemUser user = systemUserService.GetSystemUsers().Single(u => (u.username == DUMMY_USERNAME) && (u.password == DUMMY_PASSWORD));
-                    
+
                     this.Hide();
                     Main main = new Main();
                     Global.CurrentUser = user;
@@ -46,13 +52,19 @@ namespace BaoHien.UI
                     txtPassword.Text = "";
                 }
             }
-            
-
         }
-
         private void btnExit_Click(object sender, EventArgs e)
         {
             Application.Exit();
+        }
+
+        private void Login_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                processLogin();
+            }
+
         }
                 
     }

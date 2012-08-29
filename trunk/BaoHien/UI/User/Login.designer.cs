@@ -55,6 +55,7 @@
             this.txtUsername.Size = new System.Drawing.Size(234, 20);
             this.txtUsername.TabIndex = 0;
             this.validator1.SetType(this.txtUsername, Itboy.Components.ValidationType.Required);
+            this.txtUsername.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Login_KeyDown);
             // 
             // label2
             // 
@@ -102,6 +103,7 @@
             this.txtPassword.Size = new System.Drawing.Size(232, 20);
             this.txtPassword.TabIndex = 1;
             this.validator1.SetType(this.txtPassword, Itboy.Components.ValidationType.Required);
+            this.txtPassword.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Login_KeyDown);
             // 
             // validator1
             // 
@@ -122,6 +124,7 @@
             this.Name = "Login";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Đăng nhập để sử dụng hệ thống";
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Login_KeyDown);
             this.ResumeLayout(false);
             this.PerformLayout();
 
