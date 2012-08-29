@@ -202,7 +202,7 @@ namespace BaoHien.UI
                                 ((OrderList)this.CallFromUserControll).loadOrderList();
                             }
 
-                            this.Close();
+                            disableForm();
                         }
                     }
                     else//add new
@@ -357,7 +357,8 @@ namespace BaoHien.UI
         }
         public void loadDataForEditOrder(int orderId)
         {
-            btnSave.Enabled = false;
+            disableForm();
+            
             isUpdating = true;
             this.Text = "Chỉnh sửa  đơn hàng này";
             this.btnSave.Text = "Cập nhật";
@@ -393,6 +394,7 @@ namespace BaoHien.UI
 
 
             }
+
             var query = from orderDetail in orderDetails
 
                         select new ProductionRequestDetailModel
@@ -409,9 +411,10 @@ namespace BaoHien.UI
 
             originalProductions = new BindingList<ProductionRequestDetailModel>(query.ToList());
             dgwOrderDetails.DataSource = new BindingList<ProductionRequestDetailModel>(query.ToList());
-
-            dgwOrderDetails.ReadOnly = false;
-
+            if(btnSave.Enabled)
+                dgwOrderDetails.ReadOnly = false;
+            else
+                dgwOrderDetails.ReadOnly = true;
             DataGridViewComboBoxColumn productColumn = new DataGridViewComboBoxColumn();
             productColumn.Width = 150;
             productColumn.AutoComplete = false;
@@ -461,6 +464,7 @@ namespace BaoHien.UI
             totalColumn.Width = 100;
             totalColumn.DataPropertyName = "Total";
             totalColumn.HeaderText = "Tổng";
+            totalColumn.ReadOnly = true;
             //numberUnitColumn.Frozen = true;
             //totalColumn.ValueType = typeof(int);
             dgwOrderDetails.Columns.Add(totalColumn);
@@ -800,7 +804,7 @@ namespace BaoHien.UI
             oTableForHeader.Cell(1, 1).Range.Bold = 0;
             oTableForHeader.Cell(1, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
             oTableForHeader.Cell(1, 1).Width = 125;
-
+            oTableForHeader.Cell(1, 2).Width = 175;
 
             oTableForHeader.Cell(1, 3).Range.Text = "Mã phiếu:";
             oTableForHeader.Cell(1, 3).Range.Bold = 1;
@@ -809,14 +813,15 @@ namespace BaoHien.UI
             oTableForHeader.Cell(1, 4).Range.Bold = 0;
             oTableForHeader.Cell(1, 4).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
 
-            oTableForHeader.Cell(2, 1).Width = 125;
+            oTableForHeader.Cell(2, 1).Width = 75;
             oTableForHeader.Cell(2, 1).Range.Text = "Đ/C";
             oTableForHeader.Cell(2, 1).Range.Bold = 0;
             oTableForHeader.Cell(2, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
 
-            oTableForHeader.Cell(2, 2).Range.Text = ":TBD";
+            oTableForHeader.Cell(2, 2).Range.Text = BHConstant.COMPANY_ADDRESS;
             oTableForHeader.Cell(2, 2).Range.Bold = 0;
             oTableForHeader.Cell(2, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
+            oTableForHeader.Cell(2, 2).Width = 225;
 
             oTableForHeader.Cell(2, 3).Range.Text = "Ngày lập:";
             oTableForHeader.Cell(2, 3).Range.Bold = 1;
@@ -826,16 +831,25 @@ namespace BaoHien.UI
             oTableForHeader.Cell(2, 4).Range.Bold = 0;
             oTableForHeader.Cell(2, 4).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
 
-            oTableForHeader.Cell(3, 1).Width = 125;
+            oTableForHeader.Cell(3, 1).Width = 75;
             oTableForHeader.Cell(3, 1).Range.Text = "Điện thoại:";
             oTableForHeader.Cell(3, 1).Range.Bold = 0;
             oTableForHeader.Cell(3, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
 
-            oTableForHeader.Cell(3, 2).Range.Text = ":TBD";
+            oTableForHeader.Cell(3, 2).Range.Text = BHConstant.COMPANY_PHONE;
             oTableForHeader.Cell(3, 2).Range.Bold = 0;
             oTableForHeader.Cell(3, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
+            oTableForHeader.Cell(3, 2).Width = 225;
 
+            oTableForHeader.Cell(4, 1).Width = 75;
+            oTableForHeader.Cell(4, 1).Range.Text = "Fax:";
+            oTableForHeader.Cell(4, 1).Range.Bold = 0;
+            oTableForHeader.Cell(4, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
 
+            oTableForHeader.Cell(4, 2).Range.Text = BHConstant.COMPANY_FAX;
+            oTableForHeader.Cell(4, 2).Range.Bold = 0;
+            oTableForHeader.Cell(4, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
+            oTableForHeader.Cell(4, 2).Width = 225;
             //Insert a paragraph at the beginning of the document.
             Word.Paragraph oPara1;
             oPara1 = oDoc.Content.Paragraphs.Add(ref oMissing);
@@ -1027,7 +1041,7 @@ namespace BaoHien.UI
             
             Word.Table oTableForHeader;
             Word.Range ForHeader = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
-            oTableForHeader = oDoc.Tables.Add(ForHeader, 3, 4, ref oMissing, ref oMissing);
+            oTableForHeader = oDoc.Tables.Add(ForHeader, 4, 4, ref oMissing, ref oMissing);
             oTableForHeader.Range.ParagraphFormat.SpaceAfter = 6;
             oTableForHeader.Range.Font.Size = 12;
             oTableForHeader.Range.Font.Name = "Times New Roman";
@@ -1035,7 +1049,7 @@ namespace BaoHien.UI
             oTableForHeader.Cell(1, 1).Range.Bold = 0;
             oTableForHeader.Cell(1, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
             oTableForHeader.Cell(1, 1).Width = 125;
-            
+            oTableForHeader.Cell(1, 2).Width = 175;
 
             oTableForHeader.Cell(1, 3).Range.Text = "Mã phiếu:";
             oTableForHeader.Cell(1, 3).Range.Bold = 1;
@@ -1044,12 +1058,13 @@ namespace BaoHien.UI
             oTableForHeader.Cell(1, 4).Range.Bold = 0;
             oTableForHeader.Cell(1, 4).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
 
-            oTableForHeader.Cell(2, 1).Width = 125;
-            oTableForHeader.Cell(2, 1).Range.Text = "Đ/C";
+            oTableForHeader.Cell(2, 1).Width = 75;
+            oTableForHeader.Cell(2, 1).Range.Text = "Đ/C:";
             oTableForHeader.Cell(2, 1).Range.Bold = 0;
             oTableForHeader.Cell(2, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
 
-            oTableForHeader.Cell(2, 2).Range.Text = ":TBD";
+            oTableForHeader.Cell(2, 2).Width = 225;
+            oTableForHeader.Cell(2, 2).Range.Text = BHConstant.COMPANY_ADDRESS;
             oTableForHeader.Cell(2, 2).Range.Bold = 0;
             oTableForHeader.Cell(2, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
 
@@ -1061,14 +1076,25 @@ namespace BaoHien.UI
             oTableForHeader.Cell(2, 4).Range.Bold = 0;
             oTableForHeader.Cell(2, 4).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
 
-            oTableForHeader.Cell(3, 1).Width = 125;
+            oTableForHeader.Cell(3, 1).Width = 75;
             oTableForHeader.Cell(3, 1).Range.Text = "Điện thoại:";
             oTableForHeader.Cell(3, 1).Range.Bold = 0;
             oTableForHeader.Cell(3, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
 
-            oTableForHeader.Cell(3, 2).Range.Text = ":TBD";
+            oTableForHeader.Cell(3, 2).Width = 225;
+            oTableForHeader.Cell(3, 2).Range.Text = BHConstant.COMPANY_PHONE;
             oTableForHeader.Cell(3, 2).Range.Bold = 0;
             oTableForHeader.Cell(3, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
+
+            oTableForHeader.Cell(4, 1).Width = 75;
+            oTableForHeader.Cell(4, 1).Range.Text = "Fax:";
+            oTableForHeader.Cell(4, 1).Range.Bold = 0;
+            oTableForHeader.Cell(4, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
+
+            oTableForHeader.Cell(4, 2).Width = 225;
+            oTableForHeader.Cell(4, 2).Range.Text = BHConstant.COMPANY_FAX;
+            oTableForHeader.Cell(4, 2).Range.Bold = 0;
+            oTableForHeader.Cell(4, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
 
 
             //Insert a paragraph at the beginning of the document.
@@ -1223,71 +1249,71 @@ namespace BaoHien.UI
             oTable3.Range.Font.Size = 12;
             oTable3.Range.Font.Name = "Times New Roman";
 
-            oTable3.Cell(1, 1).Width = 150;
-            oTable3.Cell(2, 1).Width = 150;
-            oTable3.Cell(3, 1).Width = 150;
-            oTable3.Cell(4, 1).Width = 150;
-            oTable3.Cell(5, 1).Width = 150;
+            oTable3.Cell(1, 1).Width = 200;
+            oTable3.Cell(2, 1).Width = 200;
+            oTable3.Cell(3, 1).Width = 200;
+            oTable3.Cell(4, 1).Width = 200;
+            oTable3.Cell(5, 1).Width = 200;
 
-            oTable3.Cell(1, 2).Width = 250;
+            oTable3.Cell(1, 2).Width = 125;
             oTable3.Cell(1, 2).Range.Text = "Giá trị hàng:";
             oTable3.Cell(1, 2).Range.Bold = 0;
             oTable3.Cell(1, 2).Range.Italic = 1;
             oTable3.Cell(1, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
 
-            oTable3.Cell(1, 3).Width = 250;
+            //oTable3.Cell(1, 3).Width = 150;
             oTable3.Cell(1, 3).Range.Text = BaoHien.Common.Global.convertToCurrency(totalNoTax.ToString());
             oTable3.Cell(1, 3).Range.Bold = 0;
             oTable3.Cell(1, 3).Range.Italic = 0;
-            oTable3.Cell(1, 3).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
+            oTable3.Cell(1, 3).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
 
-            oTable3.Cell(2, 2).Width = 250;
+            oTable3.Cell(2, 2).Width = 125;
             oTable3.Cell(2, 2).Range.Text = "VAT:";
             oTable3.Cell(2, 2).Range.Bold = 0;
             oTable3.Cell(2, 2).Range.Italic = 1;
             oTable3.Cell(2, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
 
-            oTable3.Cell(2, 3).Width = 250;
+            //oTable3.Cell(2, 3).Width = 150;
             oTable3.Cell(2, 3).Range.Text = BaoHien.Common.Global.convertToCurrency(txtVAT.Text);
             oTable3.Cell(2, 3).Range.Bold = 0;
             oTable3.Cell(2, 3).Range.Italic = 0;
-            oTable3.Cell(2, 3).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
+            oTable3.Cell(2, 3).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
 
-            oTable3.Cell(3, 2).Width = 250;
+            oTable3.Cell(3, 2).Width = 125;
             oTable3.Cell(3, 2).Range.Text = "Chiết khấu:";
             oTable3.Cell(3, 2).Range.Bold = 0;
             oTable3.Cell(3, 2).Range.Italic = 1;
             oTable3.Cell(3, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
 
-            oTable3.Cell(3, 3).Width = 250;
+            //oTable3.Cell(3, 3).Width = 150;
             oTable3.Cell(3, 3).Range.Text = BaoHien.Common.Global.convertToCurrency(txtDiscount.Text);
             oTable3.Cell(3, 3).Range.Bold = 0;
             oTable3.Cell(3, 3).Range.Italic = 0;
-            oTable3.Cell(3, 3).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
+            oTable3.Cell(3, 3).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
 
-            oTable3.Cell(4, 2).Width = 250;
+            oTable3.Cell(4, 2).Width = 125;
             oTable3.Cell(4, 2).Range.Text = "Tổng tiền:";
             oTable3.Cell(4, 2).Range.Bold = 0;
             oTable3.Cell(4, 2).Range.Italic = 1;
             oTable3.Cell(4, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
 
-            oTable3.Cell(4, 3).Width = 250;
+            //oTable3.Cell(4, 3).Width = 150;
             oTable3.Cell(4, 3).Range.Text = BaoHien.Common.Global.convertToCurrency(lblGrantTotal.Text);
             oTable3.Cell(4, 3).Range.Bold = 1;
             oTable3.Cell(4, 3).Range.Italic = 0;
-            oTable3.Cell(4, 3).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
+            oTable3.Cell(4, 3).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
 
-            oTable3.Cell(5, 2).Width = 250;
+            oTable3.Cell(5, 2).Width = 125;
             oTable3.Cell(5, 2).Range.Text = "Đơn vị:";
             oTable3.Cell(5, 2).Range.Bold = 0;
             oTable3.Cell(5, 2).Range.Italic = 1;
             oTable3.Cell(5, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
 
-            oTable3.Cell(5, 3).Width = 250;
+            //oTable3.Cell(5, 3).Width = 150;
             oTable3.Cell(5, 3).Range.Text = "VNĐ";
             oTable3.Cell(5, 3).Range.Bold = 1;
             oTable3.Cell(5, 3).Range.Italic = 0;
-            oTable3.Cell(5, 3).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
+            oTable3.Cell(5, 3).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
 
             Word.Paragraph oPara4;
             oPara4 = oDoc.Content.Paragraphs.Add(ref oMissing);
@@ -1351,26 +1377,22 @@ namespace BaoHien.UI
         {
             if (txtVAT.Text != null)
             {
-                //decimal total = 0;
-                //if (decimal.TryParse(txtVAT.Text, out total))
-                //{
-                //    CultureInfo vietnam = new CultureInfo(1066);
-                //    CultureInfo usa = new CultureInfo("en-US");
-
-                //    NumberFormatInfo nfi = usa.NumberFormat;
-                //    nfi = (NumberFormatInfo)nfi.Clone();
-                //    NumberFormatInfo vnfi = vietnam.NumberFormat;
-                //    //nfi.CurrencySymbol = vnfi.CurrencySymbol;
-                //    nfi.CurrencyNegativePattern = vnfi.CurrencyNegativePattern;
-                //    nfi.CurrencyPositivePattern = vnfi.CurrencyPositivePattern;
-                //    txtVAT.Text = total.ToString("c", nfi);
-                    
-                //}
+                
                 
 
             }
         }
-
+        private void disableForm()
+        {
+            txtCreatedDate.Enabled = false;
+            txtDiscount.Enabled = false;
+            txtNote.Enabled = false;
+            txtOrderCode.Enabled = false;
+            txtVAT.Enabled = false;
+            cbxCustomer.Enabled = false;
+            btnSave.Enabled = false;
+            dgwOrderDetails.ReadOnly = true;
+        }
         
     }
 }
