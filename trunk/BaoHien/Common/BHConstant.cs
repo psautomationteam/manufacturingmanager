@@ -32,7 +32,7 @@ namespace BaoHien.Common
         public const string PREFIX_FOR_BILLING = "TT";
 
         public const string REGULAR_EXPRESSION_FOR_NUMBER = "[0-9]";
-        public const string REGULAR_EXPRESSION_FOR_CURRENCY = "[0-9].[0-9]";
+        public const string REGULAR_EXPRESSION_FOR_CURRENCY = "[0-9]?.?[0-9]";
 
         public const byte DATA_STATUS_IN_STOCK_FOR_INPUT = 1;
         public const byte DATA_STATUS_IN_STOCK_FOR_OUTPUT = 2;
