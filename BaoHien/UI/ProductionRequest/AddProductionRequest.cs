@@ -358,13 +358,11 @@ namespace BaoHien.UI
                     if (lstMaterial.Count == 0 || lstMaterial.First<MaterialInStock>().NumberOfItem == 0)
                     {
                         MessageBox.Show("Số lượng vật liệu trong kho đã hết");
-                        dgv.Rows[e.RowIndex].Cells[2].Value = 0;
 
                     }
                     else if (lstMaterial.First<MaterialInStock>().NumberOfItem < (int)dgv.Rows[e.RowIndex].Cells[2].Value)
                     {
                         MessageBox.Show("Số lượng vật liệu trong kho còn lại là: " + lstMaterial.First<MaterialInStock>().NumberOfItem.ToString());
-                        dgv.Rows[e.RowIndex].Cells[2].Value = 0;
                     }
                 }
                 else if (e.ColumnIndex == 3)
@@ -494,9 +492,6 @@ namespace BaoHien.UI
                         productionRequestDetailInProductions[e.RowIndex].AttributeId = baseAttributesAtRowForProduct[0].Id;
                         currentCell.Value = baseAttributesAtRowForProduct[0].Id;
                     }
-
-                    if (baseAttributesAtRowForProduct.Count > 0)
-                        dgvProduct.Rows[e.RowIndex].Cells[2].ReadOnly = false;
 
                 }
                 else if (e.ColumnIndex == 1)
