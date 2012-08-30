@@ -130,10 +130,10 @@ namespace BaoHien.UI
                                         productInStock.AttributeId = od.AttributeId;
                                         productInStock.ProductId = od.ProductId;
                                         productInStock.LatestUpdate = DateTime.Now;
-                                        productInStock.StatusOfData = false;
+                                        productInStock.StatusOfData = (byte)BHConstant.DATA_STATUS_IN_STOCK_FOR_OUTPUT;
 
                                         productInStock.NumberOfInput = lstProductInStock.Last<ProductInStock>().NumberOfInput;
-                                        productInStock.NumberOfOutput = lstProductInStock.Last<ProductInStock>().NumberOfOutput - od.NumberUnit;
+                                        productInStock.NumberOfOutput = lstProductInStock.Last<ProductInStock>().NumberOfOutput + od.NumberUnit;
                                         productInStock.NumberOfItem = (int)lstProductInStock.Last<ProductInStock>().NumberOfItem - od.NumberUnit;
 
                                         pis.AddProductInStock(productInStock);
@@ -154,9 +154,9 @@ namespace BaoHien.UI
                                             productInStock.ProductId = od.ProductId;
                                             productInStock.LatestUpdate = DateTime.Now;
                                             productInStock.NumberOfInput = lstProductInStock.Last<ProductInStock>().NumberOfInput;
-                                            productInStock.NumberOfOutput = lstProductInStock.Last<ProductInStock>().NumberOfOutput + original.NumberUnit - od.NumberUnit;
+                                            productInStock.NumberOfOutput = lstProductInStock.Last<ProductInStock>().NumberOfOutput - original.NumberUnit + od.NumberUnit;
                                             productInStock.NumberOfItem = lstProductInStock.Last<ProductInStock>().NumberOfItem + original.NumberUnit - od.NumberUnit;
-                                            productInStock.StatusOfData = false;
+                                            productInStock.StatusOfData = (byte)BHConstant.DATA_STATUS_IN_STOCK_FOR_OUTPUT;
                                             pis.UpdateProductInStock(productInStock);
 
                                         }
@@ -170,16 +170,27 @@ namespace BaoHien.UI
                                             newProductInStock.AttributeId = od.AttributeId;
                                             newProductInStock.ProductId = od.ProductId;
                                             newProductInStock.LatestUpdate = DateTime.Now;
-                                            newProductInStock.StatusOfData = true;
+                                            newProductInStock.StatusOfData = (byte)BHConstant.DATA_STATUS_IN_STOCK_FOR_OUTPUT;
 
                                             newProductInStock.NumberOfInput = lstNewProduct.Last<ProductInStock>().NumberOfInput;
-                                            newProductInStock.NumberOfOutput = lstNewProduct.Last<ProductInStock>().NumberOfOutput - od.NumberUnit;
+                                            newProductInStock.NumberOfOutput = lstNewProduct.Last<ProductInStock>().NumberOfOutput + od.NumberUnit;
                                             newProductInStock.NumberOfItem += lstNewProduct.Last<ProductInStock>().NumberOfItem - od.NumberUnit;
 
                                             pis.AddProductInStock(newProductInStock);
 
                                             //Xoa cu
-                                            pis.DeleteProductInStock(original.Id);
+                                            List<ProductInStock> lstOldProduct = pis.SelectProductByWhere(pt => pt.ProductId == original.ProductId && pt.AttributeId == original.AttributeId);
+                                            ProductInStock oldProductInStock = new ProductInStock();
+                                            oldProductInStock.AttributeId = original.AttributeId;
+                                            oldProductInStock.ProductId = original.ProductId;
+                                            oldProductInStock.LatestUpdate = DateTime.Now;
+                                            oldProductInStock.StatusOfData = (byte)BHConstant.DATA_STATUS_IN_STOCK_FOR_EDIT;
+
+                                            newProductInStock.NumberOfInput = lstOldProduct.Last<ProductInStock>().NumberOfInput;
+                                            newProductInStock.NumberOfOutput = lstOldProduct.Last<ProductInStock>().NumberOfOutput - original.NumberUnit;
+                                            newProductInStock.NumberOfItem += lstOldProduct.Last<ProductInStock>().NumberOfItem + original.NumberUnit;
+
+                                            pis.AddProductInStock(newProductInStock);
                                         }
 
                                     }
@@ -241,14 +252,13 @@ namespace BaoHien.UI
                                 productInStock.AttributeId = od.AttributeId;
                                 productInStock.ProductId = od.ProductId;
                                 productInStock.LatestUpdate = DateTime.Now;
-                                productInStock.StatusOfData = false;
+                                productInStock.StatusOfData = (byte)BHConstant.DATA_STATUS_IN_STOCK_FOR_OUTPUT;
                                 if (lstProductInStock.Count > 0)
                                 {
-                                    productInStock.NumberOfInput = lstProductInStock.Last<ProductInStock>() != null ? lstProductInStock.Last<ProductInStock>().NumberOfInput : 0;
-                                    productInStock.NumberOfOutput = lstProductInStock.Last<ProductInStock>() != null ? lstProductInStock.Last<ProductInStock>().NumberOfOutput - od.NumberUnit : 0;
-                                    productInStock.NumberOfItem = lstProductInStock.Last<ProductInStock>() != null ? (int)lstProductInStock.Last<ProductInStock>().NumberOfItem - od.NumberUnit : 0;
+                                    productInStock.NumberOfInput = lstProductInStock.Last<ProductInStock>().NumberOfInput;
+                                    productInStock.NumberOfOutput = lstProductInStock.Last<ProductInStock>().NumberOfOutput + od.NumberUnit;
+                                    productInStock.NumberOfItem = (int)lstProductInStock.Last<ProductInStock>().NumberOfItem - od.NumberUnit;
                                 }
-
 
                                 pis.AddProductInStock(productInStock);
 
