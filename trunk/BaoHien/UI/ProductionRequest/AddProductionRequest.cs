@@ -363,6 +363,11 @@ namespace BaoHien.UI
                     else if (lstMaterial.First<MaterialInStock>().NumberOfItem < (int)dgv.Rows[e.RowIndex].Cells[2].Value)
                     {
                         MessageBox.Show("Số lượng vật liệu trong kho còn lại là: " + lstMaterial.First<MaterialInStock>().NumberOfItem.ToString());
+                        
+                    }
+                    else
+                    {
+                        productionRequestDetailInMaterials[e.RowIndex].NumberUnit = (int)dgv.CurrentCell.Value;
                     }
                 }
                 else if (e.ColumnIndex == 3)
@@ -527,7 +532,7 @@ namespace BaoHien.UI
         {
             if (this.validator1.Validate())
             {
-                DialogResult dialogResult = MessageBox.Show("Bạn sẽ không thể chỉnh sửa sau khi lưu!Bạn muốn lưu?", "Xác nhận", MessageBoxButtons.YesNo);
+                DialogResult dialogResult = MessageBox.Show("Bạn muốn lưu?", "Xác nhận", MessageBoxButtons.YesNo);
                 if (dialogResult == System.Windows.Forms.DialogResult.Yes)
                 {
                     ProductionRequestService prs = new ProductionRequestService();
