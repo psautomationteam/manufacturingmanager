@@ -59,16 +59,17 @@ namespace BaoHien.UI
                 int index = 0;
                 var query = from productionRequest in productionRequests
 
-                            select new ProductionRequestModel
+                            select new 
                             {
                                 ReqCode = productionRequest.ReqCode,
                                 RequestedBy = productionRequest.SystemUser.FullName,
                                 Note = productionRequest.Note,
                                 Id = productionRequest.Id,
+                                CreatedBy = productionRequest.RequestedDate.ToShortDateString(),
                                 Status = productionRequest.Status != null?productionRequest.Status.Value: (byte)0,
                                 Index = index++
                             };
-                dgwRequestList.DataSource = new BindingList<ProductionRequestModel>(query.ToList());
+                dgwRequestList.DataSource = query.ToList();
                 dgwRequestList.AllowUserToAddRows = false;
                 dgwRequestList.ReadOnly = true;
             }
@@ -104,9 +105,9 @@ namespace BaoHien.UI
             
 
             DataGridViewTextBoxColumn statusColumn = new DataGridViewTextBoxColumn();
-            statusColumn.DataPropertyName = "Status";
+            statusColumn.DataPropertyName = "CreatedBy";
             statusColumn.Width = 120;
-            statusColumn.HeaderText = "Trạng thái";
+            statusColumn.HeaderText = "Ngày tạo";
             //attributeCodeColumn.Frozen = true;
             statusColumn.ValueType = typeof(string);
             dgwRequestList.Columns.Add(statusColumn);

@@ -60,7 +60,7 @@
             this.btnAdd.Location = new System.Drawing.Point(331, 187);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(99, 23);
-            this.btnAdd.TabIndex = 16;
+            this.btnAdd.TabIndex = 5;
             this.btnAdd.Text = "Thêm";
             this.btnAdd.UseVisualStyleBackColor = true;
             this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
@@ -70,14 +70,14 @@
             this.txtCode.Location = new System.Drawing.Point(152, 49);
             this.txtCode.Name = "txtCode";
             this.txtCode.Size = new System.Drawing.Size(178, 20);
-            this.txtCode.TabIndex = 14;
+            this.txtCode.TabIndex = 1;
             // 
             // txtName
             // 
             this.txtName.Location = new System.Drawing.Point(152, 16);
             this.txtName.Name = "txtName";
             this.txtName.Size = new System.Drawing.Size(278, 20);
-            this.txtName.TabIndex = 13;
+            this.txtName.TabIndex = 0;
             // 
             // label3
             // 
@@ -112,7 +112,7 @@
             this.txtPass.Name = "txtPass";
             this.txtPass.PasswordChar = '*';
             this.txtPass.Size = new System.Drawing.Size(178, 20);
-            this.txtPass.TabIndex = 18;
+            this.txtPass.TabIndex = 2;
             // 
             // label4
             // 
@@ -133,7 +133,7 @@
             this.cbUserType.Location = new System.Drawing.Point(152, 151);
             this.cbUserType.Name = "cbUserType";
             this.cbUserType.Size = new System.Drawing.Size(121, 21);
-            this.cbUserType.TabIndex = 20;
+            this.cbUserType.TabIndex = 4;
             // 
             // lblErrorMessage
             // 
@@ -149,7 +149,7 @@
             this.txtConfirmPass.Name = "txtConfirmPass";
             this.txtConfirmPass.PasswordChar = '*';
             this.txtConfirmPass.Size = new System.Drawing.Size(178, 20);
-            this.txtConfirmPass.TabIndex = 23;
+            this.txtConfirmPass.TabIndex = 3;
             this.txtConfirmPass.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
             // label6
@@ -163,18 +163,21 @@
             // 
             // btnCancel
             // 
+            this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancel.Location = new System.Drawing.Point(240, 187);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
-            this.btnCancel.TabIndex = 24;
+            this.btnCancel.TabIndex = 6;
             this.btnCancel.Text = "Hủy";
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // AddSystemUser
             // 
+            this.AcceptButton = this.btnAdd;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(455, 234);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.txtConfirmPass);

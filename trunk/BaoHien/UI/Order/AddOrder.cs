@@ -70,13 +70,15 @@ namespace BaoHien.UI
         {
             InitializeComponent();
         }
-        private void saveData()
+        private bool saveData()
         {
+            
             if (validator1.Validate())
             {
                 DialogResult dialogResult = MessageBox.Show("Bạn sẽ không thể chỉnh sửa sau khi lưu!Bạn muốn lưu?", "Xác nhận", MessageBoxButtons.YesNo);
                 if (dialogResult == System.Windows.Forms.DialogResult.Yes)
                 {
+                   
                     ProductInStockService pis = new ProductInStockService();
                     double discount = 0;
                     Double.TryParse(txtDiscount.Text, out discount);
@@ -96,7 +98,7 @@ namespace BaoHien.UI
                     else
                     {
                         MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
-                        return;
+                        return false;
                     }
                     if (order != null)//update
                     {
@@ -110,7 +112,7 @@ namespace BaoHien.UI
                         if (!result)
                         {
                             MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
-                            return;
+                            return false;
                         }
                         else
                         {
@@ -205,7 +207,7 @@ namespace BaoHien.UI
                             if (!result)
                             {
                                 MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
-                                return;
+                                return false;
                             }
                             else
                             {
@@ -224,7 +226,7 @@ namespace BaoHien.UI
                         if (cbxCustomer.SelectedValue == null)
                         {
                             MessageBox.Show("Bạn cần có một khách hành cho phiếu này!");
-                            return;
+                            return false;
                         }
                         order = new Order
                         {
@@ -268,7 +270,7 @@ namespace BaoHien.UI
                                 if (!ret)
                                 {
                                     MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
-                                    return;
+                                    return false;
                                 }
                             }
                         }
@@ -279,15 +281,18 @@ namespace BaoHien.UI
                             MessageBox.Show("Sản phẩm đã được tạo thành công");
                             //((OrderList)this.CallFromUserControll).loadOrderList();
                             this.Close();
+                            return true;
                         }
                         else
                         {
                             MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                            return false;
                         }
                     }
                 }
-
+                return true;
             }
+            return false;
         }
         private void btnSave_Click(object sender, EventArgs e)
         {
@@ -710,11 +715,15 @@ namespace BaoHien.UI
         }
         private void btnPrintOrder_Click(object sender, EventArgs e)
         {
-            printOrder();
             if (btnSave.Enabled)
             {
-                saveData();
+                if (saveData())
+                {
+                    printOrder();
+                };
             }
+            
+            
             //CaptureScreen();
             //using (var dlg = new CoolPrintPreviewDialog())
             //{
@@ -808,7 +817,7 @@ namespace BaoHien.UI
 
             Word.Table oTableForHeader;
             Word.Range ForHeader = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
-            oTableForHeader = oDoc.Tables.Add(ForHeader, 3, 4, ref oMissing, ref oMissing);
+            oTableForHeader = oDoc.Tables.Add(ForHeader, 4, 4, ref oMissing, ref oMissing);
             oTableForHeader.Range.ParagraphFormat.SpaceAfter = 1;
             oTableForHeader.Range.Font.Size = 12;
             oTableForHeader.Range.Font.Name = "Times New Roman";

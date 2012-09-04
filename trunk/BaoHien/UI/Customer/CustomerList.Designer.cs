@@ -78,7 +78,7 @@
             this.cmbSaler.Location = new System.Drawing.Point(448, 55);
             this.cmbSaler.Name = "cmbSaler";
             this.cmbSaler.Size = new System.Drawing.Size(170, 21);
-            this.cmbSaler.TabIndex = 12;
+            this.cmbSaler.TabIndex = 3;
             // 
             // label7
             // 
@@ -94,7 +94,7 @@
             this.txtPhone.Location = new System.Drawing.Point(448, 87);
             this.txtPhone.Name = "txtPhone";
             this.txtPhone.Size = new System.Drawing.Size(170, 20);
-            this.txtPhone.TabIndex = 10;
+            this.txtPhone.TabIndex = 5;
             // 
             // label6
             // 
@@ -114,7 +114,7 @@
             this.comboBox2.Location = new System.Drawing.Point(146, 87);
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(170, 21);
-            this.comboBox2.TabIndex = 8;
+            this.comboBox2.TabIndex = 4;
             // 
             // comboBox1
             // 
@@ -122,7 +122,7 @@
             this.comboBox1.Location = new System.Drawing.Point(147, 57);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(169, 21);
-            this.comboBox1.TabIndex = 7;
+            this.comboBox1.TabIndex = 2;
             // 
             // label4
             // 
@@ -147,7 +147,7 @@
             this.btnSearch.Location = new System.Drawing.Point(661, 28);
             this.btnSearch.Name = "btnSearch";
             this.btnSearch.Size = new System.Drawing.Size(75, 54);
-            this.btnSearch.TabIndex = 4;
+            this.btnSearch.TabIndex = 6;
             this.btnSearch.Text = "Tìm";
             this.btnSearch.UseVisualStyleBackColor = true;
             // 
@@ -156,14 +156,14 @@
             this.txtName.Location = new System.Drawing.Point(448, 28);
             this.txtName.Name = "txtName";
             this.txtName.Size = new System.Drawing.Size(170, 20);
-            this.txtName.TabIndex = 3;
+            this.txtName.TabIndex = 1;
             // 
             // txtCode
             // 
             this.txtCode.Location = new System.Drawing.Point(146, 28);
             this.txtCode.Name = "txtCode";
             this.txtCode.Size = new System.Drawing.Size(170, 20);
-            this.txtCode.TabIndex = 1;
+            this.txtCode.TabIndex = 0;
             // 
             // label2
             // 
@@ -198,7 +198,7 @@
             this.btnAdd.Location = new System.Drawing.Point(744, 151);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(75, 43);
-            this.btnAdd.TabIndex = 13;
+            this.btnAdd.TabIndex = 0;
             this.btnAdd.Text = "Thêm khách hàng";
             this.btnAdd.UseVisualStyleBackColor = true;
             this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);

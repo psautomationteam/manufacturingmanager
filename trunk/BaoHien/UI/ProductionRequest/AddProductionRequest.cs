@@ -660,15 +660,17 @@ namespace BaoHien.UI
                                         //Save in Materail In Stock
                                         MaterialInStock materialInStock = new MaterialInStock();
                                         List<MaterialInStock> lstMaterial = mis.SelectMaterialInStockByWhere(pt => pt.ProductId == prd.ProductId && pt.AttributeId == prd.AttributeId);
-
-                                        materialInStock.AttributeId = prd.AttributeId;
-                                        materialInStock.ProductId = prd.ProductId;
-                                        materialInStock.LatestUpdate = DateTime.Now;
-                                        materialInStock.StatusOfData = (byte)BHConstant.DATA_STATUS_IN_STOCK_FOR_OUTPUT;
-                                        materialInStock.NumberOfInput = lstMaterial.Last<MaterialInStock>().NumberOfInput;
-                                        materialInStock.NumberOfOutput = lstMaterial.Last<MaterialInStock>().NumberOfOutput + prd.NumberUnit;
-                                        materialInStock.NumberOfItem = lstMaterial.Last<MaterialInStock>().NumberOfItem - prd.NumberUnit;
-                                        mis.AddMaterialInStock(materialInStock);
+                                        if (lstMaterial != null)
+                                        {
+                                            materialInStock.AttributeId = prd.AttributeId;
+                                            materialInStock.ProductId = prd.ProductId;
+                                            materialInStock.LatestUpdate = DateTime.Now;
+                                            materialInStock.StatusOfData = (byte)BHConstant.DATA_STATUS_IN_STOCK_FOR_OUTPUT;
+                                            materialInStock.NumberOfInput = lstMaterial.Last<MaterialInStock>() != null?lstMaterial.Last<MaterialInStock>().NumberOfInput: 0;
+                                            materialInStock.NumberOfOutput = lstMaterial.Last<MaterialInStock>() != null ?lstMaterial.Last<MaterialInStock>().NumberOfOutput + prd.NumberUnit: 0;
+                                            materialInStock.NumberOfItem = lstMaterial.Last<MaterialInStock>() != null ?lstMaterial.Last<MaterialInStock>().NumberOfItem - prd.NumberUnit:0;
+                                            mis.AddMaterialInStock(materialInStock);
+                                        }
                                     }
                                     else
                                     {
