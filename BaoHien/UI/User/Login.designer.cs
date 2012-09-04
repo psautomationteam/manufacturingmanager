@@ -42,15 +42,15 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(27, 28);
+            this.label1.Location = new System.Drawing.Point(27, 26);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(82, 14);
+            this.label1.Size = new System.Drawing.Size(84, 13);
             this.label1.TabIndex = 5;
             this.label1.Text = "Tên đăng nhập:";
             // 
             // txtUsername
             // 
-            this.txtUsername.Location = new System.Drawing.Point(117, 25);
+            this.txtUsername.Location = new System.Drawing.Point(117, 23);
             this.txtUsername.Name = "txtUsername";
             this.txtUsername.Size = new System.Drawing.Size(234, 20);
             this.txtUsername.TabIndex = 0;
@@ -60,17 +60,17 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(56, 71);
+            this.label2.Location = new System.Drawing.Point(56, 66);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(53, 14);
+            this.label2.Size = new System.Drawing.Size(55, 13);
             this.label2.TabIndex = 4;
             this.label2.Text = "Mật khẩu:";
             // 
             // btnLogin
             // 
-            this.btnLogin.Location = new System.Drawing.Point(275, 118);
+            this.btnLogin.Location = new System.Drawing.Point(275, 110);
             this.btnLogin.Name = "btnLogin";
-            this.btnLogin.Size = new System.Drawing.Size(75, 25);
+            this.btnLogin.Size = new System.Drawing.Size(75, 23);
             this.btnLogin.TabIndex = 2;
             this.btnLogin.Text = "Đăng Nhập";
             this.btnLogin.UseVisualStyleBackColor = true;
@@ -78,9 +78,10 @@
             // 
             // btnExit
             // 
-            this.btnExit.Location = new System.Drawing.Point(175, 118);
+            this.btnExit.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnExit.Location = new System.Drawing.Point(175, 110);
             this.btnExit.Name = "btnExit";
-            this.btnExit.Size = new System.Drawing.Size(75, 25);
+            this.btnExit.Size = new System.Drawing.Size(75, 23);
             this.btnExit.TabIndex = 3;
             this.btnExit.Text = "Tắt";
             this.btnExit.UseVisualStyleBackColor = true;
@@ -90,14 +91,14 @@
             // 
             this.lblErrorMessage.AutoSize = true;
             this.lblErrorMessage.ForeColor = System.Drawing.Color.Red;
-            this.lblErrorMessage.Location = new System.Drawing.Point(27, 98);
+            this.lblErrorMessage.Location = new System.Drawing.Point(27, 91);
             this.lblErrorMessage.Name = "lblErrorMessage";
-            this.lblErrorMessage.Size = new System.Drawing.Size(0, 14);
+            this.lblErrorMessage.Size = new System.Drawing.Size(0, 13);
             this.lblErrorMessage.TabIndex = 6;
             // 
             // txtPassword
             // 
-            this.txtPassword.Location = new System.Drawing.Point(118, 62);
+            this.txtPassword.Location = new System.Drawing.Point(118, 58);
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.PasswordChar = '*';
             this.txtPassword.Size = new System.Drawing.Size(232, 20);
@@ -111,9 +112,11 @@
             // 
             // Login
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 14F);
+            this.AcceptButton = this.btnLogin;
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(399, 150);
+            this.CancelButton = this.btnExit;
+            this.ClientSize = new System.Drawing.Size(399, 139);
             this.Controls.Add(this.txtPassword);
             this.Controls.Add(this.lblErrorMessage);
             this.Controls.Add(this.btnExit);

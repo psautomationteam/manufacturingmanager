@@ -44,81 +44,82 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(42, 23);
+            this.label1.Location = new System.Drawing.Point(42, 21);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(105, 14);
+            this.label1.Size = new System.Drawing.Size(105, 13);
             this.label1.TabIndex = 0;
             this.label1.Text = "Mật khẩu hiện tại (*):";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(60, 59);
+            this.label2.Location = new System.Drawing.Point(60, 55);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(88, 14);
+            this.label2.Size = new System.Drawing.Size(87, 13);
             this.label2.TabIndex = 1;
             this.label2.Text = "Mật khẩu mới (*):";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 95);
+            this.label3.Location = new System.Drawing.Point(12, 88);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(137, 14);
+            this.label3.Size = new System.Drawing.Size(135, 13);
             this.label3.TabIndex = 2;
             this.label3.Text = "Xác nhận mật khẩu mới (*):";
             // 
             // txtCurrentPass
             // 
-            this.txtCurrentPass.Location = new System.Drawing.Point(154, 14);
+            this.txtCurrentPass.Location = new System.Drawing.Point(154, 13);
             this.txtCurrentPass.Name = "txtCurrentPass";
             this.txtCurrentPass.Size = new System.Drawing.Size(225, 20);
-            this.txtCurrentPass.TabIndex = 3;
+            this.txtCurrentPass.TabIndex = 0;
             this.validator1.SetType(this.txtCurrentPass, Itboy.Components.ValidationType.Required);
             // 
             // txtNewPass
             // 
-            this.txtNewPass.Location = new System.Drawing.Point(154, 52);
+            this.txtNewPass.Location = new System.Drawing.Point(154, 48);
             this.txtNewPass.Name = "txtNewPass";
             this.txtNewPass.Size = new System.Drawing.Size(225, 20);
-            this.txtNewPass.TabIndex = 4;
+            this.txtNewPass.TabIndex = 1;
             this.validator1.SetType(this.txtNewPass, Itboy.Components.ValidationType.Required);
             // 
             // txtConfirmPass
             // 
             this.validator1.SetComparedControl(this.txtConfirmPass, this.txtNewPass);
             this.validator1.SetCompareOperator(this.txtConfirmPass, Itboy.Components.ValidationCompareOperator.Equal);
-            this.txtConfirmPass.Location = new System.Drawing.Point(154, 86);
+            this.txtConfirmPass.Location = new System.Drawing.Point(154, 80);
             this.txtConfirmPass.Name = "txtConfirmPass";
             this.txtConfirmPass.Size = new System.Drawing.Size(225, 20);
-            this.txtConfirmPass.TabIndex = 5;
+            this.txtConfirmPass.TabIndex = 2;
             this.validator1.SetType(this.txtConfirmPass, ((Itboy.Components.ValidationType)((Itboy.Components.ValidationType.Required | Itboy.Components.ValidationType.Compare))));
             // 
             // btnChange
             // 
-            this.btnChange.Location = new System.Drawing.Point(304, 152);
+            this.btnChange.Location = new System.Drawing.Point(304, 141);
             this.btnChange.Name = "btnChange";
-            this.btnChange.Size = new System.Drawing.Size(75, 25);
-            this.btnChange.TabIndex = 6;
+            this.btnChange.Size = new System.Drawing.Size(75, 23);
+            this.btnChange.TabIndex = 3;
             this.btnChange.Text = "Thay Đổi";
             this.btnChange.UseVisualStyleBackColor = true;
             this.btnChange.Click += new System.EventHandler(this.btnChange_Click);
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(210, 152);
+            this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnCancel.Location = new System.Drawing.Point(210, 141);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(75, 25);
-            this.btnCancel.TabIndex = 7;
+            this.btnCancel.Size = new System.Drawing.Size(75, 23);
+            this.btnCancel.TabIndex = 4;
             this.btnCancel.Text = "Hủy";
             this.btnCancel.UseVisualStyleBackColor = true;
             // 
             // lblErrorMessage
             // 
             this.lblErrorMessage.AutoSize = true;
-            this.lblErrorMessage.Location = new System.Drawing.Point(33, 124);
+            this.lblErrorMessage.Location = new System.Drawing.Point(33, 115);
             this.lblErrorMessage.Name = "lblErrorMessage";
-            this.lblErrorMessage.Size = new System.Drawing.Size(0, 14);
+            this.lblErrorMessage.Size = new System.Drawing.Size(0, 13);
             this.lblErrorMessage.TabIndex = 8;
             // 
             // validator1
@@ -127,9 +128,11 @@
             // 
             // ChangePassword
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 14F);
+            this.AcceptButton = this.btnChange;
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(394, 190);
+            this.CancelButton = this.btnCancel;
+            this.ClientSize = new System.Drawing.Size(394, 176);
             this.Controls.Add(this.lblErrorMessage);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnChange);

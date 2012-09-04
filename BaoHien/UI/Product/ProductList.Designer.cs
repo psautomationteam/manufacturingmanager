@@ -60,7 +60,7 @@
             this.grpSearch.Location = new System.Drawing.Point(28, 14);
             this.grpSearch.Name = "grpSearch";
             this.grpSearch.Size = new System.Drawing.Size(787, 99);
-            this.grpSearch.TabIndex = 6;
+            this.grpSearch.TabIndex = 0;
             this.grpSearch.TabStop = false;
             this.grpSearch.Text = "Tìm Kiếm";
             // 
@@ -73,7 +73,7 @@
             this.cbPurchaseStatus.Location = new System.Drawing.Point(448, 56);
             this.cbPurchaseStatus.Name = "cbPurchaseStatus";
             this.cbPurchaseStatus.Size = new System.Drawing.Size(170, 21);
-            this.cbPurchaseStatus.TabIndex = 8;
+            this.cbPurchaseStatus.TabIndex = 3;
             // 
             // cbProductTypes
             // 
@@ -81,7 +81,7 @@
             this.cbProductTypes.Location = new System.Drawing.Point(147, 57);
             this.cbProductTypes.Name = "cbProductTypes";
             this.cbProductTypes.Size = new System.Drawing.Size(169, 21);
-            this.cbProductTypes.TabIndex = 7;
+            this.cbProductTypes.TabIndex = 2;
             // 
             // label4
             // 
@@ -116,14 +116,14 @@
             this.txtName.Location = new System.Drawing.Point(448, 28);
             this.txtName.Name = "txtName";
             this.txtName.Size = new System.Drawing.Size(170, 20);
-            this.txtName.TabIndex = 3;
+            this.txtName.TabIndex = 1;
             // 
             // txtCode
             // 
             this.txtCode.Location = new System.Drawing.Point(146, 28);
             this.txtCode.Name = "txtCode";
             this.txtCode.Size = new System.Drawing.Size(170, 20);
-            this.txtCode.TabIndex = 1;
+            this.txtCode.TabIndex = 0;
             // 
             // label2
             // 
@@ -167,7 +167,7 @@
             this.btnAdd.Location = new System.Drawing.Point(740, 119);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(75, 43);
-            this.btnAdd.TabIndex = 7;
+            this.btnAdd.TabIndex = 1;
             this.btnAdd.Text = "Thêm sản phẩm";
             this.btnAdd.UseVisualStyleBackColor = true;
             this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
