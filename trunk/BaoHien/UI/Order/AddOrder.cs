@@ -814,64 +814,6 @@ namespace BaoHien.UI
             oWord.Visible = true;
             oDoc = oWord.Documents.Add(ref oMissing, ref oMissing,
                 ref oMissing, ref oMissing);
-
-            Word.Table oTableForHeader;
-            Word.Range ForHeader = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
-            oTableForHeader = oDoc.Tables.Add(ForHeader, 4, 4, ref oMissing, ref oMissing);
-            oTableForHeader.Range.ParagraphFormat.SpaceAfter = 1;
-            oTableForHeader.Range.Font.Size = 12;
-            oTableForHeader.Range.Font.Name = "Times New Roman";
-
-            oTableForHeader.Cell(1, 1).Range.Text = BHConstant.COMPANY_NAME;
-            oTableForHeader.Cell(1, 1).Range.Bold = 0;
-            oTableForHeader.Cell(1, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
-            oTableForHeader.Cell(1, 1).Width = 125;
-            oTableForHeader.Cell(1, 2).Width = 175;
-
-            oTableForHeader.Cell(1, 3).Range.Text = "Mã phiếu:";
-            oTableForHeader.Cell(1, 3).Range.Bold = 1;
-            oTableForHeader.Cell(1, 3).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
-            oTableForHeader.Cell(1, 4).Range.Text = txtOrderCode.Text != null ? txtOrderCode.Text : "không tồn tại";
-            oTableForHeader.Cell(1, 4).Range.Bold = 0;
-            oTableForHeader.Cell(1, 4).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
-
-            oTableForHeader.Cell(2, 1).Width = 75;
-            oTableForHeader.Cell(2, 1).Range.Text = "Đ/C";
-            oTableForHeader.Cell(2, 1).Range.Bold = 0;
-            oTableForHeader.Cell(2, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
-
-            oTableForHeader.Cell(2, 2).Range.Text = BHConstant.COMPANY_ADDRESS;
-            oTableForHeader.Cell(2, 2).Range.Bold = 0;
-            oTableForHeader.Cell(2, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
-            oTableForHeader.Cell(2, 2).Width = 225;
-
-            oTableForHeader.Cell(2, 3).Range.Text = "Ngày lập:";
-            oTableForHeader.Cell(2, 3).Range.Bold = 1;
-            oTableForHeader.Cell(2, 3).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
-
-            oTableForHeader.Cell(2, 4).Range.Text = txtCreatedDate.Text;
-            oTableForHeader.Cell(2, 4).Range.Bold = 0;
-            oTableForHeader.Cell(2, 4).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
-
-            oTableForHeader.Cell(3, 1).Width = 75;
-            oTableForHeader.Cell(3, 1).Range.Text = "Điện thoại:";
-            oTableForHeader.Cell(3, 1).Range.Bold = 0;
-            oTableForHeader.Cell(3, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
-
-            oTableForHeader.Cell(3, 2).Range.Text = BHConstant.COMPANY_PHONE;
-            oTableForHeader.Cell(3, 2).Range.Bold = 0;
-            oTableForHeader.Cell(3, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
-            oTableForHeader.Cell(3, 2).Width = 225;
-
-            oTableForHeader.Cell(4, 1).Width = 75;
-            oTableForHeader.Cell(4, 1).Range.Text = "Fax:";
-            oTableForHeader.Cell(4, 1).Range.Bold = 0;
-            oTableForHeader.Cell(4, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
-
-            oTableForHeader.Cell(4, 2).Range.Text = BHConstant.COMPANY_FAX;
-            oTableForHeader.Cell(4, 2).Range.Bold = 0;
-            oTableForHeader.Cell(4, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
-            oTableForHeader.Cell(4, 2).Width = 225;
             //Insert a paragraph at the beginning of the document.
             Word.Paragraph oPara1;
             oPara1 = oDoc.Content.Paragraphs.Add(ref oMissing);
@@ -881,12 +823,38 @@ namespace BaoHien.UI
             oPara1.Range.Font.Name = "Times New Roman";
             oPara1.Format.SpaceAfter = 1;    //24 pt spacing after paragraph.
             oPara1.Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
-            //oPara1.Range.InsertParagraphAfter();
+            Word.Table oTableForHeader2;
+            Word.Range ForHeader2 = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
+            oTableForHeader2 = oDoc.Tables.Add(ForHeader2, 1, 1, ref oMissing, ref oMissing);
+            oTableForHeader2.Range.ParagraphFormat.SpaceAfter = 1;
+            oTableForHeader2.Range.Font.Size = 8;
+            oTableForHeader2.Range.Font.Name = "Times New Roman";
+
+            Word.Paragraph oPara6;
+            oPara6 = oDoc.Content.Paragraphs.Add(ref oMissing);
+            oPara6.Range.Text = "(SẼ BỔ XUNG HÓA ĐƠN TÀI CHÍNH VÀ THU THÊM THUẾ GTGT 10% SAU)";
+            oPara6.Range.Font.Bold = 0;
+            oPara6.Range.Font.Size = 14;
+            oPara6.Range.Font.Name = "Times New Roman";
+            oPara6.Format.SpaceAfter = 24;    //24 pt spacing after paragraph.
+            oPara6.Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+            oPara6.Range.Font.Italic = 1;
+
+
+            //Word.Paragraph oPara8;
+            //oPara8 = oDoc.Content.Paragraphs.Add(ref oMissing);
+            //oPara8.Range.Text = "";
+            //oPara8.Range.Font.Bold = 0;
+            //oPara8.Range.Font.Size = 8;
+            //oPara8.Range.Font.Name = "Times New Roman";
+            //oPara8.Format.SpaceAfter = 1;    //24 pt spacing after paragraph.
+            //oPara8.Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+            //oPara8.Range.Font.Italic = 1;
 
             Word.Table oTableForCustomerInfo;
             Word.Range ForCustomerInfo = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
-            oTableForCustomerInfo = oDoc.Tables.Add(ForCustomerInfo, 3, 4, ref oMissing, ref oMissing);
-            oTableForCustomerInfo.Range.ParagraphFormat.SpaceAfter = 6;
+            oTableForCustomerInfo = oDoc.Tables.Add(ForCustomerInfo, 4, 4, ref oMissing, ref oMissing);
+            oTableForCustomerInfo.Range.ParagraphFormat.SpaceAfter = 1;
             oTableForCustomerInfo.Range.Font.Name = "Times New Roman";
             oTableForCustomerInfo.Range.Font.Size = 13;
             
@@ -916,14 +884,25 @@ namespace BaoHien.UI
             }
 
 
-            oTableForCustomerInfo.Cell(3, 1).Range.Text = "Ghi chú:";
+            oTableForCustomerInfo.Cell(3, 1).Range.Text = "Lý do xuất kho:";
             oTableForCustomerInfo.Cell(3, 1).Range.Bold = 1;
             oTableForCustomerInfo.Cell(3, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
 
             oTableForCustomerInfo.Cell(3, 2).Width = 400;
-            oTableForCustomerInfo.Cell(3, 2).Range.Text = txtNote.Text;
+            oTableForCustomerInfo.Cell(3, 2).Range.Text = "";
             oTableForCustomerInfo.Cell(3, 2).Range.Bold = 0;
             oTableForCustomerInfo.Cell(3, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
+
+            oTableForCustomerInfo.Cell(4, 1).Range.Text = "Xuất tại kho:";
+            oTableForCustomerInfo.Cell(4, 1).Range.Bold = 1;
+            oTableForCustomerInfo.Cell(4, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
+
+            oTableForCustomerInfo.Cell(4, 2).Width = 400;
+            oTableForCustomerInfo.Cell(4, 2).Range.Text = "";
+            oTableForCustomerInfo.Cell(4, 2).Range.Bold = 0;
+            oTableForCustomerInfo.Cell(4, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
+
+            
 
             Word.Paragraph oPara2;
             oPara2 = oDoc.Content.Paragraphs.Add(ref oMissing);
@@ -938,7 +917,7 @@ namespace BaoHien.UI
             //bold and italic.
             Word.Table oTable;
             Word.Range wrdRng = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
-            oTable = oDoc.Tables.Add(wrdRng, dgwOrderDetails.RowCount + 1, 5, ref oMissing, ref oMissing);
+            oTable = oDoc.Tables.Add(wrdRng, dgwOrderDetails.RowCount + 1, 4, ref oMissing, ref oMissing);
             oTable.Range.ParagraphFormat.SpaceAfter = 6;
             oTable.Borders.Enable = 1;
             oTable.Range.Font.Size = 12;
@@ -960,8 +939,8 @@ namespace BaoHien.UI
                             oTable.Cell(r, c).Range.Text = "Quy cách";
                         else if (c == 4)
                             oTable.Cell(r, c).Range.Text = "Số lượng";
-                        else if (c == 5)
-                            oTable.Cell(r, c).Range.Text = "Ghi chú";
+                        //else if (c == 5)
+                        //    oTable.Cell(r, c).Range.Text = "Ghi chú";
                         
                     }
                     else
@@ -982,10 +961,10 @@ namespace BaoHien.UI
                         {
                             oTable.Cell(r, c).Range.Text = ((int)dgwOrderDetails.Rows[r - 2].Cells[c - 2].Value).ToString();
                         }
-                        else if (c == 5)
-                        {
-                            oTable.Cell(r, c).Range.Text = (string)dgwOrderDetails.Rows[r - 2].Cells[dgwOrderDetails.ColumnCount - 1].Value;
-                        }
+                        //else if (c == 5)
+                        //{
+                        //    oTable.Cell(r, c).Range.Text = (string)dgwOrderDetails.Rows[r - 2].Cells[dgwOrderDetails.ColumnCount - 1].Value;
+                        //}
                         
 
                     }
@@ -1005,32 +984,81 @@ namespace BaoHien.UI
             oPara3.Format.SpaceAfter = 1;    //24 pt spacing after paragraph.
             oPara3.Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
 
+            Word.Table oTableForNote;
+            Word.Range wrdRngForNote = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
+            oTableForNote = oDoc.Tables.Add(wrdRngForNote, 2, 2, ref oMissing, ref oMissing);
+            oTableForNote.Range.ParagraphFormat.SpaceAfter = 6;
+            oTableForNote.Borders.Enable = 0;
+            oTableForNote.Range.Font.Size = 12;
+            oTableForNote.Range.Font.Name = "Times New Roman";
+
+            oTableForNote.Cell(1, 1).Width = 50;
+            oTableForNote.Cell(1, 1).Range.Text = "Ghi chú";
+            oTableForNote.Cell(1, 1).Range.Bold = 0;
+            oTableForNote.Cell(1, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+            oTableForNote.Cell(1, 2).Width = 400;
+            oTableForNote.Cell(1, 2).Range.Text = "..................................................................................................................................................................................................................................................................";
+            oTableForNote.Cell(1, 2).Range.Bold = 0;
+            oTableForNote.Cell(1, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+
+           
+            //oTableForNote.Cell(2, 2).Width = 400;
+            oTableForNote.Cell(2, 2).Range.Text = "Xuất ngày      tháng      năm        ";
+            oTableForNote.Cell(2, 2).Range.Bold = 0;
+            oTableForNote.Cell(2, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
+
+            oTableForNote.Rows[1].Range.Font.Italic = 1;
+            oTableForNote.Rows[2].Range.Font.Italic = 1;
+
+            
+
+            Word.Paragraph oPara4;
+            oPara4 = oDoc.Content.Paragraphs.Add(ref oMissing);
+            oPara1.Range.Text = "";
+            oPara4.Range.Font.Name = "Times New Roman";
+            oPara4.Range.Font.Bold = 0;
+            oPara4.Range.Font.Size = 8;
+            oPara4.Format.SpaceAfter = 1;    //24 pt spacing after paragraph.
+            oPara4.Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
+            
+
             Word.Table oTableForFooter;
             Word.Range wrdRngForFooter = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
-            oTableForFooter = oDoc.Tables.Add(wrdRngForFooter, 1, 2, ref oMissing, ref oMissing);
+            oTableForFooter = oDoc.Tables.Add(wrdRngForFooter, 1, 4, ref oMissing, ref oMissing);
             oTableForFooter.Range.ParagraphFormat.SpaceAfter = 6;
             oTableForFooter.Borders.Enable = 0;
             oTableForFooter.Range.Font.Size = 12;
             oTableForFooter.Range.Font.Name = "Times New Roman";
 
-            
-            oTableForFooter.Cell(1, 1).Range.Text = "Người lập phiếu";
+            oTableForFooter.Cell(1, 1).Width = 120;
+            oTableForFooter.Cell(1, 1).Range.Text = "NGƯỜI LẬP PHIẾU\n (Ký,họ tên)";
             oTableForFooter.Cell(1, 1).Range.Bold = 0;
             oTableForFooter.Cell(1, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
 
-            oTableForFooter.Cell(1, 2).Range.Text = "Kế toán";
+            oTableForFooter.Cell(1, 2).Width = 110;
+            oTableForFooter.Cell(1, 2).Range.Text = "NGƯỜI NHẬN\n (Ký,họ tên)";
             oTableForFooter.Cell(1, 2).Range.Bold = 0;
             oTableForFooter.Cell(1, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
 
-            oTableForFooter.Rows[1].Range.Font.Italic = 1;
+            oTableForFooter.Cell(1, 3).Width = 110;
+            oTableForFooter.Cell(1, 3).Range.Text = "NGƯỜI GIAO\n (Ký,họ tên)";
+            oTableForFooter.Cell(1, 3).Range.Bold = 0;
+            oTableForFooter.Cell(1, 3).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
 
-            Word.Paragraph oPara4;
-            oPara4 = oDoc.Content.Paragraphs.Add(ref oMissing);
-            oPara4.Range.Font.Name = "Times New Roman";
-            oPara4.Range.Font.Bold = 1;
-            oPara4.Range.Font.Size = 8;
-            oPara4.Format.SpaceAfter = 1;    //24 pt spacing after paragraph.
-            oPara4.Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+            oTableForFooter.Cell(1, 4).Width = 150;
+            oTableForFooter.Cell(1, 4).Range.Text = "THỦ TRƯỞNG ĐƠN VỊ\n (Ký,họ tên)";
+            oTableForFooter.Cell(1, 4).Range.Bold = 0;
+            oTableForFooter.Cell(1, 4).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+
+            oTableForFooter.Rows[1].Range.Font.Italic = 0;
+
+            Word.Paragraph oPara5;
+            oPara5 = oDoc.Content.Paragraphs.Add(ref oMissing);
+            oPara5.Range.Font.Name = "Times New Roman";
+            oPara5.Range.Font.Bold = 1;
+            oPara5.Range.Font.Size = 8;
+            oPara5.Format.SpaceAfter = 1;    //24 pt spacing after paragraph.
+            oPara5.Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
 
             oDoc.PrintPreview();
         }
