@@ -40,7 +40,31 @@ namespace DAL.Helper
                 context = new BaoHienDBDataContext(SettingManager.BuildStringConnection());
                 
             }
-            return context != null;
+            if (context != null)
+            {
+                if (context.Connection != null)
+                {
+                    if (!context.DatabaseExists())
+                    {
+context = null;
+                        return false;
+                    }
+                    else
+                    {
+                        return true;
+                    }
+
+                }
+                else
+                {
+context = null;
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
         }
         public static bool testCurrentDBConnection()
         {
