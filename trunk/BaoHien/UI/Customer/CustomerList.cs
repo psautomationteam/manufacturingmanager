@@ -68,7 +68,7 @@ namespace BaoHien.UI
                                 SalerId = customer.SalerId,
                                 Status = customer.Status,
                                 Id = customer.Id,
-                                Index = index++
+                                Index = ++index
                             };
                 dgvProductList.DataSource = query.ToList();
 

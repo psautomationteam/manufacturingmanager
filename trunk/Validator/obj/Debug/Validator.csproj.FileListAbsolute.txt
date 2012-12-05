@@ -14,3 +14,11 @@ G:\Working\VS10\manufacturingmanager\Validator\obj\Debug\GenerateResource.read.1
 G:\Working\VS10\manufacturingmanager\Validator\obj\Debug\GenerateResource.write.1.tlog
 G:\Working\VS10\manufacturingmanager\Validator\obj\Debug\Validator.dll
 G:\Working\VS10\manufacturingmanager\Validator\obj\Debug\Validator.pdb
+D:\Workspace\baohien\Validator\bin\Debug\Validator.dll
+D:\Workspace\baohien\Validator\bin\Debug\Validator.pdb
+D:\Workspace\baohien\Validator\obj\Debug\ResolveAssemblyReference.cache
+D:\Workspace\baohien\Validator\obj\Debug\Itboy.Properties.Resources.resources
+D:\Workspace\baohien\Validator\obj\Debug\GenerateResource.read.1.tlog
+D:\Workspace\baohien\Validator\obj\Debug\GenerateResource.write.1.tlog
+D:\Workspace\baohien\Validator\obj\Debug\Validator.dll
+D:\Workspace\baohien\Validator\obj\Debug\Validator.pdb

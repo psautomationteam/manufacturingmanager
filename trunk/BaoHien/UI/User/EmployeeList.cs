@@ -56,7 +56,7 @@ namespace BaoHien.UI
                                 Status = employee.Status,
                                 Type = employee.Type,
                                 FullName = employee.FullName,
-                                Index = index++
+                                Index = ++index
                             };
                 dgvEmployeeList.DataSource = query.ToList();
 
@@ -171,8 +171,8 @@ namespace BaoHien.UI
                 DataGridViewCell cell = ((DataGridView)sender).CurrentCell;
                 if (cell.ColumnIndex == ((DataGridView)sender).ColumnCount - 1)
                 {
-                    DialogResult result = MessageBox.Show("Bạn có muốn xóa nhân viên sản phẩm này?",
-                    "Xoá loại nhân viên này",
+                    DialogResult result = MessageBox.Show("Bạn có muốn xóa nhân viên này?",
+                    "Xoá nhân viên này",
                      MessageBoxButtons.YesNo,
                     MessageBoxIcon.Question);
                     if (result == DialogResult.Yes)

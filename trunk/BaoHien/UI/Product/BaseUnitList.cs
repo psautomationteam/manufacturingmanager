@@ -72,7 +72,7 @@ namespace BaoHien.UI
                                 Name = measurementUnit.Name,
                                 Description = measurementUnit.Description,
                                 Id = measurementUnit.Id,
-                                Index = index++
+                                Index = ++index
                             };
                 dgvBaseUnitList.DataSource = query.ToList();
 
@@ -134,8 +134,8 @@ namespace BaoHien.UI
                 DataGridViewCell cell = ((DataGridView)sender).CurrentCell;
                 if (cell.ColumnIndex == ((DataGridView)sender).ColumnCount - 1)
                 {
-                    DialogResult result = MessageBox.Show("Bạn có muốn xóa loại sản phẩm này?",
-                    "Xoá loại sản phẩm này",
+                    DialogResult result = MessageBox.Show("Bạn có muốn xóa đơn vị sản phẩm này?",
+                    "Xoá đơn vị sản phẩm này",
                      MessageBoxButtons.YesNo,
                     MessageBoxIcon.Question);
                     if (result == DialogResult.Yes)

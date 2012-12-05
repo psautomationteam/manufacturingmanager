@@ -143,6 +143,7 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Name = "ChangePassword";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Đổi mật mã";
             this.ResumeLayout(false);
             this.PerformLayout();

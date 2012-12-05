@@ -143,6 +143,7 @@
             // 
             // btnCancel
             // 
+            this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancel.Location = new System.Drawing.Point(396, 169);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
@@ -175,6 +176,7 @@
             this.Controls.Add(this.txtOrderCode);
             this.Controls.Add(this.label1);
             this.Name = "AddBill";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Phiếu khách hàng trả tiền";
             this.Load += new System.EventHandler(this.AddBill_Load);
             this.ResumeLayout(false);

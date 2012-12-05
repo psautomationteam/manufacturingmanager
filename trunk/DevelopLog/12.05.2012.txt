@@ -1,0 +1,6 @@
+Update 12/05/2012
+- Change WindowStartPosition from Normal to CenterParent all child form.
+- Change title and some message delete item.
+- Number index start from 1( Add index number into Product Request list).
+- fix init edit Product info (not init "Quy cach" yet).
+- fix init employee info.

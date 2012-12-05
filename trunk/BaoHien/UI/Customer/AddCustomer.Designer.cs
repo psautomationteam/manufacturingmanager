@@ -384,6 +384,7 @@
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Name = "AddCustomer";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Thêm khách hàng";
             this.Load += new System.EventHandler(this.AddCustomer_Load);
             this.groupBox1.ResumeLayout(false);

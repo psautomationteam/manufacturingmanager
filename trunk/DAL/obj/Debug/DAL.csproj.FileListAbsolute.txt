@@ -1,0 +1,6 @@
+D:\Workspace\baohien\DAL\bin\Debug\DAL.dll.config
+D:\Workspace\baohien\DAL\bin\Debug\DAL.dll
+D:\Workspace\baohien\DAL\bin\Debug\DAL.pdb
+D:\Workspace\baohien\DAL\obj\Debug\ResolveAssemblyReference.cache
+D:\Workspace\baohien\DAL\obj\Debug\DAL.dll
+D:\Workspace\baohien\DAL\obj\Debug\DAL.pdb

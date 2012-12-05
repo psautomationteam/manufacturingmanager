@@ -60,7 +60,7 @@ namespace BaoHien.UI
                                 Description = productType.Description,
                                 Id = productType.Id,
                                 Status = productType.Status,
-                                Index = index++
+                                Index = ++index
                             };
                 dgvProductTypeList.DataSource = query.ToList();
                 lblTotalResult.Text = productTypes.Count.ToString();

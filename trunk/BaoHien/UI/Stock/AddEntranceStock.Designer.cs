@@ -188,6 +188,7 @@
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.btnDelete);
             this.Name = "AddEntranceStock";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Phiếu nhập kho";
             this.Load += new System.EventHandler(this.EntranceStock_Load);
             this.groupBox1.ResumeLayout(false);

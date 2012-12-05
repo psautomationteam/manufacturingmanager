@@ -297,6 +297,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="UI\Base\BaseForm.resx">
+      <DependentUpon>BaseForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\Billing\AddBill.resx">
       <DependentUpon>AddBill.cs</DependentUpon>
     </EmbeddedResource>

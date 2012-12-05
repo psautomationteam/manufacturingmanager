@@ -37,7 +37,7 @@ namespace BaoHien.UI
                             NumberOfOutput = (materialInStock.NumberOfOutput != null) ? (int)materialInStock.NumberOfOutput : 0,
                             NumberOfRemaining = ((materialInStock.NumberOfInput != null) ? (int)materialInStock.NumberOfInput : 0) - ((materialInStock.NumberOfOutput != null) ? (int)materialInStock.NumberOfOutput : 0),
                             BaseUnitName = (materialInStock.Product.MeasurementUnit != null) ? materialInStock.Product.MeasurementUnit.Name : "",
-                            Index = index++
+                            Index = ++index
                         };
             dgwStockEntranceList.DataSource = query.ToList();
         }

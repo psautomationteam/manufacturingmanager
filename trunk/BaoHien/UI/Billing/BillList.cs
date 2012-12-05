@@ -84,7 +84,7 @@ namespace BaoHien.UI
 
                                 CreatedDate = bill.CreatedDate.ToShortDateString(),
                                 
-                                Index = index++
+                                Index = ++index
                             };
                 dgwBillingList.DataSource = query.ToList();
 

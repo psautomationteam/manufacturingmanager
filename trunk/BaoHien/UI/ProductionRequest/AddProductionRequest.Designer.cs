@@ -216,6 +216,7 @@
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Name = "AddProductionRequest";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Lập phiếu sản xuất";
             this.Load += new System.EventHandler(this.AddProductionRequest_Load);
             this.groupBox1.ResumeLayout(false);
