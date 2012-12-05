@@ -44,6 +44,7 @@ namespace BaoHien.UI
                     product.Description = txtDescription.Text;
                     product.ProductName = txtName.Text;
                     //product.BaseUnit = cmbUnit.SelectedValue != null ? (int)cmbUnit.SelectedValue : (int?)null;
+                    product.Status = cmbStatus.SelectedValue != null ? (byte?)cmbStatus.SelectedValue : 0;
                     product.ProductCode = txtCode.Text;
                     //product.ProductType = (int)cmbType.SelectedValue;
                     if (cmbUnit.SelectedValue != null)
@@ -76,7 +77,7 @@ namespace BaoHien.UI
                         BaseUnit = cmbUnit.SelectedValue != null ? (int)cmbUnit.SelectedValue : (int?)null,
                         ProductCode = txtCode.Text,
                         ProductType = (int)cmbType.SelectedValue,
-
+                        Status = cmbStatus.SelectedValue != null ? (byte?)cmbStatus.SelectedValue : 0
                     };
                     ProductService productService = new ProductService();
                     bool result = productService.AddProduct(product);
@@ -217,7 +218,10 @@ namespace BaoHien.UI
                 {
                     cmbType.SelectedIndex = productTypes.FindIndex(p => p.Id == product.ProductType);
                 }
-                 
+                if (product.Status != null)
+                {
+                    cmbStatus.SelectedIndex = (int)product.Status;
+                }
                 txtDescription.Text = product.Description;
                 txtCode.Text = product.ProductCode;
                 txtName.Text = product.ProductName;

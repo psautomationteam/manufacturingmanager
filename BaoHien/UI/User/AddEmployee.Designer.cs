@@ -286,6 +286,7 @@
             this.Controls.Add(this.txtEmployeeCode);
             this.Controls.Add(this.label1);
             this.Name = "AddEmployee";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Thêm nhân viên";
             this.ResumeLayout(false);
             this.PerformLayout();

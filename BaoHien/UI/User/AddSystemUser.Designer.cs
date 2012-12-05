@@ -194,6 +194,7 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Name = "AddSystemUser";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Thêm mới người dùng";
             this.ResumeLayout(false);
             this.PerformLayout();

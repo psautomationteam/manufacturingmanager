@@ -67,7 +67,7 @@ namespace BaoHien.UI
                                 Id = productionRequest.Id,
                                 CreatedBy = productionRequest.RequestedDate.ToShortDateString(),
                                 Status = productionRequest.Status != null?productionRequest.Status.Value: (byte)0,
-                                Index = index++
+                                Index = ++index
                             };
                 dgwRequestList.DataSource = query.ToList();
                 dgwRequestList.AllowUserToAddRows = false;
@@ -79,6 +79,7 @@ namespace BaoHien.UI
 
             DataGridViewTextBoxColumn checkboxColumn = new DataGridViewTextBoxColumn();
             checkboxColumn.Width = 30;
+            checkboxColumn.DataPropertyName = "Index";
             checkboxColumn.HeaderText = "STT";
             checkboxColumn.ValueType = typeof(string);
             //checkboxColumn.Frozen = true;

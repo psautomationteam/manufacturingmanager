@@ -168,6 +168,7 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Name = "AddProductAttribute";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Thêm thuộc tính sản phẩm";
             this.ResumeLayout(false);
             this.PerformLayout();

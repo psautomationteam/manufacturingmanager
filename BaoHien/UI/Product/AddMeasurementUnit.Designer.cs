@@ -155,6 +155,7 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Name = "AddMeasurementUnit";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Thêm đơn vị mới";
             this.ResumeLayout(false);
             this.PerformLayout();

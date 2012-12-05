@@ -91,7 +91,7 @@ namespace BaoHien.UI
                                 Discount = order.Discount,
                                 CreatedDate = order.CreatedDate.ToShortDateString(),
                                 CreateBy = order.SystemUser.FullName,
-                                Index = index++
+                                Index = ++index
                             };
                 dgwOrderList.DataSource = query.ToList();
                 

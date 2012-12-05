@@ -21,7 +21,7 @@ namespace BaoHien.UI
         }
         public void loadDataForEditEmployee(int employeeId)
         {
-            this.Text = "Chỉnh sửa loại sản phẩm này";
+            this.Text = "Chỉnh sửa thông tin nhân viên";
             this.btnSave.Text = "Cập nhật";
 
             EmployeeService employeeService = new EmployeeService();
@@ -36,6 +36,7 @@ namespace BaoHien.UI
                 txtMobilePhone.Text = employee.MobilePhone;
                 txtNickName.Text = employee.NickName ;
                 txtEmployeeCode.Text = employee.Code;
+                cbType.SelectedIndex = (int)employee.Type;
             }
         }
 

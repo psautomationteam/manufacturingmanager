@@ -1,0 +1,11 @@
+D:\Workspace\baohien\BaoHienTest\bin\Debug\BaoHienTest.dll
+D:\Workspace\baohien\BaoHienTest\bin\Debug\BaoHienTest.pdb
+D:\Workspace\baohien\BaoHienTest\bin\Debug\BaoHien.exe
+D:\Workspace\baohien\BaoHienTest\bin\Debug\DAL.dll
+D:\Workspace\baohien\BaoHienTest\bin\Debug\Validator.dll
+D:\Workspace\baohien\BaoHienTest\bin\Debug\BaoHien.pdb
+D:\Workspace\baohien\BaoHienTest\bin\Debug\DAL.pdb
+D:\Workspace\baohien\BaoHienTest\bin\Debug\Validator.pdb
+D:\Workspace\baohien\BaoHienTest\obj\Debug\ResolveAssemblyReference.cache
+D:\Workspace\baohien\BaoHienTest\obj\Debug\BaoHienTest.dll
+D:\Workspace\baohien\BaoHienTest\obj\Debug\BaoHienTest.pdb

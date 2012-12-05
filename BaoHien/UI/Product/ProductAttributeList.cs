@@ -79,7 +79,7 @@ namespace BaoHien.UI
                                 AttributeCode = baseAttribute.AttributeCode,
                                 Description = baseAttribute.Description,
                                 Id = baseAttribute.Id,
-                                Index = index++
+                                Index = ++index
                             };
                 dgvProductAttributeList.DataSource = query.ToList();
 
@@ -152,8 +152,8 @@ namespace BaoHien.UI
                 DataGridViewCell cell = ((DataGridView)sender).CurrentCell;
                 if (cell.ColumnIndex == ((DataGridView)sender).ColumnCount - 1)
                 {
-                    DialogResult result = MessageBox.Show("Bạn có muốn xóa loại sản phẩm này?",
-                    "Xoá loại sản phẩm này",
+                    DialogResult result = MessageBox.Show("Bạn có muốn xóa thuộc tính sản phẩm này?",
+                    "Xoá thuộc tính sản phẩm này",
                      MessageBoxButtons.YesNo,
                     MessageBoxIcon.Question);
                     if (result == DialogResult.Yes)

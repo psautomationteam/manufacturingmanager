@@ -70,7 +70,7 @@ namespace BaoHien.UI
                                 Status = product.Status,
                                 ProductType = (product.ProductType1 != null)?product.ProductType1.ProductName:"",
                                 BaseUnit = (product.MeasurementUnit != null)?product.MeasurementUnit.Name:"",
-                                Index = index++
+                                Index = ++index
                             };
                 dgvProductList.DataSource = query.ToList();
                 lblTotalResult.Text = products.Count.ToString();

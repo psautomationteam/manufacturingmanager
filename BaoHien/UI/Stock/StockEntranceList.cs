@@ -57,7 +57,7 @@ namespace BaoHien.UI
                                 EntranceCode = entranceStock.EntranceCode,
                                 EntrancedDate = entranceStock.EntrancedDate.ToLongDateString(),
                                 EntrancedBy = entranceStock.SystemUser.FullName,
-                                Index = index++
+                                Index = ++index
                             };
                 dgwStockEntranceList.DataSource = query.ToList();
 

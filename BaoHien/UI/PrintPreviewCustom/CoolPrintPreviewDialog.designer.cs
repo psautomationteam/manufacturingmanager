@@ -77,7 +77,7 @@
             this._btnCancel});
             this._toolStrip.Location = new System.Drawing.Point(0, 0);
             this._toolStrip.Name = "_toolStrip";
-            this._toolStrip.Size = new System.Drawing.Size(532, 25);
+            this._toolStrip.Size = new System.Drawing.Size(426, 25);
             this._toolStrip.TabIndex = 0;
             this._toolStrip.Text = "toolStrip1";
             // 
@@ -97,14 +97,14 @@
             this._btnPageSetup.Image = ((System.Drawing.Image)(resources.GetObject("_btnPageSetup.Image")));
             this._btnPageSetup.ImageTransparentColor = System.Drawing.Color.Magenta;
             this._btnPageSetup.Name = "_btnPageSetup";
-            this._btnPageSetup.Size = new System.Drawing.Size(23, 23);
+            this._btnPageSetup.Size = new System.Drawing.Size(23, 22);
             this._btnPageSetup.Text = "Page Setup";
             this._btnPageSetup.Click += new System.EventHandler(this._btnPageSetup_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 26);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
             // 
             // _btnZoom
             // 
@@ -126,7 +126,7 @@
             this._btnZoom.Image = ((System.Drawing.Image)(resources.GetObject("_btnZoom.Image")));
             this._btnZoom.ImageTransparentColor = System.Drawing.Color.Magenta;
             this._btnZoom.Name = "_btnZoom";
-            this._btnZoom.Size = new System.Drawing.Size(77, 23);
+            this._btnZoom.Size = new System.Drawing.Size(68, 22);
             this._btnZoom.Text = "&Zoom";
             this._btnZoom.ButtonClick += new System.EventHandler(this._btnZoom_ButtonClick);
             this._btnZoom.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this._btnZoom_DropDownItemClicked);
@@ -135,81 +135,81 @@
             // 
             this._itemActualSize.Image = ((System.Drawing.Image)(resources.GetObject("_itemActualSize.Image")));
             this._itemActualSize.Name = "_itemActualSize";
-            this._itemActualSize.Size = new System.Drawing.Size(150, 22);
+            this._itemActualSize.Size = new System.Drawing.Size(134, 22);
             this._itemActualSize.Text = "Actual Size";
             // 
             // _itemFullPage
             // 
             this._itemFullPage.Image = ((System.Drawing.Image)(resources.GetObject("_itemFullPage.Image")));
             this._itemFullPage.Name = "_itemFullPage";
-            this._itemFullPage.Size = new System.Drawing.Size(150, 22);
+            this._itemFullPage.Size = new System.Drawing.Size(134, 22);
             this._itemFullPage.Text = "Full Page";
             // 
             // _itemPageWidth
             // 
             this._itemPageWidth.Image = ((System.Drawing.Image)(resources.GetObject("_itemPageWidth.Image")));
             this._itemPageWidth.Name = "_itemPageWidth";
-            this._itemPageWidth.Size = new System.Drawing.Size(150, 22);
+            this._itemPageWidth.Size = new System.Drawing.Size(134, 22);
             this._itemPageWidth.Text = "Page Width";
             // 
             // _itemTwoPages
             // 
             this._itemTwoPages.Image = ((System.Drawing.Image)(resources.GetObject("_itemTwoPages.Image")));
             this._itemTwoPages.Name = "_itemTwoPages";
-            this._itemTwoPages.Size = new System.Drawing.Size(150, 22);
+            this._itemTwoPages.Size = new System.Drawing.Size(134, 22);
             this._itemTwoPages.Text = "Two Pages";
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(147, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(131, 6);
             // 
             // _item500
             // 
             this._item500.Name = "_item500";
-            this._item500.Size = new System.Drawing.Size(150, 22);
+            this._item500.Size = new System.Drawing.Size(134, 22);
             this._item500.Text = "500%";
             // 
             // _item200
             // 
             this._item200.Name = "_item200";
-            this._item200.Size = new System.Drawing.Size(150, 22);
+            this._item200.Size = new System.Drawing.Size(134, 22);
             this._item200.Text = "200%";
             // 
             // _item150
             // 
             this._item150.Name = "_item150";
-            this._item150.Size = new System.Drawing.Size(150, 22);
+            this._item150.Size = new System.Drawing.Size(134, 22);
             this._item150.Text = "150%";
             // 
             // _item100
             // 
             this._item100.Name = "_item100";
-            this._item100.Size = new System.Drawing.Size(150, 22);
+            this._item100.Size = new System.Drawing.Size(134, 22);
             this._item100.Text = "100%";
             // 
             // _item75
             // 
             this._item75.Name = "_item75";
-            this._item75.Size = new System.Drawing.Size(150, 22);
+            this._item75.Size = new System.Drawing.Size(134, 22);
             this._item75.Text = "75%";
             // 
             // _item50
             // 
             this._item50.Name = "_item50";
-            this._item50.Size = new System.Drawing.Size(150, 22);
+            this._item50.Size = new System.Drawing.Size(134, 22);
             this._item50.Text = "50%";
             // 
             // _item25
             // 
             this._item25.Name = "_item25";
-            this._item25.Size = new System.Drawing.Size(150, 22);
+            this._item25.Size = new System.Drawing.Size(134, 22);
             this._item25.Text = "25%";
             // 
             // _item10
             // 
             this._item10.Name = "_item10";
-            this._item10.Size = new System.Drawing.Size(150, 22);
+            this._item10.Size = new System.Drawing.Size(134, 22);
             this._item10.Text = "10%";
             // 
             // _btnFirst
@@ -218,7 +218,7 @@
             this._btnFirst.Image = ((System.Drawing.Image)(resources.GetObject("_btnFirst.Image")));
             this._btnFirst.ImageTransparentColor = System.Drawing.Color.Red;
             this._btnFirst.Name = "_btnFirst";
-            this._btnFirst.Size = new System.Drawing.Size(23, 23);
+            this._btnFirst.Size = new System.Drawing.Size(23, 22);
             this._btnFirst.Text = "First Page";
             this._btnFirst.Click += new System.EventHandler(this._btnFirst_Click);
             // 
@@ -228,7 +228,7 @@
             this._btnPrev.Image = ((System.Drawing.Image)(resources.GetObject("_btnPrev.Image")));
             this._btnPrev.ImageTransparentColor = System.Drawing.Color.Red;
             this._btnPrev.Name = "_btnPrev";
-            this._btnPrev.Size = new System.Drawing.Size(23, 23);
+            this._btnPrev.Size = new System.Drawing.Size(23, 22);
             this._btnPrev.Text = "Previous Page";
             this._btnPrev.Click += new System.EventHandler(this._btnPrev_Click);
             // 
@@ -236,16 +236,16 @@
             // 
             this._txtStartPage.AutoSize = false;
             this._txtStartPage.Name = "_txtStartPage";
-            this._txtStartPage.Size = new System.Drawing.Size(39, 24);
+            this._txtStartPage.Size = new System.Drawing.Size(32, 22);
             this._txtStartPage.TextBoxTextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this._txtStartPage.Validating += new System.ComponentModel.CancelEventHandler(this._txtStartPage_Validating);
             this._txtStartPage.Enter += new System.EventHandler(this._txtStartPage_Enter);
             this._txtStartPage.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this._txtStartPage_KeyPress);
+            this._txtStartPage.Validating += new System.ComponentModel.CancelEventHandler(this._txtStartPage_Validating);
             // 
             // _lblPageCount
             // 
             this._lblPageCount.Name = "_lblPageCount";
-            this._lblPageCount.Size = new System.Drawing.Size(13, 23);
+            this._lblPageCount.Size = new System.Drawing.Size(10, 22);
             this._lblPageCount.Text = " ";
             // 
             // _btnNext
@@ -254,7 +254,7 @@
             this._btnNext.Image = ((System.Drawing.Image)(resources.GetObject("_btnNext.Image")));
             this._btnNext.ImageTransparentColor = System.Drawing.Color.Red;
             this._btnNext.Name = "_btnNext";
-            this._btnNext.Size = new System.Drawing.Size(23, 23);
+            this._btnNext.Size = new System.Drawing.Size(23, 22);
             this._btnNext.Text = "Next Page";
             this._btnNext.Click += new System.EventHandler(this._btnNext_Click);
             // 
@@ -264,7 +264,7 @@
             this._btnLast.Image = ((System.Drawing.Image)(resources.GetObject("_btnLast.Image")));
             this._btnLast.ImageTransparentColor = System.Drawing.Color.Red;
             this._btnLast.Name = "_btnLast";
-            this._btnLast.Size = new System.Drawing.Size(23, 23);
+            this._btnLast.Size = new System.Drawing.Size(23, 22);
             this._btnLast.Text = "Last Page";
             this._btnLast.Click += new System.EventHandler(this._btnLast_Click);
             // 
@@ -280,7 +280,7 @@
             this._btnCancel.Image = ((System.Drawing.Image)(resources.GetObject("_btnCancel.Image")));
             this._btnCancel.ImageTransparentColor = System.Drawing.Color.Magenta;
             this._btnCancel.Name = "_btnCancel";
-            this._btnCancel.Size = new System.Drawing.Size(70, 23);
+            this._btnCancel.Size = new System.Drawing.Size(61, 22);
             this._btnCancel.Text = "Cancel";
             this._btnCancel.Click += new System.EventHandler(this._btnCancel_Click);
             // 
@@ -290,21 +290,19 @@
             this._preview.Dock = System.Windows.Forms.DockStyle.Fill;
             this._preview.Document = null;
             this._preview.Location = new System.Drawing.Point(0, 25);
-            this._preview.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this._preview.Name = "_preview";
-            this._preview.Size = new System.Drawing.Size(532, 410);
+            this._preview.Size = new System.Drawing.Size(426, 323);
             this._preview.TabIndex = 1;
-            this._preview.PageCountChanged += new System.EventHandler(this._preview_PageCountChanged);
             this._preview.StartPageChanged += new System.EventHandler(this._preview_StartPageChanged);
+            this._preview.PageCountChanged += new System.EventHandler(this._preview_PageCountChanged);
             // 
             // CoolPrintPreviewDialog
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(532, 435);
+            this.ClientSize = new System.Drawing.Size(426, 348);
             this.Controls.Add(this._preview);
             this.Controls.Add(this._toolStrip);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "CoolPrintPreviewDialog";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;

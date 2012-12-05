@@ -73,7 +73,7 @@ namespace BaoHien.UI
                                 Type = getNameForTypeUser(user.Type),
                                 Id = user.Id,
                                 Status = user.Status == Constant.ACTIVE_PROPERTY_VALUE?true:false,
-                                Index = index++
+                                Index = ++index
                             };
                 dgvUserList.DataSource = query.ToList();
                 
