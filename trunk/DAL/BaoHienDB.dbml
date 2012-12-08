@@ -173,7 +173,6 @@
       <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="Price" Member="Price1" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
       <Column Name="UpdatedDate" Type="System.DateTime" DbType="DateTime NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Association Name="Product_Price" Member="Product" ThisKey="Id" OtherKey="Id" Type="Product" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.Product" Member="Products">
@@ -188,7 +187,6 @@
       <Column Name="Direction" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
       <Association Name="Product_MaterialInStock" Member="MaterialInStocks" ThisKey="Id" OtherKey="ProductId" Type="MaterialInStock" />
       <Association Name="Product_OrderDetail" Member="OrderDetails" ThisKey="Id" OtherKey="ProductId" Type="OrderDetail" />
-      <Association Name="Product_Price" Member="Prices" ThisKey="Id" OtherKey="Id" Type="Price" />
       <Association Name="Product_ProductAttribute" Member="ProductAttributes" ThisKey="Id" OtherKey="Id" Type="ProductAttribute" />
       <Association Name="Product_ProductInStock" Member="ProductInStock" ThisKey="Id" OtherKey="Id" Type="ProductInStock" Cardinality="One" />
       <Association Name="Product_ProductionRequestDetail" Member="ProductionRequestDetails" ThisKey="Id" OtherKey="ProductId" Type="ProductionRequestDetail" />
