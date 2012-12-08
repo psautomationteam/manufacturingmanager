@@ -77,8 +77,7 @@ namespace BaoHien.UI
             }
         }
         public void loadProductList()
-        {
-            
+        {            
             ProductService productService = new ProductService();
             List<Product> products = productService.GetProducts();
             setUpDataGrid(products);
@@ -208,8 +207,8 @@ namespace BaoHien.UI
                 DataGridViewCell cell = ((DataGridView)sender).CurrentCell;
                 if (cell.ColumnIndex == ((DataGridView)sender).ColumnCount - 1)
                 {
-                    DialogResult result = MessageBox.Show("Bạn có muốn xóa loại sản phẩm này?",
-                    "Xoá loại sản phẩm này",
+                    DialogResult result = MessageBox.Show("Bạn có muốn xóa sản phẩm này?",
+                    "Xoá sản phẩm này",
                      MessageBoxButtons.YesNo,
                     MessageBoxIcon.Question);
                     if (result == DialogResult.Yes)

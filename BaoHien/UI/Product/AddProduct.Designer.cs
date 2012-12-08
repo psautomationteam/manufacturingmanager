@@ -149,6 +149,7 @@
             this.label8.Size = new System.Drawing.Size(58, 13);
             this.label8.TabIndex = 15;
             this.label8.Text = "Trạng thái:";
+            this.label8.Visible = false;
             // 
             // cmbStatus
             // 
@@ -160,6 +161,7 @@
             this.cmbStatus.Name = "cmbStatus";
             this.cmbStatus.Size = new System.Drawing.Size(146, 21);
             this.cmbStatus.TabIndex = 5;
+            this.cmbStatus.Visible = false;
             // 
             // txtDescription
             // 

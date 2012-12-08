@@ -10,20 +10,21 @@ using BaoHien.UI.Base;
 using BaoHien.Services.Customers;
 using DAL;
 using BaoHien.Services.SystemUsers;
+using BaoHien.Services.Employees;
 
 namespace BaoHien.UI
 {
     public partial class AddCustomer : BaseForm
     {
         Customer customer;
-        List<SystemUser> salers;
+        List<Employee> salers;
         public AddCustomer()
         {
             InitializeComponent();
         }
         public void loadDataForEditCustomer(int customerId)
         {
-            this.Text = "Chỉnh sửa thuộc tính phẩm này";
+            this.Text = "Chỉnh sửa thông tin khách hàng";
             this.btnAdd.Text = "Cập nhật";
             
             CustomerService customerService = new CustomerService();
@@ -122,8 +123,8 @@ namespace BaoHien.UI
             
             if (salers == null)
             {
-                SystemUserService systemUserService = new SystemUserService();
-                salers = systemUserService.GetSystemUsers();
+                EmployeeService empls = new EmployeeService();
+                salers = empls.GetEmployees();
 
             }
 

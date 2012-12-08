@@ -196,8 +196,8 @@ namespace BaoHien.UI
                 DataGridViewCell cell = ((DataGridView)sender).CurrentCell;
                 if (cell.ColumnIndex == ((DataGridView)sender).ColumnCount - 1)
                 {
-                    DialogResult result = MessageBox.Show("Bạn có muốn xóa loại sản phẩm này?",
-                    "Xoá loại sản phẩm này",
+                    DialogResult result = MessageBox.Show("Bạn có muốn xóa khách hàng này?",
+                    "Xoá khách hàng này",
                      MessageBoxButtons.YesNo,
                     MessageBoxIcon.Question);
                     if (result == DialogResult.Yes)

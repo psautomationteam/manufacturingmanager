@@ -169,9 +169,6 @@ namespace BaoHien.Services.Base
             
             try
             {
-
-
-
                 Type typeofClassWithGenericStaticMethod = typeof(BaoHienRepository);
                 MethodInfo methodInfo = typeofClassWithGenericStaticMethod.GetMethod("Update", System.Reflection.BindingFlags.Static | BindingFlags.Public);
                 Type[] genericArguments = new Type[] { typeof(TItem) };

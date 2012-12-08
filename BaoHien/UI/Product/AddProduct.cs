@@ -25,6 +25,8 @@ namespace BaoHien.UI
         List<MeasurementUnit> measurementUnits;
         List<ProductType> productTypes;
         List<BaseAttribute> baseAttributes;
+        int mode = 0; // default "New status"
+
         public AddProduct()
         {
             InitializeComponent();
@@ -44,7 +46,6 @@ namespace BaoHien.UI
                     product.Description = txtDescription.Text;
                     product.ProductName = txtName.Text;
                     //product.BaseUnit = cmbUnit.SelectedValue != null ? (int)cmbUnit.SelectedValue : (int?)null;
-                    product.Status = cmbStatus.SelectedValue != null ? (byte?)cmbStatus.SelectedValue : 0;
                     product.ProductCode = txtCode.Text;
                     //product.ProductType = (int)cmbType.SelectedValue;
                     if (cmbUnit.SelectedValue != null)
@@ -71,13 +72,11 @@ namespace BaoHien.UI
                 {
                     product = new Product
                     {
-
                         Description = txtDescription.Text,
                         ProductName = txtName.Text,
                         BaseUnit = cmbUnit.SelectedValue != null ? (int)cmbUnit.SelectedValue : (int?)null,
                         ProductCode = txtCode.Text,
-                        ProductType = (int)cmbType.SelectedValue,
-                        Status = cmbStatus.SelectedValue != null ? (byte?)cmbStatus.SelectedValue : 0
+                        ProductType = (int)cmbType.SelectedValue
                     };
                     ProductService productService = new ProductService();
                     bool result = productService.AddProduct(product);
@@ -120,13 +119,8 @@ namespace BaoHien.UI
                                 result = false;
                                 break;
                             }
-
                         }
-
-
-
                     }
-
                     if (result)
                     {
                         MessageBox.Show("Sản phẩm đã được tạo thành công");
@@ -134,7 +128,6 @@ namespace BaoHien.UI
                         {
                             ((ProductList)this.CallFromUserControll).loadProductList();
                         }
-
                         this.Close();
                     }
                     else
@@ -143,8 +136,6 @@ namespace BaoHien.UI
                     }
                 }
             }
-            
-            
         }
 
         private void AddProduct_Load(object sender, EventArgs e)
@@ -152,9 +143,23 @@ namespace BaoHien.UI
             dgvBaseAttributes.AutoGenerateColumns = false;
             loadSomeData();
             SetupColumns();
-            
-            
-            
+
+            if (mode == 1) // Load data grid
+            {
+                List<ProductAttribute> pas = product.ProductAttributes.ToList<ProductAttribute>();
+                foreach (ProductAttribute pa in pas)
+                {
+                    foreach (DataGridViewRow dgv in dgvBaseAttributes.Rows)
+                    {
+                        DataGridViewCheckBoxCell checkbox = (DataGridViewCheckBoxCell)dgv.Cells[0];
+                        if ((BaseAttribute)dgv.DataBoundItem == pa.BaseAttribute)
+                        {
+                            checkbox.Value = 1;
+                            break;
+                        }
+                    }
+                }
+            }
         }
         private void loadSomeData()
         {
@@ -162,17 +167,12 @@ namespace BaoHien.UI
             {
                 MeasurementUnitService measurementUnitService = new MeasurementUnitService();
                 measurementUnits = measurementUnitService.GetMeasurementUnits();
-
-            }
-            
+            }            
             if (measurementUnits != null)
             {
-
                 cmbUnit.DataSource = measurementUnits;
-
                 cmbUnit.DisplayMember = "Name";
                 cmbUnit.ValueMember = "Id";
-
             }
             if (productTypes == null)
             {
@@ -182,12 +182,9 @@ namespace BaoHien.UI
             
             if (productTypes != null)
             {
-
                 cmbType.DataSource = productTypes;
-
                 cmbType.DisplayMember = "ProductName";
                 cmbType.ValueMember = "Id";
-
             }
 
             BaseAttributeService baseAttributeService = new BaseAttributeService();
@@ -195,21 +192,19 @@ namespace BaoHien.UI
             {
                 baseAttributes = baseAttributeService.GetBaseAttributes();
             }
-
-            
+            cmbStatus.SelectedIndex = 0;          
         }
         public void loadDataForEditProduct(int productId)
         {
-            this.Text = "Chỉnh sửa  sản phẩm này";
+            this.Text = "Chỉnh sửa sản phẩm này";
             this.btnAdd.Text = "Cập nhật";
-
             
             ProductService productTypeService = new ProductService();
-
             product = productTypeService.GetProduct(productId);
             loadSomeData();
             if (product != null)
             {
+                mode = 1; // Edit mode
                 if (measurementUnits != null && product.BaseUnit.HasValue)
                 {
                     cmbUnit.SelectedIndex = measurementUnits.FindIndex(mu => mu.Id == product.BaseUnit);
@@ -218,20 +213,16 @@ namespace BaoHien.UI
                 {
                     cmbType.SelectedIndex = productTypes.FindIndex(p => p.Id == product.ProductType);
                 }
-                if (product.Status != null)
-                {
-                    cmbStatus.SelectedIndex = (int)product.Status;
-                }
+                //dgvBaseAttributes.Enabled = false;
                 txtDescription.Text = product.Description;
                 txtCode.Text = product.ProductCode;
-                txtName.Text = product.ProductName;
+                txtName.Text = product.ProductName;                
             }
         }
 
         private void chkAuto_CheckedChanged(object sender, EventArgs e)
         {
-            txtCode.Enabled = !chkAuto.Checked;
-           
+            txtCode.Enabled = !chkAuto.Checked;           
         }
         private void SetupColumns()
         {
@@ -239,10 +230,6 @@ namespace BaoHien.UI
             if (baseAttributes != null)
             {
                 dgvBaseAttributes.DataSource = baseAttributes;
-
-
-
-
             }
             DataGridViewCheckBoxColumn checkboxColumn = new DataGridViewCheckBoxColumn();
             checkboxColumn.Width = 30;

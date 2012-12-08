@@ -1,0 +1,4 @@
+Update 12/08/2012
+- Change title and some message delete item.
+- fix init edit Product info (also init "Quy cach" yet).
+- fix create and edit customer.
