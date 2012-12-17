@@ -100,7 +100,7 @@ namespace BaoHien.UI
             DataGridViewTextBoxColumn attributeNameColumn = new DataGridViewTextBoxColumn();
             attributeNameColumn.Width = 150;
             attributeNameColumn.DataPropertyName = "AttributeName";
-            attributeNameColumn.HeaderText = "Tên thuộc tính";
+            attributeNameColumn.HeaderText = "Tên Quy cách";
             attributeNameColumn.ValueType = typeof(string);
             attributeNameColumn.Frozen = true;
             dgvProductAttributeList.Columns.Add(attributeNameColumn);
@@ -110,7 +110,7 @@ namespace BaoHien.UI
             DataGridViewTextBoxColumn attributeCodeColumn = new DataGridViewTextBoxColumn();
             attributeCodeColumn.DataPropertyName = "AttributeCode";
             attributeCodeColumn.Width = 120;
-            attributeCodeColumn.HeaderText = "Mã Thuộc tính";
+            attributeCodeColumn.HeaderText = "Mã Quy cách";
             attributeCodeColumn.Frozen = true;
             attributeCodeColumn.ValueType = typeof(string);
             dgvProductAttributeList.Columns.Add(attributeCodeColumn);
@@ -152,8 +152,8 @@ namespace BaoHien.UI
                 DataGridViewCell cell = ((DataGridView)sender).CurrentCell;
                 if (cell.ColumnIndex == ((DataGridView)sender).ColumnCount - 1)
                 {
-                    DialogResult result = MessageBox.Show("Bạn có muốn xóa thuộc tính sản phẩm này?",
-                    "Xoá thuộc tính sản phẩm này",
+                    DialogResult result = MessageBox.Show("Bạn có muốn xóa Quy cách sản phẩm này?",
+                    "Xoá Quy cách sản phẩm này",
                      MessageBoxButtons.YesNo,
                     MessageBoxIcon.Question);
                     if (result == DialogResult.Yes)

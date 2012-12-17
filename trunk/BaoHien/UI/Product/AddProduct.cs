@@ -241,7 +241,7 @@ namespace BaoHien.UI
             DataGridViewTextBoxColumn attributeNameColumn = new DataGridViewTextBoxColumn();
             attributeNameColumn.Width = 150;
             attributeNameColumn.DataPropertyName = "AttributeName";
-            attributeNameColumn.HeaderText = "Tên thuộc tính";
+            attributeNameColumn.HeaderText = "Tên Quy cách";
             attributeNameColumn.ValueType = typeof(string);
             //attributeNameColumn.Frozen = true;
             dgvBaseAttributes.Columns.Add(attributeNameColumn);
@@ -251,7 +251,7 @@ namespace BaoHien.UI
             DataGridViewTextBoxColumn attributeCodeColumn = new DataGridViewTextBoxColumn();
             attributeCodeColumn.DataPropertyName = "AttributeCode";
             attributeCodeColumn.Width = 120;
-            attributeCodeColumn.HeaderText = "Mã Thuộc tính";
+            attributeCodeColumn.HeaderText = "Mã Quy cách";
             //attributeCodeColumn.Frozen = true;
             attributeCodeColumn.ValueType = typeof(string);
             dgvBaseAttributes.Columns.Add(attributeCodeColumn);

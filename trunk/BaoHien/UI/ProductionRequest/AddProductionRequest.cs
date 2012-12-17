@@ -83,7 +83,7 @@ namespace BaoHien.UI
 
             DataGridViewComboBoxColumn productAttributeColumn = new DataGridViewComboBoxColumn();
             productAttributeColumn.Width = 150;
-            productAttributeColumn.HeaderText = "Thuộc tính sản phẩm";
+            productAttributeColumn.HeaderText = "Quy cách sản phẩm";
 
             productAttributeColumn.DataSource = baseAttributesAtRowForProduct;
 
@@ -163,7 +163,7 @@ namespace BaoHien.UI
 
             DataGridViewComboBoxColumn productAttributeColumn = new DataGridViewComboBoxColumn();
             productAttributeColumn.Width = 150;
-            productAttributeColumn.HeaderText = "Thuộc tính sản phẩm";
+            productAttributeColumn.HeaderText = "Quy cách sản phẩm";
 
             productAttributeColumn.DataSource = baseAttributesAtRowForProduct;
 

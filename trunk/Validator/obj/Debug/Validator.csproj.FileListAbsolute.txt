@@ -22,3 +22,11 @@ D:\Workspace\baohien\Validator\obj\Debug\GenerateResource.read.1.tlog
 D:\Workspace\baohien\Validator\obj\Debug\GenerateResource.write.1.tlog
 D:\Workspace\baohien\Validator\obj\Debug\Validator.dll
 D:\Workspace\baohien\Validator\obj\Debug\Validator.pdb
+D:\Work Offline\BaoHienCompany\Validator\bin\Debug\Validator.dll
+D:\Work Offline\BaoHienCompany\Validator\bin\Debug\Validator.pdb
+D:\Work Offline\BaoHienCompany\Validator\obj\Debug\ResolveAssemblyReference.cache
+D:\Work Offline\BaoHienCompany\Validator\obj\Debug\Itboy.Properties.Resources.resources
+D:\Work Offline\BaoHienCompany\Validator\obj\Debug\GenerateResource.read.1.tlog
+D:\Work Offline\BaoHienCompany\Validator\obj\Debug\GenerateResource.write.1.tlog
+D:\Work Offline\BaoHienCompany\Validator\obj\Debug\Validator.dll
+D:\Work Offline\BaoHienCompany\Validator\obj\Debug\Validator.pdb

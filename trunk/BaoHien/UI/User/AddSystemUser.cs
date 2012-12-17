@@ -94,7 +94,7 @@ namespace BaoHien.UI
         }
         public void loadDataForEditSystemUser(int systemUserId)
         {
-            this.Text = "Chỉnh sửa thuộc tính phẩm này";
+            this.Text = "Chỉnh sửa người dùng này";
             this.btnAdd.Text = "Cập nhật";
 
             SystemUserService systemUserService = new SystemUserService();

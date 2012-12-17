@@ -38,7 +38,7 @@ namespace BaoHien.UI
                 bool result = baseAttributeService.UpdateBaseAttribute(baseAttribute);
                 if (result)
                 {
-                    MessageBox.Show("Loại thuộc tính đã được cập nhật vào hệ thống");
+                    MessageBox.Show("Loại quy cách đã được cập nhật vào hệ thống");
                     ((ProductAttributeList)this.CallFromUserControll).loadProductAttributeList();
                     this.Close();
                 }
@@ -60,7 +60,7 @@ namespace BaoHien.UI
                 bool result = baseAttributeService.AddBaseAttribute(baseAttribute);
                 if (result)
                 {
-                    MessageBox.Show("Thuộc tính được tạo thành công");
+                    MessageBox.Show("Quy cách được tạo thành công");
                     ((ProductAttributeList)this.CallFromUserControll).loadProductAttributeList();
                     this.Close();
                 }
@@ -73,7 +73,7 @@ namespace BaoHien.UI
         }
         public void loadDataForEditProductAttribute(int productAttributeId)
         {
-            this.Text = "Chỉnh sửa thuộc tính phẩm này";
+            this.Text = "Chỉnh sửa quy cách này";
             this.btnSave.Text = "Cập nhật";
 
             BaseAttributeService baseAttributeService = new BaseAttributeService();

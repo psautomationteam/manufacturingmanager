@@ -698,7 +698,7 @@ namespace Itboy.Components
         {
             if (!this.infos.ContainsKey(control))
             {
-                control.Validating += new CancelEventHandler(control_Validating);
+                // control.Validating += new CancelEventHandler(control_Validating);
                 // Register validation info CustomValidation event.
                 ValidationInfo info = new ValidationInfo(control, this.errorProvider);
                 info.CustomValidation += new EventHandler<ValidationEventArgs>(info_CustomValidation);

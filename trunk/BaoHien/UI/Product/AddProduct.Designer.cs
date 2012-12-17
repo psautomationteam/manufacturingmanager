@@ -36,13 +36,8 @@
             this.dgvBaseAttributes = new System.Windows.Forms.DataGridView();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label9 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
-            this.cmbStatus = new System.Windows.Forms.ComboBox();
             this.txtDescription = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.txtPrice = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
             this.cmbUnit = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -107,13 +102,8 @@
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.label9);
-            this.groupBox1.Controls.Add(this.label8);
-            this.groupBox1.Controls.Add(this.cmbStatus);
             this.groupBox1.Controls.Add(this.txtDescription);
             this.groupBox1.Controls.Add(this.label7);
-            this.groupBox1.Controls.Add(this.label6);
-            this.groupBox1.Controls.Add(this.txtPrice);
-            this.groupBox1.Controls.Add(this.label5);
             this.groupBox1.Controls.Add(this.cmbUnit);
             this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.label3);
@@ -141,74 +131,22 @@
             this.label9.TabIndex = 16;
             this.label9.Text = "Các trường với \"(*)\" không được bỏ trống";
             // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(423, 81);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(58, 13);
-            this.label8.TabIndex = 15;
-            this.label8.Text = "Trạng thái:";
-            this.label8.Visible = false;
-            // 
-            // cmbStatus
-            // 
-            this.cmbStatus.FormattingEnabled = true;
-            this.cmbStatus.Items.AddRange(new object[] {
-            "Giao dịch",
-            "Chưa/Ngưng giao dịch"});
-            this.cmbStatus.Location = new System.Drawing.Point(505, 81);
-            this.cmbStatus.Name = "cmbStatus";
-            this.cmbStatus.Size = new System.Drawing.Size(146, 21);
-            this.cmbStatus.TabIndex = 5;
-            this.cmbStatus.Visible = false;
-            // 
             // txtDescription
             // 
-            this.txtDescription.Location = new System.Drawing.Point(119, 110);
+            this.txtDescription.Location = new System.Drawing.Point(119, 74);
             this.txtDescription.Multiline = true;
             this.txtDescription.Name = "txtDescription";
-            this.txtDescription.Size = new System.Drawing.Size(532, 56);
+            this.txtDescription.Size = new System.Drawing.Size(532, 92);
             this.txtDescription.TabIndex = 6;
             // 
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(53, 110);
+            this.label7.Location = new System.Drawing.Point(65, 77);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(37, 13);
             this.label7.TabIndex = 12;
             this.label7.Text = "Mổ tả:";
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(275, 79);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(30, 13);
-            this.label6.TabIndex = 11;
-            this.label6.Text = "VND";
-            this.label6.Visible = false;
-            // 
-            // txtPrice
-            // 
-            this.txtPrice.Location = new System.Drawing.Point(119, 77);
-            this.txtPrice.Name = "txtPrice";
-            this.validator1.SetRegularExpression(this.txtPrice, "[0-9]");
-            this.txtPrice.Size = new System.Drawing.Size(140, 20);
-            this.txtPrice.TabIndex = 4;
-            this.validator1.SetType(this.txtPrice, Itboy.Components.ValidationType.RegularExpression);
-            this.txtPrice.Visible = false;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(11, 81);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(79, 13);
-            this.label5.TabIndex = 9;
-            this.label5.Text = "Giá tham khảo:";
-            this.label5.Visible = false;
             // 
             // cmbUnit
             // 
@@ -335,13 +273,8 @@
         private System.Windows.Forms.DataGridView dgvBaseAttributes;
         private System.Windows.Forms.Button btnAdd;
         private System.Windows.Forms.Button btnCancel;
-        private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.ComboBox cmbStatus;
         private System.Windows.Forms.Label lblErrorMessage;
         private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.TextBox txtPrice;
-        private System.Windows.Forms.Label label5;
         private Itboy.Components.Validator validator1;
     }
 }

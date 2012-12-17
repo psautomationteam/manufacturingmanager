@@ -400,7 +400,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Services\User\" />
-    <Folder Include="UI\Other\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DAL\DAL.csproj">

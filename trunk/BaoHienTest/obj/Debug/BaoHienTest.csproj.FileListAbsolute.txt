@@ -9,3 +9,14 @@ D:\Workspace\baohien\BaoHienTest\bin\Debug\Validator.pdb
 D:\Workspace\baohien\BaoHienTest\obj\Debug\ResolveAssemblyReference.cache
 D:\Workspace\baohien\BaoHienTest\obj\Debug\BaoHienTest.dll
 D:\Workspace\baohien\BaoHienTest\obj\Debug\BaoHienTest.pdb
+D:\Work Offline\BaoHienCompany\BaoHienTest\bin\Debug\BaoHienTest.dll
+D:\Work Offline\BaoHienCompany\BaoHienTest\bin\Debug\BaoHienTest.pdb
+D:\Work Offline\BaoHienCompany\BaoHienTest\bin\Debug\BaoHien.exe
+D:\Work Offline\BaoHienCompany\BaoHienTest\bin\Debug\DAL.dll
+D:\Work Offline\BaoHienCompany\BaoHienTest\bin\Debug\Validator.dll
+D:\Work Offline\BaoHienCompany\BaoHienTest\bin\Debug\BaoHien.pdb
+D:\Work Offline\BaoHienCompany\BaoHienTest\bin\Debug\DAL.pdb
+D:\Work Offline\BaoHienCompany\BaoHienTest\bin\Debug\Validator.pdb
+D:\Work Offline\BaoHienCompany\BaoHienTest\obj\Debug\ResolveAssemblyReference.cache
+D:\Work Offline\BaoHienCompany\BaoHienTest\obj\Debug\BaoHienTest.dll
+D:\Work Offline\BaoHienCompany\BaoHienTest\obj\Debug\BaoHienTest.pdb
