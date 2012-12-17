@@ -1,0 +1,8 @@
+C:\Documents and Settings\ntkha\Desktop\Currency_T1974212172006\CurrencyTextBox\CurrencyTextBox\bin\Release\CurrencyTextBox.dll
+C:\Documents and Settings\ntkha\Desktop\Currency_T1974212172006\CurrencyTextBox\CurrencyTextBox\bin\Release\CurrencyTextBox.pdb
+C:\Documents and Settings\ntkha\Desktop\Currency_T1974212172006\CurrencyTextBox\CurrencyTextBox\obj\Release\ResolveAssemblyReference.cache
+C:\Documents and Settings\ntkha\Desktop\Currency_T1974212172006\CurrencyTextBox\CurrencyTextBox\obj\Release\CurrencyTextBox.CurrencyTextBox.resources
+C:\Documents and Settings\ntkha\Desktop\Currency_T1974212172006\CurrencyTextBox\CurrencyTextBox\obj\Release\GenerateResource-ResGen.read.1.tlog
+C:\Documents and Settings\ntkha\Desktop\Currency_T1974212172006\CurrencyTextBox\CurrencyTextBox\obj\Release\GenerateResource-ResGen.write.1.tlog
+C:\Documents and Settings\ntkha\Desktop\Currency_T1974212172006\CurrencyTextBox\CurrencyTextBox\obj\Release\CurrencyTextBox.dll
+C:\Documents and Settings\ntkha\Desktop\Currency_T1974212172006\CurrencyTextBox\CurrencyTextBox\obj\Release\CurrencyTextBox.pdb

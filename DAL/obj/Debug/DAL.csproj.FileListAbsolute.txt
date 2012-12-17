@@ -4,3 +4,9 @@ D:\Workspace\baohien\DAL\bin\Debug\DAL.pdb
 D:\Workspace\baohien\DAL\obj\Debug\ResolveAssemblyReference.cache
 D:\Workspace\baohien\DAL\obj\Debug\DAL.dll
 D:\Workspace\baohien\DAL\obj\Debug\DAL.pdb
+D:\Work Offline\BaoHienCompany\DAL\bin\Debug\DAL.dll.config
+D:\Work Offline\BaoHienCompany\DAL\bin\Debug\DAL.dll
+D:\Work Offline\BaoHienCompany\DAL\bin\Debug\DAL.pdb
+D:\Work Offline\BaoHienCompany\DAL\obj\Debug\ResolveAssemblyReference.cache
+D:\Work Offline\BaoHienCompany\DAL\obj\Debug\DAL.dll
+D:\Work Offline\BaoHienCompany\DAL\obj\Debug\DAL.pdb

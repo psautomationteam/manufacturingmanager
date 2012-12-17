@@ -216,7 +216,7 @@
             // 
             this.menuAttribute.Name = "menuAttribute";
             this.menuAttribute.Size = new System.Drawing.Size(144, 22);
-            this.menuAttribute.Text = "Thuộc tính SP";
+            this.menuAttribute.Text = "Quy cách SP";
             this.menuAttribute.Click += new System.EventHandler(this.menuAttribute_Click);
             // 
             // menuMeasurementUnit

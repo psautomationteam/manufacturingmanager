@@ -10,6 +10,9 @@ namespace DAL.Helper
 {
     public class SettingManager
     {
+        //public static string INSTANCE = "\\sqlexpress";
+        public static string INSTANCE = "";
+
         public void UpdateSetting(string keyName, string keyValue)
         {
             XmlDocument xmlDoc = new XmlDocument();
@@ -50,7 +53,7 @@ namespace DAL.Helper
 
             SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
 
-            builder["Data Source"] = DBServerName + "\\sqlexpress";
+            builder["Data Source"] = DBServerName + INSTANCE;
             builder["integrated Security"] = true;
             builder["Initial Catalog"] = DatabaseName;
             if (DatabaseUserID != "" && DatabasePwd != "")
@@ -68,8 +71,7 @@ namespace DAL.Helper
         {
             if (DBServerName != null)
             {
-
-                DAL.Properties.Settings.Default.DBServerName = DBServerName + "\\sqlexpress";
+                DAL.Properties.Settings.Default.DBServerName = DBServerName + INSTANCE;
             }
             if(DatabaseName != null)
             {

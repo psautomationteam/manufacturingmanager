@@ -123,7 +123,7 @@
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(90, 13);
             this.label2.TabIndex = 12;
-            this.label2.Text = "Mã thuộc tính (*):";
+            this.label2.Text = "Mã Quy cách (*):";
             // 
             // label1
             // 
@@ -132,7 +132,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(91, 13);
             this.label1.TabIndex = 11;
-            this.label1.Text = "Tên thuộc tính(*):";
+            this.label1.Text = "Tên Quy cách(*):";
             // 
             // label4
             // 
@@ -169,7 +169,7 @@
             this.Controls.Add(this.label1);
             this.Name = "AddProductAttribute";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Thêm thuộc tính sản phẩm";
+            this.Text = "Thêm Quy cách sản phẩm";
             this.ResumeLayout(false);
             this.PerformLayout();
 
