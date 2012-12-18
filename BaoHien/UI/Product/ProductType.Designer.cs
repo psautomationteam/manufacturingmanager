@@ -132,11 +132,11 @@
             this.lblTotalResult.AutoSize = true;
             this.lblTotalResult.Font = new System.Drawing.Font("Arial", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTotalResult.ForeColor = System.Drawing.Color.Blue;
-            this.lblTotalResult.Location = new System.Drawing.Point(148, 93);
+            this.lblTotalResult.Location = new System.Drawing.Point(148, 97);
             this.lblTotalResult.Name = "lblTotalResult";
-            this.lblTotalResult.Size = new System.Drawing.Size(24, 16);
+            this.lblTotalResult.Size = new System.Drawing.Size(16, 16);
             this.lblTotalResult.TabIndex = 5;
-            this.lblTotalResult.Text = "10";
+            this.lblTotalResult.Text = "0";
             // 
             // ucProductType
             // 

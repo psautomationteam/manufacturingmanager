@@ -46,7 +46,7 @@ namespace DAL.Helper
                 {
                     if (!context.DatabaseExists())
                     {
-context = null;
+                        context = null;
                         return false;
                     }
                     else
@@ -57,7 +57,7 @@ context = null;
                 }
                 else
                 {
-context = null;
+                    context = null;
                     return false;
                 }
             }

@@ -26,7 +26,8 @@ namespace BaoHien.UI
         List<ProductType> productTypes;
         List<BaseAttribute> baseAttributes;
         int mode = 0; // default "New status"
-
+        string code = "";
+        
         public AddProduct()
         {
             InitializeComponent();
@@ -82,16 +83,16 @@ namespace BaoHien.UI
                     bool result = productService.AddProduct(product);
 
                     long newProductId = BaoHienRepository.GetMaxId<Product>();
-                    PriceService priceService = new PriceService();
-                    double price = 0;
-                    Double.TryParse(txtPrice.Text, out price);
-                    Price newPrice = new Price
-                    {
-                        Id = (int)newProductId,
-                        Price1 = price,
-                        UpdatedDate = DateTime.Now
-                    };
-                    result = priceService.AddPrice(newPrice);
+                    //PriceService priceService = new PriceService();
+                    //double price = 0;
+                    //Double.TryParse(txtPrice.Text, out price);
+                    //Price newPrice = new Price
+                    //{
+                    //    Id = (int)newProductId,
+                    //    Price1 = price,
+                    //    UpdatedDate = DateTime.Now
+                    //};
+                    //result = priceService.AddPrice(newPrice);
 
                     DataGridViewRowCollection selectedRows = dgvBaseAttributes.Rows;
                     ProductAttributeService productAttributeService = new ProductAttributeService();
@@ -191,8 +192,7 @@ namespace BaoHien.UI
             if (baseAttributes == null)
             {
                 baseAttributes = baseAttributeService.GetBaseAttributes();
-            }
-            cmbStatus.SelectedIndex = 0;          
+            }      
         }
         public void loadDataForEditProduct(int productId)
         {
@@ -222,8 +222,18 @@ namespace BaoHien.UI
 
         private void chkAuto_CheckedChanged(object sender, EventArgs e)
         {
-            txtCode.Enabled = !chkAuto.Checked;           
+            txtCode.Enabled = !chkAuto.Checked;
+            if (!txtCode.Enabled)
+            {
+                int max_id = product == null ? BaoHienRepository.GetMaxId<Product>() : product.Id;
+                string id = BHConstant.PREFIX_FOR_PRODUCT;
+                if (max_id.ToString().Length < BHConstant.MAX_ID)
+                    id += String.Concat(Enumerable.Repeat("0", BHConstant.MAX_ID - max_id.ToString().Length));
+                id += max_id.ToString();
+                txtCode.Text = id;
+            }
         }
+
         private void SetupColumns()
         {
             dgvBaseAttributes.AutoGenerateColumns = false;
@@ -278,6 +288,12 @@ namespace BaoHien.UI
         private void dgwOrderDetails_DataError(object sender, DataGridViewDataErrorEventArgs e)
         {
             MessageBox.Show("Có lỗi nhập liệu xảy ra,vui lòng kiểm tra lại!");
+        }
+
+        private void txtCode_Leave(object sender, EventArgs e)
+        {
+            TextBox tx = sender as TextBox;
+            code = tx.Text;
         }
     }
 }

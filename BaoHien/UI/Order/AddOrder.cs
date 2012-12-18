@@ -39,6 +39,8 @@ namespace BaoHien.UI
         BindingList<BaseAttribute> baseAttributesAtRow;
         BindingList<ProductionRequestDetailModel> originalProductions;
 
+        long beforeVAT = 0, afterVAT = 0;
+
         private System.IO.Stream streamToPrint;
         Image MyImage;
         string streamType;
@@ -598,7 +600,8 @@ namespace BaoHien.UI
             if (hasValue)
             {
                 double vat = 0.0;
-                double.TryParse(txtVAT.Text, out vat);
+                double.TryParse(txtVAT.WorkingText, out vat);
+                double.TryParse(txtDiscount.WorkingText, out discount);
                 totalWithTax = totalNoTax + vat - discount;
                 lblSubTotal.Text = totalNoTax.ToString();
                 lblGrantTotal.Text = totalWithTax.ToString();
@@ -609,9 +612,7 @@ namespace BaoHien.UI
         {
             if (sender is KeyPressAwareDataGridView)
             {
-                KeyPressAwareDataGridView dgv = (KeyPressAwareDataGridView)sender;
-
-                
+                KeyPressAwareDataGridView dgv = (KeyPressAwareDataGridView)sender;                
             }
         }
 
@@ -1417,21 +1418,7 @@ namespace BaoHien.UI
         {
             this.Close();
         }
-
-        private void txtVAT_TextChanged(object sender, EventArgs e)
-        {
-           
-        }
-
-        private void txtVAT_Leave(object sender, EventArgs e)
-        {
-            if (txtVAT.Text != null)
-            {
-                
-                
-
-            }
-        }
+        
         private void disableForm()
         {
             txtCreatedDate.Enabled = false;
@@ -1442,6 +1429,22 @@ namespace BaoHien.UI
             cbxCustomer.Enabled = false;
             btnSave.Enabled = false;
             dgwOrderDetails.ReadOnly = true;
+        }
+
+        private void txtVAT_Leave_1(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(txtVAT.WorkingText))
+            {
+                calculateTotal();
+            }
+        }
+
+        private void txtDiscount_Leave(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(txtDiscount.WorkingText))
+            {
+                calculateTotal();
+            }
         }
         
     }

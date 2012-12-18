@@ -406,6 +406,10 @@
       <Project>{E20ACD5C-C921-45BB-BC44-D227D734C34A}</Project>
       <Name>DAL</Name>
     </ProjectReference>
+    <ProjectReference Include="..\JRINCCustomControls\JRINCCustomControls.csproj">
+      <Project>{C8B714BF-091D-4972-AF18-6F6904FD0D8D}</Project>
+      <Name>JRINCCustomControls</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Validator\Validator.csproj">
       <Project>{87D24BFF-5031-4716-BF01-3EA42C791538}</Project>
       <Name>Validator</Name>

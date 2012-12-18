@@ -28,8 +28,11 @@ namespace BaoHien.Common
         public const short SIZE_OF_CODE = 4;
         public const string PREFIX_FOR_ORDER = "BH";
         public const string PREFIX_FOR_PRODUCTION = "SX";
+        public const string PREFIX_FOR_PRODUCT = "SP";
         public const string PREFIX_FOR_ENTRANCE = "NK";
         public const string PREFIX_FOR_BILLING = "TT";
+
+        public const int MAX_ID = 4;
 
         public const string REGULAR_EXPRESSION_FOR_NUMBER = "[0-9]";
         public const string REGULAR_EXPRESSION_FOR_CURRENCY = "[0-9]?.?[0-9]";
