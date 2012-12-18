@@ -20,3 +20,6 @@ D:\Work Offline\BaoHienCompany\BaoHienTest\bin\Debug\Validator.pdb
 D:\Work Offline\BaoHienCompany\BaoHienTest\obj\Debug\ResolveAssemblyReference.cache
 D:\Work Offline\BaoHienCompany\BaoHienTest\obj\Debug\BaoHienTest.dll
 D:\Work Offline\BaoHienCompany\BaoHienTest\obj\Debug\BaoHienTest.pdb
+D:\Work Offline\BaoHienCompany\BaoHienTest\bin\Debug\JRINCCustomControls.dll
+D:\Work Offline\BaoHienCompany\BaoHienTest\bin\Debug\JRINCCustomControls.pdb
+D:\Work Offline\BaoHienCompany\BaoHienTest\bin\Debug\JRINCCustomControls.xml

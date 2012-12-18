@@ -34,7 +34,6 @@ namespace BaoHien.UI
             if (systemUsers != null)
             {
                 cmbSaler.DataSource = systemUsers;
-
                 cmbSaler.DisplayMember = "FullName";
                 cmbSaler.ValueMember = "Id";
 
@@ -71,7 +70,7 @@ namespace BaoHien.UI
                                 Index = ++index
                             };
                 dgvProductList.DataSource = query.ToList();
-
+                lblTotalResult.Text = customers.Count.ToString();
             }
         }
         private void SetupColumns()

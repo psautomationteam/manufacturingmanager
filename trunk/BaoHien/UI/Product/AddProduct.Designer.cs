@@ -201,6 +201,7 @@
             this.txtCode.Size = new System.Drawing.Size(140, 20);
             this.txtCode.TabIndex = 2;
             this.validator1.SetType(this.txtCode, Itboy.Components.ValidationType.Required);
+            this.txtCode.Leave += new System.EventHandler(this.txtCode_Leave);
             // 
             // label2
             // 

@@ -31,15 +31,13 @@ namespace BaoHien.UI
         {
             this.components = new System.ComponentModel.Container();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.txtDiscount = new JRINCCustomControls.currencyTextBox(this.components);
+            this.txtVAT = new JRINCCustomControls.currencyTextBox(this.components);
             this.txtNote = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.txtCreatedDate = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.txtDiscount = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.txtVAT = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.cbxCustomer = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -65,15 +63,13 @@ namespace BaoHien.UI
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.txtDiscount);
+            this.groupBox1.Controls.Add(this.txtVAT);
             this.groupBox1.Controls.Add(this.txtNote);
             this.groupBox1.Controls.Add(this.label8);
             this.groupBox1.Controls.Add(this.txtCreatedDate);
             this.groupBox1.Controls.Add(this.label7);
-            this.groupBox1.Controls.Add(this.label6);
-            this.groupBox1.Controls.Add(this.txtDiscount);
-            this.groupBox1.Controls.Add(this.label5);
             this.groupBox1.Controls.Add(this.label4);
-            this.groupBox1.Controls.Add(this.txtVAT);
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.cbxCustomer);
             this.groupBox1.Controls.Add(this.label2);
@@ -85,6 +81,30 @@ namespace BaoHien.UI
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Thông tin phiếu bán hàng";
+            // 
+            // txtDiscount
+            // 
+            this.txtDiscount.DecimalPlaces = 0;
+            this.txtDiscount.DecimalsSeparator = ',';
+            this.txtDiscount.Location = new System.Drawing.Point(481, 48);
+            this.txtDiscount.Name = "txtDiscount";
+            this.txtDiscount.PreFix = "(VND) ";
+            this.txtDiscount.Size = new System.Drawing.Size(221, 20);
+            this.txtDiscount.TabIndex = 14;
+            this.txtDiscount.ThousandsSeparator = '.';
+            this.txtDiscount.Leave += new System.EventHandler(this.txtDiscount_Leave);
+            // 
+            // txtVAT
+            // 
+            this.txtVAT.DecimalPlaces = 0;
+            this.txtVAT.DecimalsSeparator = ',';
+            this.txtVAT.Location = new System.Drawing.Point(94, 48);
+            this.txtVAT.Name = "txtVAT";
+            this.txtVAT.PreFix = "(VND) ";
+            this.txtVAT.Size = new System.Drawing.Size(186, 20);
+            this.txtVAT.TabIndex = 13;
+            this.txtVAT.ThousandsSeparator = '.';
+            this.txtVAT.Leave += new System.EventHandler(this.txtVAT_Leave_1);
             // 
             // txtNote
             // 
@@ -106,9 +126,9 @@ namespace BaoHien.UI
             // txtCreatedDate
             // 
             this.txtCreatedDate.Enabled = false;
-            this.txtCreatedDate.Location = new System.Drawing.Point(94, 82);
+            this.txtCreatedDate.Location = new System.Drawing.Point(94, 79);
             this.txtCreatedDate.Name = "txtCreatedDate";
-            this.txtCreatedDate.Size = new System.Drawing.Size(159, 20);
+            this.txtCreatedDate.Size = new System.Drawing.Size(186, 20);
             this.txtCreatedDate.TabIndex = 4;
             // 
             // label7
@@ -120,33 +140,6 @@ namespace BaoHien.UI
             this.label7.TabIndex = 10;
             this.label7.Text = "Ngày lập:";
             // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(671, 53);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(30, 13);
-            this.label6.TabIndex = 9;
-            this.label6.Text = "VND";
-            // 
-            // txtDiscount
-            // 
-            this.txtDiscount.Location = new System.Drawing.Point(481, 50);
-            this.txtDiscount.Name = "txtDiscount";
-            this.validator1.SetRegularExpression(this.txtDiscount, "[0-9].[0-9]");
-            this.txtDiscount.Size = new System.Drawing.Size(183, 20);
-            this.txtDiscount.TabIndex = 3;
-            this.validator1.SetType(this.txtDiscount, Itboy.Components.ValidationType.RegularExpression);
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(259, 54);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(30, 13);
-            this.label5.TabIndex = 7;
-            this.label5.Text = "VND";
-            // 
             // label4
             // 
             this.label4.AutoSize = true;
@@ -155,17 +148,6 @@ namespace BaoHien.UI
             this.label4.Size = new System.Drawing.Size(52, 13);
             this.label4.TabIndex = 6;
             this.label4.Text = "Khấu chi:";
-            // 
-            // txtVAT
-            // 
-            this.txtVAT.Location = new System.Drawing.Point(94, 51);
-            this.txtVAT.Name = "txtVAT";
-            this.validator1.SetRegularExpression(this.txtVAT, "[0-9].[0-9]");
-            this.txtVAT.Size = new System.Drawing.Size(159, 20);
-            this.txtVAT.TabIndex = 2;
-            this.validator1.SetType(this.txtVAT, Itboy.Components.ValidationType.RegularExpression);
-            this.txtVAT.TextChanged += new System.EventHandler(this.txtVAT_TextChanged);
-            this.txtVAT.Leave += new System.EventHandler(this.txtVAT_Leave);
             // 
             // label3
             // 
@@ -188,7 +170,7 @@ namespace BaoHien.UI
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(361, 20);
+            this.label2.Location = new System.Drawing.Point(374, 20);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(81, 13);
             this.label2.TabIndex = 2;
@@ -371,16 +353,12 @@ namespace BaoHien.UI
         #endregion
 
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.TextBox txtDiscount;
-        private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox txtVAT;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ComboBox cbxCustomer;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txtOrderCode;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox txtNote;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.TextBox txtCreatedDate;
@@ -398,5 +376,7 @@ namespace BaoHien.UI
         private System.Windows.Forms.Button btnPrintXK;
         private Itboy.Components.Validator validator1;
         private System.Drawing.Printing.PrintDocument printDoc;
+        private JRINCCustomControls.currencyTextBox txtDiscount;
+        private JRINCCustomControls.currencyTextBox txtVAT;
     }
 }

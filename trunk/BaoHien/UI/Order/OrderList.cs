@@ -94,7 +94,7 @@ namespace BaoHien.UI
                                 Index = ++index
                             };
                 dgwOrderList.DataSource = query.ToList();
-                
+                lblTotalResult.Text = orders.Count.ToString();
             }
         }
         private void SetupColumns()

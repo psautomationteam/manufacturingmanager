@@ -41,8 +41,6 @@ namespace BaoHien.UI
             {
                 setUpDataGrid(productTypes);
                 //dgvProductTypeList.DataSource = productTypes;
-
-
             }
         }
         private void setUpDataGrid(List<ProductType> productTypes)

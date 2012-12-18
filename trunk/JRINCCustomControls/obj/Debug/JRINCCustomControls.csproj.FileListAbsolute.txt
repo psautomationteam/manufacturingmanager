@@ -1,0 +1,6 @@
+D:\Work Offline\BaoHienCompany\JRINCCustomControls\bin\Debug\JRINCCustomControls.XML
+D:\Work Offline\BaoHienCompany\JRINCCustomControls\bin\Debug\JRINCCustomControls.dll
+D:\Work Offline\BaoHienCompany\JRINCCustomControls\bin\Debug\JRINCCustomControls.pdb
+D:\Work Offline\BaoHienCompany\JRINCCustomControls\obj\Debug\ResolveAssemblyReference.cache
+D:\Work Offline\BaoHienCompany\JRINCCustomControls\obj\Debug\JRINCCustomControls.dll
+D:\Work Offline\BaoHienCompany\JRINCCustomControls\obj\Debug\JRINCCustomControls.pdb

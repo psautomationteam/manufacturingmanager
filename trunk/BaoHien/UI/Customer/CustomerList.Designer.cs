@@ -217,11 +217,11 @@
             this.lblTotalResult.AutoSize = true;
             this.lblTotalResult.Font = new System.Drawing.Font("Arial", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTotalResult.ForeColor = System.Drawing.Color.Blue;
-            this.lblTotalResult.Location = new System.Drawing.Point(168, 158);
+            this.lblTotalResult.Location = new System.Drawing.Point(168, 162);
             this.lblTotalResult.Name = "lblTotalResult";
-            this.lblTotalResult.Size = new System.Drawing.Size(24, 16);
+            this.lblTotalResult.Size = new System.Drawing.Size(16, 16);
             this.lblTotalResult.TabIndex = 17;
-            this.lblTotalResult.Text = "10";
+            this.lblTotalResult.Text = "0";
             // 
             // CustomerList
             // 
