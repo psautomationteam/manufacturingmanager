@@ -27,48 +27,50 @@ namespace BaoHien.UI
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            if (productType != null && productType.Id > 0)//edit
+            if (validator1.Validate())
             {
-                productType.Description = txtDescription.Text;
-                productType.ProductName = txtName.Text;
-                productType.TypeCode = txtCode.Text;
+                if (productType != null && productType.Id > 0)//edit
+                {
+                    productType.Description = txtDescription.Text;
+                    productType.ProductName = txtName.Text;
+                    productType.TypeCode = txtCode.Text;
 
-                ProductTypeService productTypeService = new ProductTypeService();
-                bool result = productTypeService.UpdateProductType(productType);
-                if (result)
-                {
-                    MessageBox.Show("Loại sản phẩm đã được cập nhật vào hệ thống");
-                    ((ucProductType)this.CallFromUserControll).loadProductTypeList();
-                    this.Close();
+                    ProductTypeService productTypeService = new ProductTypeService();
+                    bool result = productTypeService.UpdateProductType(productType);
+                    if (result)
+                    {
+                        MessageBox.Show("Loại sản phẩm đã được cập nhật vào hệ thống");
+                        ((ucProductType)this.CallFromUserControll).loadProductTypeList();
+                        this.Close();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                    }
                 }
-                else
+                else//add new
                 {
-                    MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                    productType = new ProductType
+                    {
+
+                        Description = txtDescription.Text,
+                        ProductName = txtName.Text,
+                        TypeCode = txtCode.Text
+                    };
+                    ProductTypeService productTypeService = new ProductTypeService();
+                    bool result = productTypeService.AddProductType(productType);
+                    if (result)
+                    {
+                        MessageBox.Show("Loại sản phẩm đã được thêm mới vào hệ thống");
+                        ((ucProductType)this.CallFromUserControll).loadProductTypeList();
+                        this.Close();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                    }
                 }
             }
-            else//add new
-            {
-                productType = new ProductType
-                {
-
-                    Description = txtDescription.Text,
-                    ProductName = txtName.Text,
-                    TypeCode = txtCode.Text
-                };
-                ProductTypeService productTypeService = new ProductTypeService();
-                bool result = productTypeService.AddProductType(productType);
-                if (result)
-                {
-                    MessageBox.Show("Loại sản phẩm đã được thêm mới vào hệ thống");
-                    ((ucProductType)this.CallFromUserControll).loadProductTypeList();
-                    this.Close();
-                }
-                else
-                {
-                    MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
-                }
-            }
-            
         }
         public void loadDataForEditProductType(int productTypeId)
         {

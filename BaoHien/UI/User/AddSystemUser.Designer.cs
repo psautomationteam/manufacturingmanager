@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.label5 = new System.Windows.Forms.Label();
             this.btnAdd = new System.Windows.Forms.Button();
             this.txtCode = new System.Windows.Forms.TextBox();
@@ -42,6 +43,7 @@
             this.txtConfirmPass = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.btnCancel = new System.Windows.Forms.Button();
+            this.validator1 = new Itboy.Components.Validator(this.components);
             this.SuspendLayout();
             // 
             // label5
@@ -172,6 +174,10 @@
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
+            // validator1
+            // 
+            this.validator1.Form = this;
+            // 
             // AddSystemUser
             // 
             this.AcceptButton = this.btnAdd;
@@ -217,5 +223,6 @@
         private System.Windows.Forms.TextBox txtConfirmPass;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Button btnCancel;
+        private Itboy.Components.Validator validator1;
     }
 }

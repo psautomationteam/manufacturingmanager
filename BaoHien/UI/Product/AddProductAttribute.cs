@@ -28,48 +28,50 @@ namespace BaoHien.UI
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            if (baseAttribute != null && baseAttribute.Id > 0)
+            if (validator1.Validate())
             {
-                baseAttribute.Description = txtDescription.Text;
-                baseAttribute.AttributeName = txtName.Text;
-                baseAttribute.AttributeCode = txtCode.Text;
-
-                BaseAttributeService baseAttributeService = new BaseAttributeService();
-                bool result = baseAttributeService.UpdateBaseAttribute(baseAttribute);
-                if (result)
+                if (baseAttribute != null && baseAttribute.Id > 0)
                 {
-                    MessageBox.Show("Loại quy cách đã được cập nhật vào hệ thống");
-                    ((ProductAttributeList)this.CallFromUserControll).loadProductAttributeList();
-                    this.Close();
+                    baseAttribute.Description = txtDescription.Text;
+                    baseAttribute.AttributeName = txtName.Text;
+                    baseAttribute.AttributeCode = txtCode.Text;
+
+                    BaseAttributeService baseAttributeService = new BaseAttributeService();
+                    bool result = baseAttributeService.UpdateBaseAttribute(baseAttribute);
+                    if (result)
+                    {
+                        MessageBox.Show("Loại quy cách đã được cập nhật vào hệ thống");
+                        ((ProductAttributeList)this.CallFromUserControll).loadProductAttributeList();
+                        this.Close();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                    }
                 }
                 else
                 {
-                    MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
-                }
-            }
-            else
-            {
-                baseAttribute = new BaseAttribute
-                {
+                    baseAttribute = new BaseAttribute
+                    {
 
-                    AttributeName = txtName.Text,
-                    Description = txtDescription.Text,
-                    AttributeCode = txtCode.Text
-                };
-                BaseAttributeService baseAttributeService = new BaseAttributeService();
-                bool result = baseAttributeService.AddBaseAttribute(baseAttribute);
-                if (result)
-                {
-                    MessageBox.Show("Quy cách được tạo thành công");
-                    ((ProductAttributeList)this.CallFromUserControll).loadProductAttributeList();
-                    this.Close();
-                }
-                else
-                {
-                    MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                        AttributeName = txtName.Text,
+                        Description = txtDescription.Text,
+                        AttributeCode = txtCode.Text
+                    };
+                    BaseAttributeService baseAttributeService = new BaseAttributeService();
+                    bool result = baseAttributeService.AddBaseAttribute(baseAttribute);
+                    if (result)
+                    {
+                        MessageBox.Show("Quy cách được tạo thành công");
+                        ((ProductAttributeList)this.CallFromUserControll).loadProductAttributeList();
+                        this.Close();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                    }
                 }
             }
-            
         }
         public void loadDataForEditProductAttribute(int productAttributeId)
         {

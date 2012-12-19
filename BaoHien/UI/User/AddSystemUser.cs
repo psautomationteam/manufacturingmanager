@@ -23,69 +23,71 @@ namespace BaoHien.UI
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            short userType = 0;
-            string o = cbUserType.Text;
-            if (o != null && o != "" && o != " ")
+            if (validator1.Validate())
             {
-                if (o.Contains(BHConstant.USER_TYPE_NAME1))
+                short userType = 0;
+                string o = cbUserType.Text;
+                if (o != null && o != "" && o != " ")
                 {
-                    userType = BHConstant.USER_TYPE_ID1;
+                    if (o.Contains(BHConstant.USER_TYPE_NAME1))
+                    {
+                        userType = BHConstant.USER_TYPE_ID1;
 
+                    }
+                    else if (o.Contains(BHConstant.USER_TYPE_NAME2))
+                    {
+                        userType = BHConstant.USER_TYPE_ID2;
+                    }
+                    else if (o.Contains(BHConstant.USER_TYPE_NAME3))
+                    {
+                        userType = BHConstant.USER_TYPE_ID3;
+                    }
                 }
-                else if (o.Contains(BHConstant.USER_TYPE_NAME2))
+                if (systemUser != null)
                 {
-                    userType = BHConstant.USER_TYPE_ID2;
-                }
-                else if (o.Contains(BHConstant.USER_TYPE_NAME3))
-                {
-                    userType = BHConstant.USER_TYPE_ID3;
-                }
-            }
-            if (systemUser != null)
-            {
-                systemUser.FullName = txtName.Text;
-                if (txtPass.Text != "" && txtConfirmPass.Text != "" && txtPass.Text.Equals(txtConfirmPass.Text))
-                {
-                    systemUser.password = txtPass.Text;
-                }
-                
-                systemUser.Type = userType;
-                
-                SystemUserService systemUserService = new SystemUserService();
-                if (systemUserService.UpdateSystemUser(systemUser))
-                {
-                    MessageBox.Show("Người dùng đã được cập nhật thành công");
-                    ((SystemUserList)this.CallFromUserControll).loadSystemUserList();
-                    this.Close();
-                }
-                else
-                {
-                    MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
-                }
-            }
-            else
-            {
-                systemUser = new SystemUser
-                {
-                    FullName = txtName.Text,
-                    password = txtPass.Text,
-                    Type = userType,
-                    username = txtCode.Text
-                };
-                SystemUserService systemUserService = new SystemUserService();
-                if (systemUserService.AddPSystemUser(systemUser))
-                {
-                    MessageBox.Show("Người dùng đã được tạo thành công");
-                    ((SystemUserList)this.CallFromUserControll).loadSystemUserList();
-                    this.Close();
+                    systemUser.FullName = txtName.Text;
+                    if (txtPass.Text != "" && txtConfirmPass.Text != "" && txtPass.Text.Equals(txtConfirmPass.Text))
+                    {
+                        systemUser.password = txtPass.Text;
+                    }
+
+                    systemUser.Type = userType;
+
+                    SystemUserService systemUserService = new SystemUserService();
+                    if (systemUserService.UpdateSystemUser(systemUser))
+                    {
+                        MessageBox.Show("Người dùng đã được cập nhật thành công");
+                        ((SystemUserList)this.CallFromUserControll).loadSystemUserList();
+                        this.Close();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                    }
                 }
                 else
                 {
-                    MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                    systemUser = new SystemUser
+                    {
+                        FullName = txtName.Text,
+                        password = txtPass.Text,
+                        Type = userType,
+                        username = txtCode.Text
+                    };
+                    SystemUserService systemUserService = new SystemUserService();
+                    if (systemUserService.AddPSystemUser(systemUser))
+                    {
+                        MessageBox.Show("Người dùng đã được tạo thành công");
+                        ((SystemUserList)this.CallFromUserControll).loadSystemUserList();
+                        this.Close();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                    }
                 }
+
             }
-            
-            
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)

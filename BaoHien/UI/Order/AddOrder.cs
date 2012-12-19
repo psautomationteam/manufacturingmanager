@@ -38,9 +38,7 @@ namespace BaoHien.UI
         BindingList<Product> products;
         BindingList<BaseAttribute> baseAttributesAtRow;
         BindingList<ProductionRequestDetailModel> originalProductions;
-
-        long beforeVAT = 0, afterVAT = 0;
-
+        
         private System.IO.Stream streamToPrint;
         Image MyImage;
         string streamType;
@@ -68,13 +66,14 @@ namespace BaoHien.UI
             System.Int32 dwRop // raster operation code
 
         );
+
         public AddOrder()
         {
             InitializeComponent();
         }
+
         private bool saveData()
-        {
-            
+        {            
             if (validator1.Validate())
             {
                 DialogResult dialogResult = MessageBox.Show("Bạn sẽ không thể chỉnh sửa sau khi lưu!Bạn muốn lưu?", "Xác nhận", MessageBoxButtons.YesNo);
@@ -296,11 +295,12 @@ namespace BaoHien.UI
             }
             return false;
         }
+
         private void btnSave_Click(object sender, EventArgs e)
         {
-
             saveData();
         }
+
         private void loadSomeData()
         {
             if(customers == null)
@@ -345,6 +345,7 @@ namespace BaoHien.UI
                 txtCreatedDate.Text = DateTime.Now.ToShortDateString();
             }
         }
+
         public void updateProductionRequestDetailCells()
         {
             if (isUpdating && order != null && orderDetails.Count < dgwOrderDetails.RowCount)
@@ -375,6 +376,7 @@ namespace BaoHien.UI
             }
             
         }
+
         public void loadDataForEditOrder(int orderId)
         {
             disableForm();
@@ -396,14 +398,15 @@ namespace BaoHien.UI
             }
             
         }
+
         private void AddOrder_Load(object sender, EventArgs e)
         {
             loadSomeData();
             SetupColumns();
             updateProductionRequestDetailCells();
-            calculateTotal();
-            
+            calculateTotal();            
         }
+
         private void SetupColumns()
         {
             dgwOrderDetails.AutoGenerateColumns = false;
@@ -507,7 +510,6 @@ namespace BaoHien.UI
             deleteButton.ImageLayout = DataGridViewImageCellLayout.Normal;
         }
         
-
         private void dgwOrderDetails_DataError(object sender, DataGridViewDataErrorEventArgs e)
         {
             //MessageBox.Show("Có lỗi nhập liệu xảy ra,vui lòng kiểm tra lại!");
@@ -714,6 +716,7 @@ namespace BaoHien.UI
 
             //MyImage.Save(@"c:\PrintPage.jpg", ImageFormat.Jpeg);
         }
+
         private void btnPrintOrder_Click(object sender, EventArgs e)
         {
             if (btnSave.Enabled)
@@ -734,6 +737,7 @@ namespace BaoHien.UI
            
             
         }
+
         public void StartPrint(Stream streamToPrint, string streamType)
         {
 
@@ -762,6 +766,7 @@ namespace BaoHien.UI
 
             }
         }
+
         private void printDoc_PrintPage(object sender, PrintPageEventArgs e)
         {
             //System.Drawing.Image image = System.Drawing.Image.FromStream(this.streamToPrint);
@@ -803,6 +808,7 @@ namespace BaoHien.UI
         {
             printForStock();
         }
+
         private void printForStock()
         {
             object oMissing = System.Reflection.Missing.Value;
@@ -1063,6 +1069,7 @@ namespace BaoHien.UI
 
             oDoc.PrintPreview();
         }
+
         private void printOrder()
         {
             double totalNoTax = 0.0;
@@ -1409,11 +1416,13 @@ namespace BaoHien.UI
             oDoc.PrintPreview();
             //oDoc.Close(ref oMissing, ref oMissing, ref oMissing);
         }
+
         private void InsertLine()
         {
             
 
         }
+
         private void btnCancel_Click(object sender, EventArgs e)
         {
             this.Close();
