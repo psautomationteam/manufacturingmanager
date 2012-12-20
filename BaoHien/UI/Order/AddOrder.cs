@@ -39,34 +39,6 @@ namespace BaoHien.UI
         BindingList<BaseAttribute> baseAttributesAtRow;
         BindingList<ProductionRequestDetailModel> originalProductions;
         
-        private System.IO.Stream streamToPrint;
-        Image MyImage;
-        string streamType;
-        [System.Runtime.InteropServices.DllImportAttribute("gdi32.dll")]
-        private static extern bool BitBlt
-
-        (
-
-            IntPtr hdcDest, // handle to destination DC
-
-            int nXDest, // x-coord of destination upper-left corner
-
-            int nYDest, // y-coord of destination upper-left corner
-
-            int nWidth, // width of destination rectangle
-
-            int nHeight, // height of destination rectangle
-
-            IntPtr hdcSrc, // handle to source DC
-
-            int nXSrc, // x-coordinate of source upper-left corner
-
-            int nYSrc, // y-coordinate of source upper-left corner
-
-            System.Int32 dwRop // raster operation code
-
-        );
-
         public AddOrder()
         {
             InitializeComponent();
@@ -414,22 +386,18 @@ namespace BaoHien.UI
             if (orderDetails == null)
             {
                 orderDetails = new BindingList<OrderDetail>();
-
-
             }
 
             var query = from orderDetail in orderDetails
-
                         select new ProductionRequestDetailModel
                         {
                             ProductId = orderDetail.ProductId,
                             AttributeId = orderDetail.AttributeId,
-                            NumberUnit = orderDetail.NumberUnit,
-
-                           
+                            NumberUnit = orderDetail.NumberUnit,                           
                             Price = orderDetail.Price,
                             Note = orderDetail.Note,
-                            Total = (double)orderDetail.Price * orderDetail.NumberUnit
+                            Total = (double)orderDetail.Price * orderDetail.NumberUnit,
+                            Commission = orderDetail.Commission,
                         };
 
             originalProductions = new BindingList<ProductionRequestDetailModel>(query.ToList());
@@ -453,16 +421,12 @@ namespace BaoHien.UI
             DataGridViewComboBoxColumn productAttributeColumn = new DataGridViewComboBoxColumn();
             productAttributeColumn.Width = 150;
             productAttributeColumn.HeaderText = "Quy cách sản phẩm";
-
             productAttributeColumn.DataSource = baseAttributesAtRow;
-
             productAttributeColumn.DisplayMember = "AttributeName";
             //productColumn.Frozen = true;
             productAttributeColumn.ValueMember = "Id";
 
             dgwOrderDetails.Columns.Add(productAttributeColumn);
-
-
 
             DataGridViewTextBoxColumn numberUnitColumn = new DataGridViewTextBoxColumn();
 
@@ -481,6 +445,13 @@ namespace BaoHien.UI
             //numberUnitColumn.Frozen = true;
             //priceColumn.ValueType = typeof(int);
             dgwOrderDetails.Columns.Add(priceColumn);
+
+            DataGridViewTextBoxColumn commissionColumn = new DataGridViewTextBoxColumn();
+
+            commissionColumn.Width = 100;
+            commissionColumn.DataPropertyName = "Commision";
+            commissionColumn.HeaderText = "Hoa hồng";
+            dgwOrderDetails.Columns.Add(commissionColumn);
 
             DataGridViewTextBoxColumn totalColumn = new DataGridViewTextBoxColumn();
 
@@ -529,54 +500,56 @@ namespace BaoHien.UI
             }
             if (dgv.CurrentCell.Value != null)
             {
-                if (e.ColumnIndex == 0)
+                switch (e.ColumnIndex)
                 {
-                    
-                    orderDetails[e.RowIndex].ProductId = (int)dgv.CurrentCell.Value;
-                    ProductAttributeService productAttributeService = new ProductAttributeService();
-                    List<ProductAttribute> productAttributes = productAttributeService.SelectProductAttributeByWhere(ba => ba.Id == orderDetails[e.RowIndex].ProductId);
-                    baseAttributesAtRow = new BindingList<BaseAttribute>();
-                    foreach(ProductAttribute pa in productAttributes)
-                    {
-                        baseAttributesAtRow.Add(pa.BaseAttribute);
-                    }
-                    DataGridViewComboBoxCell currentCell = (DataGridViewComboBoxCell)dgwOrderDetails.Rows[e.RowIndex].Cells[1];
-                    currentCell.DataSource = baseAttributesAtRow;
-                    if (baseAttributesAtRow.Count > e.RowIndex && baseAttributesAtRow.Count > 0)
-                    {
-                        orderDetails[e.RowIndex].AttributeId = baseAttributesAtRow[0].Id;
-                        currentCell.Value = baseAttributesAtRow[0].Id;
-                    }
-                    
-
-                }
-                else if (e.ColumnIndex == 1)
-                {
-                    orderDetails[e.RowIndex].AttributeId = (int)dgv.CurrentCell.Value;
-                }
-                else if (e.ColumnIndex == 2)
-                {
-                    orderDetails[e.RowIndex].NumberUnit = (int)dgv.CurrentCell.Value;
-                }
-                else if (e.ColumnIndex == 3)
-                {
-                    orderDetails[e.RowIndex].Price = (double)dgv.CurrentCell.Value;
-                }
-                else if (e.ColumnIndex == 4)
-                {
-                    if (dgv.CurrentCell.Value != null)
-                    {
-                        orderDetails[e.RowIndex].Cost = (double)dgv.CurrentCell.Value;
-                    }
-                    
-                }
-                else if (e.ColumnIndex == 5)
-                {
-                    orderDetails[e.RowIndex].Note = (string)dgv.CurrentCell.Value;
+                    case 0:
+                        {
+                            orderDetails[e.RowIndex].ProductId = (int)dgv.CurrentCell.Value;
+                            ProductAttributeService productAttributeService = new ProductAttributeService();
+                            List<ProductAttribute> productAttributes = productAttributeService.SelectProductAttributeByWhere(ba => ba.Id == orderDetails[e.RowIndex].ProductId);
+                            baseAttributesAtRow = new BindingList<BaseAttribute>();
+                            foreach (ProductAttribute pa in productAttributes)
+                            {
+                                baseAttributesAtRow.Add(pa.BaseAttribute);
+                            }
+                            DataGridViewComboBoxCell currentCell = (DataGridViewComboBoxCell)dgwOrderDetails.Rows[e.RowIndex].Cells[1];
+                            currentCell.DataSource = baseAttributesAtRow;
+                            if (baseAttributesAtRow.Count > e.RowIndex && baseAttributesAtRow.Count > 0)
+                            {
+                                orderDetails[e.RowIndex].AttributeId = baseAttributesAtRow[0].Id;
+                                currentCell.Value = baseAttributesAtRow[0].Id;
+                            }
+                        } break;
+                    case 1:
+                        {
+                            orderDetails[e.RowIndex].AttributeId = (int)dgv.CurrentCell.Value;
+                        } break;
+                    case 2:
+                        {
+                            orderDetails[e.RowIndex].NumberUnit = (int)dgv.CurrentCell.Value;
+                        } break;
+                    case 3:
+                        {
+                            orderDetails[e.RowIndex].Price = (double)dgv.CurrentCell.Value;
+                        } break;
+                    case 4:
+                        {
+                            orderDetails[e.RowIndex].Commission = (double)dgv.CurrentCell.Value;
+                        } break;
+                    case 5:
+                        {
+                            if (dgv.CurrentCell.Value != null)
+                            {
+                                orderDetails[e.RowIndex].Cost = (double)dgv.CurrentCell.Value;
+                            }
+                        } break;
+                    case 6:
+                        {
+                            orderDetails[e.RowIndex].Note = (string)dgv.CurrentCell.Value;
+                        } break;
                 }
             }
-            calculateTotal();
-           
+            calculateTotal();           
         }
 
         private void calculateTotal()
@@ -620,195 +593,111 @@ namespace BaoHien.UI
 
         private void dgwOrderDetails_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
         {
-
-            if (dgwOrderDetails.CurrentCell.ColumnIndex == 0)
+            switch (dgwOrderDetails.CurrentCell.ColumnIndex)
             {
-                var source = new AutoCompleteStringCollection();
-                String[] stringArray = Array.ConvertAll<Product, String>(products.ToArray(), delegate(Product row) { return (String)row.ProductName; });
-                source.AddRange(stringArray);
-
-                ComboBox prodCode = e.Control as ComboBox;
-                if (prodCode != null)
-                {
-                    prodCode.DropDownStyle = ComboBoxStyle.DropDown;
-                    prodCode.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-                    prodCode.AutoCompleteCustomSource = source;
-                    prodCode.AutoCompleteSource = AutoCompleteSource.CustomSource;
-                    prodCode.MaxDropDownItems = 5;
-
-                }
-                //this.validator1.SetType(prodCode, Itboy.Components.ValidationType.Required);
-            }
-            else if (dgwOrderDetails.CurrentCell.ColumnIndex == 1)
-            {
-                if (baseAttributesAtRow != null)
-                {
-                    var source = new AutoCompleteStringCollection();
-                    String[] stringArray = Array.ConvertAll<BaseAttribute, String>(baseAttributesAtRow.ToArray(), delegate(BaseAttribute row) { return (String)row.AttributeName; });
-                    source.AddRange(stringArray);
-
-                    ComboBox prodCode = e.Control as ComboBox;
-                    if (prodCode != null)
+                case 0:
                     {
-                        prodCode.DropDownStyle = ComboBoxStyle.DropDown;
-                        prodCode.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-                        prodCode.AutoCompleteCustomSource = source;
-                        prodCode.AutoCompleteSource = AutoCompleteSource.CustomSource;
-                        prodCode.MaxDropDownItems = 5;
+                        var source = new AutoCompleteStringCollection();
+                        String[] stringArray = Array.ConvertAll<Product, String>(products.ToArray(), delegate(Product row) { return (String)row.ProductName; });
+                        source.AddRange(stringArray);
 
-                    }
-                    //this.validator1.SetType(prodCode, Itboy.Components.ValidationType.Required);
-                }
+                        ComboBox prodCode = e.Control as ComboBox;
+                        if (prodCode != null)
+                        {
+                            prodCode.DropDownStyle = ComboBoxStyle.DropDown;
+                            prodCode.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+                            prodCode.AutoCompleteCustomSource = source;
+                            prodCode.AutoCompleteSource = AutoCompleteSource.CustomSource;
+                            prodCode.MaxDropDownItems = 5;
 
-            }
-            else if (dgwOrderDetails.CurrentCell.ColumnIndex == 2)
-            {
-                TextBox numberOfUnit = e.Control as TextBox;
-                this.validator1.SetRegularExpression(numberOfUnit, BHConstant.REGULAR_EXPRESSION_FOR_NUMBER);
-                this.validator1.SetType(numberOfUnit, Itboy.Components.ValidationType.RegularExpression);
-            }
-            else if (dgwOrderDetails.CurrentCell.ColumnIndex == 3)
-            {
-                TextBox price = e.Control as TextBox;
-                this.validator1.SetRegularExpression(price, BHConstant.REGULAR_EXPRESSION_FOR_CURRENCY);
-                this.validator1.SetType(price, Itboy.Components.ValidationType.RegularExpression);
-            }
-            else if (dgwOrderDetails.CurrentCell.ColumnIndex == 4)
-            {
-                TextBox total = e.Control as TextBox;
-                this.validator1.SetRegularExpression(total, BHConstant.REGULAR_EXPRESSION_FOR_CURRENCY);
-                this.validator1.SetType(total, Itboy.Components.ValidationType.RegularExpression);
-            }
-            else
-            {
-                if (e.Control is TextBox)
-                {
-                    TextBox other = e.Control as TextBox;
-                    this.validator1.SetType(other, Itboy.Components.ValidationType.None);
-                }
-            }
-            
+                        }
+                        //this.validator1.SetType(prodCode, Itboy.Components.ValidationType.Required);
+                    } break;
+                case 1:
+                    {
+                        if (baseAttributesAtRow != null)
+                        {
+                            var source = new AutoCompleteStringCollection();
+                            String[] stringArray = Array.ConvertAll<BaseAttribute, String>(baseAttributesAtRow.ToArray(), delegate(BaseAttribute row) { return (String)row.AttributeName; });
+                            source.AddRange(stringArray);
 
+                            ComboBox prodCode = e.Control as ComboBox;
+                            if (prodCode != null)
+                            {
+                                prodCode.DropDownStyle = ComboBoxStyle.DropDown;
+                                prodCode.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+                                prodCode.AutoCompleteCustomSource = source;
+                                prodCode.AutoCompleteSource = AutoCompleteSource.CustomSource;
+                                prodCode.MaxDropDownItems = 5;
+
+                            }
+                            //this.validator1.SetType(prodCode, Itboy.Components.ValidationType.Required);
+                        }
+                    } break;
+                case 2:
+                    {
+                        TextBox numberOfUnit = e.Control as TextBox;
+                        this.validator1.SetRegularExpression(numberOfUnit, BHConstant.REGULAR_EXPRESSION_FOR_NUMBER);
+                        this.validator1.SetType(numberOfUnit, Itboy.Components.ValidationType.RegularExpression);
+                    } break;
+                case 3:
+                    {
+                        TextBox price = e.Control as TextBox;
+                        this.validator1.SetRegularExpression(price, BHConstant.REGULAR_EXPRESSION_FOR_CURRENCY);
+                        this.validator1.SetType(price, Itboy.Components.ValidationType.RegularExpression);
+                    } break;
+                case 4:
+                    {
+                        TextBox commision = e.Control as TextBox;
+                        this.validator1.SetRegularExpression(commision, BHConstant.REGULAR_EXPRESSION_FOR_CURRENCY);
+                        this.validator1.SetType(commision, Itboy.Components.ValidationType.RegularExpression);
+                    } break;
+                case 5:
+                    {
+                        TextBox total = e.Control as TextBox;
+                        this.validator1.SetRegularExpression(total, BHConstant.REGULAR_EXPRESSION_FOR_CURRENCY);
+                        this.validator1.SetType(total, Itboy.Components.ValidationType.RegularExpression);
+                    } break;
+                case 6:
+                    {
+                        if (e.Control is TextBox)
+                        {
+                            TextBox other = e.Control as TextBox;
+                            this.validator1.SetType(other, Itboy.Components.ValidationType.None);
+                        }
+                    } break;
+            }
         }
 
         private void dgwOrderDetails_CellEnter(object sender, DataGridViewCellEventArgs e)
         {
             
         }
-
-        private void CaptureScreen()
-        {
-            Graphics g1 = this.CreateGraphics();
-
-            MyImage = new Bitmap(this.ClientRectangle.Width, this.ClientRectangle.Height, g1);
-
-            Graphics g2 = Graphics.FromImage(MyImage);
-
-            IntPtr dc1 = g1.GetHdc();
-
-            IntPtr dc2 = g2.GetHdc();
-
-            BitBlt(dc2, 0, 0, this.ClientRectangle.Width, this.ClientRectangle.Height, dc1, 0, 0, 13369376);
-
-            g1.ReleaseHdc(dc1);
-
-            g2.ReleaseHdc(dc2);
-
-            //MyImage.Save(@"c:\PrintPage.jpg", ImageFormat.Jpeg);
-        }
-
+        
         private void btnPrintOrder_Click(object sender, EventArgs e)
         {
             if (btnSave.Enabled)
             {
-                if (saveData())
+                PrintDialog pd = new PrintDialog();
+                pd.PrinterSettings = new PrinterSettings();
+                if (DialogResult.OK == pd.ShowDialog(this))
                 {
-                    printOrder();
-                };
-            }
-            
-            
-            //CaptureScreen();
-            //using (var dlg = new CoolPrintPreviewDialog())
-            //{
-            //    dlg.Document = this.printDoc;
-            //    dlg.ShowDialog(this);
-            //}
-           
-            
-        }
-
-        public void StartPrint(Stream streamToPrint, string streamType)
-        {
-
-            this.printDoc.PrintPage += new PrintPageEventHandler(printDoc_PrintPage);
-
-            this.streamToPrint = streamToPrint;
-
-            this.streamType = streamType;
-
-            System.Windows.Forms.PrintDialog PrintDialog1 = new PrintDialog();
-
-            PrintDialog1.AllowSomePages = true;
-
-            PrintDialog1.ShowHelp = true;
-
-            PrintDialog1.Document = printDoc;
-
-            DialogResult result = PrintDialog1.ShowDialog();
-
-            if (result == DialogResult.OK)
-            {
-
-                printDoc.Print();
-
-                //docToPrint.Print();
-
+                    if (saveData())
+                    {
+                        printOrder();
+                        printForStock();
+                        // Print the file to the printer.
+                        RawPrinterHelper.SendFileToPrinter(pd.PrinterSettings.PrinterName, AppDomain.CurrentDomain.BaseDirectory + @"\Temp\Stock.doc");
+                        RawPrinterHelper.SendFileToPrinter(pd.PrinterSettings.PrinterName, AppDomain.CurrentDomain.BaseDirectory + @"\Temp\Order.doc");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Hệ thống xảy ra lỗi, vui lòng thử lại sau !");
+                    }
+                }
             }
         }
-
-        private void printDoc_PrintPage(object sender, PrintPageEventArgs e)
-        {
-            //System.Drawing.Image image = System.Drawing.Image.FromStream(this.streamToPrint);
-            //;
-            //int x = e.MarginBounds.X;
-
-            //int y = e.MarginBounds.Y;
-
-            //int width = image.Width;
-
-            //int height = image.Height;
-
-            //if ((width / e.MarginBounds.Width) > (height / e.MarginBounds.Height))
-            //{
-
-            //    width = e.MarginBounds.Width;
-
-            //    height = image.Height * e.MarginBounds.Width / image.Width;
-
-            //}
-
-            //else
-            //{
-
-            //    height = e.MarginBounds.Height;
-
-            //    width = image.Width * e.MarginBounds.Height / image.Height;
-
-            //}
-
-            //System.Drawing.Rectangle destRect = new System.Drawing.Rectangle(x, y, width, height);
-
-            //e.Graphics.DrawImage(image, destRect, 0, 0, image.Width, image.Height, System.Drawing.GraphicsUnit.Pixel);
-            e.Graphics.DrawImage(MyImage, 0, 0);
-            MyImage.Save(@"c:\PrintPage.jpg", ImageFormat.Jpeg);
-        }
-
-        private void btnPrintXK_Click(object sender, EventArgs e)
-        {
-            printForStock();
-        }
-
+        
         private void printForStock()
         {
             object oMissing = System.Reflection.Missing.Value;
@@ -818,9 +707,12 @@ namespace BaoHien.UI
             Microsoft.Office.Interop.Word._Application oWord;
             Word._Document oDoc;
             oWord = new Word.Application();
-            oWord.Visible = true;
+            oWord.Visible = false;
             oDoc = oWord.Documents.Add(ref oMissing, ref oMissing,
                 ref oMissing, ref oMissing);
+
+            #region Format
+
             //Insert a paragraph at the beginning of the document.
             Word.Paragraph oPara1;
             oPara1 = oDoc.Content.Paragraphs.Add(ref oMissing);
@@ -1067,7 +959,11 @@ namespace BaoHien.UI
             oPara5.Format.SpaceAfter = 1;    //24 pt spacing after paragraph.
             oPara5.Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
 
-            oDoc.PrintPreview();
+            #endregion
+
+            oDoc.SaveAs2(AppDomain.CurrentDomain.BaseDirectory + @"\Temp\Stock.doc");
+
+            oWord.Quit();
         }
 
         private void printOrder()
@@ -1093,10 +989,12 @@ namespace BaoHien.UI
             Microsoft.Office.Interop.Word._Application oWord;
             Word._Document oDoc;
             oWord = new Word.Application();
-            oWord.Visible = true;
+            oWord.Visible = false;
             oDoc = oWord.Documents.Add(ref oMissing, ref oMissing,
                 ref oMissing, ref oMissing);
-            
+
+            #region Format
+
             Word.Table oTableForHeader;
             Word.Range ForHeader = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
             oTableForHeader = oDoc.Tables.Add(ForHeader, 4, 4, ref oMissing, ref oMissing);
@@ -1413,16 +1311,13 @@ namespace BaoHien.UI
             oPara5.Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
             //oPara5.Range.InsertParagraphAfter();
 
-            oDoc.PrintPreview();
-            //oDoc.Close(ref oMissing, ref oMissing, ref oMissing);
+            #endregion
+
+            oDoc.SaveAs2(AppDomain.CurrentDomain.BaseDirectory + @"\Temp\Order.doc");
+
+            oWord.Quit();
         }
-
-        private void InsertLine()
-        {
-            
-
-        }
-
+        
         private void btnCancel_Click(object sender, EventArgs e)
         {
             this.Close();

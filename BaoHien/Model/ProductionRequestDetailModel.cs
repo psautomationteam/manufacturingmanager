@@ -18,12 +18,20 @@ namespace BaoHien.Model
         int attributeId;
         int numberUnit;
         double price;
+        double commission;
 
         public double Price
         {
             get { return price; }
             set { price = value; }
         }
+
+        public double Commission
+        {
+            get { return commission; }
+            set { commission = value; }
+        }
+
         double tax;
 
         public double Tax
