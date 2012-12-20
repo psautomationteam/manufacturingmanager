@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="BaoHienCompany" Class="BaoHienDBDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="AppSettings" ConnectionString="Data Source=bryanpham-pc\sqlexpress;Initial Catalog=BaoHienCompany;Integrated Security=True;Pooling=False" SettingsObjectName="DAL.Properties.Settings" SettingsPropertyName="BaoHienCompanyConnectionString" Provider="System.Data.SqlClient" />
+  <Connection Mode="AppSettings" ConnectionString="Data Source=NTKHA;Initial Catalog=BaoHienCompany;Integrated Security=True" SettingsObjectName="DAL.Properties.Settings" SettingsPropertyName="BaoHienCompanyConnectionString2" Provider="System.Data.SqlClient" />
   <Table Name="dbo.BaseAttribute" Member="BaseAttributes">
     <Type Name="BaseAttribute">
       <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -7,10 +7,10 @@
       <Column Name="Description" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
       <Column Name="AttributeCode" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
       <Association Name="BaseAttribute_MaterialInStock" Member="MaterialInStocks" ThisKey="Id" OtherKey="AttributeId" Type="MaterialInStock" />
-      <Association Name="BaseAttribute_OrderDetail" Member="OrderDetails" ThisKey="Id" OtherKey="AttributeId" Type="OrderDetail" />
       <Association Name="BaseAttribute_ProductAttribute" Member="ProductAttributes" ThisKey="Id" OtherKey="AttributeId" Type="ProductAttribute" />
       <Association Name="BaseAttribute_ProductInStock" Member="ProductInStocks" ThisKey="Id" OtherKey="AttributeId" Type="ProductInStock" />
       <Association Name="BaseAttribute_ProductionRequestDetail" Member="ProductionRequestDetails" ThisKey="Id" OtherKey="AttributeId" Type="ProductionRequestDetail" />
+      <Association Name="BaseAttribute_OrderDetail" Member="OrderDetails" ThisKey="Id" OtherKey="AttributeId" Type="OrderDetail" />
     </Type>
   </Table>
   <Table Name="dbo.SystemUser" Member="SystemUsers">
@@ -153,21 +153,6 @@
       <Association Name="SystemUser_Order" Member="SystemUser" ThisKey="CreateBy" OtherKey="Id" Type="SystemUser" IsForeignKey="true" />
     </Type>
   </Table>
-  <Table Name="dbo.OrderDetail" Member="OrderDetails">
-    <Type Name="OrderDetail">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="ProductId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="NumberUnit" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="Price" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
-      <Column Name="Cost" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
-      <Column Name="AttributeId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="Note" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="OrderId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Association Name="BaseAttribute_OrderDetail" Member="BaseAttribute" ThisKey="AttributeId" OtherKey="Id" Type="BaseAttribute" IsForeignKey="true" />
-      <Association Name="Order_OrderDetail" Member="Order" ThisKey="OrderId" OtherKey="Id" Type="Order" IsForeignKey="true" />
-      <Association Name="Product_OrderDetail" Member="Product" ThisKey="ProductId" OtherKey="Id" Type="Product" IsForeignKey="true" />
-    </Type>
-  </Table>
   <Table Name="dbo.Price" Member="Prices">
     <Type Name="Price">
       <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
@@ -186,10 +171,10 @@
       <Column Name="Status" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
       <Column Name="Direction" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
       <Association Name="Product_MaterialInStock" Member="MaterialInStocks" ThisKey="Id" OtherKey="ProductId" Type="MaterialInStock" />
-      <Association Name="Product_OrderDetail" Member="OrderDetails" ThisKey="Id" OtherKey="ProductId" Type="OrderDetail" />
       <Association Name="Product_ProductAttribute" Member="ProductAttributes" ThisKey="Id" OtherKey="Id" Type="ProductAttribute" />
       <Association Name="Product_ProductInStock" Member="ProductInStock" ThisKey="Id" OtherKey="Id" Type="ProductInStock" Cardinality="One" />
       <Association Name="Product_ProductionRequestDetail" Member="ProductionRequestDetails" ThisKey="Id" OtherKey="ProductId" Type="ProductionRequestDetail" />
+      <Association Name="Product_OrderDetail" Member="OrderDetails" ThisKey="Id" OtherKey="ProductId" Type="OrderDetail" />
       <Association Name="MeasurementUnit_Product" Member="MeasurementUnit" ThisKey="BaseUnit" OtherKey="Id" Type="MeasurementUnit" IsForeignKey="true" />
       <Association Name="ProductType_Product" Member="ProductType1" ThisKey="ProductType" OtherKey="Id" Type="ProductType" IsForeignKey="true" />
     </Type>
@@ -252,6 +237,22 @@
       <Column Name="TypeCode" Type="System.String" DbType="VarChar(25) NOT NULL" CanBeNull="false" />
       <Column Name="Status" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
       <Association Name="ProductType_Product" Member="Products" ThisKey="Id" OtherKey="ProductType" Type="Product" />
+    </Type>
+  </Table>
+  <Table Name="dbo.OrderDetail" Member="OrderDetails">
+    <Type Name="OrderDetail">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="ProductId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="NumberUnit" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Price" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="Cost" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="AttributeId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Note" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="OrderId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Commission" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Association Name="BaseAttribute_OrderDetail" Member="BaseAttribute" ThisKey="AttributeId" OtherKey="Id" Type="BaseAttribute" IsForeignKey="true" />
+      <Association Name="Order_OrderDetail" Member="Order" ThisKey="OrderId" OtherKey="Id" Type="Order" IsForeignKey="true" />
+      <Association Name="Product_OrderDetail" Member="Product" ThisKey="ProductId" OtherKey="Id" Type="Product" IsForeignKey="true" />
     </Type>
   </Table>
   <Function Name="dbo.GenerateRandomString" Method="GenerateRandomString">

@@ -66,6 +66,7 @@
     <Compile Include="Common\BHConstant.cs" />
     <Compile Include="Common\Global.cs" />
     <Compile Include="Common\RandomGeneration.cs" />
+    <Compile Include="Common\RawPrinter.cs" />
     <Compile Include="Model\BillSearchCriteria.cs" />
     <Compile Include="Model\ArrearReportModel.cs" />
     <Compile Include="Model\EntranceStockReport.cs" />

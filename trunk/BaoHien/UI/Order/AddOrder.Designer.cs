@@ -53,9 +53,7 @@ namespace BaoHien.UI
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
             this.btnPrintOrder = new System.Windows.Forms.Button();
-            this.btnPrintXK = new System.Windows.Forms.Button();
             this.validator1 = new Itboy.Components.Validator(this.components);
-            this.printDoc = new System.Drawing.Printing.PrintDocument();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgwOrderDetails)).BeginInit();
@@ -232,7 +230,7 @@ namespace BaoHien.UI
             // 
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.Location = new System.Drawing.Point(373, 495);
+            this.label10.Location = new System.Drawing.Point(400, 497);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(210, 14);
             this.label10.TabIndex = 3;
@@ -242,7 +240,7 @@ namespace BaoHien.UI
             // 
             this.label11.AutoSize = true;
             this.label11.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label11.Location = new System.Drawing.Point(380, 519);
+            this.label11.Location = new System.Drawing.Point(400, 519);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(201, 14);
             this.label11.TabIndex = 4;
@@ -253,7 +251,7 @@ namespace BaoHien.UI
             this.lblSubTotal.AutoSize = true;
             this.lblSubTotal.Font = new System.Drawing.Font("Arial", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblSubTotal.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
-            this.lblSubTotal.Location = new System.Drawing.Point(596, 493);
+            this.lblSubTotal.Location = new System.Drawing.Point(654, 495);
             this.lblSubTotal.Name = "lblSubTotal";
             this.lblSubTotal.Size = new System.Drawing.Size(49, 16);
             this.lblSubTotal.TabIndex = 5;
@@ -264,7 +262,7 @@ namespace BaoHien.UI
             this.lblGrantTotal.AutoSize = true;
             this.lblGrantTotal.Font = new System.Drawing.Font("Arial", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblGrantTotal.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
-            this.lblGrantTotal.Location = new System.Drawing.Point(596, 514);
+            this.lblGrantTotal.Location = new System.Drawing.Point(654, 517);
             this.lblGrantTotal.Name = "lblGrantTotal";
             this.lblGrantTotal.Size = new System.Drawing.Size(49, 16);
             this.lblGrantTotal.TabIndex = 6;
@@ -273,7 +271,7 @@ namespace BaoHien.UI
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(361, 541);
+            this.btnCancel.Location = new System.Drawing.Point(476, 538);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 5;
@@ -293,31 +291,17 @@ namespace BaoHien.UI
             // 
             // btnPrintOrder
             // 
-            this.btnPrintOrder.Location = new System.Drawing.Point(455, 540);
+            this.btnPrintOrder.Location = new System.Drawing.Point(557, 538);
             this.btnPrintOrder.Name = "btnPrintOrder";
             this.btnPrintOrder.Size = new System.Drawing.Size(94, 23);
             this.btnPrintOrder.TabIndex = 4;
-            this.btnPrintOrder.Text = "In phiếu BH";
+            this.btnPrintOrder.Text = "Xuất phiếu";
             this.btnPrintOrder.UseVisualStyleBackColor = true;
             this.btnPrintOrder.Click += new System.EventHandler(this.btnPrintOrder_Click);
-            // 
-            // btnPrintXK
-            // 
-            this.btnPrintXK.Location = new System.Drawing.Point(565, 540);
-            this.btnPrintXK.Name = "btnPrintXK";
-            this.btnPrintXK.Size = new System.Drawing.Size(75, 23);
-            this.btnPrintXK.TabIndex = 3;
-            this.btnPrintXK.Text = "In phiễu XK";
-            this.btnPrintXK.UseVisualStyleBackColor = true;
-            this.btnPrintXK.Click += new System.EventHandler(this.btnPrintXK_Click);
             // 
             // validator1
             // 
             this.validator1.Form = this;
-            // 
-            // printDoc
-            // 
-            this.printDoc.PrintPage += new System.Drawing.Printing.PrintPageEventHandler(this.printDoc_PrintPage);
             // 
             // AddOrder
             // 
@@ -326,7 +310,6 @@ namespace BaoHien.UI
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(740, 573);
-            this.Controls.Add(this.btnPrintXK);
             this.Controls.Add(this.btnPrintOrder);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.btnCancel);
@@ -373,9 +356,7 @@ namespace BaoHien.UI
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.Button btnPrintOrder;
-        private System.Windows.Forms.Button btnPrintXK;
         private Itboy.Components.Validator validator1;
-        private System.Drawing.Printing.PrintDocument printDoc;
         private JRINCCustomControls.currencyTextBox txtDiscount;
         private JRINCCustomControls.currencyTextBox txtVAT;
     }
