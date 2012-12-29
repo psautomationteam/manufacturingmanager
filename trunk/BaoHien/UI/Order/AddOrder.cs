@@ -22,10 +22,10 @@ using System.Drawing.Printing;
 using System.IO;
 using CoolPrintPreview;
 using System.Reflection;
-using Word = Microsoft.Office.Interop.Word;
 using BaoHien.Services.ProductInStocks;
-using Microsoft.Office.Interop.Word;
 using System.Globalization;
+using PDF = iTextSharp.text;
+using iTextSharp.text.pdf;
 
 namespace BaoHien.UI
 {
@@ -566,9 +566,9 @@ namespace BaoHien.UI
                 {
                     if (dgwOrderDetails.Rows[i].Cells[2].Value != null && dgwOrderDetails.Rows[i].Cells[3].Value != null)
                     {
-                        dgwOrderDetails.Rows[i].Cells[4].Value = (int)dgwOrderDetails.Rows[i].Cells[2].Value * (double)dgwOrderDetails.Rows[i].Cells[3].Value;
+                        dgwOrderDetails.Rows[i].Cells[5].Value = (int)dgwOrderDetails.Rows[i].Cells[2].Value * (double)dgwOrderDetails.Rows[i].Cells[3].Value;
                         hasValue = true;
-                        totalNoTax += (double)dgwOrderDetails.Rows[i].Cells[4].Value;
+                        totalNoTax += (double)dgwOrderDetails.Rows[i].Cells[5].Value;
                     }
                 }
             }
@@ -682,640 +682,443 @@ namespace BaoHien.UI
                 pd.PrinterSettings = new PrinterSettings();
                 if (DialogResult.OK == pd.ShowDialog(this))
                 {
-                    if (saveData())
-                    {
-                        printOrder();
-                        printForStock();
-                        // Print the file to the printer.
-                        RawPrinterHelper.SendFileToPrinter(pd.PrinterSettings.PrinterName, AppDomain.CurrentDomain.BaseDirectory + @"\Temp\Stock.doc");
-                        RawPrinterHelper.SendFileToPrinter(pd.PrinterSettings.PrinterName, AppDomain.CurrentDomain.BaseDirectory + @"\Temp\Order.doc");
-                    }
-                    else
-                    {
-                        MessageBox.Show("Hệ thống xảy ra lỗi, vui lòng thử lại sau !");
-                    }
+                    this.Cursor = Cursors.AppStarting;
+                    printForStock();
+                    this.Cursor = Cursors.Default;
+                    //if (saveData())
+                    //{
+                    //    printOrder();
+                    //    printForStock();
+                    //    // Print the file to the printer.
+                    //    RawPrinterHelper.SendFileToPrinter(pd.PrinterSettings.PrinterName, AppDomain.CurrentDomain.BaseDirectory + @"\Temp\Stock.doc");
+                    //    RawPrinterHelper.SendFileToPrinter(pd.PrinterSettings.PrinterName, AppDomain.CurrentDomain.BaseDirectory + @"\Temp\Order.doc");
+                    //}
+                    //else
+                    //{
+                    //    MessageBox.Show("Hệ thống xảy ra lỗi, vui lòng thử lại sau !");
+                    //}
                 }
             }
         }
         
         private void printForStock()
         {
-            object oMissing = System.Reflection.Missing.Value;
-            object oEndOfDoc = "\\endofdoc"; /* \endofdoc is a predefined bookmark */
+            Global.checkDirSaveFile();
+            var doc = new PDF.Document();
+            PdfWriter.GetInstance(doc, new FileStream(BHConstant.SAVE_IN_DIRECTORY + @"\XKho.pdf", FileMode.Create));
+            doc.Open();
 
-            //Start Word and create a new document.
-            Microsoft.Office.Interop.Word._Application oWord;
-            Word._Document oDoc;
-            oWord = new Word.Application();
-            oWord.Visible = false;
-            oDoc = oWord.Documents.Add(ref oMissing, ref oMissing,
-                ref oMissing, ref oMissing);
+            doc.Add(FormatConfig.ParaHeader("PHIẾU XUẤT KHO"));
+            doc.Add(FormatConfig.ParaRightBelowHeader("Mã số phiếu : BH1025"));
+            doc.Add(FormatConfig.ParaRightBelowHeader("Ngày xuất : " + DateTime.Now.ToString("dd/mm/yyyy")));
 
-            #region Format
+            doc.Add(FormatConfig.ParaCommonInfo("Tên khách hàng : ", getCustomerName()));
+            doc.Add(FormatConfig.ParaCommonInfo("Địa chỉ : ", getCustomerAddress()));
+            doc.Add(FormatConfig.ParaCommonInfo("Điện thoại : ", getCustomerPhone()));
 
-            //Insert a paragraph at the beginning of the document.
-            Word.Paragraph oPara1;
-            oPara1 = oDoc.Content.Paragraphs.Add(ref oMissing);
-            oPara1.Range.Text = "PHIẾU XUẤT KHO";
-            oPara1.Range.Font.Bold = 1;
-            oPara1.Range.Font.Size = 30;
-            oPara1.Range.Font.Name = "Times New Roman";
-            oPara1.Format.SpaceAfter = 1;    //24 pt spacing after paragraph.
-            oPara1.Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
-            Word.Table oTableForHeader2;
-            Word.Range ForHeader2 = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
-            oTableForHeader2 = oDoc.Tables.Add(ForHeader2, 1, 1, ref oMissing, ref oMissing);
-            oTableForHeader2.Range.ParagraphFormat.SpaceAfter = 1;
-            oTableForHeader2.Range.Font.Size = 8;
-            oTableForHeader2.Range.Font.Name = "Times New Roman";
+            PDF.pdf.PdfPTable table = FormatConfig.Table(4, new float[] { 1f, 4f, 1f, 4f });
+            table.AddCell(FormatConfig.TableCellHeader("STT"));
+            table.AddCell(FormatConfig.TableCellHeader("Tên hàng"));
+            table.AddCell(FormatConfig.TableCellHeader("Số lượng"));
+            table.AddCell(FormatConfig.TableCellHeader("Ghi chú"));
 
-            Word.Paragraph oPara6;
-            oPara6 = oDoc.Content.Paragraphs.Add(ref oMissing);
-            oPara6.Range.Text = "(SẼ BỔ XUNG HÓA ĐƠN TÀI CHÍNH VÀ THU THÊM THUẾ GTGT 10% SAU)";
-            oPara6.Range.Font.Bold = 0;
-            oPara6.Range.Font.Size = 14;
-            oPara6.Range.Font.Name = "Times New Roman";
-            oPara6.Format.SpaceAfter = 24;    //24 pt spacing after paragraph.
-            oPara6.Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
-            oPara6.Range.Font.Italic = 1;
-
-
-            //Word.Paragraph oPara8;
-            //oPara8 = oDoc.Content.Paragraphs.Add(ref oMissing);
-            //oPara8.Range.Text = "";
-            //oPara8.Range.Font.Bold = 0;
-            //oPara8.Range.Font.Size = 8;
-            //oPara8.Range.Font.Name = "Times New Roman";
-            //oPara8.Format.SpaceAfter = 1;    //24 pt spacing after paragraph.
-            //oPara8.Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
-            //oPara8.Range.Font.Italic = 1;
-
-            Word.Table oTableForCustomerInfo;
-            Word.Range ForCustomerInfo = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
-            oTableForCustomerInfo = oDoc.Tables.Add(ForCustomerInfo, 4, 4, ref oMissing, ref oMissing);
-            oTableForCustomerInfo.Range.ParagraphFormat.SpaceAfter = 1;
-            oTableForCustomerInfo.Range.Font.Name = "Times New Roman";
-            oTableForCustomerInfo.Range.Font.Size = 13;
-            
-            oTableForCustomerInfo.Cell(1, 1).Range.Text = "Khách hàng:";
-            oTableForCustomerInfo.Cell(1, 1).Range.Bold = 1;
-            oTableForCustomerInfo.Cell(1, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
-
-            if (cbxCustomer.SelectedValue != null)
+            for (int r = 1; r <= dgwOrderDetails.RowCount; r++)
             {
-                oTableForCustomerInfo.Cell(1, 2).Width = 400;
-                oTableForCustomerInfo.Cell(1, 2).Range.Text = customers.Where(cus => cus.Id == (int)cbxCustomer.SelectedValue).FirstOrDefault().CustomerName;
-                oTableForCustomerInfo.Cell(1, 2).Range.Bold = 0;
-                oTableForCustomerInfo.Cell(1, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
-            }
-
-            
-            oTableForCustomerInfo.Cell(2, 1).Range.Text = "Địa chỉ:";
-            oTableForCustomerInfo.Cell(2, 1).Range.Bold = 1;
-            oTableForCustomerInfo.Cell(2, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
-
-            if (cbxCustomer.SelectedValue != null)
-            {
-                oTableForCustomerInfo.Cell(2, 2).Width = 400;
-                oTableForCustomerInfo.Cell(2, 2).Range.Text = customers.Where(cus => cus.Id == (int)cbxCustomer.SelectedValue).FirstOrDefault().Address;
-                oTableForCustomerInfo.Cell(2, 2).Range.Bold = 0;
-                oTableForCustomerInfo.Cell(2, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
-            }
-
-
-            oTableForCustomerInfo.Cell(3, 1).Range.Text = "Lý do xuất kho:";
-            oTableForCustomerInfo.Cell(3, 1).Range.Bold = 1;
-            oTableForCustomerInfo.Cell(3, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
-
-            oTableForCustomerInfo.Cell(3, 2).Width = 400;
-            oTableForCustomerInfo.Cell(3, 2).Range.Text = "";
-            oTableForCustomerInfo.Cell(3, 2).Range.Bold = 0;
-            oTableForCustomerInfo.Cell(3, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
-
-            oTableForCustomerInfo.Cell(4, 1).Range.Text = "Xuất tại kho:";
-            oTableForCustomerInfo.Cell(4, 1).Range.Bold = 1;
-            oTableForCustomerInfo.Cell(4, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
-
-            oTableForCustomerInfo.Cell(4, 2).Width = 400;
-            oTableForCustomerInfo.Cell(4, 2).Range.Text = "";
-            oTableForCustomerInfo.Cell(4, 2).Range.Bold = 0;
-            oTableForCustomerInfo.Cell(4, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
-
-            
-
-            Word.Paragraph oPara2;
-            oPara2 = oDoc.Content.Paragraphs.Add(ref oMissing);
-            oPara2.Range.Font.Name = "Times New Roman";
-            oPara2.Range.Font.Bold = 1;
-            oPara2.Range.Font.Size = 8;
-            oPara2.Format.SpaceAfter = 1;    //24 pt spacing after paragraph.
-            oPara2.Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
-
-
-            //Insert a table, fill it with data, and make the first row
-            //bold and italic.
-            Word.Table oTable;
-            Word.Range wrdRng = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
-            oTable = oDoc.Tables.Add(wrdRng, dgwOrderDetails.RowCount + 1, 4, ref oMissing, ref oMissing);
-            oTable.Range.ParagraphFormat.SpaceAfter = 6;
-            oTable.Borders.Enable = 1;
-            oTable.Range.Font.Size = 12;
-            oTable.Range.Font.Bold = 1;
-            oTable.Range.Font.Name = "Times New Roman";
-            int r, c;
-
-
-            for (r = 1; r <= dgwOrderDetails.RowCount; r++)
-                for (c = 1; c <= dgwOrderDetails.ColumnCount; c++)
+                for (int c = 1; c <= dgwOrderDetails.ColumnCount; c++)
                 {
-                    if (r == 1)
+                    try
                     {
-                        if (c == 1)
-                            oTable.Cell(r, c).Range.Text = "STT";
-                        else if (c == 2)
-                            oTable.Cell(r, c).Range.Text = "Tên hàng";
-                        else if (c == 3)
-                            oTable.Cell(r, c).Range.Text = "Quy cách";
-                        else if (c == 4)
-                            oTable.Cell(r, c).Range.Text = "Số lượng";
-                        //else if (c == 5)
-                        //    oTable.Cell(r, c).Range.Text = "Ghi chú";
-                        
+                        switch (c)
+                        {
+                            case 1:
+                                table.AddCell(FormatConfig.TableCellBody(r.ToString(), PdfPCell.ALIGN_CENTER));
+                                break;
+                            case 2:
+                                table.AddCell(FormatConfig.TableCellBody(
+                                    getProductName(r, c),
+                                    PdfPCell.ALIGN_LEFT));
+                                break;
+                            case 4:
+                                table.AddCell(FormatConfig.TableCellBody(
+                                    ((int)dgwOrderDetails.Rows[r - 2].Cells[c - 2].Value).ToString(),
+                                    PdfPCell.ALIGN_CENTER));
+                                break;
+                            case 5:
+                                table.AddCell(FormatConfig.TableCellBody(
+                                    (string)dgwOrderDetails.Rows[r - 2].Cells[dgwOrderDetails.ColumnCount - 1].Value,
+                                    PdfPCell.ALIGN_RIGHT));
+                                break;
+                            default:
+                                break;
+                        }
                     }
-                    else
-                    {
-                        if (c == 1)
-                        {
-                            oTable.Cell(r, c).Range.Text = (r - 1).ToString();
-                        }
-                        else if (c == 2)
-                        {
-                            oTable.Cell(r, c).Range.Text = products.ToList().Where(p => p.Id == orderDetails[r - 2].ProductId).FirstOrDefault().ProductName;
-                        }
-                        else if (c == 3)
-                        {
-                            oTable.Cell(r, c).Range.Text = baseAttributesAtRow.ToList().Where(a => a.Id == (int)dgwOrderDetails.Rows[r - 2].Cells[c - 2].Value).FirstOrDefault().AttributeName;
-                        }
-                        else if (c == 4)
-                        {
-                            oTable.Cell(r, c).Range.Text = ((int)dgwOrderDetails.Rows[r - 2].Cells[c - 2].Value).ToString();
-                        }
-                        //else if (c == 5)
-                        //{
-                        //    oTable.Cell(r, c).Range.Text = (string)dgwOrderDetails.Rows[r - 2].Cells[dgwOrderDetails.ColumnCount - 1].Value;
-                        //}
-                        
-
-                    }
-
-
+                    catch { }
                 }
+            }
 
-            oTable.Rows[1].Range.Font.Italic = 1;
-            oTable.Rows[1].Range.Font.Bold = 0;
+            doc.Add(table);
 
+            doc.Add(FormatConfig.ParaCommonInfo("Ghi chú : ", String.Concat(Enumerable.Repeat("...", 96))));
 
-            Word.Paragraph oPara3;
-            oPara3 = oDoc.Content.Paragraphs.Add(ref oMissing);
-            oPara3.Range.Font.Name = "Times New Roman";
-            oPara3.Range.Font.Bold = 1;
-            oPara3.Range.Font.Size = 8;
-            oPara3.Format.SpaceAfter = 1;    //24 pt spacing after paragraph.
-            oPara3.Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+            PDF.pdf.PdfPTable table2 = FormatConfig.Table(3, new float[] { 3.5f, 4f, 2.5f });
+            table2.AddCell(FormatConfig.TableCellHeaderCommon("Thủ trưởng đơn vị", PdfPCell.NO_BORDER));
+            table2.AddCell(FormatConfig.TableCellHeaderCommon("Kế toán", PdfPCell.NO_BORDER));
+            table2.AddCell(FormatConfig.TableCellHeaderCommon("Thủ kho", PdfPCell.NO_BORDER));
+            doc.Add(table2);
 
-            Word.Table oTableForNote;
-            Word.Range wrdRngForNote = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
-            oTableForNote = oDoc.Tables.Add(wrdRngForNote, 2, 2, ref oMissing, ref oMissing);
-            oTableForNote.Range.ParagraphFormat.SpaceAfter = 6;
-            oTableForNote.Borders.Enable = 0;
-            oTableForNote.Range.Font.Size = 12;
-            oTableForNote.Range.Font.Name = "Times New Roman";
-
-            oTableForNote.Cell(1, 1).Width = 50;
-            oTableForNote.Cell(1, 1).Range.Text = "Ghi chú";
-            oTableForNote.Cell(1, 1).Range.Bold = 0;
-            oTableForNote.Cell(1, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
-            oTableForNote.Cell(1, 2).Width = 400;
-            oTableForNote.Cell(1, 2).Range.Text = "..................................................................................................................................................................................................................................................................";
-            oTableForNote.Cell(1, 2).Range.Bold = 0;
-            oTableForNote.Cell(1, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
-
-           
-            //oTableForNote.Cell(2, 2).Width = 400;
-            oTableForNote.Cell(2, 2).Range.Text = "Xuất ngày      tháng      năm        ";
-            oTableForNote.Cell(2, 2).Range.Bold = 0;
-            oTableForNote.Cell(2, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
-
-            oTableForNote.Rows[1].Range.Font.Italic = 1;
-            oTableForNote.Rows[2].Range.Font.Italic = 1;
-
-            
-
-            Word.Paragraph oPara4;
-            oPara4 = oDoc.Content.Paragraphs.Add(ref oMissing);
-            oPara1.Range.Text = "";
-            oPara4.Range.Font.Name = "Times New Roman";
-            oPara4.Range.Font.Bold = 0;
-            oPara4.Range.Font.Size = 8;
-            oPara4.Format.SpaceAfter = 1;    //24 pt spacing after paragraph.
-            oPara4.Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
-            
-
-            Word.Table oTableForFooter;
-            Word.Range wrdRngForFooter = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
-            oTableForFooter = oDoc.Tables.Add(wrdRngForFooter, 1, 4, ref oMissing, ref oMissing);
-            oTableForFooter.Range.ParagraphFormat.SpaceAfter = 6;
-            oTableForFooter.Borders.Enable = 0;
-            oTableForFooter.Range.Font.Size = 12;
-            oTableForFooter.Range.Font.Name = "Times New Roman";
-
-            oTableForFooter.Cell(1, 1).Width = 120;
-            oTableForFooter.Cell(1, 1).Range.Text = "NGƯỜI LẬP PHIẾU\n (Ký,họ tên)";
-            oTableForFooter.Cell(1, 1).Range.Bold = 0;
-            oTableForFooter.Cell(1, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
-
-            oTableForFooter.Cell(1, 2).Width = 110;
-            oTableForFooter.Cell(1, 2).Range.Text = "NGƯỜI NHẬN\n (Ký,họ tên)";
-            oTableForFooter.Cell(1, 2).Range.Bold = 0;
-            oTableForFooter.Cell(1, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
-
-            oTableForFooter.Cell(1, 3).Width = 110;
-            oTableForFooter.Cell(1, 3).Range.Text = "NGƯỜI GIAO\n (Ký,họ tên)";
-            oTableForFooter.Cell(1, 3).Range.Bold = 0;
-            oTableForFooter.Cell(1, 3).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
-
-            oTableForFooter.Cell(1, 4).Width = 150;
-            oTableForFooter.Cell(1, 4).Range.Text = "THỦ TRƯỞNG ĐƠN VỊ\n (Ký,họ tên)";
-            oTableForFooter.Cell(1, 4).Range.Bold = 0;
-            oTableForFooter.Cell(1, 4).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
-
-            oTableForFooter.Rows[1].Range.Font.Italic = 0;
-
-            Word.Paragraph oPara5;
-            oPara5 = oDoc.Content.Paragraphs.Add(ref oMissing);
-            oPara5.Range.Font.Name = "Times New Roman";
-            oPara5.Range.Font.Bold = 1;
-            oPara5.Range.Font.Size = 8;
-            oPara5.Format.SpaceAfter = 1;    //24 pt spacing after paragraph.
-            oPara5.Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
-
-            #endregion
-
-            oDoc.SaveAs2(AppDomain.CurrentDomain.BaseDirectory + @"\Temp\Stock.doc");
-
-            oWord.Quit();
+            doc.Close();
         }
 
         private void printOrder()
         {
-            double totalNoTax = 0.0;
-            for (int i = 0; i < dgwOrderDetails.RowCount; i++)
-            {
-                if (dgwOrderDetails.ColumnCount > 4)
-                {
-                    if (dgwOrderDetails.Rows[i].Cells[2].Value != null && dgwOrderDetails.Rows[i].Cells[3].Value != null)
-                    {
-                        dgwOrderDetails.Rows[i].Cells[4].Value = (int)dgwOrderDetails.Rows[i].Cells[2].Value * (double)dgwOrderDetails.Rows[i].Cells[3].Value;
+            //double totalNoTax = 0.0;
+            //for (int i = 0; i < dgwOrderDetails.RowCount; i++)
+            //{
+            //    if (dgwOrderDetails.ColumnCount > 4)
+            //    {
+            //        if (dgwOrderDetails.Rows[i].Cells[2].Value != null && dgwOrderDetails.Rows[i].Cells[3].Value != null)
+            //        {
+            //            dgwOrderDetails.Rows[i].Cells[4].Value = (int)dgwOrderDetails.Rows[i].Cells[2].Value * (double)dgwOrderDetails.Rows[i].Cells[3].Value;
                         
-                        totalNoTax += (double)dgwOrderDetails.Rows[i].Cells[4].Value;
-                    }
-                }
-            }
+            //            totalNoTax += (double)dgwOrderDetails.Rows[i].Cells[4].Value;
+            //        }
+            //    }
+            //}
 
-            object oMissing = System.Reflection.Missing.Value;
-            object oEndOfDoc = "\\endofdoc"; /* \endofdoc is a predefined bookmark */
+            //object oMissing = System.Reflection.Missing.Value;
+            //object oEndOfDoc = "\\endofdoc"; /* \endofdoc is a predefined bookmark */
 
-            //Start Word and create a new document.
-            Microsoft.Office.Interop.Word._Application oWord;
-            Word._Document oDoc;
-            oWord = new Word.Application();
-            oWord.Visible = false;
-            oDoc = oWord.Documents.Add(ref oMissing, ref oMissing,
-                ref oMissing, ref oMissing);
+            ////Start Word and create a new document.
+            //Microsoft.Office.Interop.Word._Application oWord;
+            //Word._Document oDoc;
+            //oWord = new Word.Application();
+            //oWord.Visible = false;
+            //oDoc = oWord.Documents.Add(ref oMissing, ref oMissing,
+            //    ref oMissing, ref oMissing);
 
-            #region Format
+            //#region Format
 
-            Word.Table oTableForHeader;
-            Word.Range ForHeader = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
-            oTableForHeader = oDoc.Tables.Add(ForHeader, 4, 4, ref oMissing, ref oMissing);
-            oTableForHeader.Range.ParagraphFormat.SpaceAfter = 6;
-            oTableForHeader.Range.Font.Size = 12;
-            oTableForHeader.Range.Font.Name = "Times New Roman";
-            oTableForHeader.Cell(1, 1).Range.Text = BHConstant.COMPANY_NAME;
-            oTableForHeader.Cell(1, 1).Range.Bold = 0;
-            oTableForHeader.Cell(1, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
-            oTableForHeader.Cell(1, 1).Width = 125;
-            oTableForHeader.Cell(1, 2).Width = 175;
+            //Word.Table oTableForHeader;
+            //Word.Range ForHeader = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
+            //oTableForHeader = oDoc.Tables.Add(ForHeader, 4, 4, ref oMissing, ref oMissing);
+            //oTableForHeader.Range.ParagraphFormat.SpaceAfter = 6;
+            //oTableForHeader.Range.Font.Size = 12;
+            //oTableForHeader.Range.Font.Name = "Times New Roman";
+            //oTableForHeader.Cell(1, 1).Range.Text = BHConstant.COMPANY_NAME;
+            //oTableForHeader.Cell(1, 1).Range.Bold = 0;
+            //oTableForHeader.Cell(1, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
+            //oTableForHeader.Cell(1, 1).Width = 125;
+            //oTableForHeader.Cell(1, 2).Width = 175;
 
-            oTableForHeader.Cell(1, 3).Range.Text = "Mã phiếu:";
-            oTableForHeader.Cell(1, 3).Range.Bold = 1;
-            oTableForHeader.Cell(1, 3).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
-            oTableForHeader.Cell(1, 4).Range.Text = txtOrderCode.Text != null ? txtOrderCode.Text : "không tồn tại";
-            oTableForHeader.Cell(1, 4).Range.Bold = 0;
-            oTableForHeader.Cell(1, 4).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
+            //oTableForHeader.Cell(1, 3).Range.Text = "Mã phiếu:";
+            //oTableForHeader.Cell(1, 3).Range.Bold = 1;
+            //oTableForHeader.Cell(1, 3).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
+            //oTableForHeader.Cell(1, 4).Range.Text = txtOrderCode.Text != null ? txtOrderCode.Text : "không tồn tại";
+            //oTableForHeader.Cell(1, 4).Range.Bold = 0;
+            //oTableForHeader.Cell(1, 4).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
 
-            oTableForHeader.Cell(2, 1).Width = 75;
-            oTableForHeader.Cell(2, 1).Range.Text = "Đ/C:";
-            oTableForHeader.Cell(2, 1).Range.Bold = 0;
-            oTableForHeader.Cell(2, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
+            //oTableForHeader.Cell(2, 1).Width = 75;
+            //oTableForHeader.Cell(2, 1).Range.Text = "Đ/C:";
+            //oTableForHeader.Cell(2, 1).Range.Bold = 0;
+            //oTableForHeader.Cell(2, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
 
-            oTableForHeader.Cell(2, 2).Width = 225;
-            oTableForHeader.Cell(2, 2).Range.Text = BHConstant.COMPANY_ADDRESS;
-            oTableForHeader.Cell(2, 2).Range.Bold = 0;
-            oTableForHeader.Cell(2, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
+            //oTableForHeader.Cell(2, 2).Width = 225;
+            //oTableForHeader.Cell(2, 2).Range.Text = BHConstant.COMPANY_ADDRESS;
+            //oTableForHeader.Cell(2, 2).Range.Bold = 0;
+            //oTableForHeader.Cell(2, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
 
-            oTableForHeader.Cell(2, 3).Range.Text = "Ngày lập:";
-            oTableForHeader.Cell(2, 3).Range.Bold = 1;
-            oTableForHeader.Cell(2, 3).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
+            //oTableForHeader.Cell(2, 3).Range.Text = "Ngày lập:";
+            //oTableForHeader.Cell(2, 3).Range.Bold = 1;
+            //oTableForHeader.Cell(2, 3).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
 
-            oTableForHeader.Cell(2, 4).Range.Text = txtCreatedDate.Text;
-            oTableForHeader.Cell(2, 4).Range.Bold = 0;
-            oTableForHeader.Cell(2, 4).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
+            //oTableForHeader.Cell(2, 4).Range.Text = txtCreatedDate.Text;
+            //oTableForHeader.Cell(2, 4).Range.Bold = 0;
+            //oTableForHeader.Cell(2, 4).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
 
-            oTableForHeader.Cell(3, 1).Width = 75;
-            oTableForHeader.Cell(3, 1).Range.Text = "Điện thoại:";
-            oTableForHeader.Cell(3, 1).Range.Bold = 0;
-            oTableForHeader.Cell(3, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
+            //oTableForHeader.Cell(3, 1).Width = 75;
+            //oTableForHeader.Cell(3, 1).Range.Text = "Điện thoại:";
+            //oTableForHeader.Cell(3, 1).Range.Bold = 0;
+            //oTableForHeader.Cell(3, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
 
-            oTableForHeader.Cell(3, 2).Width = 225;
-            oTableForHeader.Cell(3, 2).Range.Text = BHConstant.COMPANY_PHONE;
-            oTableForHeader.Cell(3, 2).Range.Bold = 0;
-            oTableForHeader.Cell(3, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
+            //oTableForHeader.Cell(3, 2).Width = 225;
+            //oTableForHeader.Cell(3, 2).Range.Text = BHConstant.COMPANY_PHONE;
+            //oTableForHeader.Cell(3, 2).Range.Bold = 0;
+            //oTableForHeader.Cell(3, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
 
-            oTableForHeader.Cell(4, 1).Width = 75;
-            oTableForHeader.Cell(4, 1).Range.Text = "Fax:";
-            oTableForHeader.Cell(4, 1).Range.Bold = 0;
-            oTableForHeader.Cell(4, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
+            //oTableForHeader.Cell(4, 1).Width = 75;
+            //oTableForHeader.Cell(4, 1).Range.Text = "Fax:";
+            //oTableForHeader.Cell(4, 1).Range.Bold = 0;
+            //oTableForHeader.Cell(4, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
 
-            oTableForHeader.Cell(4, 2).Width = 225;
-            oTableForHeader.Cell(4, 2).Range.Text = BHConstant.COMPANY_FAX;
-            oTableForHeader.Cell(4, 2).Range.Bold = 0;
-            oTableForHeader.Cell(4, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
+            //oTableForHeader.Cell(4, 2).Width = 225;
+            //oTableForHeader.Cell(4, 2).Range.Text = BHConstant.COMPANY_FAX;
+            //oTableForHeader.Cell(4, 2).Range.Bold = 0;
+            //oTableForHeader.Cell(4, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
 
 
-            //Insert a paragraph at the beginning of the document.
-            Word.Paragraph oPara1;
-            oPara1 = oDoc.Content.Paragraphs.Add(ref oMissing);
-            oPara1.Range.Text = "PHIẾU BÁN HÀNG";
-            oPara1.Range.Font.Bold = 1;
-            oPara1.Range.Font.Name = "Times New Roman";
-            oPara1.Range.Font.Size = 30;
-            oPara1.Format.SpaceAfter = 1;    //24 pt spacing after paragraph.
-            oPara1.Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
-            oPara1.Range.InsertParagraphAfter();
+            ////Insert a paragraph at the beginning of the document.
+            //Word.Paragraph oPara1;
+            //oPara1 = oDoc.Content.Paragraphs.Add(ref oMissing);
+            //oPara1.Range.Text = "PHIẾU BÁN HÀNG";
+            //oPara1.Range.Font.Bold = 1;
+            //oPara1.Range.Font.Name = "Times New Roman";
+            //oPara1.Range.Font.Size = 30;
+            //oPara1.Format.SpaceAfter = 1;    //24 pt spacing after paragraph.
+            //oPara1.Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+            //oPara1.Range.InsertParagraphAfter();
 
-            Word.Table oTableForCustomerInfo;
-            Word.Range ForCustomerInfo = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
-            oTableForCustomerInfo = oDoc.Tables.Add(ForCustomerInfo, 3, 4, ref oMissing, ref oMissing);
-            oTableForCustomerInfo.Range.ParagraphFormat.SpaceAfter = 1;
-            oTableForCustomerInfo.Range.Font.Name = "Times New Roman";
-            oTableForCustomerInfo.Range.Font.Size = 13;
-            oTableForCustomerInfo.Cell(1, 1).Range.Text = "Khách hàng:";
-            oTableForCustomerInfo.Cell(1, 1).Range.Bold = 1;
-            oTableForCustomerInfo.Cell(1, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
+            //Word.Table oTableForCustomerInfo;
+            //Word.Range ForCustomerInfo = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
+            //oTableForCustomerInfo = oDoc.Tables.Add(ForCustomerInfo, 3, 4, ref oMissing, ref oMissing);
+            //oTableForCustomerInfo.Range.ParagraphFormat.SpaceAfter = 1;
+            //oTableForCustomerInfo.Range.Font.Name = "Times New Roman";
+            //oTableForCustomerInfo.Range.Font.Size = 13;
+            //oTableForCustomerInfo.Cell(1, 1).Range.Text = "Khách hàng:";
+            //oTableForCustomerInfo.Cell(1, 1).Range.Bold = 1;
+            //oTableForCustomerInfo.Cell(1, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
 
-            if (cbxCustomer.SelectedValue != null)
-            {
-                oTableForCustomerInfo.Cell(1, 2).Width = 400;
-                oTableForCustomerInfo.Cell(1, 2).Range.Text = customers.Where(cus => cus.Id == (int)cbxCustomer.SelectedValue).FirstOrDefault().CustomerName;
-                oTableForCustomerInfo.Cell(1, 2).Range.Bold = 0;
-                oTableForCustomerInfo.Cell(1, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
-            }
+            //if (cbxCustomer.SelectedValue != null)
+            //{
+            //    oTableForCustomerInfo.Cell(1, 2).Width = 400;
+            //    oTableForCustomerInfo.Cell(1, 2).Range.Text = customers.Where(cus => cus.Id == (int)cbxCustomer.SelectedValue).FirstOrDefault().CustomerName;
+            //    oTableForCustomerInfo.Cell(1, 2).Range.Bold = 0;
+            //    oTableForCustomerInfo.Cell(1, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
+            //}
 
-            oTableForCustomerInfo.Cell(2, 1).Range.Text = "Địa chỉ:";
-            oTableForCustomerInfo.Cell(2, 1).Range.Bold = 1;
-            oTableForCustomerInfo.Cell(2, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
+            //oTableForCustomerInfo.Cell(2, 1).Range.Text = "Địa chỉ:";
+            //oTableForCustomerInfo.Cell(2, 1).Range.Bold = 1;
+            //oTableForCustomerInfo.Cell(2, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
 
-            if (cbxCustomer.SelectedValue != null)
-            {
-                oTableForCustomerInfo.Cell(2, 2).Width = 400;
-                oTableForCustomerInfo.Cell(2, 2).Range.Text = customers.Where(cus => cus.Id == (int)cbxCustomer.SelectedValue).FirstOrDefault().Address;
-                oTableForCustomerInfo.Cell(2, 2).Range.Bold = 0;
-                oTableForCustomerInfo.Cell(2, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
-            }
+            //if (cbxCustomer.SelectedValue != null)
+            //{
+            //    oTableForCustomerInfo.Cell(2, 2).Width = 400;
+            //    oTableForCustomerInfo.Cell(2, 2).Range.Text = customers.Where(cus => cus.Id == (int)cbxCustomer.SelectedValue).FirstOrDefault().Address;
+            //    oTableForCustomerInfo.Cell(2, 2).Range.Bold = 0;
+            //    oTableForCustomerInfo.Cell(2, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
+            //}
 
            
-            oTableForCustomerInfo.Cell(3, 1).Range.Text = "Ghi chú:";
-            oTableForCustomerInfo.Cell(3, 1).Range.Bold = 1;
-            oTableForCustomerInfo.Cell(3, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
+            //oTableForCustomerInfo.Cell(3, 1).Range.Text = "Ghi chú:";
+            //oTableForCustomerInfo.Cell(3, 1).Range.Bold = 1;
+            //oTableForCustomerInfo.Cell(3, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
 
-            oTableForCustomerInfo.Cell(3, 2).Width = 400;
-            oTableForCustomerInfo.Cell(3, 2).Range.Text = txtNote.Text;
-            oTableForCustomerInfo.Cell(3, 2).Range.Bold = 0;
-            oTableForCustomerInfo.Cell(3, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
+            //oTableForCustomerInfo.Cell(3, 2).Width = 400;
+            //oTableForCustomerInfo.Cell(3, 2).Range.Text = txtNote.Text;
+            //oTableForCustomerInfo.Cell(3, 2).Range.Bold = 0;
+            //oTableForCustomerInfo.Cell(3, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
 
-            //Microsoft.Office.Interop.Word.InlineShape line3 = oDoc.Paragraphs.Last.Range.InlineShapes.AddHorizontalLineStandard(ref oMissing);
-            //line3.Height = 1;
-            //line3.HorizontalLineFormat.NoShade = true;
-            //line3.Fill.ForeColor.RGB = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Transparent);
+            ////Microsoft.Office.Interop.Word.InlineShape line3 = oDoc.Paragraphs.Last.Range.InlineShapes.AddHorizontalLineStandard(ref oMissing);
+            ////line3.Height = 1;
+            ////line3.HorizontalLineFormat.NoShade = true;
+            ////line3.Fill.ForeColor.RGB = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Transparent);
 
-            Word.Paragraph oPara2;
-            oPara2 = oDoc.Content.Paragraphs.Add(ref oMissing);
-            oPara2.Range.Font.Name = "Times New Roman";
-            oPara2.Range.Font.Bold = 1;
-            oPara2.Range.Font.Size = 8;
-            oPara2.Format.SpaceAfter = 1;    //24 pt spacing after paragraph.
-            oPara2.Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
-            //oPara2.Range.InsertParagraphAfter();
+            //Word.Paragraph oPara2;
+            //oPara2 = oDoc.Content.Paragraphs.Add(ref oMissing);
+            //oPara2.Range.Font.Name = "Times New Roman";
+            //oPara2.Range.Font.Bold = 1;
+            //oPara2.Range.Font.Size = 8;
+            //oPara2.Format.SpaceAfter = 1;    //24 pt spacing after paragraph.
+            //oPara2.Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+            ////oPara2.Range.InsertParagraphAfter();
 
-            //Insert a table, fill it with data, and make the first row
-            //bold and italic.
-            Word.Table oTable;
-            Word.Range wrdRng = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
-            oTable = oDoc.Tables.Add(wrdRng, dgwOrderDetails.RowCount + 1, 6, ref oMissing, ref oMissing);
-            oTable.Range.ParagraphFormat.SpaceAfter = 1;
-            oTable.Borders.Enable = 1;
-            oTable.Range.Font.Name = "Times New Roman";
-            oTable.Range.Font.Size = 12;
-            oTable.Range.Font.Bold = 1;
-            oTable.Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
-            int r, c;
+            ////Insert a table, fill it with data, and make the first row
+            ////bold and italic.
+            //Word.Table oTable;
+            //Word.Range wrdRng = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
+            //oTable = oDoc.Tables.Add(wrdRng, dgwOrderDetails.RowCount + 1, 6, ref oMissing, ref oMissing);
+            //oTable.Range.ParagraphFormat.SpaceAfter = 1;
+            //oTable.Borders.Enable = 1;
+            //oTable.Range.Font.Name = "Times New Roman";
+            //oTable.Range.Font.Size = 12;
+            //oTable.Range.Font.Bold = 1;
+            //oTable.Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+            //int r, c;
 
 
-            for (r = 1; r <= dgwOrderDetails.RowCount; r++)
-                for (c = 1; c <= dgwOrderDetails.ColumnCount; c++)
-                {
-                    if (r == 1)
-                    {
-                        if(c == 1)
-                            oTable.Cell(r, c).Range.Text = "STT";
-                        else if(c == 2)
-                            oTable.Cell(r, c).Range.Text = "Tên hàng";
-                        else if (c == 3)
-                            oTable.Cell(r, c).Range.Text = "Quy cách";
-                        else if (c == 4)
-                            oTable.Cell(r, c).Range.Text = "Số lượng";
-                        else if (c == 5)
-                            oTable.Cell(r, c).Range.Text = "Giá(VNĐ)";
-                        else if (c == 6)
-                            oTable.Cell(r, c).Range.Text = "Thành tiền(VNĐ)";
-                        //oTable.Cell(r, c).Range.Text = dgwOrderDetails.Columns[c - 1].HeaderText;
-                    }
-                    else
-                    {
-                        if (c == 1)
-                        {
-                            oTable.Cell(r, c).Range.Text = (r - 1).ToString();
-                        }
-                        else if (c == 2)
-                        {
-                            oTable.Cell(r, c).Range.Text = products.ToList().Where(p => p.Id == orderDetails[r - 2].ProductId).FirstOrDefault().ProductName;
-                        }
-                        else if (c == 3)
-                        {
-                            oTable.Cell(r, c).Range.Text = baseAttributesAtRow.ToList().Where(a => a.Id == (int)dgwOrderDetails.Rows[r - 2].Cells[c - 2].Value).FirstOrDefault().AttributeName;
-                        }
-                        else if (c == 4)
-                        {
-                            oTable.Cell(r, c).Range.Text = ((int)dgwOrderDetails.Rows[r - 2].Cells[c - 2].Value).ToString();
-                        }
-                        else if (c == 5)
-                        {
-                            string tmp = ((double)dgwOrderDetails.Rows[r - 2].Cells[c - 2].Value).ToString();
-                            oTable.Cell(r, c).Range.Text = BaoHien.Common.Global.convertToCurrency(tmp);
-                        }
-                        else if (c == 6)
-                        {
-                            string tmp = (((double)dgwOrderDetails.Rows[r - 2].Cells[c - 2].Value)).ToString();
-                            oTable.Cell(r, c).Range.Text = BaoHien.Common.Global.convertToCurrency(tmp);
-                        }
+            //for (r = 1; r <= dgwOrderDetails.RowCount; r++)
+            //    for (c = 1; c <= dgwOrderDetails.ColumnCount; c++)
+            //    {
+            //        if (r == 1)
+            //        {
+            //            if(c == 1)
+            //                oTable.Cell(r, c).Range.Text = "STT";
+            //            else if(c == 2)
+            //                oTable.Cell(r, c).Range.Text = "Tên hàng";
+            //            else if (c == 3)
+            //                oTable.Cell(r, c).Range.Text = "Quy cách";
+            //            else if (c == 4)
+            //                oTable.Cell(r, c).Range.Text = "Số lượng";
+            //            else if (c == 5)
+            //                oTable.Cell(r, c).Range.Text = "Giá(VNĐ)";
+            //            else if (c == 6)
+            //                oTable.Cell(r, c).Range.Text = "Thành tiền(VNĐ)";
+            //            //oTable.Cell(r, c).Range.Text = dgwOrderDetails.Columns[c - 1].HeaderText;
+            //        }
+            //        else
+            //        {
+            //            if (c == 1)
+            //            {
+            //                oTable.Cell(r, c).Range.Text = (r - 1).ToString();
+            //            }
+            //            else if (c == 2)
+            //            {
+            //                oTable.Cell(r, c).Range.Text = products.ToList().Where(p => p.Id == orderDetails[r - 2].ProductId).FirstOrDefault().ProductName;
+            //            }
+            //            else if (c == 3)
+            //            {
+            //                oTable.Cell(r, c).Range.Text = baseAttributesAtRow.ToList().Where(a => a.Id == (int)dgwOrderDetails.Rows[r - 2].Cells[c - 2].Value).FirstOrDefault().AttributeName;
+            //            }
+            //            else if (c == 4)
+            //            {
+            //                oTable.Cell(r, c).Range.Text = ((int)dgwOrderDetails.Rows[r - 2].Cells[c - 2].Value).ToString();
+            //            }
+            //            else if (c == 5)
+            //            {
+            //                string tmp = ((double)dgwOrderDetails.Rows[r - 2].Cells[c - 2].Value).ToString();
+            //                oTable.Cell(r, c).Range.Text = BaoHien.Common.Global.convertToCurrency(tmp);
+            //            }
+            //            else if (c == 6)
+            //            {
+            //                string tmp = (((double)dgwOrderDetails.Rows[r - 2].Cells[c - 2].Value)).ToString();
+            //                oTable.Cell(r, c).Range.Text = BaoHien.Common.Global.convertToCurrency(tmp);
+            //            }
                         
-                    }
+            //        }
 
 
-                }
+            //    }
             
-            oTable.Rows[1].Range.Font.Italic = 1;
-            oTable.Rows[1].Range.Font.Bold = 0;
+            //oTable.Rows[1].Range.Font.Italic = 1;
+            //oTable.Rows[1].Range.Font.Bold = 0;
 
-            Word.Paragraph oPara3;
-            oPara3 = oDoc.Content.Paragraphs.Add(ref oMissing);
-            oPara3.Range.Font.Name = "Times New Roman";
-            oPara3.Range.Font.Bold = 1;
-            oPara3.Range.Font.Size = 8;
-            oPara3.Format.SpaceAfter = 1;    //24 pt spacing after paragraph.
-            oPara3.Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
-            //oPara3.Range.InsertParagraphAfter();
+            //Word.Paragraph oPara3;
+            //oPara3 = oDoc.Content.Paragraphs.Add(ref oMissing);
+            //oPara3.Range.Font.Name = "Times New Roman";
+            //oPara3.Range.Font.Bold = 1;
+            //oPara3.Range.Font.Size = 8;
+            //oPara3.Format.SpaceAfter = 1;    //24 pt spacing after paragraph.
+            //oPara3.Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+            ////oPara3.Range.InsertParagraphAfter();
 
-            Word.Table oTable3;
-            Word.Range wrdRng3 = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
-            oTable3 = oDoc.Tables.Add(wrdRng3, 5, 3, ref oMissing, ref oMissing);
-            oTable3.Range.ParagraphFormat.SpaceAfter = 1;
-            oTable3.Borders.Enable = 0;
-            oTable3.Range.Font.Size = 12;
-            oTable3.Range.Font.Name = "Times New Roman";
+            //Word.Table oTable3;
+            //Word.Range wrdRng3 = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
+            //oTable3 = oDoc.Tables.Add(wrdRng3, 5, 3, ref oMissing, ref oMissing);
+            //oTable3.Range.ParagraphFormat.SpaceAfter = 1;
+            //oTable3.Borders.Enable = 0;
+            //oTable3.Range.Font.Size = 12;
+            //oTable3.Range.Font.Name = "Times New Roman";
 
-            oTable3.Cell(1, 1).Width = 200;
-            oTable3.Cell(2, 1).Width = 200;
-            oTable3.Cell(3, 1).Width = 200;
-            oTable3.Cell(4, 1).Width = 200;
-            oTable3.Cell(5, 1).Width = 200;
+            //oTable3.Cell(1, 1).Width = 200;
+            //oTable3.Cell(2, 1).Width = 200;
+            //oTable3.Cell(3, 1).Width = 200;
+            //oTable3.Cell(4, 1).Width = 200;
+            //oTable3.Cell(5, 1).Width = 200;
 
-            oTable3.Cell(1, 2).Width = 125;
-            oTable3.Cell(1, 2).Range.Text = "Giá trị hàng:";
-            oTable3.Cell(1, 2).Range.Bold = 0;
-            oTable3.Cell(1, 2).Range.Italic = 1;
-            oTable3.Cell(1, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
+            //oTable3.Cell(1, 2).Width = 125;
+            //oTable3.Cell(1, 2).Range.Text = "Giá trị hàng:";
+            //oTable3.Cell(1, 2).Range.Bold = 0;
+            //oTable3.Cell(1, 2).Range.Italic = 1;
+            //oTable3.Cell(1, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
 
-            //oTable3.Cell(1, 3).Width = 150;
-            oTable3.Cell(1, 3).Range.Text = BaoHien.Common.Global.convertToCurrency(totalNoTax.ToString());
-            oTable3.Cell(1, 3).Range.Bold = 0;
-            oTable3.Cell(1, 3).Range.Italic = 0;
-            oTable3.Cell(1, 3).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
+            ////oTable3.Cell(1, 3).Width = 150;
+            //oTable3.Cell(1, 3).Range.Text = BaoHien.Common.Global.convertToCurrency(totalNoTax.ToString());
+            //oTable3.Cell(1, 3).Range.Bold = 0;
+            //oTable3.Cell(1, 3).Range.Italic = 0;
+            //oTable3.Cell(1, 3).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
 
-            oTable3.Cell(2, 2).Width = 125;
-            oTable3.Cell(2, 2).Range.Text = "VAT:";
-            oTable3.Cell(2, 2).Range.Bold = 0;
-            oTable3.Cell(2, 2).Range.Italic = 1;
-            oTable3.Cell(2, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
+            //oTable3.Cell(2, 2).Width = 125;
+            //oTable3.Cell(2, 2).Range.Text = "VAT:";
+            //oTable3.Cell(2, 2).Range.Bold = 0;
+            //oTable3.Cell(2, 2).Range.Italic = 1;
+            //oTable3.Cell(2, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
 
-            //oTable3.Cell(2, 3).Width = 150;
-            oTable3.Cell(2, 3).Range.Text = BaoHien.Common.Global.convertToCurrency(txtVAT.Text);
-            oTable3.Cell(2, 3).Range.Bold = 0;
-            oTable3.Cell(2, 3).Range.Italic = 0;
-            oTable3.Cell(2, 3).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
+            ////oTable3.Cell(2, 3).Width = 150;
+            //oTable3.Cell(2, 3).Range.Text = BaoHien.Common.Global.convertToCurrency(txtVAT.Text);
+            //oTable3.Cell(2, 3).Range.Bold = 0;
+            //oTable3.Cell(2, 3).Range.Italic = 0;
+            //oTable3.Cell(2, 3).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
 
-            oTable3.Cell(3, 2).Width = 125;
-            oTable3.Cell(3, 2).Range.Text = "Chiết khấu:";
-            oTable3.Cell(3, 2).Range.Bold = 0;
-            oTable3.Cell(3, 2).Range.Italic = 1;
-            oTable3.Cell(3, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
+            //oTable3.Cell(3, 2).Width = 125;
+            //oTable3.Cell(3, 2).Range.Text = "Chiết khấu:";
+            //oTable3.Cell(3, 2).Range.Bold = 0;
+            //oTable3.Cell(3, 2).Range.Italic = 1;
+            //oTable3.Cell(3, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
 
-            //oTable3.Cell(3, 3).Width = 150;
-            oTable3.Cell(3, 3).Range.Text = BaoHien.Common.Global.convertToCurrency(txtDiscount.Text);
-            oTable3.Cell(3, 3).Range.Bold = 0;
-            oTable3.Cell(3, 3).Range.Italic = 0;
-            oTable3.Cell(3, 3).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
+            ////oTable3.Cell(3, 3).Width = 150;
+            //oTable3.Cell(3, 3).Range.Text = BaoHien.Common.Global.convertToCurrency(txtDiscount.Text);
+            //oTable3.Cell(3, 3).Range.Bold = 0;
+            //oTable3.Cell(3, 3).Range.Italic = 0;
+            //oTable3.Cell(3, 3).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
 
-            oTable3.Cell(4, 2).Width = 125;
-            oTable3.Cell(4, 2).Range.Text = "Tổng tiền:";
-            oTable3.Cell(4, 2).Range.Bold = 0;
-            oTable3.Cell(4, 2).Range.Italic = 1;
-            oTable3.Cell(4, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
+            //oTable3.Cell(4, 2).Width = 125;
+            //oTable3.Cell(4, 2).Range.Text = "Tổng tiền:";
+            //oTable3.Cell(4, 2).Range.Bold = 0;
+            //oTable3.Cell(4, 2).Range.Italic = 1;
+            //oTable3.Cell(4, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
 
-            //oTable3.Cell(4, 3).Width = 150;
-            oTable3.Cell(4, 3).Range.Text = BaoHien.Common.Global.convertToCurrency(lblGrantTotal.Text);
-            oTable3.Cell(4, 3).Range.Bold = 1;
-            oTable3.Cell(4, 3).Range.Italic = 0;
-            oTable3.Cell(4, 3).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
+            ////oTable3.Cell(4, 3).Width = 150;
+            //oTable3.Cell(4, 3).Range.Text = BaoHien.Common.Global.convertToCurrency(lblGrantTotal.Text);
+            //oTable3.Cell(4, 3).Range.Bold = 1;
+            //oTable3.Cell(4, 3).Range.Italic = 0;
+            //oTable3.Cell(4, 3).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
 
-            oTable3.Cell(5, 2).Width = 125;
-            oTable3.Cell(5, 2).Range.Text = "Đơn vị:";
-            oTable3.Cell(5, 2).Range.Bold = 0;
-            oTable3.Cell(5, 2).Range.Italic = 1;
-            oTable3.Cell(5, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
+            //oTable3.Cell(5, 2).Width = 125;
+            //oTable3.Cell(5, 2).Range.Text = "Đơn vị:";
+            //oTable3.Cell(5, 2).Range.Bold = 0;
+            //oTable3.Cell(5, 2).Range.Italic = 1;
+            //oTable3.Cell(5, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
 
-            //oTable3.Cell(5, 3).Width = 150;
-            oTable3.Cell(5, 3).Range.Text = "VNĐ";
-            oTable3.Cell(5, 3).Range.Bold = 1;
-            oTable3.Cell(5, 3).Range.Italic = 0;
-            oTable3.Cell(5, 3).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
+            ////oTable3.Cell(5, 3).Width = 150;
+            //oTable3.Cell(5, 3).Range.Text = "VNĐ";
+            //oTable3.Cell(5, 3).Range.Bold = 1;
+            //oTable3.Cell(5, 3).Range.Italic = 0;
+            //oTable3.Cell(5, 3).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
 
-            Word.Paragraph oPara4;
-            oPara4 = oDoc.Content.Paragraphs.Add(ref oMissing);
-            oPara4.Range.Font.Name = "Times New Roman";
-            oPara4.Range.Font.Bold = 1;
-            oPara4.Range.Font.Size = 8;
-            oPara4.Format.SpaceAfter = 1;    //24 pt spacing after paragraph.
-            oPara4.Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
-            //oPara4.Range.InsertParagraphAfter();
+            //Word.Paragraph oPara4;
+            //oPara4 = oDoc.Content.Paragraphs.Add(ref oMissing);
+            //oPara4.Range.Font.Name = "Times New Roman";
+            //oPara4.Range.Font.Bold = 1;
+            //oPara4.Range.Font.Size = 8;
+            //oPara4.Format.SpaceAfter = 1;    //24 pt spacing after paragraph.
+            //oPara4.Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+            ////oPara4.Range.InsertParagraphAfter();
 
-            Word.Table oTableForFooter;
-            Word.Range wrdRngForFooter = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
-            oTableForFooter = oDoc.Tables.Add(wrdRngForFooter, 1, 3, ref oMissing, ref oMissing);
-            oTableForFooter.Range.ParagraphFormat.SpaceAfter = 1;
-            oTableForFooter.Borders.Enable = 0;
-            oTableForFooter.Range.Font.Size = 12;
-            oTableForFooter.Range.Font.Name = "Times New Roman";
+            //Word.Table oTableForFooter;
+            //Word.Range wrdRngForFooter = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
+            //oTableForFooter = oDoc.Tables.Add(wrdRngForFooter, 1, 3, ref oMissing, ref oMissing);
+            //oTableForFooter.Range.ParagraphFormat.SpaceAfter = 1;
+            //oTableForFooter.Borders.Enable = 0;
+            //oTableForFooter.Range.Font.Size = 12;
+            //oTableForFooter.Range.Font.Name = "Times New Roman";
 
-            oTableForFooter.Cell(1, 1).Range.Text = "Khách hàng";
-            oTableForFooter.Cell(1, 1).Range.Bold = 0;
-            oTableForFooter.Cell(1, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+            //oTableForFooter.Cell(1, 1).Range.Text = "Khách hàng";
+            //oTableForFooter.Cell(1, 1).Range.Bold = 0;
+            //oTableForFooter.Cell(1, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
 
-            oTableForFooter.Cell(1, 2).Range.Text = "Người lập phiếu";
-            oTableForFooter.Cell(1, 2).Range.Bold = 0;
-            oTableForFooter.Cell(1, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+            //oTableForFooter.Cell(1, 2).Range.Text = "Người lập phiếu";
+            //oTableForFooter.Cell(1, 2).Range.Bold = 0;
+            //oTableForFooter.Cell(1, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
             
-            oTableForFooter.Cell(1, 3).Range.Text = "Kế toán";
-            oTableForFooter.Cell(1, 3).Range.Bold = 0;
-            oTableForFooter.Cell(1, 3).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+            //oTableForFooter.Cell(1, 3).Range.Text = "Kế toán";
+            //oTableForFooter.Cell(1, 3).Range.Bold = 0;
+            //oTableForFooter.Cell(1, 3).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
 
-            oTableForFooter.Rows[1].Range.Font.Italic = 1;
+            //oTableForFooter.Rows[1].Range.Font.Italic = 1;
 
-            Word.Paragraph oPara5;
-            oPara5 = oDoc.Content.Paragraphs.Add(ref oMissing);
-            oPara5.Range.Font.Name = "Times New Roman";
-            oPara5.Range.Font.Bold = 1;
-            oPara5.Range.Font.Size = 8;
-            oPara5.Format.SpaceAfter = 1;    //24 pt spacing after paragraph.
-            oPara5.Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
-            //oPara5.Range.InsertParagraphAfter();
+            //Word.Paragraph oPara5;
+            //oPara5 = oDoc.Content.Paragraphs.Add(ref oMissing);
+            //oPara5.Range.Font.Name = "Times New Roman";
+            //oPara5.Range.Font.Bold = 1;
+            //oPara5.Range.Font.Size = 8;
+            //oPara5.Format.SpaceAfter = 1;    //24 pt spacing after paragraph.
+            //oPara5.Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+            ////oPara5.Range.InsertParagraphAfter();
 
-            #endregion
+            //#endregion
 
-            oDoc.SaveAs2(AppDomain.CurrentDomain.BaseDirectory + @"\Temp\Order.doc");
+            ////oDoc.SaveAs2(AppDomain.CurrentDomain.BaseDirectory + @"\Temp\Order.doc");
 
-            oWord.Quit();
+            //oWord.Quit();
         }
         
         private void btnCancel_Click(object sender, EventArgs e)
@@ -1351,5 +1154,47 @@ namespace BaoHien.UI
             }
         }
         
+        private string getCustomerName()
+        {
+            string result = string.Empty;
+            if (cbxCustomer.SelectedValue != null)
+                result = customers.Where(cus => cus.Id == (int)cbxCustomer.SelectedValue).FirstOrDefault().CustomerName;
+            return result;
+        }
+
+        private string getCustomerAddress()
+        {
+            string result = string.Empty;
+            if (cbxCustomer.SelectedValue != null)
+                result = customers.Where(cus => cus.Id == (int)cbxCustomer.SelectedValue).FirstOrDefault().Address;
+            return result;
+        }
+
+        private string getCustomerPhone()
+        {
+            string result = string.Empty;
+            if (cbxCustomer.SelectedValue != null)
+                result = customers.Where(cus => cus.Id == (int)cbxCustomer.SelectedValue).FirstOrDefault().Phone;
+            return result;
+        }
+
+        private string getProductName(int row, int column)
+        { 
+            string result = string.Empty;
+            if(orderDetails[row - 1].ProductId != null && orderDetails[row - 1].ProductId != 0)
+            {
+                string product = string.Empty;
+                Product pr = products.Where(p => p.Id == orderDetails[row - 1].ProductId).SingleOrDefault();
+                if(pr != null)
+                    product = pr.ProductName;
+                string attr = string.Empty;
+                BaseAttribute ba = baseAttributesAtRow.Where(b => b.Id == (int)dgwOrderDetails.Rows[row - 1].Cells[column - 2].Value).SingleOrDefault();
+                if(ba != null)
+                    attr = ba.AttributeName;
+                result = product + " " + attr;
+
+            }
+            return result;
+        }
     }
 }

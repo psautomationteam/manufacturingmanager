@@ -10,3 +10,9 @@ D:\Work Offline\BaoHienCompany\DAL\bin\Debug\DAL.pdb
 D:\Work Offline\BaoHienCompany\DAL\obj\Debug\ResolveAssemblyReference.cache
 D:\Work Offline\BaoHienCompany\DAL\obj\Debug\DAL.dll
 D:\Work Offline\BaoHienCompany\DAL\obj\Debug\DAL.pdb
+D:\Pikait\Work\BaoHien\DAL\bin\Debug\DAL.dll.config
+D:\Pikait\Work\BaoHien\DAL\bin\Debug\DAL.dll
+D:\Pikait\Work\BaoHien\DAL\bin\Debug\DAL.pdb
+D:\Pikait\Work\BaoHien\DAL\obj\Debug\ResolveAssemblyReference.cache
+D:\Pikait\Work\BaoHien\DAL\obj\Debug\DAL.dll
+D:\Pikait\Work\BaoHien\DAL\obj\Debug\DAL.pdb
