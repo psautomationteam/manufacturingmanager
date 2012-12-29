@@ -27,7 +27,8 @@ namespace BaoHien.UI
         List<BaseAttribute> baseAttributes;
         int mode = 0; // default "New status"
         string code = "";
-        
+        List<int> oldAttr;
+
         public AddProduct()
         {
             InitializeComponent();
@@ -58,6 +59,7 @@ namespace BaoHien.UI
                     product.ProductType1 = refProductType;
                     ProductService productService = new ProductService();
                     bool result = productService.UpdateProduct(product);
+                    result = UpdateAttribute(product.Id);
                     if (result)
                     {
                         MessageBox.Show("Sản phẩm đã được cập nhật thành công");
@@ -94,34 +96,7 @@ namespace BaoHien.UI
                     //};
                     //result = priceService.AddPrice(newPrice);
 
-                    DataGridViewRowCollection selectedRows = dgvBaseAttributes.Rows;
-                    ProductAttributeService productAttributeService = new ProductAttributeService();
-                    foreach (DataGridViewRow dgv in selectedRows)
-                    {
-                        DataGridViewCheckBoxCell checkbox = (DataGridViewCheckBoxCell)dgv.Cells[0];
-                        if (checkbox.Value != null && checkbox.Value.ToString().Equals(bool.TrueString) && dgv.DataBoundItem != null)
-                        {
-                            ProductAttribute productAttribute = new ProductAttribute
-                            {
-                                AttributeId = ((BaseAttribute)dgv.DataBoundItem).Id,
-                                Id = (int)newProductId
-                            };
-                            result = productAttributeService.AddProductAttribute(productAttribute);
-                            if (!result)
-                            {
-                                MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
-                                return;
-                            }
-                        }
-                        else
-                        {
-                            if (dgv.DataBoundItem == null)
-                            {
-                                result = false;
-                                break;
-                            }
-                        }
-                    }
+                    result = UpdateAttribute(newProductId);
                     if (result)
                     {
                         MessageBox.Show("Sản phẩm đã được tạo thành công");
@@ -145,11 +120,13 @@ namespace BaoHien.UI
             loadSomeData();
             SetupColumns();
 
+            oldAttr = new List<int>();
             if (mode == 1) // Load data grid
             {
                 List<ProductAttribute> pas = product.ProductAttributes.ToList<ProductAttribute>();
                 foreach (ProductAttribute pa in pas)
                 {
+                    oldAttr.Add(pa.AttributeId);
                     foreach (DataGridViewRow dgv in dgvBaseAttributes.Rows)
                     {
                         DataGridViewCheckBoxCell checkbox = (DataGridViewCheckBoxCell)dgv.Cells[0];
@@ -162,6 +139,7 @@ namespace BaoHien.UI
                 }
             }
         }
+
         private void loadSomeData()
         {
             if (measurementUnits == null)
@@ -194,6 +172,7 @@ namespace BaoHien.UI
                 baseAttributes = baseAttributeService.GetBaseAttributes();
             }      
         }
+
         public void loadDataForEditProduct(int productId)
         {
             this.Text = "Chỉnh sửa sản phẩm này";
@@ -294,6 +273,55 @@ namespace BaoHien.UI
         {
             TextBox tx = sender as TextBox;
             code = tx.Text;
+        }
+
+        private bool UpdateAttribute(long newProductId)
+        {
+            DataGridViewRowCollection selectedRows = dgvBaseAttributes.Rows;
+            ProductAttributeService productAttributeService = new ProductAttributeService();
+
+            bool result = true;
+            List<int> newAttr = new List<int>();
+            List<int> addAttr, removeAttr;
+
+            foreach (DataGridViewRow dgv in selectedRows)
+            {
+                DataGridViewCheckBoxCell checkbox = (DataGridViewCheckBoxCell)dgv.Cells[0];
+                if (checkbox.Value != null &&
+                    (checkbox.Value.ToString().Equals(bool.TrueString) || checkbox.Value.ToString().Equals("1")))
+                {
+                    newAttr.Add(((BaseAttribute)dgv.DataBoundItem).Id);
+                }
+            }
+
+            addAttr = newAttr.Except(oldAttr).ToList();
+            removeAttr = oldAttr.Except(newAttr).ToList();
+
+            foreach (int add in addAttr)
+            {
+                ProductAttribute pa = new ProductAttribute()
+                {
+                    ProductId = (int)newProductId,
+                    AttributeId = add
+                };
+                result = productAttributeService.AddProductAttribute(pa);
+            }
+
+            foreach (int remove in removeAttr)
+            {
+                int removeId = -1;
+                using (BaoHienDBDataContext context = new BaoHienDBDataContext(SettingManager.BuildStringConnection()))
+                {
+                    ProductAttribute pa = context.ProductAttributes
+                        .Where(p => p.AttributeId == remove && p.ProductId == (int)newProductId).SingleOrDefault();
+                    if (pa != null)
+                        removeId = pa.Id;
+                }
+                if (removeId != -1)
+                    result = productAttributeService.DeleteProductAttribute(removeId);
+            }
+            BaoHienRepository.ResetDBDataContext();
+            return result;
         }
     }
 }

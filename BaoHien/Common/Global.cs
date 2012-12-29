@@ -6,6 +6,7 @@ using BaoHien.UI;
 using DAL;
 using BaoHien.Properties;
 using System.Globalization;
+using System.IO;
 
 namespace BaoHien.Common
 {
@@ -31,6 +32,7 @@ namespace BaoHien.Common
                 string tmp = total.ToString("c", nfi);
                 return tmp.Remove(tmp.ToString().Length - 1);
         }
+
         public static SystemUser CurrentUser
         {
             get
@@ -42,6 +44,13 @@ namespace BaoHien.Common
                 currentUser = value;
             }
         }
-        
+
+        public static void checkDirSaveFile()
+        {
+            if (!Directory.Exists(BHConstant.SAVE_IN_DIRECTORY))
+            {
+                Directory.CreateDirectory(BHConstant.SAVE_IN_DIRECTORY);
+            }
+        }
     }
 }
