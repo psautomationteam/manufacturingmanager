@@ -35,8 +35,7 @@ namespace BaoHien.UI
         Order order;
         BindingList<Customer> customers;
         BindingList<OrderDetail> orderDetails;
-        BindingList<Product> products;
-        BindingList<BaseAttribute> baseAttributesAtRow;
+        BindingList<ProductAttributeModel> productAttrs;
         BindingList<ProductionRequestDetailModel> originalProductions;
         
         public AddOrder()
@@ -50,11 +49,10 @@ namespace BaoHien.UI
             {
                 DialogResult dialogResult = MessageBox.Show("Bạn sẽ không thể chỉnh sửa sau khi lưu!Bạn muốn lưu?", "Xác nhận", MessageBoxButtons.YesNo);
                 if (dialogResult == System.Windows.Forms.DialogResult.Yes)
-                {
-                   
+                {                   
                     ProductInStockService pis = new ProductInStockService();
                     double discount = 0;
-                    Double.TryParse(txtDiscount.Text, out discount);
+                    Double.TryParse(txtDiscount.WorkingText, out discount);
                     DateTime createdDate = DateTime.Now;
                     if (!DateTime.TryParse(txtCreatedDate.Text, out createdDate))
                     {
@@ -62,7 +60,7 @@ namespace BaoHien.UI
                     };
 
                     double vat = 0;
-                    Double.TryParse(txtVAT.Text, out vat);
+                    Double.TryParse(txtVAT.WorkingText, out vat);
                     int userId = 0;
                     if (BaoHien.Common.Global.CurrentUser != null)
                     {
@@ -210,8 +208,6 @@ namespace BaoHien.UI
                             OrderCode = txtOrderCode.Text,
                             CreatedDate = createdDate,
                             CreateBy = userId
-
-
                         };
                         OrderService orderService = new OrderService();
                         bool result = orderService.AddOrder(order);
@@ -282,10 +278,7 @@ namespace BaoHien.UI
             }
             if (customers != null)
             {
-
-
                 cbxCustomer.DataSource = customers;
-
                 cbxCustomer.DisplayMember = "CustomerName";
                 cbxCustomer.ValueMember = "Id";
                 if (customers.Count == 0)
@@ -293,11 +286,8 @@ namespace BaoHien.UI
                     cbxCustomer.Enabled = false;
                 }
             }
-            
-            ProductService productService = new ProductService();
-            products = new BindingList<Product>(productService.GetProducts());
-            BaseAttributeService baseAttributeService = new BaseAttributeService();
-            baseAttributesAtRow = new BindingList<BaseAttribute>(baseAttributeService.GetBaseAttributes());
+            ProductAttributeService productAttrService = new ProductAttributeService();
+            productAttrs = new BindingList<ProductAttributeModel>(productAttrService.GetProductAndAttribute());
             if (order != null)
             {
                 if (customers != null)
@@ -309,7 +299,6 @@ namespace BaoHien.UI
                 txtVAT.Text = order.VAT.HasValue ? order.VAT.Value.ToString() : "";
                 txtOrderCode.Text = order.OrderCode;
                 txtCreatedDate.Text = order.CreatedDate.ToShortDateString();
-
             }
             else
             {
@@ -322,31 +311,20 @@ namespace BaoHien.UI
         {
             if (isUpdating && order != null && orderDetails.Count < dgwOrderDetails.RowCount)
             {
-
+                ProductAttributeService productAttrService = new ProductAttributeService();
                 for (int i = 0; i < orderDetails.Count; i++)
                 {
-                    for (int j = 0; j < 2 && j < dgwOrderDetails.ColumnCount; j++)
+                    if (dgwOrderDetails.Rows[i].Cells[0] is DataGridViewComboBoxCell)
                     {
-                        if (dgwOrderDetails.Rows[i].Cells[j] is DataGridViewComboBoxCell)
+                        DataGridViewComboBoxCell pkgBoxCell = (DataGridViewComboBoxCell)dgwOrderDetails.Rows[i].Cells[0];
+                        try
                         {
-                            if (j == 0)
-                            {
-                                DataGridViewComboBoxCell pkgBoxCell = (DataGridViewComboBoxCell)dgwOrderDetails.Rows[i].Cells[j];
-                                pkgBoxCell.Value = orderDetails[i].ProductId;
-                            }
-                            if (j == 1)
-                            {
-                                DataGridViewComboBoxCell pkgBoxCell = (DataGridViewComboBoxCell)dgwOrderDetails.Rows[i].Cells[j];
-                                pkgBoxCell.Value = orderDetails[i].AttributeId;
-                            }
+                            pkgBoxCell.Value = productAttrService.GetProductAttribute(orderDetails[i].ProductId, orderDetails[i].AttributeId).Id;
                         }
+                        catch { }
                     }
                 }
-
-
-
-            }
-            
+            }            
         }
 
         public void loadDataForEditOrder(int orderId)
@@ -363,9 +341,7 @@ namespace BaoHien.UI
                 if (orderDetails == null)
                 {
                     OrderDetailService orderDetailService = new OrderDetailService();
-
                     orderDetails = new BindingList<OrderDetail>(orderDetailService.SelectOrderDetailByWhere(o => o.OrderId == order.Id));
-
                 }
             }
             
@@ -406,30 +382,18 @@ namespace BaoHien.UI
                 dgwOrderDetails.ReadOnly = false;
             else
                 dgwOrderDetails.ReadOnly = true;
-            DataGridViewComboBoxColumn productColumn = new DataGridViewComboBoxColumn();
-            productColumn.Width = 150;
-            productColumn.AutoComplete = false;
 
+            DataGridViewComboBoxColumn productColumn = new DataGridViewComboBoxColumn();
+            productColumn.Width = 200;
+            productColumn.AutoComplete = false;
             productColumn.HeaderText = "Sản phẩm";
-            productColumn.DataSource = products;
-            productColumn.DisplayMember = "ProductName";
+            productColumn.DataSource = productAttrs;
+            productColumn.DisplayMember = "ProductAttribute";
             //productColumn.Frozen = true;
             productColumn.ValueMember = "Id";
-
             dgwOrderDetails.Columns.Add(productColumn);
-
-            DataGridViewComboBoxColumn productAttributeColumn = new DataGridViewComboBoxColumn();
-            productAttributeColumn.Width = 150;
-            productAttributeColumn.HeaderText = "Quy cách sản phẩm";
-            productAttributeColumn.DataSource = baseAttributesAtRow;
-            productAttributeColumn.DisplayMember = "AttributeName";
-            //productColumn.Frozen = true;
-            productAttributeColumn.ValueMember = "Id";
-
-            dgwOrderDetails.Columns.Add(productAttributeColumn);
-
+            
             DataGridViewTextBoxColumn numberUnitColumn = new DataGridViewTextBoxColumn();
-
             numberUnitColumn.Width = 100;
             numberUnitColumn.DataPropertyName = "NumberUnit";
             numberUnitColumn.HeaderText = "Số lượng";
@@ -438,7 +402,6 @@ namespace BaoHien.UI
             dgwOrderDetails.Columns.Add(numberUnitColumn);
 
             DataGridViewTextBoxColumn priceColumn = new DataGridViewTextBoxColumn();
-
             priceColumn.Width = 100;
             priceColumn.DataPropertyName = "Price";
             priceColumn.HeaderText = "Giá";
@@ -447,14 +410,13 @@ namespace BaoHien.UI
             dgwOrderDetails.Columns.Add(priceColumn);
 
             DataGridViewTextBoxColumn commissionColumn = new DataGridViewTextBoxColumn();
-
             commissionColumn.Width = 100;
             commissionColumn.DataPropertyName = "Commision";
             commissionColumn.HeaderText = "Hoa hồng";
+            commissionColumn.ValueType = typeof(int);
             dgwOrderDetails.Columns.Add(commissionColumn);
 
             DataGridViewTextBoxColumn totalColumn = new DataGridViewTextBoxColumn();
-
             totalColumn.Width = 100;
             totalColumn.DataPropertyName = "Total";
             totalColumn.HeaderText = "Tổng";
@@ -464,21 +426,12 @@ namespace BaoHien.UI
             dgwOrderDetails.Columns.Add(totalColumn);
 
             DataGridViewTextBoxColumn noteColumn = new DataGridViewTextBoxColumn();
-
             noteColumn.DataPropertyName = "Note";
             noteColumn.Width = 100;
             noteColumn.HeaderText = "Ghi chú";
             //numberUnitColumn.Frozen = true;
             noteColumn.ValueType = typeof(string);
             dgwOrderDetails.Columns.Add(noteColumn);
-
-            DataGridViewImageColumn deleteButton = new DataGridViewImageColumn();
-            deleteButton.DataPropertyName = "DeleteButton";
-            deleteButton.Image = Properties.Resources.erase;
-            deleteButton.Width = 100;
-            deleteButton.HeaderText = "Xóa";
-            deleteButton.ReadOnly = true;
-            deleteButton.ImageLayout = DataGridViewImageCellLayout.Normal;
         }
         
         private void dgwOrderDetails_DataError(object sender, DataGridViewDataErrorEventArgs e)
@@ -504,82 +457,64 @@ namespace BaoHien.UI
                 {
                     case 0:
                         {
-                            orderDetails[e.RowIndex].ProductId = (int)dgv.CurrentCell.Value;
-                            ProductAttributeService productAttributeService = new ProductAttributeService();
-                            List<ProductAttribute> productAttributes = productAttributeService.SelectProductAttributeByWhere(ba => ba.Id == orderDetails[e.RowIndex].ProductId);
-                            baseAttributesAtRow = new BindingList<BaseAttribute>();
-                            foreach (ProductAttribute pa in productAttributes)
+                            ProductAttributeService productAttrService = new ProductAttributeService();
+                            ProductAttribute pa = productAttrService.GetProductAttribute((int)dgv.CurrentCell.Value);
+                            if (pa != null)
                             {
-                                baseAttributesAtRow.Add(pa.BaseAttribute);
-                            }
-                            DataGridViewComboBoxCell currentCell = (DataGridViewComboBoxCell)dgwOrderDetails.Rows[e.RowIndex].Cells[1];
-                            currentCell.DataSource = baseAttributesAtRow;
-                            if (baseAttributesAtRow.Count > e.RowIndex && baseAttributesAtRow.Count > 0)
-                            {
-                                orderDetails[e.RowIndex].AttributeId = baseAttributesAtRow[0].Id;
-                                currentCell.Value = baseAttributesAtRow[0].Id;
+                                orderDetails[e.RowIndex].ProductId = pa.ProductId;
+                                orderDetails[e.RowIndex].AttributeId = pa.AttributeId;
                             }
                         } break;
                     case 1:
                         {
-                            orderDetails[e.RowIndex].AttributeId = (int)dgv.CurrentCell.Value;
+                            orderDetails[e.RowIndex].NumberUnit = (int)dgv.CurrentCell.Value;
                         } break;
                     case 2:
                         {
-                            orderDetails[e.RowIndex].NumberUnit = (int)dgv.CurrentCell.Value;
+                            orderDetails[e.RowIndex].Price = (double)dgv.CurrentCell.Value;
                         } break;
                     case 3:
                         {
-                            orderDetails[e.RowIndex].Price = (double)dgv.CurrentCell.Value;
+                            orderDetails[e.RowIndex].Commission = double.Parse(dgv.CurrentCell.Value.ToString());//(double)dgv.CurrentCell.Value;
                         } break;
                     case 4:
-                        {
-                            orderDetails[e.RowIndex].Commission = (double)dgv.CurrentCell.Value;
-                        } break;
+                        break;
                     case 5:
-                        {
-                            if (dgv.CurrentCell.Value != null)
-                            {
-                                orderDetails[e.RowIndex].Cost = (double)dgv.CurrentCell.Value;
-                            }
-                        } break;
-                    case 6:
                         {
                             orderDetails[e.RowIndex].Note = (string)dgv.CurrentCell.Value;
                         } break;
                 }
             }
-            calculateTotal();           
+            calculateTotal();
+            orderDetails[e.RowIndex].Cost = (int)dgwOrderDetails.Rows[e.RowIndex].Cells[1].Value * (double)dgwOrderDetails.Rows[e.RowIndex].Cells[2].Value;
         }
 
         private void calculateTotal()
         {
             double totalNoTax = 0.0;
             double totalWithTax = 0.0;
-            double discount = 0;
-            double.TryParse(txtDiscount.Text, out discount);
             bool hasValue = false;
 
-            for (int i = 0; i < dgwOrderDetails.RowCount; i++)
+            for (int i = 0; i < orderDetails.Count; i++)
             {
-                if (dgwOrderDetails.ColumnCount > 4)
+                if (orderDetails[i].ProductId != 0 && orderDetails[i].AttributeId != 0)
                 {
-                    if (dgwOrderDetails.Rows[i].Cells[2].Value != null && dgwOrderDetails.Rows[i].Cells[3].Value != null)
-                    {
-                        dgwOrderDetails.Rows[i].Cells[5].Value = (int)dgwOrderDetails.Rows[i].Cells[2].Value * (double)dgwOrderDetails.Rows[i].Cells[3].Value;
-                        hasValue = true;
-                        totalNoTax += (double)dgwOrderDetails.Rows[i].Cells[5].Value;
-                    }
+                    dgwOrderDetails.Rows[i].Cells[4].Value = (int)dgwOrderDetails.Rows[i].Cells[1].Value * (double)dgwOrderDetails.Rows[i].Cells[2].Value;
+                    hasValue = true;
+                    totalNoTax += (double)dgwOrderDetails.Rows[i].Cells[4].Value;
                 }
             }
             if (hasValue)
             {
                 double vat = 0.0;
-                double.TryParse(txtVAT.WorkingText, out vat);
-                double.TryParse(txtDiscount.WorkingText, out discount);
+                double discount = 0;
+                string tVAT = string.IsNullOrEmpty(txtVAT.WorkingText) ? txtVAT.Text : txtVAT.WorkingText;
+                string tDiscount = string.IsNullOrEmpty(txtDiscount.WorkingText) ? txtDiscount.Text : txtDiscount.WorkingText;
+                double.TryParse(tVAT, out vat);
+                double.TryParse(tDiscount, out discount);
                 totalWithTax = totalNoTax + vat - discount;
-                lblSubTotal.Text = totalNoTax.ToString();
-                lblGrantTotal.Text = totalWithTax.ToString();
+                lblSubTotal.Text = Global.formatCurrencyText(totalNoTax.ToString(), "(VND) ", '.', ',');
+                lblGrantTotal.Text = Global.formatCurrencyText(totalWithTax.ToString(), "(VND) ", '.', ',');
             }
         }
 
@@ -598,7 +533,7 @@ namespace BaoHien.UI
                 case 0:
                     {
                         var source = new AutoCompleteStringCollection();
-                        String[] stringArray = Array.ConvertAll<Product, String>(products.ToArray(), delegate(Product row) { return (String)row.ProductName; });
+                        String[] stringArray = Array.ConvertAll<ProductAttributeModel, String>(productAttrs.ToArray(), delegate(ProductAttributeModel row) { return (String)row.ProductAttribute; });
                         source.AddRange(stringArray);
 
                         ComboBox prodCode = e.Control as ComboBox;
@@ -615,50 +550,29 @@ namespace BaoHien.UI
                     } break;
                 case 1:
                     {
-                        if (baseAttributesAtRow != null)
-                        {
-                            var source = new AutoCompleteStringCollection();
-                            String[] stringArray = Array.ConvertAll<BaseAttribute, String>(baseAttributesAtRow.ToArray(), delegate(BaseAttribute row) { return (String)row.AttributeName; });
-                            source.AddRange(stringArray);
-
-                            ComboBox prodCode = e.Control as ComboBox;
-                            if (prodCode != null)
-                            {
-                                prodCode.DropDownStyle = ComboBoxStyle.DropDown;
-                                prodCode.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-                                prodCode.AutoCompleteCustomSource = source;
-                                prodCode.AutoCompleteSource = AutoCompleteSource.CustomSource;
-                                prodCode.MaxDropDownItems = 5;
-
-                            }
-                            //this.validator1.SetType(prodCode, Itboy.Components.ValidationType.Required);
-                        }
-                    } break;
-                case 2:
-                    {
                         TextBox numberOfUnit = e.Control as TextBox;
                         this.validator1.SetRegularExpression(numberOfUnit, BHConstant.REGULAR_EXPRESSION_FOR_NUMBER);
                         this.validator1.SetType(numberOfUnit, Itboy.Components.ValidationType.RegularExpression);
                     } break;
-                case 3:
+                case 2:
                     {
                         TextBox price = e.Control as TextBox;
                         this.validator1.SetRegularExpression(price, BHConstant.REGULAR_EXPRESSION_FOR_CURRENCY);
                         this.validator1.SetType(price, Itboy.Components.ValidationType.RegularExpression);
                     } break;
-                case 4:
+                case 3:
                     {
                         TextBox commision = e.Control as TextBox;
                         this.validator1.SetRegularExpression(commision, BHConstant.REGULAR_EXPRESSION_FOR_CURRENCY);
                         this.validator1.SetType(commision, Itboy.Components.ValidationType.RegularExpression);
                     } break;
-                case 5:
+                case 4:
                     {
                         TextBox total = e.Control as TextBox;
                         this.validator1.SetRegularExpression(total, BHConstant.REGULAR_EXPRESSION_FOR_CURRENCY);
                         this.validator1.SetType(total, Itboy.Components.ValidationType.RegularExpression);
                     } break;
-                case 6:
+                case 5:
                     {
                         if (e.Control is TextBox)
                         {
@@ -683,20 +597,20 @@ namespace BaoHien.UI
                 if (DialogResult.OK == pd.ShowDialog(this))
                 {
                     this.Cursor = Cursors.AppStarting;
-                    printForStock();
-                    this.Cursor = Cursors.Default;
-                    //if (saveData())
-                    //{
-                    //    printOrder();
-                    //    printForStock();
-                    //    // Print the file to the printer.
-                    //    RawPrinterHelper.SendFileToPrinter(pd.PrinterSettings.PrinterName, AppDomain.CurrentDomain.BaseDirectory + @"\Temp\Stock.doc");
-                    //    RawPrinterHelper.SendFileToPrinter(pd.PrinterSettings.PrinterName, AppDomain.CurrentDomain.BaseDirectory + @"\Temp\Order.doc");
-                    //}
-                    //else
-                    //{
-                    //    MessageBox.Show("Hệ thống xảy ra lỗi, vui lòng thử lại sau !");
-                    //}
+                    if (saveData())
+                    {
+                        printOrder();
+                        printForStock();
+                        // Print the file to the printer.
+                        RawPrinterHelper.SendFileToPrinter(pd.PrinterSettings.PrinterName, AppDomain.CurrentDomain.BaseDirectory + @"\Temp\XKho.pdf");
+                        RawPrinterHelper.SendFileToPrinter(pd.PrinterSettings.PrinterName, AppDomain.CurrentDomain.BaseDirectory + @"\Temp\BHang.pdf");
+                        this.Cursor = Cursors.Default;
+                    }
+                    else
+                    {
+                        this.Cursor = Cursors.Default;
+                        MessageBox.Show("Hệ thống xảy ra lỗi, vui lòng thử lại sau !");
+                    }
                 }
             }
         }
@@ -709,8 +623,8 @@ namespace BaoHien.UI
             doc.Open();
 
             doc.Add(FormatConfig.ParaHeader("PHIẾU XUẤT KHO"));
-            doc.Add(FormatConfig.ParaRightBelowHeader("Mã số phiếu : BH1025"));
-            doc.Add(FormatConfig.ParaRightBelowHeader("Ngày xuất : " + DateTime.Now.ToString("dd/mm/yyyy")));
+            doc.Add(FormatConfig.ParaRightBelowHeader("Mã số phiếu : " + getOrderCode()));
+            doc.Add(FormatConfig.ParaRightBelowHeader("Ngày xuất : " + DateTime.Now.ToString("dd/MM/yyyy")));
 
             doc.Add(FormatConfig.ParaCommonInfo("Tên khách hàng : ", getCustomerName()));
             doc.Add(FormatConfig.ParaCommonInfo("Địa chỉ : ", getCustomerAddress()));
@@ -722,37 +636,20 @@ namespace BaoHien.UI
             table.AddCell(FormatConfig.TableCellHeader("Số lượng"));
             table.AddCell(FormatConfig.TableCellHeader("Ghi chú"));
 
-            for (int r = 1; r <= dgwOrderDetails.RowCount; r++)
+            for (int i = 0; i < orderDetails.Count; i++)
             {
-                for (int c = 1; c <= dgwOrderDetails.ColumnCount; c++)
+                if (orderDetails[i].ProductId != 0 && orderDetails[i].AttributeId != 0)
                 {
-                    try
-                    {
-                        switch (c)
-                        {
-                            case 1:
-                                table.AddCell(FormatConfig.TableCellBody(r.ToString(), PdfPCell.ALIGN_CENTER));
-                                break;
-                            case 2:
-                                table.AddCell(FormatConfig.TableCellBody(
-                                    getProductName(r, c),
-                                    PdfPCell.ALIGN_LEFT));
-                                break;
-                            case 4:
-                                table.AddCell(FormatConfig.TableCellBody(
-                                    ((int)dgwOrderDetails.Rows[r - 2].Cells[c - 2].Value).ToString(),
-                                    PdfPCell.ALIGN_CENTER));
-                                break;
-                            case 5:
-                                table.AddCell(FormatConfig.TableCellBody(
-                                    (string)dgwOrderDetails.Rows[r - 2].Cells[dgwOrderDetails.ColumnCount - 1].Value,
-                                    PdfPCell.ALIGN_RIGHT));
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-                    catch { }
+                    table.AddCell(FormatConfig.TableCellBody((i + 1).ToString(), PdfPCell.ALIGN_CENTER));
+                    table.AddCell(FormatConfig.TableCellBody(
+                                        getProductName(orderDetails[i].ProductId, orderDetails[i].AttributeId),
+                                        PdfPCell.ALIGN_LEFT));
+                    table.AddCell(FormatConfig.TableCellBody(
+                                        orderDetails[i].NumberUnit.ToString(),
+                                        PdfPCell.ALIGN_CENTER));
+                    table.AddCell(FormatConfig.TableCellBody(
+                                        string.IsNullOrEmpty(orderDetails[i].Note) ? "" : orderDetails[i].Note.ToString(),
+                                        PdfPCell.ALIGN_LEFT));
                 }
             }
 
@@ -771,354 +668,72 @@ namespace BaoHien.UI
 
         private void printOrder()
         {
-            //double totalNoTax = 0.0;
-            //for (int i = 0; i < dgwOrderDetails.RowCount; i++)
-            //{
-            //    if (dgwOrderDetails.ColumnCount > 4)
-            //    {
-            //        if (dgwOrderDetails.Rows[i].Cells[2].Value != null && dgwOrderDetails.Rows[i].Cells[3].Value != null)
-            //        {
-            //            dgwOrderDetails.Rows[i].Cells[4].Value = (int)dgwOrderDetails.Rows[i].Cells[2].Value * (double)dgwOrderDetails.Rows[i].Cells[3].Value;
-                        
-            //            totalNoTax += (double)dgwOrderDetails.Rows[i].Cells[4].Value;
-            //        }
-            //    }
-            //}
+            Global.checkDirSaveFile();
+            var doc = new PDF.Document();
+            PdfWriter.GetInstance(doc, new FileStream(BHConstant.SAVE_IN_DIRECTORY + @"\BHang.pdf", FileMode.Create));
+            doc.Open();
 
-            //object oMissing = System.Reflection.Missing.Value;
-            //object oEndOfDoc = "\\endofdoc"; /* \endofdoc is a predefined bookmark */
+            doc.Add(FormatConfig.ParaHeader("PHIẾU XUẤT KHO"));
+            doc.Add(FormatConfig.ParaRightBelowHeader("Mã số phiếu : " + getOrderCode()));
+            doc.Add(FormatConfig.ParaRightBelowHeader("Ngày xuất : " + DateTime.Now.ToString("dd/MM/yyyy")));
 
-            ////Start Word and create a new document.
-            //Microsoft.Office.Interop.Word._Application oWord;
-            //Word._Document oDoc;
-            //oWord = new Word.Application();
-            //oWord.Visible = false;
-            //oDoc = oWord.Documents.Add(ref oMissing, ref oMissing,
-            //    ref oMissing, ref oMissing);
+            doc.Add(FormatConfig.ParaCommonInfo("Tên khách hàng : ", getCustomerName()));
+            doc.Add(FormatConfig.ParaCommonInfo("Địa chỉ : ", getCustomerAddress()));
+            doc.Add(FormatConfig.ParaCommonInfo("Điện thoại : ", getCustomerPhone()));
 
-            //#region Format
+            PDF.pdf.PdfPTable table = FormatConfig.Table(5, new float[] { 1f, 4f, 1f, 2f, 2f });
+            table.AddCell(FormatConfig.TableCellHeader("STT"));
+            table.AddCell(FormatConfig.TableCellHeader("Tên hàng"));
+            table.AddCell(FormatConfig.TableCellHeader("Số lượng"));
+            table.AddCell(FormatConfig.TableCellHeader("Giá (VND)"));
+            table.AddCell(FormatConfig.TableCellHeader("Thành tiền (VND)"));
 
-            //Word.Table oTableForHeader;
-            //Word.Range ForHeader = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
-            //oTableForHeader = oDoc.Tables.Add(ForHeader, 4, 4, ref oMissing, ref oMissing);
-            //oTableForHeader.Range.ParagraphFormat.SpaceAfter = 6;
-            //oTableForHeader.Range.Font.Size = 12;
-            //oTableForHeader.Range.Font.Name = "Times New Roman";
-            //oTableForHeader.Cell(1, 1).Range.Text = BHConstant.COMPANY_NAME;
-            //oTableForHeader.Cell(1, 1).Range.Bold = 0;
-            //oTableForHeader.Cell(1, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
-            //oTableForHeader.Cell(1, 1).Width = 125;
-            //oTableForHeader.Cell(1, 2).Width = 175;
+            for (int i = 0; i < orderDetails.Count; i++)
+            {
+                if (orderDetails[i].ProductId != 0 && orderDetails[i].AttributeId != 0)
+                {
+                    table.AddCell(FormatConfig.TableCellBody((i + 1).ToString(), PdfPCell.ALIGN_CENTER));
+                    table.AddCell(FormatConfig.TableCellBody(
+                                        getProductName(orderDetails[i].ProductId, orderDetails[i].AttributeId),
+                                        PdfPCell.ALIGN_LEFT));
+                    table.AddCell(FormatConfig.TableCellBody(
+                                        orderDetails[i].NumberUnit.ToString(),
+                                        PdfPCell.ALIGN_CENTER));
+                    table.AddCell(FormatConfig.TableCellBody(
+                                        Global.convertToCurrency(orderDetails[i].Price.ToString()),
+                                        PdfPCell.ALIGN_RIGHT));
+                    table.AddCell(FormatConfig.TableCellBody(
+                                        Global.convertToCurrency(orderDetails[i].Cost.ToString()),
+                                        PdfPCell.ALIGN_RIGHT));
+                }
+            }
 
-            //oTableForHeader.Cell(1, 3).Range.Text = "Mã phiếu:";
-            //oTableForHeader.Cell(1, 3).Range.Bold = 1;
-            //oTableForHeader.Cell(1, 3).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
-            //oTableForHeader.Cell(1, 4).Range.Text = txtOrderCode.Text != null ? txtOrderCode.Text : "không tồn tại";
-            //oTableForHeader.Cell(1, 4).Range.Bold = 0;
-            //oTableForHeader.Cell(1, 4).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
+            table.AddCell(FormatConfig.TableCellBoldBody("VAT", PdfPCell.ALIGN_RIGHT, 4));
+            table.AddCell(FormatConfig.TableCellBody(
+                Global.convertToCurrency(txtVAT.WorkingText),
+                PdfPCell.ALIGN_RIGHT));
 
-            //oTableForHeader.Cell(2, 1).Width = 75;
-            //oTableForHeader.Cell(2, 1).Range.Text = "Đ/C:";
-            //oTableForHeader.Cell(2, 1).Range.Bold = 0;
-            //oTableForHeader.Cell(2, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
+            table.AddCell(FormatConfig.TableCellBoldBody("Khấu chi", PdfPCell.ALIGN_RIGHT, 4));
+            table.AddCell(FormatConfig.TableCellBody(
+                Global.convertToCurrency(txtDiscount.WorkingText),
+                PdfPCell.ALIGN_RIGHT));
 
-            //oTableForHeader.Cell(2, 2).Width = 225;
-            //oTableForHeader.Cell(2, 2).Range.Text = BHConstant.COMPANY_ADDRESS;
-            //oTableForHeader.Cell(2, 2).Range.Bold = 0;
-            //oTableForHeader.Cell(2, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
+            table.AddCell(FormatConfig.TableCellBoldBody("Tổng", PdfPCell.ALIGN_RIGHT, 4));
+            table.AddCell(FormatConfig.TableCellBody(
+                Global.convertToCurrency(lblGrantTotal.Text),
+                PdfPCell.ALIGN_RIGHT));
 
-            //oTableForHeader.Cell(2, 3).Range.Text = "Ngày lập:";
-            //oTableForHeader.Cell(2, 3).Range.Bold = 1;
-            //oTableForHeader.Cell(2, 3).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
+            doc.Add(table);
 
-            //oTableForHeader.Cell(2, 4).Range.Text = txtCreatedDate.Text;
-            //oTableForHeader.Cell(2, 4).Range.Bold = 0;
-            //oTableForHeader.Cell(2, 4).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
+            doc.Add(FormatConfig.ParaCommonInfo("Ghi chú : ", String.Concat(Enumerable.Repeat("...", 96))));
 
-            //oTableForHeader.Cell(3, 1).Width = 75;
-            //oTableForHeader.Cell(3, 1).Range.Text = "Điện thoại:";
-            //oTableForHeader.Cell(3, 1).Range.Bold = 0;
-            //oTableForHeader.Cell(3, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
+            PDF.pdf.PdfPTable table2 = FormatConfig.Table(3, new float[] { 3.5f, 4f, 2.5f });
+            table2.AddCell(FormatConfig.TableCellHeaderCommon("Thủ trưởng đơn vị", PdfPCell.NO_BORDER));
+            table2.AddCell(FormatConfig.TableCellHeaderCommon("Kế toán", PdfPCell.NO_BORDER));
+            table2.AddCell(FormatConfig.TableCellHeaderCommon("Khách hàng", PdfPCell.NO_BORDER));
+            doc.Add(table2);
 
-            //oTableForHeader.Cell(3, 2).Width = 225;
-            //oTableForHeader.Cell(3, 2).Range.Text = BHConstant.COMPANY_PHONE;
-            //oTableForHeader.Cell(3, 2).Range.Bold = 0;
-            //oTableForHeader.Cell(3, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
-
-            //oTableForHeader.Cell(4, 1).Width = 75;
-            //oTableForHeader.Cell(4, 1).Range.Text = "Fax:";
-            //oTableForHeader.Cell(4, 1).Range.Bold = 0;
-            //oTableForHeader.Cell(4, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
-
-            //oTableForHeader.Cell(4, 2).Width = 225;
-            //oTableForHeader.Cell(4, 2).Range.Text = BHConstant.COMPANY_FAX;
-            //oTableForHeader.Cell(4, 2).Range.Bold = 0;
-            //oTableForHeader.Cell(4, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
-
-
-            ////Insert a paragraph at the beginning of the document.
-            //Word.Paragraph oPara1;
-            //oPara1 = oDoc.Content.Paragraphs.Add(ref oMissing);
-            //oPara1.Range.Text = "PHIẾU BÁN HÀNG";
-            //oPara1.Range.Font.Bold = 1;
-            //oPara1.Range.Font.Name = "Times New Roman";
-            //oPara1.Range.Font.Size = 30;
-            //oPara1.Format.SpaceAfter = 1;    //24 pt spacing after paragraph.
-            //oPara1.Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
-            //oPara1.Range.InsertParagraphAfter();
-
-            //Word.Table oTableForCustomerInfo;
-            //Word.Range ForCustomerInfo = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
-            //oTableForCustomerInfo = oDoc.Tables.Add(ForCustomerInfo, 3, 4, ref oMissing, ref oMissing);
-            //oTableForCustomerInfo.Range.ParagraphFormat.SpaceAfter = 1;
-            //oTableForCustomerInfo.Range.Font.Name = "Times New Roman";
-            //oTableForCustomerInfo.Range.Font.Size = 13;
-            //oTableForCustomerInfo.Cell(1, 1).Range.Text = "Khách hàng:";
-            //oTableForCustomerInfo.Cell(1, 1).Range.Bold = 1;
-            //oTableForCustomerInfo.Cell(1, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
-
-            //if (cbxCustomer.SelectedValue != null)
-            //{
-            //    oTableForCustomerInfo.Cell(1, 2).Width = 400;
-            //    oTableForCustomerInfo.Cell(1, 2).Range.Text = customers.Where(cus => cus.Id == (int)cbxCustomer.SelectedValue).FirstOrDefault().CustomerName;
-            //    oTableForCustomerInfo.Cell(1, 2).Range.Bold = 0;
-            //    oTableForCustomerInfo.Cell(1, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
-            //}
-
-            //oTableForCustomerInfo.Cell(2, 1).Range.Text = "Địa chỉ:";
-            //oTableForCustomerInfo.Cell(2, 1).Range.Bold = 1;
-            //oTableForCustomerInfo.Cell(2, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
-
-            //if (cbxCustomer.SelectedValue != null)
-            //{
-            //    oTableForCustomerInfo.Cell(2, 2).Width = 400;
-            //    oTableForCustomerInfo.Cell(2, 2).Range.Text = customers.Where(cus => cus.Id == (int)cbxCustomer.SelectedValue).FirstOrDefault().Address;
-            //    oTableForCustomerInfo.Cell(2, 2).Range.Bold = 0;
-            //    oTableForCustomerInfo.Cell(2, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
-            //}
-
-           
-            //oTableForCustomerInfo.Cell(3, 1).Range.Text = "Ghi chú:";
-            //oTableForCustomerInfo.Cell(3, 1).Range.Bold = 1;
-            //oTableForCustomerInfo.Cell(3, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
-
-            //oTableForCustomerInfo.Cell(3, 2).Width = 400;
-            //oTableForCustomerInfo.Cell(3, 2).Range.Text = txtNote.Text;
-            //oTableForCustomerInfo.Cell(3, 2).Range.Bold = 0;
-            //oTableForCustomerInfo.Cell(3, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
-
-            ////Microsoft.Office.Interop.Word.InlineShape line3 = oDoc.Paragraphs.Last.Range.InlineShapes.AddHorizontalLineStandard(ref oMissing);
-            ////line3.Height = 1;
-            ////line3.HorizontalLineFormat.NoShade = true;
-            ////line3.Fill.ForeColor.RGB = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Transparent);
-
-            //Word.Paragraph oPara2;
-            //oPara2 = oDoc.Content.Paragraphs.Add(ref oMissing);
-            //oPara2.Range.Font.Name = "Times New Roman";
-            //oPara2.Range.Font.Bold = 1;
-            //oPara2.Range.Font.Size = 8;
-            //oPara2.Format.SpaceAfter = 1;    //24 pt spacing after paragraph.
-            //oPara2.Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
-            ////oPara2.Range.InsertParagraphAfter();
-
-            ////Insert a table, fill it with data, and make the first row
-            ////bold and italic.
-            //Word.Table oTable;
-            //Word.Range wrdRng = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
-            //oTable = oDoc.Tables.Add(wrdRng, dgwOrderDetails.RowCount + 1, 6, ref oMissing, ref oMissing);
-            //oTable.Range.ParagraphFormat.SpaceAfter = 1;
-            //oTable.Borders.Enable = 1;
-            //oTable.Range.Font.Name = "Times New Roman";
-            //oTable.Range.Font.Size = 12;
-            //oTable.Range.Font.Bold = 1;
-            //oTable.Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
-            //int r, c;
-
-
-            //for (r = 1; r <= dgwOrderDetails.RowCount; r++)
-            //    for (c = 1; c <= dgwOrderDetails.ColumnCount; c++)
-            //    {
-            //        if (r == 1)
-            //        {
-            //            if(c == 1)
-            //                oTable.Cell(r, c).Range.Text = "STT";
-            //            else if(c == 2)
-            //                oTable.Cell(r, c).Range.Text = "Tên hàng";
-            //            else if (c == 3)
-            //                oTable.Cell(r, c).Range.Text = "Quy cách";
-            //            else if (c == 4)
-            //                oTable.Cell(r, c).Range.Text = "Số lượng";
-            //            else if (c == 5)
-            //                oTable.Cell(r, c).Range.Text = "Giá(VNĐ)";
-            //            else if (c == 6)
-            //                oTable.Cell(r, c).Range.Text = "Thành tiền(VNĐ)";
-            //            //oTable.Cell(r, c).Range.Text = dgwOrderDetails.Columns[c - 1].HeaderText;
-            //        }
-            //        else
-            //        {
-            //            if (c == 1)
-            //            {
-            //                oTable.Cell(r, c).Range.Text = (r - 1).ToString();
-            //            }
-            //            else if (c == 2)
-            //            {
-            //                oTable.Cell(r, c).Range.Text = products.ToList().Where(p => p.Id == orderDetails[r - 2].ProductId).FirstOrDefault().ProductName;
-            //            }
-            //            else if (c == 3)
-            //            {
-            //                oTable.Cell(r, c).Range.Text = baseAttributesAtRow.ToList().Where(a => a.Id == (int)dgwOrderDetails.Rows[r - 2].Cells[c - 2].Value).FirstOrDefault().AttributeName;
-            //            }
-            //            else if (c == 4)
-            //            {
-            //                oTable.Cell(r, c).Range.Text = ((int)dgwOrderDetails.Rows[r - 2].Cells[c - 2].Value).ToString();
-            //            }
-            //            else if (c == 5)
-            //            {
-            //                string tmp = ((double)dgwOrderDetails.Rows[r - 2].Cells[c - 2].Value).ToString();
-            //                oTable.Cell(r, c).Range.Text = BaoHien.Common.Global.convertToCurrency(tmp);
-            //            }
-            //            else if (c == 6)
-            //            {
-            //                string tmp = (((double)dgwOrderDetails.Rows[r - 2].Cells[c - 2].Value)).ToString();
-            //                oTable.Cell(r, c).Range.Text = BaoHien.Common.Global.convertToCurrency(tmp);
-            //            }
-                        
-            //        }
-
-
-            //    }
-            
-            //oTable.Rows[1].Range.Font.Italic = 1;
-            //oTable.Rows[1].Range.Font.Bold = 0;
-
-            //Word.Paragraph oPara3;
-            //oPara3 = oDoc.Content.Paragraphs.Add(ref oMissing);
-            //oPara3.Range.Font.Name = "Times New Roman";
-            //oPara3.Range.Font.Bold = 1;
-            //oPara3.Range.Font.Size = 8;
-            //oPara3.Format.SpaceAfter = 1;    //24 pt spacing after paragraph.
-            //oPara3.Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
-            ////oPara3.Range.InsertParagraphAfter();
-
-            //Word.Table oTable3;
-            //Word.Range wrdRng3 = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
-            //oTable3 = oDoc.Tables.Add(wrdRng3, 5, 3, ref oMissing, ref oMissing);
-            //oTable3.Range.ParagraphFormat.SpaceAfter = 1;
-            //oTable3.Borders.Enable = 0;
-            //oTable3.Range.Font.Size = 12;
-            //oTable3.Range.Font.Name = "Times New Roman";
-
-            //oTable3.Cell(1, 1).Width = 200;
-            //oTable3.Cell(2, 1).Width = 200;
-            //oTable3.Cell(3, 1).Width = 200;
-            //oTable3.Cell(4, 1).Width = 200;
-            //oTable3.Cell(5, 1).Width = 200;
-
-            //oTable3.Cell(1, 2).Width = 125;
-            //oTable3.Cell(1, 2).Range.Text = "Giá trị hàng:";
-            //oTable3.Cell(1, 2).Range.Bold = 0;
-            //oTable3.Cell(1, 2).Range.Italic = 1;
-            //oTable3.Cell(1, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
-
-            ////oTable3.Cell(1, 3).Width = 150;
-            //oTable3.Cell(1, 3).Range.Text = BaoHien.Common.Global.convertToCurrency(totalNoTax.ToString());
-            //oTable3.Cell(1, 3).Range.Bold = 0;
-            //oTable3.Cell(1, 3).Range.Italic = 0;
-            //oTable3.Cell(1, 3).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
-
-            //oTable3.Cell(2, 2).Width = 125;
-            //oTable3.Cell(2, 2).Range.Text = "VAT:";
-            //oTable3.Cell(2, 2).Range.Bold = 0;
-            //oTable3.Cell(2, 2).Range.Italic = 1;
-            //oTable3.Cell(2, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
-
-            ////oTable3.Cell(2, 3).Width = 150;
-            //oTable3.Cell(2, 3).Range.Text = BaoHien.Common.Global.convertToCurrency(txtVAT.Text);
-            //oTable3.Cell(2, 3).Range.Bold = 0;
-            //oTable3.Cell(2, 3).Range.Italic = 0;
-            //oTable3.Cell(2, 3).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
-
-            //oTable3.Cell(3, 2).Width = 125;
-            //oTable3.Cell(3, 2).Range.Text = "Chiết khấu:";
-            //oTable3.Cell(3, 2).Range.Bold = 0;
-            //oTable3.Cell(3, 2).Range.Italic = 1;
-            //oTable3.Cell(3, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
-
-            ////oTable3.Cell(3, 3).Width = 150;
-            //oTable3.Cell(3, 3).Range.Text = BaoHien.Common.Global.convertToCurrency(txtDiscount.Text);
-            //oTable3.Cell(3, 3).Range.Bold = 0;
-            //oTable3.Cell(3, 3).Range.Italic = 0;
-            //oTable3.Cell(3, 3).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
-
-            //oTable3.Cell(4, 2).Width = 125;
-            //oTable3.Cell(4, 2).Range.Text = "Tổng tiền:";
-            //oTable3.Cell(4, 2).Range.Bold = 0;
-            //oTable3.Cell(4, 2).Range.Italic = 1;
-            //oTable3.Cell(4, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
-
-            ////oTable3.Cell(4, 3).Width = 150;
-            //oTable3.Cell(4, 3).Range.Text = BaoHien.Common.Global.convertToCurrency(lblGrantTotal.Text);
-            //oTable3.Cell(4, 3).Range.Bold = 1;
-            //oTable3.Cell(4, 3).Range.Italic = 0;
-            //oTable3.Cell(4, 3).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
-
-            //oTable3.Cell(5, 2).Width = 125;
-            //oTable3.Cell(5, 2).Range.Text = "Đơn vị:";
-            //oTable3.Cell(5, 2).Range.Bold = 0;
-            //oTable3.Cell(5, 2).Range.Italic = 1;
-            //oTable3.Cell(5, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
-
-            ////oTable3.Cell(5, 3).Width = 150;
-            //oTable3.Cell(5, 3).Range.Text = "VNĐ";
-            //oTable3.Cell(5, 3).Range.Bold = 1;
-            //oTable3.Cell(5, 3).Range.Italic = 0;
-            //oTable3.Cell(5, 3).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
-
-            //Word.Paragraph oPara4;
-            //oPara4 = oDoc.Content.Paragraphs.Add(ref oMissing);
-            //oPara4.Range.Font.Name = "Times New Roman";
-            //oPara4.Range.Font.Bold = 1;
-            //oPara4.Range.Font.Size = 8;
-            //oPara4.Format.SpaceAfter = 1;    //24 pt spacing after paragraph.
-            //oPara4.Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
-            ////oPara4.Range.InsertParagraphAfter();
-
-            //Word.Table oTableForFooter;
-            //Word.Range wrdRngForFooter = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
-            //oTableForFooter = oDoc.Tables.Add(wrdRngForFooter, 1, 3, ref oMissing, ref oMissing);
-            //oTableForFooter.Range.ParagraphFormat.SpaceAfter = 1;
-            //oTableForFooter.Borders.Enable = 0;
-            //oTableForFooter.Range.Font.Size = 12;
-            //oTableForFooter.Range.Font.Name = "Times New Roman";
-
-            //oTableForFooter.Cell(1, 1).Range.Text = "Khách hàng";
-            //oTableForFooter.Cell(1, 1).Range.Bold = 0;
-            //oTableForFooter.Cell(1, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
-
-            //oTableForFooter.Cell(1, 2).Range.Text = "Người lập phiếu";
-            //oTableForFooter.Cell(1, 2).Range.Bold = 0;
-            //oTableForFooter.Cell(1, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
-            
-            //oTableForFooter.Cell(1, 3).Range.Text = "Kế toán";
-            //oTableForFooter.Cell(1, 3).Range.Bold = 0;
-            //oTableForFooter.Cell(1, 3).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
-
-            //oTableForFooter.Rows[1].Range.Font.Italic = 1;
-
-            //Word.Paragraph oPara5;
-            //oPara5 = oDoc.Content.Paragraphs.Add(ref oMissing);
-            //oPara5.Range.Font.Name = "Times New Roman";
-            //oPara5.Range.Font.Bold = 1;
-            //oPara5.Range.Font.Size = 8;
-            //oPara5.Format.SpaceAfter = 1;    //24 pt spacing after paragraph.
-            //oPara5.Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
-            ////oPara5.Range.InsertParagraphAfter();
-
-            //#endregion
-
-            ////oDoc.SaveAs2(AppDomain.CurrentDomain.BaseDirectory + @"\Temp\Order.doc");
-
-            //oWord.Quit();
+            doc.Close();
         }
         
         private void btnCancel_Click(object sender, EventArgs e)
@@ -1137,23 +752,20 @@ namespace BaoHien.UI
             btnSave.Enabled = false;
             dgwOrderDetails.ReadOnly = true;
         }
-
-        private void txtVAT_Leave_1(object sender, EventArgs e)
-        {
-            if (!string.IsNullOrEmpty(txtVAT.WorkingText))
-            {
-                calculateTotal();
-            }
-        }
-
+        
         private void txtDiscount_Leave(object sender, EventArgs e)
         {
-            if (!string.IsNullOrEmpty(txtDiscount.WorkingText))
+            if (!string.IsNullOrEmpty(txtDiscount.Text))
             {
                 calculateTotal();
             }
         }
-        
+
+        private string getOrderCode()
+        {
+            return txtOrderCode.Text;
+        }
+
         private string getCustomerName()
         {
             string result = string.Empty;
@@ -1178,23 +790,21 @@ namespace BaoHien.UI
             return result;
         }
 
-        private string getProductName(int row, int column)
+        private string getProductName(int productID, int attrID)
         { 
             string result = string.Empty;
-            if(orderDetails[row - 1].ProductId != null && orderDetails[row - 1].ProductId != 0)
-            {
-                string product = string.Empty;
-                Product pr = products.Where(p => p.Id == orderDetails[row - 1].ProductId).SingleOrDefault();
-                if(pr != null)
-                    product = pr.ProductName;
-                string attr = string.Empty;
-                BaseAttribute ba = baseAttributesAtRow.Where(b => b.Id == (int)dgwOrderDetails.Rows[row - 1].Cells[column - 2].Value).SingleOrDefault();
-                if(ba != null)
-                    attr = ba.AttributeName;
-                result = product + " " + attr;
-
-            }
+            ProductAttributeModel pad = productAttrs.Where(p => p.ProductId == productID && p.AttributeId == attrID).SingleOrDefault();
+            if (pad != null)
+                result = pad.ProductAttribute;
             return result;
+        }
+
+        private void txtVAT_Leave(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(txtVAT.Text))
+            {
+                calculateTotal();
+            }
         }
     }
 }

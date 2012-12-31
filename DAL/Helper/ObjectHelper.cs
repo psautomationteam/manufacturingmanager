@@ -64,6 +64,7 @@ namespace DAL.Helper
 
             }
         }
+
         public static void ConvertObjectTo<T1, T2>(T1 sourceObject, ref T2 destObject)
         {
             //	If either the source, or destination is null, return
@@ -111,6 +112,7 @@ namespace DAL.Helper
 
             }
         }
+
         public static void CopyObject<T1, T2>(T1 sourceObject, ref T2 destObject)
         {
             //	If either the source, or destination is null, return
@@ -150,6 +152,7 @@ namespace DAL.Helper
 
             }
         }
+
         public static void ConvertObjectListFrom<T1, T2>(List<T1> sourceObjectList, ref List<T2> destObjectList)
         {
             if (sourceObjectList == null || destObjectList == null)
@@ -174,6 +177,7 @@ namespace DAL.Helper
 
             }
         }
+
         public static void ConvertObjectListTo<T1, T2>(List<T1> sourceObjectList, ref List<T2> destObjectList)
         {
             if (sourceObjectList == null || destObjectList == null)
@@ -198,6 +202,7 @@ namespace DAL.Helper
 
             }
         }
+
         public static void CopyObjectList<T1, T2>(List<T1> sourceObjectList, ref List<T2> destObjectList)
         {
             if (sourceObjectList == null || destObjectList == null)

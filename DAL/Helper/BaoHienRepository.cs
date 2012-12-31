@@ -19,12 +19,14 @@ namespace DAL.Helper
 
         //public static string addr;
         private static BaoHienDBDataContext context = null;
+
         public static void ResetDBDataContext()
         {
             context.Connection.Close();
             context = null;
             context = GetBaoHienDBDataContext();
         }
+
         public static BaoHienDBDataContext GetBaoHienDBDataContext()
         {
             if (checkExistingContext())
@@ -33,6 +35,7 @@ namespace DAL.Helper
             }
             return null;
         }
+
         static bool checkExistingContext()
         {
             if (context == null)
@@ -66,10 +69,12 @@ namespace DAL.Helper
                 return false;
             }
         }
+
         public static bool testCurrentDBConnection()
         {
             return checkExistingContext();
         }
+
         public static bool testDBConnection(string DBServerName, string DatabaseName, string DatabaseUserID, string DatabasePwd)
         {
             BaoHienDBDataContext contextForTest = null;
@@ -99,6 +104,7 @@ namespace DAL.Helper
             }
             return true;
         }
+
         static Expression<Func<T, T2>> CreateLambdaForDeletedField<T, T2>()
         {
             var param = Expression.Parameter(typeof(T), "item");
@@ -106,6 +112,7 @@ namespace DAL.Helper
             var expression = Expression.Lambda<Func<T, T2>>(Expression.Convert(Expression.Property(param, Constant.DELETED_PROPERTY_NAME), typeof(T2)), param);
             return expression;
         }
+
         static Expression<Func<T, T2>> CreateLambdaForIdField<T, T2>()
         {
             var param = Expression.Parameter(typeof(T), "item");
@@ -147,6 +154,7 @@ namespace DAL.Helper
             }
 
         }
+
         public static IList<T> SelectByWhere<T>(Expression<Func<T, bool>> func) where T : class
         {
             try
@@ -166,6 +174,7 @@ namespace DAL.Helper
 
 
         }
+
         public static T SelectByPK<T>(List<String> ids) where T : class
         {
             try
@@ -239,6 +248,7 @@ namespace DAL.Helper
                 throw;
             }
         }
+
         public static IList<T> SelectAll<T>() where T : class
         {
             try
@@ -259,6 +269,7 @@ namespace DAL.Helper
                 throw;
             }
         }
+
         public static Type GetPrimaryKeyType<T>() where T : class
         {
             try
@@ -289,6 +300,7 @@ namespace DAL.Helper
                 throw;
             }
         }
+
         public static string GetPrimaryKeyName<T>() where T : class
         {
             try
@@ -320,6 +332,7 @@ namespace DAL.Helper
                 throw;
             }
         }
+
         public static void Insert<T>(T item) where T : class
         {
             try
@@ -345,6 +358,7 @@ namespace DAL.Helper
                 throw;
             }
         }
+
         public static void Update<T>(T item, string id) where T : class
         {
             try
@@ -395,7 +409,6 @@ namespace DAL.Helper
             }
         }
 
-
         public static void Remove<T>(T item, string id) where T : class
         {
             try
@@ -434,10 +447,5 @@ namespace DAL.Helper
                 throw;
             }
         }
-       
-
-        
-
-        
     }
 }
