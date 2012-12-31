@@ -102,7 +102,7 @@ namespace BaoHien.UI
             this.txtVAT.Size = new System.Drawing.Size(186, 20);
             this.txtVAT.TabIndex = 13;
             this.txtVAT.ThousandsSeparator = '.';
-            this.txtVAT.Leave += new System.EventHandler(this.txtVAT_Leave_1);
+            this.txtVAT.Leave += new System.EventHandler(this.txtVAT_Leave);
             // 
             // txtNote
             // 
@@ -249,24 +249,24 @@ namespace BaoHien.UI
             // lblSubTotal
             // 
             this.lblSubTotal.AutoSize = true;
-            this.lblSubTotal.Font = new System.Drawing.Font("Arial", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSubTotal.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblSubTotal.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
-            this.lblSubTotal.Location = new System.Drawing.Point(654, 495);
+            this.lblSubTotal.Location = new System.Drawing.Point(616, 496);
             this.lblSubTotal.Name = "lblSubTotal";
-            this.lblSubTotal.Size = new System.Drawing.Size(49, 16);
+            this.lblSubTotal.Size = new System.Drawing.Size(14, 15);
             this.lblSubTotal.TabIndex = 5;
-            this.lblSubTotal.Text = "0 VND";
+            this.lblSubTotal.Text = "0";
             // 
             // lblGrantTotal
             // 
             this.lblGrantTotal.AutoSize = true;
-            this.lblGrantTotal.Font = new System.Drawing.Font("Arial", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblGrantTotal.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblGrantTotal.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
-            this.lblGrantTotal.Location = new System.Drawing.Point(654, 517);
+            this.lblGrantTotal.Location = new System.Drawing.Point(616, 518);
             this.lblGrantTotal.Name = "lblGrantTotal";
-            this.lblGrantTotal.Size = new System.Drawing.Size(49, 16);
+            this.lblGrantTotal.Size = new System.Drawing.Size(14, 15);
             this.lblGrantTotal.TabIndex = 6;
-            this.lblGrantTotal.Text = "0 VND";
+            this.lblGrantTotal.Text = "0";
             // 
             // btnCancel
             // 

@@ -28,6 +28,7 @@ namespace BaoHien.Services.Base
 
             return result;
         }
+
         protected List<TItem> OnGetItems<TItem>()
         {
             
@@ -49,6 +50,7 @@ namespace BaoHien.Services.Base
             }
             return list;
         }
+
         private Boolean checkDeletedItems<TItem>(TItem item)
         {
             Type type = typeof(TItem);
@@ -87,6 +89,7 @@ namespace BaoHien.Services.Base
             }
             return item;
         }
+
         protected TItem OnGetItem<TItem>(List<string> ids)
         {
            
@@ -183,6 +186,7 @@ namespace BaoHien.Services.Base
             }
             return true;
         }
+
         protected bool OnUpdateItem<TItem>(TItem newValue, List<string> ids)
         {
 
@@ -205,6 +209,7 @@ namespace BaoHien.Services.Base
             }
             return true;
         }
+
         protected bool OnDeleteItem<TItem>(string id)
         {
             
@@ -282,6 +287,7 @@ namespace BaoHien.Services.Base
             }
             return true;
         }
+
         protected List<TItem> SelectItemByWhere<TItem>(Expression<Func<TItem, bool>> func)
         {
             List<TItem> list = null;
