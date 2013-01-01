@@ -106,7 +106,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(563, 26);
+            this.label3.Location = new System.Drawing.Point(564, 22);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(35, 13);
             this.label3.TabIndex = 2;
@@ -115,7 +115,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(317, 25);
+            this.label2.Location = new System.Drawing.Point(317, 21);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(45, 13);
             this.label2.TabIndex = 1;
@@ -124,7 +124,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(17, 26);
+            this.label1.Location = new System.Drawing.Point(17, 21);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(54, 13);
             this.label1.TabIndex = 0;
@@ -132,7 +132,7 @@
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(866, 414);
+            this.btnSave.Location = new System.Drawing.Point(646, 414);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 2;
@@ -145,7 +145,7 @@
             this.dgvStockEntranceDetails.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvStockEntranceDetails.Location = new System.Drawing.Point(6, 19);
             this.dgvStockEntranceDetails.Name = "dgvStockEntranceDetails";
-            this.dgvStockEntranceDetails.Size = new System.Drawing.Size(912, 294);
+            this.dgvStockEntranceDetails.Size = new System.Drawing.Size(713, 294);
             this.dgvStockEntranceDetails.TabIndex = 0;
             this.dgvStockEntranceDetails.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvStockEntranceDetails_CellEndEdit);
             this.dgvStockEntranceDetails.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dgvStockEntranceDetails_DataError);
@@ -156,7 +156,7 @@
             this.groupBox2.Controls.Add(this.dgvStockEntranceDetails);
             this.groupBox2.Location = new System.Drawing.Point(17, 89);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(924, 319);
+            this.groupBox2.Size = new System.Drawing.Size(725, 319);
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Chi tiết phiếu nhập kho";
@@ -164,7 +164,7 @@
             // btnDelete
             // 
             this.btnDelete.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnDelete.Location = new System.Drawing.Point(781, 415);
+            this.btnDelete.Location = new System.Drawing.Point(558, 414);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(75, 23);
             this.btnDelete.TabIndex = 3;
@@ -182,7 +182,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnDelete;
-            this.ClientSize = new System.Drawing.Size(964, 465);
+            this.ClientSize = new System.Drawing.Size(751, 445);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.groupBox2);

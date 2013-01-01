@@ -83,6 +83,7 @@
     <Compile Include="Model\ProductionRequestModel.cs" />
     <Compile Include="Model\ProductTypeSearchCriteria.cs" />
     <Compile Include="Model\ProductSearchCriteria.cs" />
+    <Compile Include="Services\Customer\CustomerLogService.cs" />
     <Compile Include="UI\Configuration\DBConfiguration.cs">
       <SubType>Form</SubType>
     </Compile>

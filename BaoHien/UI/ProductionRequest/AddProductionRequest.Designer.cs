@@ -64,7 +64,7 @@
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(726, 80);
+            this.groupBox1.Size = new System.Drawing.Size(925, 80);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Thông tin phiếu sản xuất";
@@ -73,35 +73,35 @@
             // 
             this.txtNote.Location = new System.Drawing.Point(78, 52);
             this.txtNote.Name = "txtNote";
-            this.txtNote.Size = new System.Drawing.Size(627, 20);
+            this.txtNote.Size = new System.Drawing.Size(841, 20);
             this.txtNote.TabIndex = 3;
             // 
             // txtDate
             // 
-            this.txtDate.Location = new System.Drawing.Point(605, 18);
+            this.txtDate.Location = new System.Drawing.Point(781, 18);
             this.txtDate.Name = "txtDate";
-            this.txtDate.Size = new System.Drawing.Size(100, 20);
+            this.txtDate.Size = new System.Drawing.Size(138, 20);
             this.txtDate.TabIndex = 2;
             // 
             // txtUser
             // 
-            this.txtUser.Location = new System.Drawing.Point(368, 19);
+            this.txtUser.Location = new System.Drawing.Point(434, 18);
             this.txtUser.Name = "txtUser";
-            this.txtUser.Size = new System.Drawing.Size(158, 20);
+            this.txtUser.Size = new System.Drawing.Size(233, 20);
             this.txtUser.TabIndex = 1;
             // 
             // txtCode
             // 
             this.txtCode.Enabled = false;
-            this.txtCode.Location = new System.Drawing.Point(77, 19);
+            this.txtCode.Location = new System.Drawing.Point(78, 19);
             this.txtCode.Name = "txtCode";
-            this.txtCode.Size = new System.Drawing.Size(157, 20);
+            this.txtCode.Size = new System.Drawing.Size(247, 20);
             this.txtCode.TabIndex = 0;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(35, 52);
+            this.label4.Location = new System.Drawing.Point(17, 55);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(36, 13);
             this.label4.TabIndex = 3;
@@ -110,7 +110,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(563, 26);
+            this.label3.Location = new System.Drawing.Point(727, 21);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(35, 13);
             this.label3.TabIndex = 2;
@@ -119,7 +119,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(295, 26);
+            this.label2.Location = new System.Drawing.Point(352, 21);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(67, 13);
             this.label2.TabIndex = 1;
@@ -128,7 +128,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(17, 26);
+            this.label1.Location = new System.Drawing.Point(17, 21);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(54, 13);
             this.label1.TabIndex = 0;
