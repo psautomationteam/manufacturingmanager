@@ -12,6 +12,7 @@ using BaoHien.Services.Customers;
 using DAL.Helper;
 using BaoHien.Services.SystemUsers;
 using BaoHien.Model;
+using BaoHien.Common;
 
 namespace BaoHien.UI
 {
@@ -30,6 +31,7 @@ namespace BaoHien.UI
             loadOrderList();
             SetupColumns();
         }
+
         public void loadOrderList()
         {
             loadSomeData();
@@ -38,6 +40,7 @@ namespace BaoHien.UI
             setUpDataGrid(orders);
             
         }
+
         private void loadSomeData()
         {
             if (customers == null)
@@ -72,6 +75,7 @@ namespace BaoHien.UI
             }
             
         }
+
         private void setUpDataGrid(List<Order> orders)
         {
             dgwOrderList.AutoGenerateColumns = false;
@@ -97,6 +101,7 @@ namespace BaoHien.UI
                 lblTotalResult.Text = orders.Count.ToString();
             }
         }
+
         private void SetupColumns()
         {
             dgwOrderList.AutoGenerateColumns = false;
@@ -195,7 +200,7 @@ namespace BaoHien.UI
                 DataGridViewCell cell = ((DataGridView)sender).CurrentCell;
                 if (cell.ColumnIndex == ((DataGridView)sender).ColumnCount - 1)
                 {
-                    DialogResult result = MessageBox.Show("Bạn có muốn xóa đơn hàng này này?",
+                    DialogResult result = MessageBox.Show("Bạn muốn xóa đơn hàng này?",
                     "Xoá đơn hàng",
                      MessageBoxButtons.YesNo,
                     MessageBoxIcon.Question);
@@ -206,7 +211,25 @@ namespace BaoHien.UI
                         OrderService orderService = new OrderService();
                         //Product mu = (Product)dgv.DataBoundItem;
                         int id = ObjectHelper.GetValueFromAnonymousType<int>(currentRow.DataBoundItem, "Id");
-                        if (!orderService.DeleteOrder(id))
+                        Order order = orderService.GetOrder(id);
+                        CustomerLogService cls = new CustomerLogService();
+                        CustomerLog newest = cls.GetNewestCustomerLog(order.CustId);
+                        double beforeDebit = 0.0;
+                        if (newest != null)
+                        {
+                            beforeDebit = newest.AfterDebit;
+                        }
+                        CustomerLog cl = new CustomerLog
+                        {
+                            CustomerId = order.CustId,
+                            RecordCode = BHConstant.MONEY_BACK_CODE,
+                            BeforeDebit = beforeDebit,
+                            Amount = order.Total,
+                            AfterDebit = beforeDebit - order.Total,
+                            CreatedDate = DateTime.Now
+                        };
+                        bool kq = cls.AddCustomerLog(cl);
+                        if (!orderService.DeleteOrder(id) && kq)
                         {
                             MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
 

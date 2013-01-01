@@ -25,8 +25,7 @@ namespace BaoHien.UI
         bool isUpdating = false;
         EntranceStock entranceStock;
         BindingList<EntranceStockDetail> entranceStockDetails;
-        BindingList<Product> products;
-        BindingList<BaseAttribute> baseAttributesAtRow;
+        BindingList<ProductAttributeModel> products;
         BindingList<ProductionRequestDetailModel> originalEntranceDetail;
 
         public AddEntranceStock()
@@ -45,14 +44,11 @@ namespace BaoHien.UI
             SetupColumns();
             updateProductionRequestDetailCells();
         }
+
         private void loadSomeData()
         {
-            
-
-            ProductService productService = new ProductService();
-            products = new BindingList<Product>(productService.GetProducts());
-            BaseAttributeService baseAttributeService = new BaseAttributeService();
-            baseAttributesAtRow = new BindingList<BaseAttribute>(baseAttributeService.GetBaseAttributes());
+            ProductAttributeService productAttrService = new ProductAttributeService();
+            products = new BindingList<ProductAttributeModel>(productAttrService.GetProductAndAttribute());
             if (entranceStock != null)
             {
                 txtCode.Text = entranceStock.EntranceCode;
@@ -66,144 +62,81 @@ namespace BaoHien.UI
                 if (Global.CurrentUser != null)
                 {
                     txtUser.Text = Global.CurrentUser.FullName;
-                }
-                
+                }                
                 txtUser.Enabled = false;
-
                 txtCode.Text = RandomGeneration.GeneratingCode(BHConstant.PREFIX_FOR_ENTRANCE);
                 txtDate.Text = DateTime.Now.ToShortDateString();
             }
             txtDate.Enabled = false;
             txtUser.Enabled = false;
         }
+
         private void SetupColumns()
         {
             dgvStockEntranceDetails.AutoGenerateColumns = false;
-
             if (entranceStockDetails == null)
             {
                 entranceStockDetails = new BindingList<EntranceStockDetail>();
-
-
             }
             var query = from entranceStockDetail in entranceStockDetails
-
                         select new ProductionRequestDetailModel
                         {
                             Id=entranceStockDetail.Id,
                             ProductId = entranceStockDetail.ProductId,
                             AttributeId = entranceStockDetail.AttributeId,
                             NumberUnit = entranceStockDetail.NumberUnit,
-                           
-
-                            Note = entranceStockDetail.Note,
-                            
+                            Note = entranceStockDetail.Note,                            
                         };
             dgvStockEntranceDetails.DataSource = new BindingList<ProductionRequestDetailModel>(query.ToList());
             originalEntranceDetail = new BindingList<ProductionRequestDetailModel>(query.ToList());
-            
-
             dgvStockEntranceDetails.ReadOnly = false;
 
             DataGridViewComboBoxColumn productColumn = new DataGridViewComboBoxColumn();
-            productColumn.Width = 150;
+            productColumn.Width = 200;
             productColumn.AutoComplete = false;
-
             productColumn.HeaderText = "Sản phẩm";
             productColumn.DataSource = products;
-            productColumn.DisplayMember = "ProductName";
+            productColumn.DisplayMember = "ProductAttribute";
             //productColumn.Frozen = true;
             productColumn.ValueMember = "Id";
-
             dgvStockEntranceDetails.Columns.Add(productColumn);
 
-            DataGridViewComboBoxColumn productAttributeColumn = new DataGridViewComboBoxColumn();
-            productAttributeColumn.Width = 150;
-            productAttributeColumn.HeaderText = "Quy cách sản phẩm";
-
-            productAttributeColumn.DataSource = baseAttributesAtRow;
-
-            productAttributeColumn.DisplayMember = "AttributeName";
-            //productColumn.Frozen = true;
-            productAttributeColumn.ValueMember = "Id";
-
-            dgvStockEntranceDetails.Columns.Add(productAttributeColumn);
-
-
-
             DataGridViewTextBoxColumn numberUnitColumn = new DataGridViewTextBoxColumn();
-
             numberUnitColumn.Width = 100;
             numberUnitColumn.DataPropertyName = "NumberUnit";
             numberUnitColumn.HeaderText = "Số lượng";
             //numberUnitColumn.Frozen = true;
             numberUnitColumn.ValueType = typeof(int);
             dgvStockEntranceDetails.Columns.Add(numberUnitColumn);
-
-            //DataGridViewTextBoxColumn priceColumn = new DataGridViewTextBoxColumn();
-
-            //priceColumn.Width = 100;
-            //priceColumn.DataPropertyName = "Price";
-            //priceColumn.HeaderText = "Số lượng";
-            ////numberUnitColumn.Frozen = true;
-            //priceColumn.ValueType = typeof(int);
-            //dgwOrderDetails.Columns.Add(priceColumn);
-
-            //DataGridViewTextBoxColumn totalColumn = new DataGridViewTextBoxColumn();
-
-            //totalColumn.Width = 100;
-            //totalColumn.DataPropertyName = "Total";
-            //totalColumn.HeaderText = "Số lượng";
-            ////numberUnitColumn.Frozen = true;
-            //totalColumn.ValueType = typeof(int);
-            //dgvStockEntranceDetails.Columns.Add(totalColumn);
-
+            
             DataGridViewTextBoxColumn noteColumn = new DataGridViewTextBoxColumn();
-
             noteColumn.DataPropertyName = "Note";
-            noteColumn.Width = 100;
+            noteColumn.Width = 300;
             noteColumn.HeaderText = "Ghi chú";
             //numberUnitColumn.Frozen = true;
             noteColumn.ValueType = typeof(string);
             dgvStockEntranceDetails.Columns.Add(noteColumn);
-
-            DataGridViewImageColumn deleteButton = new DataGridViewImageColumn();
-            deleteButton.DataPropertyName = "DeleteButton";
-            deleteButton.Image = Properties.Resources.erase;
-            deleteButton.Width = 100;
-            deleteButton.HeaderText = "Xóa";
-            deleteButton.ReadOnly = true;
-            deleteButton.ImageLayout = DataGridViewImageCellLayout.Normal;
         }
+
         public void updateProductionRequestDetailCells()
         {
             if (isUpdating && entranceStock != null && entranceStockDetails.Count < dgvStockEntranceDetails.RowCount)
             {
-
+                ProductAttributeService productAttrService = new ProductAttributeService();
                 for (int i = 0; i < entranceStockDetails.Count; i++)
                 {
-                    for (int j = 0; j < 2 && j < dgvStockEntranceDetails.ColumnCount; j++)
+                    if (dgvStockEntranceDetails.Rows[i].Cells[0] is DataGridViewComboBoxCell)
                     {
-                        if (dgvStockEntranceDetails.Rows[i].Cells[j] is DataGridViewComboBoxCell)
+                        DataGridViewComboBoxCell pkgBoxCell = (DataGridViewComboBoxCell)dgvStockEntranceDetails.Rows[i].Cells[0];
+                        try
                         {
-                            if (j == 0)
-                            {
-                                DataGridViewComboBoxCell pkgBoxCell = (DataGridViewComboBoxCell)dgvStockEntranceDetails.Rows[i].Cells[j];
-                                pkgBoxCell.Value = entranceStockDetails[i].ProductId;
-                            }
-                            if (j == 1)
-                            {
-                                DataGridViewComboBoxCell pkgBoxCell = (DataGridViewComboBoxCell)dgvStockEntranceDetails.Rows[i].Cells[j];
-                                pkgBoxCell.Value = entranceStockDetails[i].AttributeId;
-                            }
+                            pkgBoxCell.Value = productAttrService.GetProductAttribute(entranceStockDetails[i].ProductId,
+                                entranceStockDetails[i].AttributeId).Id;
                         }
+                        catch { }
                     }
                 }
-
-
-
             }
-
         }
 
         private void dgvStockEntranceDetails_CellEndEdit(object sender, DataGridViewCellEventArgs e)
@@ -220,39 +153,24 @@ namespace BaoHien.UI
             }
             if (dgv.CurrentCell.Value != null)
             {
-                if (e.ColumnIndex == 0)
+                switch (e.ColumnIndex)
                 {
-
-                    entranceStockDetails[e.RowIndex].ProductId = (int)dgv.CurrentCell.Value;
-                    ProductAttributeService productAttributeService = new ProductAttributeService();
-                    List<ProductAttribute> productAttributes = productAttributeService.SelectProductAttributeByWhere(ba => ba.Id == entranceStockDetails[e.RowIndex].ProductId);
-                    baseAttributesAtRow = new BindingList<BaseAttribute>();
-                    foreach (ProductAttribute pa in productAttributes)
-                    {
-                        baseAttributesAtRow.Add(pa.BaseAttribute);
-                    }
-                    DataGridViewComboBoxCell currentCell = (DataGridViewComboBoxCell)dgvStockEntranceDetails.Rows[e.RowIndex].Cells[1];
-                    currentCell.DataSource = baseAttributesAtRow;
-                    if (baseAttributesAtRow.Count > e.RowIndex && baseAttributesAtRow.Count > 0)
-                    {
-                        entranceStockDetails[e.RowIndex].AttributeId = baseAttributesAtRow[0].Id;
-                        currentCell.Value = baseAttributesAtRow[0].Id;
-                    }
-
-
-                }
-                else if (e.ColumnIndex == 1)
-                {
-                    entranceStockDetails[e.RowIndex].AttributeId = (int)dgv.CurrentCell.Value;
-                }
-                else if (e.ColumnIndex == 2)
-                {
-                    entranceStockDetails[e.RowIndex].NumberUnit = (int)dgv.CurrentCell.Value;
-                }
-                
-                else if (e.ColumnIndex == 3)
-                {
-                    entranceStockDetails[e.RowIndex].Note = (string)dgv.CurrentCell.Value;
+                    case 0:
+                        {
+                            ProductAttributeService productAttrService = new ProductAttributeService();
+                            ProductAttribute pa = productAttrService.GetProductAttribute((int)dgv.CurrentCell.Value);
+                            if (pa != null)
+                            {
+                                entranceStockDetails[e.RowIndex].ProductId = pa.ProductId;
+                                entranceStockDetails[e.RowIndex].AttributeId = pa.AttributeId;
+                            }
+                        } break;
+                    case 1:
+                        entranceStockDetails[e.RowIndex].NumberUnit = (int)dgv.CurrentCell.Value;
+                        break;
+                    case 2:
+                        entranceStockDetails[e.RowIndex].Note = (string)dgv.CurrentCell.Value;
+                        break;
                 }
             }
         }
@@ -264,59 +182,42 @@ namespace BaoHien.UI
 
         private void dgvStockEntranceDetails_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
         {
-            if (dgvStockEntranceDetails.CurrentCell.ColumnIndex == 0)
+            switch (dgvStockEntranceDetails.CurrentCell.ColumnIndex)
             {
-                var source = new AutoCompleteStringCollection();
-                String[] stringArray = Array.ConvertAll<Product, String>(products.ToArray(), delegate(Product row) { return (String)row.ProductName; });
-                source.AddRange(stringArray);
-
-                ComboBox prodCode = e.Control as ComboBox;
-                if (prodCode != null)
-                {
-                    prodCode.DropDownStyle = ComboBoxStyle.DropDown;
-                    prodCode.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-                    prodCode.AutoCompleteCustomSource = source;
-                    prodCode.AutoCompleteSource = AutoCompleteSource.CustomSource;
-                    prodCode.MaxDropDownItems = 5;
-
-                }
-                //this.validator1.SetType(prodCode, Itboy.Components.ValidationType.Required);
-            }
-            else if (dgvStockEntranceDetails.CurrentCell.ColumnIndex == 1)
-            {
-                if (baseAttributesAtRow != null)
-                {
-                    var source = new AutoCompleteStringCollection();
-                    String[] stringArray = Array.ConvertAll<BaseAttribute, String>(baseAttributesAtRow.ToArray(), delegate(BaseAttribute row) { return (String)row.AttributeName; });
-                    source.AddRange(stringArray);
-
-                    ComboBox prodCode = e.Control as ComboBox;
-                    if (prodCode != null)
+                case 0:
                     {
-                        prodCode.DropDownStyle = ComboBoxStyle.DropDown;
-                        prodCode.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-                        prodCode.AutoCompleteCustomSource = source;
-                        prodCode.AutoCompleteSource = AutoCompleteSource.CustomSource;
-                        prodCode.MaxDropDownItems = 5;
+                        var source = new AutoCompleteStringCollection();
+                        String[] stringArray = Array.ConvertAll<ProductAttributeModel, String>(products.ToArray(), delegate(ProductAttributeModel row) { return (String)row.ProductAttribute; });
+                        source.AddRange(stringArray);
 
+                        ComboBox prodCode = e.Control as ComboBox;
+                        if (prodCode != null)
+                        {
+                            prodCode.DropDownStyle = ComboBoxStyle.DropDown;
+                            prodCode.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+                            prodCode.AutoCompleteCustomSource = source;
+                            prodCode.AutoCompleteSource = AutoCompleteSource.CustomSource;
+                            prodCode.MaxDropDownItems = 5;
+
+                        }
+                        //this.validator1.SetType(prodCode, Itboy.Components.ValidationType.Required);
+                    } break;
+                case 1:
+                    { 
+                        TextBox numberOfUnit = e.Control as TextBox;
+                        this.validator1.SetRegularExpression(numberOfUnit, BHConstant.REGULAR_EXPRESSION_FOR_NUMBER);
+                        this.validator1.SetType(numberOfUnit, Itboy.Components.ValidationType.RegularExpression);
                     }
-                    //this.validator1.SetType(prodCode, Itboy.Components.ValidationType.Required);
-                }
-
-            }
-            else if (dgvStockEntranceDetails.CurrentCell.ColumnIndex == 2)
-            {
-                TextBox numberOfUnit = e.Control as TextBox;
-                this.validator1.SetRegularExpression(numberOfUnit, BHConstant.REGULAR_EXPRESSION_FOR_NUMBER);
-                this.validator1.SetType(numberOfUnit, Itboy.Components.ValidationType.RegularExpression);
-            }
-            else
-            {
-                if (e.Control is TextBox)
-                {
-                    TextBox other = e.Control as TextBox;
-                    this.validator1.SetType(other, Itboy.Components.ValidationType.None);
-                }
+                    break;
+                case 2:
+                    {
+                        if (e.Control is TextBox)
+                        {
+                            TextBox other = e.Control as TextBox;
+                            this.validator1.SetType(other, Itboy.Components.ValidationType.None);
+                        }
+                    }
+                    break;
             }
         }
 
@@ -331,7 +232,7 @@ namespace BaoHien.UI
         public void loadDataForEditEntranceStock(int entranceId)
         {
             isUpdating = true;
-            this.Text = "Chỉnh sửa  đơn hàng này";
+            this.Text = "Chỉnh sửa phiếu nhập kho này";
             this.btnSave.Text = "Cập nhật";
             EntranceStockService entranceStockService = new EntranceStockService();
             entranceStock = entranceStockService.GetEntranceStock(entranceId);
@@ -340,9 +241,7 @@ namespace BaoHien.UI
                 if (entranceStockDetails == null)
                 {
                     EntranceStockDetailService entranceStockDetailService = new EntranceStockDetailService();
-
                     entranceStockDetails = new BindingList<EntranceStockDetail>(entranceStockDetailService.SelectEntranceStockDetailByWhere(o => o.EntranceStockId == entranceStock.Id));
-
                 }
             }
 
@@ -577,6 +476,7 @@ namespace BaoHien.UI
 
         private void AddMaterialInStock()
         { 
+
         }
     }
 }

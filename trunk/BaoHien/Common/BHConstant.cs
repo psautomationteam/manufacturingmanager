@@ -42,5 +42,7 @@ namespace BaoHien.Common
         public const byte DATA_STATUS_IN_STOCK_FOR_EDIT = 3;
 
         public static string SAVE_IN_DIRECTORY = AppDomain.CurrentDomain.BaseDirectory + @"\Temp";
+
+        public static string MONEY_BACK_CODE = "MBC_BH";
     }
 }

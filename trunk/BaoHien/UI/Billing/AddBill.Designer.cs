@@ -37,11 +37,11 @@
             this.label2 = new System.Windows.Forms.Label();
             this.txtOrderCode = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.txtAmount = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.btnSave = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.validator1 = new Itboy.Components.Validator(this.components);
+            this.txtAmount = new JRINCCustomControls.currencyTextBox(this.components);
             this.SuspendLayout();
             // 
             // txtNote
@@ -113,15 +113,6 @@
             this.label1.TabIndex = 14;
             this.label1.Text = "Mã Phiếu:";
             // 
-            // txtAmount
-            // 
-            this.txtAmount.Location = new System.Drawing.Point(92, 39);
-            this.txtAmount.Name = "txtAmount";
-            this.validator1.SetRegularExpression(this.txtAmount, "[0-9].[0-9]");
-            this.txtAmount.Size = new System.Drawing.Size(151, 20);
-            this.txtAmount.TabIndex = 1;
-            this.validator1.SetType(this.txtAmount, Itboy.Components.ValidationType.RegularExpression);
-            // 
             // label3
             // 
             this.label3.AutoSize = true;
@@ -156,6 +147,17 @@
             // 
             this.validator1.Form = this;
             // 
+            // txtAmount
+            // 
+            this.txtAmount.DecimalPlaces = 0;
+            this.txtAmount.DecimalsSeparator = ',';
+            this.txtAmount.Location = new System.Drawing.Point(92, 41);
+            this.txtAmount.Name = "txtAmount";
+            this.txtAmount.PreFix = "(VND) ";
+            this.txtAmount.Size = new System.Drawing.Size(151, 20);
+            this.txtAmount.TabIndex = 23;
+            this.txtAmount.ThousandsSeparator = '.';
+            // 
             // AddBill
             // 
             this.AcceptButton = this.btnSave;
@@ -163,9 +165,9 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(576, 204);
+            this.Controls.Add(this.txtAmount);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.btnCancel);
-            this.Controls.Add(this.txtAmount);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.txtNote);
             this.Controls.Add(this.label8);
@@ -194,10 +196,10 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txtOrderCode;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox txtAmount;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.Button btnCancel;
         private Itboy.Components.Validator validator1;
+        private JRINCCustomControls.currencyTextBox txtAmount;
     }
 }

@@ -87,5 +87,10 @@ namespace BaoHien.Common
             }
             return (_preFix != "" && str.ToString() != "") ? _preFix + " " + str.ToString() : (str.ToString() != "") ? str.ToString() : "";
         }
+
+        public static string formatVNDCurrencyText(string content)
+        {
+            return formatCurrencyText(content, "(VND) ", '.', ',');
+        }
     }
 }

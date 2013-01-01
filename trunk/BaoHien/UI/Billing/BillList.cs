@@ -12,6 +12,7 @@ using BaoHien.Services.SystemUsers;
 using BaoHien.Services.Bills;
 using DAL.Helper;
 using BaoHien.Model;
+using BaoHien.Common;
 
 namespace BaoHien.UI
 {
@@ -19,10 +20,12 @@ namespace BaoHien.UI
     {
         List<Customer> customers;
         List<SystemUser> systemUsers;
+
         public BillList()
         {
             InitializeComponent();
         }
+
         public void loadBillList()
         {
             loadSomeData();
@@ -31,6 +34,7 @@ namespace BaoHien.UI
             setUpDataGrid(bills);
 
         }
+
         private void loadSomeData()
         {
             if (customers == null)
@@ -65,6 +69,7 @@ namespace BaoHien.UI
             }
 
         }
+
         private void setUpDataGrid(List<Bill> bills)
         {
             dgwBillingList.AutoGenerateColumns = false;
@@ -90,6 +95,7 @@ namespace BaoHien.UI
 
             }
         }
+
         private void SetupColumns()
         {
             dgwBillingList.AutoGenerateColumns = false;
@@ -224,7 +230,25 @@ namespace BaoHien.UI
                         BillService billService = new BillService();
                         //Product mu = (Product)dgv.DataBoundItem;
                         int id = ObjectHelper.GetValueFromAnonymousType<int>(currentRow.DataBoundItem, "Id");
-                        if (!billService.DeleteBill(id))
+                        Bill bill = billService.GetBill(id);
+                        CustomerLogService cls = new CustomerLogService();
+                        CustomerLog newest = cls.GetNewestCustomerLog(bill.CustId);
+                        double beforeDebit = 0.0;
+                        if (newest != null)
+                        {
+                            beforeDebit = newest.AfterDebit;
+                        }
+                        CustomerLog cl = new CustomerLog
+                        {
+                            CustomerId = bill.CustId,
+                            RecordCode = BHConstant.MONEY_BACK_CODE,
+                            BeforeDebit = beforeDebit,
+                            Amount = bill.Amount,
+                            AfterDebit = beforeDebit + bill.Amount,
+                            CreatedDate = DateTime.Now
+                        };
+                        bool kq = cls.AddCustomerLog(cl);
+                        if (!billService.DeleteBill(id) && kq)
                         {
                             MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
 

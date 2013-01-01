@@ -16,11 +16,10 @@ using BaoHien.UI.Base;
 namespace BaoHien.UI
 {
     public partial class AddBill : BaseForm
-    {
-        
+    {        
         Bill bill;
         List<Customer> customers;
-        List<SystemUser> systemUsers;
+
         public AddBill()
         {
             InitializeComponent();
@@ -30,31 +29,30 @@ namespace BaoHien.UI
         {
             this.Close();
         }
+
         private void loadSomeData()
         {
             if (customers == null)
             {
                 CustomerService customerService = new CustomerService();
-                customers = customerService.GetCustomers();
-               
+                customers = customerService.GetCustomers();               
             }
             if (customers != null)
             {
-
-
                 cbxCustomer.DataSource = customers;
-
                 cbxCustomer.DisplayMember = "CustomerName";
                 cbxCustomer.ValueMember = "Id";
-
             }
             if (bill != null)
             {
-                txtAmount.Text = bill.Amount.ToString();
+                txtAmount.Text = Global.formatVNDCurrencyText(bill.Amount.ToString());
+                txtAmount.Enabled = false;
                 txtCreatedDate.Text = bill.CreatedDate.ToShortDateString();
                 txtNote.Text = bill.Note;
                 txtOrderCode.Text = bill.BillCode;
                 cbxCustomer.SelectedValue = bill.CustId;
+                cbxCustomer.Enabled = false;
+                btnSave.Text = "OK";
             }
             else
             {
@@ -63,6 +61,7 @@ namespace BaoHien.UI
             }
             txtCreatedDate.Enabled = false;
         }
+
         private void btnSave_Click(object sender, EventArgs e)
         {
             if (validator1.Validate())
@@ -71,7 +70,8 @@ namespace BaoHien.UI
                 if (bill == null)
                 {
                     double amount = 0;
-                    double.TryParse(txtAmount.Text, out amount);
+                    string amountStr = string.IsNullOrEmpty(txtAmount.WorkingText) ? txtAmount.Text : txtAmount.WorkingText;
+                    double.TryParse(amountStr, out amount);
                     int userId = 0;
                     if (Global.CurrentUser != null)
                     {
@@ -94,6 +94,23 @@ namespace BaoHien.UI
                     };
 
                     bool result = billService.AddBill(bill);
+                    CustomerLogService cls = new CustomerLogService();
+                    CustomerLog newest = cls.GetNewestCustomerLog(bill.CustId);
+                    double beforeDebit = 0.0;
+                    if (newest != null)
+                    {
+                        beforeDebit = newest.AfterDebit;
+                    }
+                    CustomerLog cl = new CustomerLog
+                    {
+                        CustomerId = bill.CustId,
+                        RecordCode = bill.BillCode,
+                        BeforeDebit = beforeDebit,
+                        Amount = bill.Amount,
+                        AfterDebit = beforeDebit - bill.Amount,
+                        CreatedDate = DateTime.Now
+                    };
+                    result = cls.AddCustomerLog(cl);
                     if (result)
                     {
                         MessageBox.Show("Phiếu thanh toán đã được thêm!");
@@ -106,33 +123,33 @@ namespace BaoHien.UI
                 }
                 else
                 {
-                    double amount = 0;
-                    double.TryParse(txtAmount.Text, out amount);
-                    int userId = 0;
-                    if (Global.CurrentUser != null)
-                    {
-                        userId = Global.CurrentUser.Id;
-                    }
-                    else
-                    {
-                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
-                        return;
-                    }
-                    bill.BillCode = txtOrderCode.Text;
-                    bill.Note = txtNote.Text;
-                    bill.Amount = amount;
-                    bill.CustId = cbxCustomer.SelectedValue != null ? (int)cbxCustomer.SelectedValue : 0;
-                    bill.UserId = userId;
-                    bool result = billService.UpdateBill(bill);
-                    if (result)
-                    {
-                        MessageBox.Show("Phiếu thanh toán đã được cập nhật!");
-                    }
-                    else
-                    {
-                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
-                        return;
-                    }
+                    //double amount = 0;
+                    //double.TryParse(txtAmount.Text, out amount);
+                    //int userId = 0;
+                    //if (Global.CurrentUser != null)
+                    //{
+                    //    userId = Global.CurrentUser.Id;
+                    //}
+                    //else
+                    //{
+                    //    MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                    //    return;
+                    //}
+                    //bill.BillCode = txtOrderCode.Text;
+                    //bill.Note = txtNote.Text;
+                    //bill.Amount = amount;
+                    //bill.CustId = cbxCustomer.SelectedValue != null ? (int)cbxCustomer.SelectedValue : 0;
+                    //bill.UserId = userId;
+                    //bool result = billService.UpdateBill(bill);
+                    //if (result)
+                    //{
+                    //    MessageBox.Show("Phiếu thanh toán đã được cập nhật!");
+                    //}
+                    //else
+                    //{
+                    //    MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                    //    return;
+                    //}
                 }
                 if (this.CallFromUserControll != null && this.CallFromUserControll is BillList)
                 {
@@ -148,11 +165,11 @@ namespace BaoHien.UI
         {
             loadSomeData();
         }
+
         public void loadDataForEditBill(int billId)
         {
             BillService billService = new BillService();
-            bill = billService.GetBill(billId);
-            
+            bill = billService.GetBill(billId);            
         }
     }
 }
