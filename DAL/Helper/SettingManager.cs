@@ -10,8 +10,8 @@ namespace DAL.Helper
 {
     public class SettingManager
     {
-        public static string INSTANCE = "\\sqlexpress";
-        //public static string INSTANCE = "";
+        //public static string INSTANCE = "\\sqlexpress";
+        public static string INSTANCE = "";
 
         public void UpdateSetting(string keyName, string keyValue)
         {

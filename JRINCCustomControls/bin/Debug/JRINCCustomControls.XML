@@ -4,23 +4,6 @@
         <name>JRINCCustomControls</name>
     </assembly>
     <members>
-        <member name="M:JRINCCustomControls.currencyTextBox.#ctor">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="M:JRINCCustomControls.currencyTextBox.#ctor(System.ComponentModel.IContainer)">
-            <summary>
-            
-            </summary>
-            <param name="container"></param>
-        </member>
-        <member name="M:JRINCCustomControls.currencyTextBox.formatText">
-            <summary>
-            Formats the entered text.
-            </summary>
-            <returns></returns>
-        </member>
         <member name="F:JRINCCustomControls.currencyTextBox.components">
             <summary>
             Required designer variable.
@@ -37,6 +20,23 @@
             Required method for Designer support - do not modify
             the contents of this method with the code editor.
             </summary>
+        </member>
+        <member name="M:JRINCCustomControls.currencyTextBox.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:JRINCCustomControls.currencyTextBox.#ctor(System.ComponentModel.IContainer)">
+            <summary>
+            
+            </summary>
+            <param name="container"></param>
+        </member>
+        <member name="M:JRINCCustomControls.currencyTextBox.formatText">
+            <summary>
+            Formats the entered text.
+            </summary>
+            <returns></returns>
         </member>
         <member name="P:JRINCCustomControls.currencyTextBox.WorkingText">
             <summary>
