@@ -7,54 +7,34 @@ namespace BaoHien.Model
 {
     public class ArrearReportModel
     {
-        string date;
+        int index;
+        public int Index
+        {
+            get { return index; }
+            set { index = value; }
+        }
 
+        string date;
         public string Date
         {
             get { return date; }
             set { date = value; }
         }
-        string productName;
 
-        public string ProductName
+        string recordCode;
+        public string RecordCode
         {
-            get { return productName; }
-            set { productName = value; }
+            get { return recordCode; }
+            set { recordCode = value; }
         }
-        string attributeName;
 
-        public string AttributeName
+        string amount;
+        public string Amount
         {
-            get { return attributeName; }
-            set { attributeName = value; }
+            get { return amount; }
+            set { amount = value; }
         }
-        string baseUnitName;
 
-        public string BaseUnitName
-        {
-            get { return baseUnitName; }
-            set { baseUnitName = value; }
-        }
-        int numberOfItem;
-
-        public int NumberOfItem
-        {
-            get { return numberOfItem; }
-            set { numberOfItem = value; }
-        }
-        double price;
-
-        public double Price
-        {
-            get { return price; }
-            set { price = value; }
-        }
-        double total;
-
-        public double Total
-        {
-            get { return total; }
-            set { total = value; }
-        }
+        
     }
 }

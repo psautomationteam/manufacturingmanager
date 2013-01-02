@@ -135,7 +135,8 @@ namespace BaoHien.UI
         }
         #endregion 
 
-#region toolbar action
+        #region toolbar action
+
         private void tsbAddProduct_Click(object sender, EventArgs e)
         {
             AddProduct frmAddProduct = new AddProduct();
@@ -173,7 +174,7 @@ namespace BaoHien.UI
             frm.ShowDialog();
         }
 
-#endregion
+        #endregion
 
         private void Main_Load(object sender, EventArgs e)
         {
@@ -191,45 +192,5 @@ namespace BaoHien.UI
             DBConfiguration frm = new DBConfiguration();
             frm.ShowDialog();
         }
-
-        
-
-       
-
-      
-        
-
-       
-        
-
-       
-
-       
-        
-
-        
-
-        
-
-        
-
-        
-
-        
-
-        
-
-        
-
-        
-
-        
-
-        
-
-        
-
-       
-
     }
 }

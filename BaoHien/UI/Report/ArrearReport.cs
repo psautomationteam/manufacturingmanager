@@ -11,6 +11,7 @@ using BaoHien.Services.Products;
 using BaoHien.Model;
 using BaoHien.Services.MaterialInStocks;
 using BaoHien.Services.Customers;
+using BaoHien.Common;
 
 namespace BaoHien.UI
 {
@@ -18,59 +19,63 @@ namespace BaoHien.UI
     {
         List<Customer> customers;
         List<EntranceStockReport> entranceStockReports;
+
         public ArrearReport()
         {
             InitializeComponent();
             LoadCustomers();
-            
+            dtpFrom.Value = DateTime.Today.AddMonths(-1);
+            dtpFrom.CustomFormat = "dd/MM/yyyy";
+            dtpTo.CustomFormat = "dd/MM/yyyy";
         }
-        private void setUpDataGrid(List<MaterialInStock> materialInStocks)
+
+        private void setUpDataGrid(List<CustomerLog> customerLogs)
         {
             int index = 0;
-            var query = from materialInStock in materialInStocks
-                        select new EntranceStockReport
+            var query = from customerLog in customerLogs
+                        select new ArrearReportModel
                         {
-                            ProductCode = materialInStock.Product.ProductCode,
-                            ProductName = materialInStock.Product.ProductName,
-                            AttributeName = materialInStock.BaseAttribute.AttributeName,
-                            NumberOfInput = (materialInStock.NumberOfInput != null) ? (int)materialInStock.NumberOfInput : 0,
-                            NumberOfOutput = (materialInStock.NumberOfOutput != null) ? (int)materialInStock.NumberOfOutput : 0,
-                            NumberOfRemaining = ((materialInStock.NumberOfInput != null) ? (int)materialInStock.NumberOfInput : 0) - ((materialInStock.NumberOfOutput != null) ? (int)materialInStock.NumberOfOutput : 0),
-                            BaseUnitName = (materialInStock.Product.MeasurementUnit != null) ? materialInStock.Product.MeasurementUnit.Name : "",
+                            Date = customerLog.CreatedDate.ToString("dd/MM/yyyy HH:mm:ss"),
+                            Amount = Global.formatVNDCurrencyText((customerLog.BeforeDebit - customerLog.AfterDebit).ToString()),
+                            RecordCode = customerLog.RecordCode,
                             Index = ++index
                         };
             dgwStockEntranceList.DataSource = query.ToList();
         }
+
         void LoadReport()
         {
             if (cbmCustomers.SelectedValue != null)
             {
-                int productTyeId = (int)cbmCustomers.SelectedValue;
-                MaterialInStockService materialInStockService = new MaterialInStockService();
-                List<MaterialInStock> materialInStocks = materialInStockService.GetMaterialInStocks();
-                materialInStocks = materialInStocks.Where(mis=>mis.Product.ProductType == productTyeId).ToList();
-                setUpDataGrid(materialInStocks);
+                int customerId = (int)cbmCustomers.SelectedValue;
+                if (customerId != 0)
+                {
+                    CustomerLogService customerLogService = new CustomerLogService();
+                    List<CustomerLog> customerLogs = customerLogService.GetLogsOfCustomer(customerId, dtpFrom.Value, dtpTo.Value);
+                    setUpDataGrid(customerLogs);
+                }
             }
             else
             {
                 MessageBox.Show("Vui lòng chọn loại sản phẩm");
             }
-            
-            
         }
+
         void LoadCustomers()
         {
             CustomerService customerService = new CustomerService();
             customers = customerService.GetCustomers();
+            Customer ctm = new Customer { 
+                Id = 0,
+                CustomerName = "Tất cả"
+            };
+            customers.Add(ctm);
+            customers = customers.OrderBy(ct => ct.Id).ToList();
             if (customers != null)
             {
-
-
                 cbmCustomers.DataSource = customers;
-
                 cbmCustomers.DisplayMember = "CustomerName";
                 cbmCustomers.ValueMember = "Id";
-
             }
         }
         
@@ -86,67 +91,29 @@ namespace BaoHien.UI
             //indexColumn.Frozen = true;
             dgwStockEntranceList.Columns.Add(indexColumn);
 
-            DataGridViewTextBoxColumn productCodeColumn = new DataGridViewTextBoxColumn();
-            productCodeColumn.Width = 150;
-            productCodeColumn.DataPropertyName = "ProductCode";
-            productCodeColumn.HeaderText = "Mã sản phẩm";
-            productCodeColumn.ValueType = typeof(string);
+            DataGridViewTextBoxColumn recordCodeColumn = new DataGridViewTextBoxColumn();
+            recordCodeColumn.Width = 150;
+            recordCodeColumn.DataPropertyName = "RecordCode";
+            recordCodeColumn.HeaderText = "Mã phiếu";
+            recordCodeColumn.ValueType = typeof(string);
             //productCodeColumn.Frozen = true;
-            dgwStockEntranceList.Columns.Add(productCodeColumn);
+            dgwStockEntranceList.Columns.Add(recordCodeColumn);
 
-            DataGridViewTextBoxColumn productNameColumn = new DataGridViewTextBoxColumn();
-            productNameColumn.Width = 150;
-            productNameColumn.DataPropertyName = "ProductName";
-            productNameColumn.HeaderText = "Tên sản phẩm";
-            productNameColumn.ValueType = typeof(string);
+            DataGridViewTextBoxColumn dateColumn = new DataGridViewTextBoxColumn();
+            dateColumn.Width = 150;
+            dateColumn.DataPropertyName = "Date";
+            dateColumn.HeaderText = "Ngày";
+            dateColumn.ValueType = typeof(string);
             //productNameColumn.Frozen = true;
-            dgwStockEntranceList.Columns.Add(productNameColumn);
-
-
-
-
-
-            DataGridViewTextBoxColumn attributeNameColumn = new DataGridViewTextBoxColumn();
-            attributeNameColumn.DataPropertyName = "AttributeName";
-            attributeNameColumn.Width = 100;
-            attributeNameColumn.HeaderText = "Quy cách";
-            //attributeNameColumn.Frozen = true;
-            attributeNameColumn.ValueType = typeof(string);
-            dgwStockEntranceList.Columns.Add(attributeNameColumn);
-
-            DataGridViewTextBoxColumn baseUnitColumn = new DataGridViewTextBoxColumn();
-            baseUnitColumn.DataPropertyName = "BaseUnit";
-            baseUnitColumn.Width = 100;
-            baseUnitColumn.HeaderText = "Đơn vị tính";
-            //baseUnitColumn.Frozen = true;
-            baseUnitColumn.ValueType = typeof(string);
-            dgwStockEntranceList.Columns.Add(baseUnitColumn);
-
-            DataGridViewTextBoxColumn numberOfInputColumn = new DataGridViewTextBoxColumn();
-            numberOfInputColumn.DataPropertyName = "NumberOfInput";
-            numberOfInputColumn.Width = 100;
-            numberOfInputColumn.HeaderText = "Nhập";
-            //numberOfInputColumn.Frozen = true;
-            numberOfInputColumn.ValueType = typeof(string);
-            dgwStockEntranceList.Columns.Add(numberOfInputColumn);
-
-            DataGridViewTextBoxColumn numberOfOutputColumn = new DataGridViewTextBoxColumn();
-            numberOfOutputColumn.DataPropertyName = "NumberOfOutput";
-            numberOfOutputColumn.Width = 100;
-            numberOfOutputColumn.HeaderText = "Xuất";
-            //numberOfOutputColumn.Frozen = true;
-            numberOfOutputColumn.ValueType = typeof(string);
-            dgwStockEntranceList.Columns.Add(numberOfOutputColumn);
-
-            DataGridViewTextBoxColumn numberOfRemainingColumn = new DataGridViewTextBoxColumn();
-            numberOfRemainingColumn.DataPropertyName = "NumberOfRemaining";
-            numberOfRemainingColumn.Width = 100;
-            numberOfRemainingColumn.HeaderText = "Số lượng tồn";
-            //numberOfRemainingColumn.Frozen = true;
-            numberOfRemainingColumn.ValueType = typeof(string);
-            dgwStockEntranceList.Columns.Add(numberOfRemainingColumn);
-
+            dgwStockEntranceList.Columns.Add(dateColumn);
             
+            DataGridViewTextBoxColumn amountColumn = new DataGridViewTextBoxColumn();
+            amountColumn.DataPropertyName = "Amount";
+            amountColumn.Width = 150;
+            amountColumn.HeaderText = "Số tiền";
+            //attributeNameColumn.Frozen = true;
+            amountColumn.ValueType = typeof(string);
+            dgwStockEntranceList.Columns.Add(amountColumn);
         }
 
         private void btnSearch_Click(object sender, EventArgs e)

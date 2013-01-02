@@ -36,12 +36,16 @@
             this.label1 = new System.Windows.Forms.Label();
             this.dgwStockEntranceList = new System.Windows.Forms.DataGridView();
             this.label8 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.dtpTo = new System.Windows.Forms.DateTimePicker();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgwStockEntranceList)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.dtpTo);
+            this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.btnSearch);
             this.groupBox1.Controls.Add(this.cbmCustomers);
             this.groupBox1.Controls.Add(this.label5);
@@ -49,16 +53,16 @@
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Location = new System.Drawing.Point(19, 16);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(696, 63);
+            this.groupBox1.Size = new System.Drawing.Size(1053, 63);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Thông tin tạo báo cáo";
             // 
             // btnSearch
             // 
-            this.btnSearch.Location = new System.Drawing.Point(597, 19);
+            this.btnSearch.Location = new System.Drawing.Point(939, 21);
             this.btnSearch.Name = "btnSearch";
-            this.btnSearch.Size = new System.Drawing.Size(75, 35);
+            this.btnSearch.Size = new System.Drawing.Size(73, 25);
             this.btnSearch.TabIndex = 2;
             this.btnSearch.Text = "Báo Cáo";
             this.btnSearch.UseVisualStyleBackColor = true;
@@ -67,15 +71,15 @@
             // cbmCustomers
             // 
             this.cbmCustomers.FormattingEnabled = true;
-            this.cbmCustomers.Location = new System.Drawing.Point(383, 19);
+            this.cbmCustomers.Location = new System.Drawing.Point(643, 24);
             this.cbmCustomers.Name = "cbmCustomers";
-            this.cbmCustomers.Size = new System.Drawing.Size(166, 21);
+            this.cbmCustomers.Size = new System.Drawing.Size(208, 21);
             this.cbmCustomers.TabIndex = 1;
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(298, 27);
+            this.label5.Location = new System.Drawing.Point(546, 28);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(68, 13);
             this.label5.TabIndex = 8;
@@ -83,20 +87,20 @@
             // 
             // dtpFrom
             // 
-            this.dtpFrom.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dtpFrom.Location = new System.Drawing.Point(116, 21);
+            this.dtpFrom.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dtpFrom.Location = new System.Drawing.Point(87, 25);
             this.dtpFrom.Name = "dtpFrom";
-            this.dtpFrom.Size = new System.Drawing.Size(124, 20);
+            this.dtpFrom.Size = new System.Drawing.Size(132, 20);
             this.dtpFrom.TabIndex = 0;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(39, 27);
+            this.label1.Location = new System.Drawing.Point(29, 27);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(71, 13);
+            this.label1.Size = new System.Drawing.Size(52, 13);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Tại thời điểm:";
+            this.label1.Text = "Từ ngày :";
             // 
             // dgwStockEntranceList
             // 
@@ -115,6 +119,23 @@
             this.label8.Size = new System.Drawing.Size(324, 14);
             this.label8.TabIndex = 20;
             this.label8.Text = "Chú ý: mặc định sẽ là tình trạng hiện tại trong kho và thành phẩm";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(262, 28);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(59, 13);
+            this.label2.TabIndex = 9;
+            this.label2.Text = "Đến ngày :";
+            // 
+            // dtpTo
+            // 
+            this.dtpTo.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dtpTo.Location = new System.Drawing.Point(345, 24);
+            this.dtpTo.Name = "dtpTo";
+            this.dtpTo.Size = new System.Drawing.Size(149, 20);
+            this.dtpTo.TabIndex = 10;
             // 
             // ArrearReport
             // 
@@ -143,5 +164,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.DataGridView dgwStockEntranceList;
         private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.DateTimePicker dtpTo;
+        private System.Windows.Forms.Label label2;
     }
 }

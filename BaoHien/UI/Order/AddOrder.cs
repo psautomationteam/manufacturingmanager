@@ -853,13 +853,13 @@ namespace BaoHien.UI
                 processStartInfo.UseShellExecute = false;
                 Process process = Process.Start(processStartInfo);
                 process.WaitForInputIdle(20 * 1000);
+                process.Kill();
 
                 processStartInfo = new ProcessStartInfo(path.ToString(), parameter2);
                 processStartInfo.CreateNoWindow = true;
                 processStartInfo.UseShellExecute = false;
                 process = Process.Start(processStartInfo);
                 process.WaitForInputIdle(20 * 1000);
-
                 process.Kill();
             }
             catch

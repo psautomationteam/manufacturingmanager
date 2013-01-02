@@ -15,10 +15,12 @@ namespace BaoHien.UI
     public partial class AddEmployee : BaseForm
     {
         Employee employee;
+
         public AddEmployee()
         {
             InitializeComponent();
         }
+
         public void loadDataForEditEmployee(int employeeId)
         {
             this.Text = "Chỉnh sửa thông tin nhân viên";
@@ -59,7 +61,7 @@ namespace BaoHien.UI
                     bool result = employeeService.UpdateEmployee(employee);
                     if (result)
                     {
-                        MessageBox.Show("Nhân viên mới đã được cập nhật vào hệ thống");
+                        MessageBox.Show("Thông tin nhân viên đã được cập nhật vào hệ thống");
                         ((EmployeeList)this.CallFromUserControll).loadEmployeeList();
                         this.Close();
                     }
@@ -85,7 +87,7 @@ namespace BaoHien.UI
                     bool result = employeeService.AddEmployee(employee);
                     if (result)
                     {
-                        MessageBox.Show("Loại sản phẩm đã được thêm mới vào hệ thống");
+                        MessageBox.Show("Nhân viên đã được thêm mới vào hệ thống");
                         ((EmployeeList)this.CallFromUserControll).loadEmployeeList();
                         this.Close();
                     }

@@ -204,7 +204,7 @@ namespace BaoHien.UI
             txtCode.Enabled = !chkAuto.Checked;
             if (!txtCode.Enabled)
             {
-                int max_id = product == null ? BaoHienRepository.GetMaxId<Product>() : product.Id;
+                int max_id = product == null ? BaoHienRepository.GetMaxId<Product>() + 1 : product.Id;
                 string id = BHConstant.PREFIX_FOR_PRODUCT;
                 if (max_id.ToString().Length < BHConstant.MAX_ID)
                     id += String.Concat(Enumerable.Repeat("0", BHConstant.MAX_ID - max_id.ToString().Length));
@@ -235,8 +235,6 @@ namespace BaoHien.UI
             //attributeNameColumn.Frozen = true;
             dgvBaseAttributes.Columns.Add(attributeNameColumn);
 
-
-
             DataGridViewTextBoxColumn attributeCodeColumn = new DataGridViewTextBoxColumn();
             attributeCodeColumn.DataPropertyName = "AttributeCode";
             attributeCodeColumn.Width = 120;
@@ -245,13 +243,6 @@ namespace BaoHien.UI
             attributeCodeColumn.ValueType = typeof(string);
             dgvBaseAttributes.Columns.Add(attributeCodeColumn);
 
-            DataGridViewImageColumn deleteButton = new DataGridViewImageColumn();
-            deleteButton.Image = Properties.Resources.erase;
-            deleteButton.Width = 100;
-            deleteButton.HeaderText = "Xóa";
-            //deleteButton.ReadOnly = true;
-            deleteButton.ImageLayout = DataGridViewImageCellLayout.Normal;
-
             DataGridViewTextBoxColumn descriptionColumn = new DataGridViewTextBoxColumn();
             descriptionColumn.Width = 350;// dgvProductAttributeList.Width - attributeNameColumn.Width - attributeCodeColumn.Width;
             descriptionColumn.DataPropertyName = "Description";
@@ -259,9 +250,6 @@ namespace BaoHien.UI
             //descriptionColumn.Frozen = true;
             descriptionColumn.ValueType = typeof(string);
             dgvBaseAttributes.Columns.Add(descriptionColumn);
-
-            dgvBaseAttributes.Columns.Add(deleteButton);
-
         }
 
         private void dgwOrderDetails_DataError(object sender, DataGridViewDataErrorEventArgs e)
