@@ -395,7 +395,7 @@ namespace BaoHien.UI
                         }
                         else
                         {
-                            MessageBox.Show("Sản phẩm đã được cập nhật thành công");
+                            MessageBox.Show("Phiếu nhập kho đã được cập nhật thành công");
                         }
                         if (this.CallFromUserControll != null && this.CallFromUserControll is StockEntranceList)
                         {
@@ -407,7 +407,6 @@ namespace BaoHien.UI
                 }
                 else//add new
                 {
-
                     entranceStock = new EntranceStock
                     {
 
@@ -461,7 +460,7 @@ namespace BaoHien.UI
 
                     if (result)
                     {
-                        MessageBox.Show("Sản phẩm đã được tạo thành công");
+                        MessageBox.Show("Phiếu nhập kho đã được tạo thành công");
                         //((OrderList)this.CallFromUserControll).loadOrderList();
                         this.Close();
                     }

@@ -43,5 +43,16 @@ namespace BaoHien.Services.Customers
             }
             return result;
         }
+
+        public List<CustomerLog> GetLogsOfCustomer(int customerId, DateTime from, DateTime to)
+        {
+            List<CustomerLog> result = new List<CustomerLog>();
+            using (BaoHienDBDataContext context = new BaoHienDBDataContext(SettingManager.BuildStringConnection()))
+            {
+                result = context.CustomerLogs
+                    .Where(c => c.CustomerId == customerId && c.CreatedDate >= from && c.CreatedDate <= to).ToList();
+            }
+            return result;
+        }
     }
 }
