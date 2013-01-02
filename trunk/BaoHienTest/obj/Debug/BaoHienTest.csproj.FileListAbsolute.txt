@@ -38,3 +38,18 @@ D:\Pikait\Work\BaoHien\BaoHienTest\bin\Debug\JRINCCustomControls.xml
 D:\Pikait\Work\BaoHien\BaoHienTest\obj\Debug\BaoHienTest.dll
 D:\Pikait\Work\BaoHien\BaoHienTest\obj\Debug\BaoHienTest.pdb
 D:\Pikait\Work\BaoHien\BaoHienTest\bin\Debug\itextsharp.dll
+D:\Work Offline\C#\BaoHienTest\bin\Debug\BaoHienTest.dll
+D:\Work Offline\C#\BaoHienTest\bin\Debug\BaoHienTest.pdb
+D:\Work Offline\C#\BaoHienTest\bin\Debug\BaoHien.exe
+D:\Work Offline\C#\BaoHienTest\bin\Debug\DAL.dll
+D:\Work Offline\C#\BaoHienTest\bin\Debug\Validator.dll
+D:\Work Offline\C#\BaoHienTest\bin\Debug\JRINCCustomControls.dll
+D:\Work Offline\C#\BaoHienTest\bin\Debug\itextsharp.dll
+D:\Work Offline\C#\BaoHienTest\bin\Debug\BaoHien.pdb
+D:\Work Offline\C#\BaoHienTest\bin\Debug\DAL.pdb
+D:\Work Offline\C#\BaoHienTest\bin\Debug\Validator.pdb
+D:\Work Offline\C#\BaoHienTest\bin\Debug\JRINCCustomControls.pdb
+D:\Work Offline\C#\BaoHienTest\bin\Debug\JRINCCustomControls.xml
+D:\Work Offline\C#\BaoHienTest\obj\Debug\ResolveAssemblyReference.cache
+D:\Work Offline\C#\BaoHienTest\obj\Debug\BaoHienTest.dll
+D:\Work Offline\C#\BaoHienTest\obj\Debug\BaoHienTest.pdb

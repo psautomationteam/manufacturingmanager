@@ -26,6 +26,8 @@ using BaoHien.Services.ProductInStocks;
 using System.Globalization;
 using PDF = iTextSharp.text;
 using iTextSharp.text.pdf;
+using Microsoft.Win32;
+using System.Diagnostics;
 
 namespace BaoHien.UI
 {
@@ -617,27 +619,26 @@ namespace BaoHien.UI
         
         private void btnPrintOrder_Click(object sender, EventArgs e)
         {
-            if (btnSave.Enabled)
+            PrintDialog pd = new PrintDialog();
+            pd.PrinterSettings = new PrinterSettings();
+            if (DialogResult.OK == pd.ShowDialog(this))
             {
-                PrintDialog pd = new PrintDialog();
-                pd.PrinterSettings = new PrinterSettings();
-                if (DialogResult.OK == pd.ShowDialog(this))
+                this.Cursor = Cursors.AppStarting;
+                if (btnSave.Enabled)
                 {
-                    this.Cursor = Cursors.AppStarting;
                     if (saveData())
                     {
-                        printOrder();
-                        printForStock();
-                        // Print the file to the printer.
-                        RawPrinterHelper.SendFileToPrinter(pd.PrinterSettings.PrinterName, AppDomain.CurrentDomain.BaseDirectory + @"\Temp\XKho.pdf");
-                        RawPrinterHelper.SendFileToPrinter(pd.PrinterSettings.PrinterName, AppDomain.CurrentDomain.BaseDirectory + @"\Temp\BHang.pdf");
-                        this.Cursor = Cursors.Default;
+                        Print(pd.PrinterSettings.PrinterName);
                     }
                     else
                     {
                         this.Cursor = Cursors.Default;
                         MessageBox.Show("Hệ thống xảy ra lỗi, vui lòng thử lại sau !");
                     }
+                }
+                else
+                {
+                    Print(pd.PrinterSettings.PrinterName);
                 }
             }
         }
@@ -700,7 +701,7 @@ namespace BaoHien.UI
             PdfWriter.GetInstance(doc, new FileStream(BHConstant.SAVE_IN_DIRECTORY + @"\BHang.pdf", FileMode.Create));
             doc.Open();
 
-            doc.Add(FormatConfig.ParaHeader("PHIẾU XUẤT KHO"));
+            doc.Add(FormatConfig.ParaHeader("PHIẾU BÁN HÀNG"));
             doc.Add(FormatConfig.ParaRightBelowHeader("Mã số phiếu : " + getOrderCode()));
             doc.Add(FormatConfig.ParaRightBelowHeader("Ngày xuất : " + DateTime.Now.ToString("dd/MM/yyyy")));
 
@@ -747,7 +748,7 @@ namespace BaoHien.UI
 
             table.AddCell(FormatConfig.TableCellBoldBody("Tổng", PdfPCell.ALIGN_RIGHT, 4));
             table.AddCell(FormatConfig.TableCellBody(
-                Global.convertToCurrency(lblGrantTotal.Text),
+                Global.convertToCurrency(totalWithTax.ToString()),
                 PdfPCell.ALIGN_RIGHT));
 
             doc.Add(table);
@@ -832,6 +833,42 @@ namespace BaoHien.UI
             {
                 calculateTotal();
             }
+        }
+
+        private void Print(string printerName)
+        {
+            printOrder();
+            printForStock();
+            // Print the file to the printer.
+            var adobe = Registry.LocalMachine.OpenSubKey("Software").OpenSubKey("Microsoft").OpenSubKey("Windows").OpenSubKey("CurrentVersion").OpenSubKey("App Paths").OpenSubKey("AcroRd32.exe");
+            var path = adobe.GetValue("");
+            string file1 = BHConstant.SAVE_IN_DIRECTORY + @"\BHang.pdf";
+            string file2 = BHConstant.SAVE_IN_DIRECTORY + @"\XKho.pdf";
+            string parameter1 = String.Format(@"/n /t ""{0}"" ""{1}""", file1, printerName);
+            string parameter2 = String.Format(@"/n /t ""{0}"" ""{1}""", file2, printerName);
+            try
+            {
+                ProcessStartInfo processStartInfo = new ProcessStartInfo(path.ToString(), parameter1);
+                processStartInfo.CreateNoWindow = true;
+                processStartInfo.UseShellExecute = false;
+                Process process = Process.Start(processStartInfo);
+                process.WaitForInputIdle(20 * 1000);
+
+                processStartInfo = new ProcessStartInfo(path.ToString(), parameter2);
+                processStartInfo.CreateNoWindow = true;
+                processStartInfo.UseShellExecute = false;
+                process = Process.Start(processStartInfo);
+                process.WaitForInputIdle(20 * 1000);
+
+                process.Kill();
+            }
+            catch
+            {
+                MessageBox.Show("Không thể kết nối máy in!");
+            }
+            //RawPrinterHelper.SendFileToPrinter(pd.PrinterSettings.PrinterName, AppDomain.CurrentDomain.BaseDirectory + @"\Temp\XKho.pdf");
+            //RawPrinterHelper.SendFileToPrinter(pd.PrinterSettings.PrinterName, AppDomain.CurrentDomain.BaseDirectory + @"\Temp\BHang.pdf");
+            this.Cursor = Cursors.Default;
         }
     }
 }
