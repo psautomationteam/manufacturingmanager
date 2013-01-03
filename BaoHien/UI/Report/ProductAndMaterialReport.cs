@@ -10,19 +10,24 @@ using DAL;
 using BaoHien.Services.Products;
 using BaoHien.Model;
 using BaoHien.Services.MaterialInStocks;
+using BaoHien.Services.ProductAttributes;
 
 namespace BaoHien.UI
 {
     public partial class ProductAndMaterialReport : UserControl
     {
-        List<ProductType> productTypes;
         List<EntranceStockReport> entranceStockReports;
+        List<ProductAttributeModel> productAttrs;
+
         public ProductAndMaterialReport()
         {
             InitializeComponent();
             LoadProductType();
-            
+            dtpFrom.Value = DateTime.Today.AddDays(-DateTime.Now.Day + 1);
+            dtpFrom.CustomFormat = "dd/MM/yyyy";
+            dtpTo.CustomFormat = "dd/MM/yyyy";
         }
+
         private void setUpDataGrid(List<MaterialInStock> materialInStocks)
         {
             int index = 0;
@@ -40,9 +45,10 @@ namespace BaoHien.UI
                         };
             dgwStockEntranceList.DataSource = query.ToList();
         }
+
         void LoadReport()
         {
-            if (chkbSelectAll.Checked)
+            if (false)//chkbSelectAll.Checked)
             {
                 
                 MaterialInStockService materialInStockService = new MaterialInStockService();
@@ -69,19 +75,22 @@ namespace BaoHien.UI
             
             
         }
+
         void LoadProductType()
         {
-            ProductTypeService productTypeService = new ProductTypeService();
-            productTypes = productTypeService.GetProductTypes();
-            if (productTypes != null)
+            ProductAttributeService productAttrService = new ProductAttributeService();
+            ProductAttributeModel pam = new ProductAttributeModel { 
+                ProductAttribute = "Tất cả",
+                Id = 0
+            };
+            productAttrs = productAttrService.GetProductAndAttribute();
+            productAttrs.Add(pam);
+            productAttrs = productAttrs.OrderBy(ct => ct.Id).ToList();
+            if (productAttrs != null)
             {
-
-
-                cbmProductTypes.DataSource = productTypes;
-
-                cbmProductTypes.DisplayMember = "ProductName";
+                cbmProductTypes.DataSource = productAttrs;
+                cbmProductTypes.DisplayMember = "ProductAttribute";
                 cbmProductTypes.ValueMember = "Id";
-
             }
         }
         
@@ -165,6 +174,21 @@ namespace BaoHien.UI
             dgwStockEntranceList.AutoGenerateColumns = false;
             LoadReport();
             SetupColumns();
+        }
+
+        private void cbmProductTypes_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ComboBox cb = sender as ComboBox;
+            if (cb.SelectedIndex == 0)
+            {
+                dtpFrom.Enabled = false;
+                dtpTo.Enabled = false;
+            }
+            else
+            {
+                dtpFrom.Enabled = true;
+                dtpTo.Enabled = true;
+            }
         }
     }
 }
