@@ -41,6 +41,15 @@ namespace BaoHien.UI
                             Index = ++index
                         };
             dgwStockEntranceList.DataSource = query.ToList();
+            SetupColumnOneCustomer();
+            setColorRow(3);
+        }
+
+        private void setUpDataGridAllCustomers(List<ArrearReportModel> arrearReportModel)
+        {
+            dgwStockEntranceList.DataSource = arrearReportModel;
+            SetupColumnAllCustomers();
+            setColorRow(4);
         }
 
         void LoadReport()
@@ -54,10 +63,31 @@ namespace BaoHien.UI
                     List<CustomerLog> customerLogs = customerLogService.GetLogsOfCustomer(customerId, dtpFrom.Value, dtpTo.Value);
                     setUpDataGrid(customerLogs);
                 }
+                else
+                {
+                    CustomerService customerService = new CustomerService();
+                    var customers = customerService.GetCustomers();
+                    CustomerLogService customerLogService = new CustomerLogService();
+                    List<ArrearReportModel> arrearReportModel = new List<ArrearReportModel>();
+                    int index = 0;
+                    foreach (Customer ct in customers)
+                    {
+                        CustomerLog ctl = customerLogService.GetNewestCustomerLog(ct.Id);
+                        ArrearReportModel arrear = new ArrearReportModel { 
+                            CustomerName = ct.CustomerName,
+                            Date = ctl.CreatedDate.ToString("dd/MM/yyyy HH:mm:ss"),
+                            Amount = Global.formatVNDCurrencyText(ctl.AfterDebit.ToString()),
+                            RecordCode = ctl.RecordCode,
+                            Index = ++index
+                        };
+                        arrearReportModel.Add(arrear);
+                    }
+                    setUpDataGridAllCustomers(arrearReportModel);
+                }
             }
             else
             {
-                MessageBox.Show("Vui lòng chọn loại sản phẩm");
+                MessageBox.Show("Không đủ thông tin để lập báo cáo!");
             }
         }
 
@@ -79,7 +109,7 @@ namespace BaoHien.UI
             }
         }
         
-        private void SetupColumns()
+        private void SetupColumnOneCustomer()
         {
             dgwStockEntranceList.Columns.Clear();
             dgwStockEntranceList.AutoGenerateColumns = false;
@@ -116,11 +146,86 @@ namespace BaoHien.UI
             dgwStockEntranceList.Columns.Add(amountColumn);
         }
 
+        private void SetupColumnAllCustomers()
+        {
+            dgwStockEntranceList.Columns.Clear();
+            dgwStockEntranceList.AutoGenerateColumns = false;
+            DataGridViewTextBoxColumn indexColumn = new DataGridViewTextBoxColumn();
+            indexColumn.Width = 30;
+            indexColumn.DataPropertyName = "Index";
+            indexColumn.HeaderText = "STT";
+            indexColumn.ValueType = typeof(string);
+            //indexColumn.Frozen = true;
+            dgwStockEntranceList.Columns.Add(indexColumn);
+
+            DataGridViewTextBoxColumn customerNameColumn = new DataGridViewTextBoxColumn();
+            customerNameColumn.Width = 150;
+            customerNameColumn.DataPropertyName = "CustomerName";
+            customerNameColumn.HeaderText = "Tên khách hàng";
+            customerNameColumn.ValueType = typeof(string);
+            //productCodeColumn.Frozen = true;
+            dgwStockEntranceList.Columns.Add(customerNameColumn);
+
+            DataGridViewTextBoxColumn recordCodeColumn = new DataGridViewTextBoxColumn();
+            recordCodeColumn.Width = 150;
+            recordCodeColumn.DataPropertyName = "RecordCode";
+            recordCodeColumn.HeaderText = "Mã phiếu (giao dịch cuối)";
+            recordCodeColumn.ValueType = typeof(string);
+            //productCodeColumn.Frozen = true;
+            dgwStockEntranceList.Columns.Add(recordCodeColumn);
+
+            DataGridViewTextBoxColumn dateColumn = new DataGridViewTextBoxColumn();
+            dateColumn.Width = 150;
+            dateColumn.DataPropertyName = "Date";
+            dateColumn.HeaderText = "Ngày";
+            dateColumn.ValueType = typeof(string);
+            //productNameColumn.Frozen = true;
+            dgwStockEntranceList.Columns.Add(dateColumn);
+
+            DataGridViewTextBoxColumn amountColumn = new DataGridViewTextBoxColumn();
+            amountColumn.DataPropertyName = "Amount";
+            amountColumn.Width = 150;
+            amountColumn.HeaderText = "Số tiền";
+            //attributeNameColumn.Frozen = true;
+            amountColumn.ValueType = typeof(string);
+            dgwStockEntranceList.Columns.Add(amountColumn);
+        }
+
         private void btnSearch_Click(object sender, EventArgs e)
         {
             dgwStockEntranceList.AutoGenerateColumns = false;
             LoadReport();
-            SetupColumns();
+        }
+
+        private void cbmCustomers_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ComboBox cb = sender as ComboBox;
+            if (cb.SelectedIndex == 0)
+            {
+                dtpFrom.Enabled = false;
+                dtpTo.Enabled = false;
+            }
+            else
+            {
+                dtpFrom.Enabled = true;
+                dtpTo.Enabled = true;
+            }
+        }
+
+        private void setColorRow(int followValueColumn)
+        {
+            foreach (DataGridViewRow row in dgwStockEntranceList.Rows)
+            {
+                row.DefaultCellStyle.ForeColor = Color.White;
+                if (row.Cells[followValueColumn].Value.ToString().Contains("-"))
+                {
+                    row.DefaultCellStyle.BackColor = Color.Blue;
+                }
+                else
+                {
+                    row.DefaultCellStyle.BackColor = Color.Red;
+                }
+            }
         }
     }
 }
