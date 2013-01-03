@@ -35,6 +35,11 @@ namespace BaoHien.Model
             set { amount = value; }
         }
 
-        
+        string customerName;
+        public string CustomerName
+        {
+            get { return customerName; }
+            set { customerName = value; }
+        }
     }
 }
