@@ -170,13 +170,6 @@ namespace BaoHien.UI
             baseUnitColumn.ValueType = typeof(string);
             dgvProductList.Columns.Add(baseUnitColumn);
 
-            DataGridViewImageColumn deleteButton = new DataGridViewImageColumn();
-            deleteButton.Image = Properties.Resources.erase;
-            deleteButton.Width = 100;
-            deleteButton.HeaderText = "Xóa";
-            deleteButton.ReadOnly = true;
-            deleteButton.ImageLayout = DataGridViewImageCellLayout.Normal;
-
             DataGridViewTextBoxColumn descriptionColumn = new DataGridViewTextBoxColumn();
             descriptionColumn.Width = 170;// dgvProductList.Width - productNameColumn.Width - typeCodeColumn.Width - deleteButton.Width;
             descriptionColumn.DataPropertyName = "Description";
@@ -185,6 +178,12 @@ namespace BaoHien.UI
             descriptionColumn.ValueType = typeof(string);
             dgvProductList.Columns.Add(descriptionColumn);
 
+            DataGridViewImageColumn deleteButton = new DataGridViewImageColumn();
+            deleteButton.Image = Properties.Resources.erase;
+            deleteButton.Width = 40;
+            deleteButton.HeaderText = "Xóa";
+            deleteButton.ReadOnly = true;
+            deleteButton.ImageLayout = DataGridViewImageCellLayout.Normal;
             dgvProductList.Columns.Add(deleteButton);
         }
 

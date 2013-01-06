@@ -38,7 +38,7 @@
             this.dgvBaseUnitList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvBaseUnitList.Location = new System.Drawing.Point(44, 72);
             this.dgvBaseUnitList.Name = "dgvBaseUnitList";
-            this.dgvBaseUnitList.Size = new System.Drawing.Size(787, 469);
+            this.dgvBaseUnitList.Size = new System.Drawing.Size(1007, 541);
             this.dgvBaseUnitList.TabIndex = 14;
             this.dgvBaseUnitList.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvBaseUnitList_CellClick);
             this.dgvBaseUnitList.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvBaseUnitList_CellDoubleClick);

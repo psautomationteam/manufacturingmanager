@@ -18,29 +18,35 @@ namespace BaoHien.Services.Products
 
             return product;
         }
+
         public List<Product> GetProducts()
         {
             List<Product> products = OnGetItems<Product>();
 
             return products;
         }
+
         public bool AddProduct(Product product)
         {
             return OnAddItem<Product>(product);
         }
+
         public bool DeleteProduct(System.Int32 id)
         {
             return OnDeleteItem<Product>(id.ToString());
         }
+
         public bool UpdateProduct(Product product)
         {
             return OnUpdateItem<Product>(product, product.Id.ToString());
         }
+
         public List<Product> SelectProductByWhere(Expression<Func<Product, bool>> func)
         {
 
             return SelectItemByWhere<Product>(func);
         }
+
         public List<Product> SearchingProduct(ProductSearchCriteria productSearchCriteria)
         {
             
@@ -69,6 +75,5 @@ namespace BaoHien.Services.Products
                 return query.ToList();
             return null;
         }
-
     }
 }

@@ -59,14 +59,14 @@
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Location = new System.Drawing.Point(15, 3);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(666, 86);
+            this.groupBox1.Size = new System.Drawing.Size(1053, 86);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Tìm kiếm phiếu sản xuất";
             // 
             // btnSearch
             // 
-            this.btnSearch.Location = new System.Drawing.Point(575, 17);
+            this.btnSearch.Location = new System.Drawing.Point(962, 23);
             this.btnSearch.Name = "btnSearch";
             this.btnSearch.Size = new System.Drawing.Size(75, 49);
             this.btnSearch.TabIndex = 4;
@@ -77,15 +77,15 @@
             // cbmUsers
             // 
             this.cbmUsers.FormattingEnabled = true;
-            this.cbmUsers.Location = new System.Drawing.Point(378, 47);
+            this.cbmUsers.Location = new System.Drawing.Point(549, 52);
             this.cbmUsers.Name = "cbmUsers";
-            this.cbmUsers.Size = new System.Drawing.Size(166, 21);
+            this.cbmUsers.Size = new System.Drawing.Size(194, 21);
             this.cbmUsers.TabIndex = 3;
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(279, 53);
+            this.label5.Location = new System.Drawing.Point(435, 56);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(84, 13);
             this.label5.TabIndex = 8;
@@ -93,15 +93,15 @@
             // 
             // txtCode
             // 
-            this.txtCode.Location = new System.Drawing.Point(70, 52);
+            this.txtCode.Location = new System.Drawing.Point(124, 52);
             this.txtCode.Name = "txtCode";
-            this.txtCode.Size = new System.Drawing.Size(203, 20);
+            this.txtCode.Size = new System.Drawing.Size(189, 20);
             this.txtCode.TabIndex = 2;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(9, 57);
+            this.label3.Location = new System.Drawing.Point(39, 56);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(54, 13);
             this.label3.TabIndex = 4;
@@ -109,27 +109,27 @@
             // 
             // dtpTo
             // 
-            this.dtpTo.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dtpTo.Location = new System.Drawing.Point(378, 21);
+            this.dtpTo.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dtpTo.Location = new System.Drawing.Point(549, 24);
             this.dtpTo.Name = "dtpTo";
-            this.dtpTo.Size = new System.Drawing.Size(122, 20);
+            this.dtpTo.Size = new System.Drawing.Size(194, 20);
             this.dtpTo.TabIndex = 1;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(339, 24);
+            this.label2.Location = new System.Drawing.Point(435, 30);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(30, 13);
+            this.label2.Size = new System.Drawing.Size(56, 13);
             this.label2.TabIndex = 2;
-            this.label2.Text = "Đến:";
+            this.label2.Text = "Đến ngày:";
             // 
             // dtpFrom
             // 
-            this.dtpFrom.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dtpFrom.Location = new System.Drawing.Point(72, 24);
+            this.dtpFrom.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dtpFrom.Location = new System.Drawing.Point(124, 24);
             this.dtpFrom.Name = "dtpFrom";
-            this.dtpFrom.Size = new System.Drawing.Size(124, 20);
+            this.dtpFrom.Size = new System.Drawing.Size(189, 20);
             this.dtpFrom.TabIndex = 0;
             // 
             // label1
@@ -137,16 +137,16 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(39, 30);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(23, 13);
+            this.label1.Size = new System.Drawing.Size(49, 13);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Từ:";
+            this.label1.Text = "Từ ngày:";
             // 
             // dgwRequestList
             // 
             this.dgwRequestList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgwRequestList.Location = new System.Drawing.Point(15, 137);
             this.dgwRequestList.Name = "dgwRequestList";
-            this.dgwRequestList.Size = new System.Drawing.Size(1053, 459);
+            this.dgwRequestList.Size = new System.Drawing.Size(1053, 475);
             this.dgwRequestList.TabIndex = 11;
             this.dgwRequestList.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgwRequestList_CellClick);
             this.dgwRequestList.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgwRequestList_CellDoubleClick);
@@ -155,7 +155,7 @@
             // 
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.Location = new System.Drawing.Point(232, 102);
+            this.label8.Location = new System.Drawing.Point(573, 104);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(479, 14);
             this.label8.TabIndex = 10;

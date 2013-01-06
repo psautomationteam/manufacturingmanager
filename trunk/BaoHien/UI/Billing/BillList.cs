@@ -165,18 +165,18 @@ namespace BaoHien.UI
 
             DataGridViewImageColumn deleteButton = new DataGridViewImageColumn();
             deleteButton.Image = Properties.Resources.erase;
-            deleteButton.Width = 100;
+            deleteButton.Width = 40;
             deleteButton.HeaderText = "Xóa";
             deleteButton.ReadOnly = true;
             deleteButton.ImageLayout = DataGridViewImageCellLayout.Normal;
-
-
-
             dgwBillingList.Columns.Add(deleteButton);
         }
 
         private void BillList_Load(object sender, EventArgs e)
         {
+            dtpFrom.Value = DateTime.Today.AddDays(-DateTime.Now.Day + 1);
+            dtpFrom.CustomFormat = BHConstant.DATE_FORMAT;
+            dtpTo.CustomFormat = BHConstant.DATE_FORMAT;
             loadBillList();
             SetupColumns();
         }
@@ -241,7 +241,7 @@ namespace BaoHien.UI
                         CustomerLog cl = new CustomerLog
                         {
                             CustomerId = bill.CustId,
-                            RecordCode = BHConstant.MONEY_BACK_CODE,
+                            RecordCode = bill.BillCode,
                             BeforeDebit = beforeDebit,
                             Amount = bill.Amount,
                             AfterDebit = beforeDebit + bill.Amount,

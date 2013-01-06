@@ -108,6 +108,14 @@ namespace BaoHien.UI
             typeCodeColumn.ValueType = typeof(string);
             dgvUserList.Columns.Add(typeCodeColumn);
             
+            DataGridViewTextBoxColumn descriptionColumn = new DataGridViewTextBoxColumn();
+            descriptionColumn.Width = 320;// dgvUserList.Width - productNameColumn.Width - typeCodeColumn.Width;
+            descriptionColumn.DataPropertyName = "Type";
+            descriptionColumn.HeaderText = "Kiểu người dùng";
+            //descriptionColumn.Frozen = true;
+            descriptionColumn.ValueType = typeof(string);
+            dgvUserList.Columns.Add(descriptionColumn);
+
             DataGridViewCheckBoxColumn deleteButton = new DataGridViewCheckBoxColumn();
             deleteButton.DataPropertyName = "Status";
             deleteButton.Width = 100;
@@ -116,13 +124,6 @@ namespace BaoHien.UI
             deleteButton.TrueValue = true;
             deleteButton.ValueType = typeof(bool);
             //deleteButton.
-            DataGridViewTextBoxColumn descriptionColumn = new DataGridViewTextBoxColumn();
-            descriptionColumn.Width = 320;// dgvUserList.Width - productNameColumn.Width - typeCodeColumn.Width;
-            descriptionColumn.DataPropertyName = "Type";
-            descriptionColumn.HeaderText = "Kiểu người dùng";
-            //descriptionColumn.Frozen = true;
-            descriptionColumn.ValueType = typeof(string);
-            dgvUserList.Columns.Add(descriptionColumn);
             dgvUserList.Columns.Add(deleteButton);
         }
         private void btnDelete_Click(object sender, EventArgs e)

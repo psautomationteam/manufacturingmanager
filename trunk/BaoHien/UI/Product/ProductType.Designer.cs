@@ -51,14 +51,14 @@
             this.grpSearch.Controls.Add(this.label1);
             this.grpSearch.Location = new System.Drawing.Point(12, 3);
             this.grpSearch.Name = "grpSearch";
-            this.grpSearch.Size = new System.Drawing.Size(787, 52);
+            this.grpSearch.Size = new System.Drawing.Size(1052, 67);
             this.grpSearch.TabIndex = 0;
             this.grpSearch.TabStop = false;
             this.grpSearch.Text = "Tìm Kiếm";
             // 
             // btnSearch
             // 
-            this.btnSearch.Location = new System.Drawing.Point(636, 17);
+            this.btnSearch.Location = new System.Drawing.Point(967, 19);
             this.btnSearch.Name = "btnSearch";
             this.btnSearch.Size = new System.Drawing.Size(75, 23);
             this.btnSearch.TabIndex = 4;
@@ -68,22 +68,22 @@
             // 
             // txtName
             // 
-            this.txtName.Location = new System.Drawing.Point(423, 17);
+            this.txtName.Location = new System.Drawing.Point(621, 26);
             this.txtName.Name = "txtName";
-            this.txtName.Size = new System.Drawing.Size(170, 20);
+            this.txtName.Size = new System.Drawing.Size(242, 20);
             this.txtName.TabIndex = 3;
             // 
             // txtCode
             // 
-            this.txtCode.Location = new System.Drawing.Point(121, 17);
+            this.txtCode.Location = new System.Drawing.Point(139, 26);
             this.txtCode.Name = "txtCode";
-            this.txtCode.Size = new System.Drawing.Size(170, 20);
+            this.txtCode.Size = new System.Drawing.Size(297, 20);
             this.txtCode.TabIndex = 1;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(309, 20);
+            this.label2.Location = new System.Drawing.Point(494, 29);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(97, 13);
             this.label2.TabIndex = 2;
@@ -92,7 +92,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(22, 20);
+            this.label1.Location = new System.Drawing.Point(22, 29);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(93, 13);
             this.label1.TabIndex = 0;
@@ -100,7 +100,7 @@
             // 
             // btnAdd
             // 
-            this.btnAdd.Location = new System.Drawing.Point(724, 86);
+            this.btnAdd.Location = new System.Drawing.Point(979, 87);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(75, 43);
             this.btnAdd.TabIndex = 1;
@@ -113,7 +113,7 @@
             this.dgvProductTypeList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvProductTypeList.Location = new System.Drawing.Point(12, 136);
             this.dgvProductTypeList.Name = "dgvProductTypeList";
-            this.dgvProductTypeList.Size = new System.Drawing.Size(787, 305);
+            this.dgvProductTypeList.Size = new System.Drawing.Size(1052, 484);
             this.dgvProductTypeList.TabIndex = 2;
             this.dgvProductTypeList.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvProductTypeList_CellClick);
             this.dgvProductTypeList.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvProductTypeList_CellDoubleClick);

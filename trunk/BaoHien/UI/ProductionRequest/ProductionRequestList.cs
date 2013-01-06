@@ -12,6 +12,8 @@ using DAL.Helper;
 using BaoHien.Model;
 using BaoHien.Services.ProductionRequestDetails;
 using BaoHien.Services.SystemUsers;
+using BaoHien.Services.ProductLogs;
+using BaoHien.Common;
 
 namespace BaoHien.UI
 {
@@ -19,6 +21,7 @@ namespace BaoHien.UI
     {
         List<ProductionRequest> productionRequests;
         List<SystemUser> users;
+
         public ProductionRequestList()
         {
             InitializeComponent();
@@ -26,16 +29,21 @@ namespace BaoHien.UI
 
         private void ProductionRequestList_Load(object sender, EventArgs e)
         {
+            dtpFrom.Value = DateTime.Today.AddDays(-DateTime.Now.Day + 1);
+            dtpFrom.CustomFormat = BHConstant.DATE_FORMAT;
+            dtpTo.CustomFormat = BHConstant.DATE_FORMAT;
             loadProductionRequestList();
             setUpSomeData();
             SetupColumns();
         }
+
         private void setUpSomeData()
         {
             cbmUsers.DataSource = users;
             cbmUsers.DisplayMember = "FullName";
             cbmUsers.ValueMember = "Id";
         }
+
         public void loadProductionRequestList()
         {
 
@@ -52,6 +60,7 @@ namespace BaoHien.UI
             users = systemUserService.GetSystemUsers();
            
         }
+
         private void setUpDataGrid(List<ProductionRequest> productionRequests)
         {
             if (productionRequests != null)
@@ -74,6 +83,7 @@ namespace BaoHien.UI
                 dgwRequestList.ReadOnly = true;
             }
         }
+
         private void SetupColumns()
         {
 
@@ -113,13 +123,6 @@ namespace BaoHien.UI
             statusColumn.ValueType = typeof(string);
             dgwRequestList.Columns.Add(statusColumn);
 
-            DataGridViewImageColumn deleteButton = new DataGridViewImageColumn();
-            deleteButton.Image = Properties.Resources.erase;
-            deleteButton.Width = 150;
-            deleteButton.HeaderText = "Xóa";
-            //deleteButton.ReadOnly = true;
-            deleteButton.ImageLayout = DataGridViewImageCellLayout.Normal;
-
             DataGridViewTextBoxColumn noteColumn = new DataGridViewTextBoxColumn();
             noteColumn.DataPropertyName = "Note";
             noteColumn.Width = 400;
@@ -128,6 +131,12 @@ namespace BaoHien.UI
             noteColumn.ValueType = typeof(string);
             dgwRequestList.Columns.Add(noteColumn);
 
+            DataGridViewImageColumn deleteButton = new DataGridViewImageColumn();
+            deleteButton.Image = Properties.Resources.erase;
+            deleteButton.Width = 40;
+            deleteButton.HeaderText = "Xóa";
+            //deleteButton.ReadOnly = true;
+            deleteButton.ImageLayout = DataGridViewImageCellLayout.Normal;
             dgwRequestList.Columns.Add(deleteButton);
 
         }
@@ -163,15 +172,31 @@ namespace BaoHien.UI
                         ProductionRequestDetailService productionRequestDetailService = new ProductionRequestDetailService();
                         //Product mu = (Product)dgv.DataBoundItem;
                         int id = ObjectHelper.GetValueFromAnonymousType<int>(currentRow.DataBoundItem, "Id");
+                        ProductionRequest pr = productionRequestService.GetProductionRequest(id);
                         List<ProductionRequestDetail> productionRequestDetails = productionRequestDetailService.GetProductionRequestDetails().Where(p => p.ProductionRequestId == id).ToList();
                         bool ret = false;
                         if (productionRequestDetails != null)
                         {
+                            ProductLogService productLogService = new ProductLogService();
                             foreach (ProductionRequestDetail prd in productionRequestDetails)
                             {
                                 List<int> ids = new List<int>();
                                 ids.Add(prd.Id);
                                 ids.Add(prd.ProductionRequestId);
+                                ProductLog pl = productLogService.GetNewestProductLog(prd.ProductId, prd.AttributeId);
+                                ProductLog plg = new ProductLog
+                                {
+                                    AttributeId = prd.AttributeId,
+                                    ProductId = prd.ProductId,
+                                    RecordCode = pr.ReqCode,
+                                    BeforeNumber = pl.AfterNumber,
+                                    Amount = prd.NumberUnit,
+                                    AfterNumber = (prd.Direction == true) ? 
+                                        ((pl.AfterNumber - prd.NumberUnit) > 0 ? (pl.AfterNumber - prd.NumberUnit) : 0 )
+                                        : (pl.AfterNumber + prd.NumberUnit),
+                                    CreatedDate = DateTime.Now
+                                };
+                                ret = productLogService.AddProductLog(plg);
                                 ret = productionRequestDetailService.DeleteProductionRequestDetail(ids);
                                 if (!ret)
                                 {

@@ -16,7 +16,7 @@ using BaoHien.Services.ProductInStocks;
 using BaoHien.Common;
 using BaoHien.UI.Base;
 using DAL.Helper;
-using BaoHien.Services.MaterialInStocks;
+using BaoHien.Services.ProductLogs;
 
 namespace BaoHien.UI
 {
@@ -24,6 +24,7 @@ namespace BaoHien.UI
     {
         bool isUpdating = false;
         EntranceStock entranceStock;
+        ProductLogService productLogService;
         BindingList<EntranceStockDetail> entranceStockDetails;
         BindingList<ProductAttributeModel> products;
         BindingList<ProductionRequestDetailModel> originalEntranceDetail;
@@ -40,6 +41,7 @@ namespace BaoHien.UI
 
         private void EntranceStock_Load(object sender, EventArgs e)
         {
+            productLogService = new ProductLogService();
             loadSomeData();
             SetupColumns();
             updateProductionRequestDetailCells();
@@ -55,7 +57,6 @@ namespace BaoHien.UI
                 txtNote.Text = entranceStock.Note;
                 txtDate.Text = entranceStock.EntrancedDate.ToShortDateString();
                 txtUser.Text = entranceStock.SystemUser.FullName;
-                
             }
             else
             {
@@ -220,20 +221,13 @@ namespace BaoHien.UI
                     break;
             }
         }
-
-        private void UpdateMaterialInStock()
-        {
-            foreach (EntranceStockDetail esd in entranceStockDetails)
-            {
- 
-            }
-        }
-
+        
         public void loadDataForEditEntranceStock(int entranceId)
         {
             isUpdating = true;
-            this.Text = "Chỉnh sửa phiếu nhập kho này";
-            this.btnSave.Text = "Cập nhật";
+            this.Text = "Xem thông tin phiếu nhập kho";
+            this.btnSave.Text = "OK";
+            this.btnSave.Enabled = false;
             EntranceStockService entranceStockService = new EntranceStockService();
             entranceStock = entranceStockService.GetEntranceStock(entranceId);
             if (entranceStock != null)
@@ -244,21 +238,17 @@ namespace BaoHien.UI
                     entranceStockDetails = new BindingList<EntranceStockDetail>(entranceStockDetailService.SelectEntranceStockDetailByWhere(o => o.EntranceStockId == entranceStock.Id));
                 }
             }
-
         }
 
         private void btnSave_Click(object sender, EventArgs e)
         {
             if (this.validator1.Validate())
             {
-                MaterialInStockService mis = new MaterialInStockService();
                 DateTime createdDate = DateTime.Now;
                 if (!DateTime.TryParse(txtDate.Text, out createdDate))
                 {
                     createdDate = DateTime.Now;
                 };
-
-
                 int userId = 0;
                 if (Global.CurrentUser != null)
                 {
@@ -271,139 +261,145 @@ namespace BaoHien.UI
                 }
                 if (entranceStock != null)//update
                 {
-                    entranceStock.EntranceCode = txtCode.Text;
-                    entranceStock.Note = txtNote.Text;
+                    #region Fix Update
 
-                    EntranceStockService entranceStockService = new EntranceStockService();
-                    bool result = entranceStockService.UpdateEntranceStock(entranceStock);
-                    if (!result)
-                    {
-                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
-                        return;
-                    }
-                    else
-                    {
+                    //entranceStock.EntranceCode = txtCode.Text;
+                    //entranceStock.Note = txtNote.Text;
 
-                        EntranceStockDetailService entranceStockDetailService = new EntranceStockDetailService();
+                    //EntranceStockService entranceStockService = new EntranceStockService();
+                    //bool result = entranceStockService.UpdateEntranceStock(entranceStock);
+                    //if (!result)
+                    //{
+                    //    MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                    //    return;
+                    //}
+                    //else
+                    //{
 
-                        foreach (EntranceStockDetail od in entranceStockDetails)
-                        {
-                            if (od.ProductId > 0 && od.AttributeId > 0)
-                            {
-                                if (od.Id == 0)
-                                {
-                                    od.EntranceStockId = entranceStock.Id;
-                                    result = entranceStockDetailService.AddEntranceStockDetail(od);
+                    //    EntranceStockDetailService entranceStockDetailService = new EntranceStockDetailService();
 
-
-                                    //Tao moi
-                                    List<MaterialInStock> lstMaterial = mis.SelectMaterialInStockByWhere(pt => pt.ProductId == od.ProductId && pt.AttributeId == od.AttributeId);
-                                    MaterialInStock materialInStock = new MaterialInStock();
-                                    materialInStock.AttributeId = od.AttributeId;
-                                    materialInStock.ProductId = od.ProductId;
-                                    materialInStock.LatestUpdate = DateTime.Now;
-                                    materialInStock.StatusOfData = (byte)BHConstant.DATA_STATUS_IN_STOCK_FOR_INPUT;
-                                    if (lstMaterial.Count > 0)
-                                    {
-                                        materialInStock.NumberOfInput = lstMaterial.Last<MaterialInStock>().NumberOfInput + od.NumberUnit;
-                                        materialInStock.NumberOfOutput = lstMaterial.Last<MaterialInStock>().NumberOfOutput;
-                                        materialInStock.NumberOfItem = lstMaterial.Last<MaterialInStock>().NumberOfItem + od.NumberUnit;
-                                    }
-                                    else
-                                    {
-                                        materialInStock.NumberOfInput = od.NumberUnit;
-                                        materialInStock.NumberOfOutput = 0;
-                                        materialInStock.NumberOfItem = od.NumberUnit;
-
-                                    }
-                                    mis.AddMaterialInStock(materialInStock);
-                                }
-                                else
-                                {
-                                    ProductionRequestDetailModel original = new ProductionRequestDetailModel();
-                                    original = originalEntranceDetail.Where(p => p.Id == od.Id).ToList().FirstOrDefault();
-                                    result = entranceStockDetailService.UpdateEntranceStockDetail(od);
-                                    if (original != null)
-                                    {
-                                        if (od.ProductId == original.ProductId && od.AttributeId == original.AttributeId && od.NumberUnit != original.NumberUnit)
-                                        {
-                                            //Sua so luong
-                                            List<MaterialInStock> lstMaterial = mis.SelectMaterialInStockByWhere(pt => pt.ProductId == od.ProductId && pt.AttributeId == od.AttributeId);
-                                            MaterialInStock materialInStock = new MaterialInStock();
-                                            materialInStock.AttributeId = od.AttributeId;
-                                            materialInStock.ProductId = od.ProductId;
-                                            materialInStock.LatestUpdate = DateTime.Now;
-                                            materialInStock.StatusOfData = (byte)BHConstant.DATA_STATUS_IN_STOCK_FOR_EDIT;
-                                            materialInStock.NumberOfInput = lstMaterial.Last<MaterialInStock>().NumberOfInput + od.NumberUnit - original.NumberUnit;
-                                            materialInStock.NumberOfOutput = lstMaterial.Last<MaterialInStock>().NumberOfOutput;
-                                            materialInStock.NumberOfItem = lstMaterial.Last<MaterialInStock>().NumberOfItem + od.NumberUnit - original.NumberUnit;
-                                            mis.AddMaterialInStock(materialInStock);
-                                        }
-                                        else if (od.ProductId != original.ProductId || od.AttributeId != original.AttributeId)
-                                        {
-                                            //Tao moi
-                                            List<MaterialInStock> lstNewMaterial = mis.SelectMaterialInStockByWhere(pt => pt.ProductId == od.ProductId && pt.AttributeId == od.AttributeId);
-                                            MaterialInStock newMaterialInStock = new MaterialInStock();
-                                            newMaterialInStock.AttributeId = od.AttributeId;
-                                            newMaterialInStock.ProductId = od.ProductId;
-                                            newMaterialInStock.StatusOfData = (byte)BHConstant.DATA_STATUS_IN_STOCK_FOR_INPUT;
-                                            newMaterialInStock.LatestUpdate = DateTime.Now;
-                                            if (lstNewMaterial.Count > 0)
-                                            {
-                                                newMaterialInStock.NumberOfInput = lstNewMaterial.Last<MaterialInStock>().NumberOfInput + od.NumberUnit;
-                                                newMaterialInStock.NumberOfOutput = lstNewMaterial.Last<MaterialInStock>().NumberOfOutput;
-                                                newMaterialInStock.NumberOfItem = lstNewMaterial.Last<MaterialInStock>().NumberOfItem + od.NumberUnit;
-                                            }
-                                            else
-                                            {
-                                                newMaterialInStock.NumberOfInput = od.NumberUnit;
-                                                newMaterialInStock.NumberOfOutput = 0;
-                                                newMaterialInStock.NumberOfItem = od.NumberUnit;
-                                            }
-                                            mis.AddMaterialInStock(newMaterialInStock);
+                    //    foreach (EntranceStockDetail od in entranceStockDetails)
+                    //    {
+                    //        if (od.ProductId > 0 && od.AttributeId > 0)
+                    //        {
+                    //            if (od.Id == 0)
+                    //            {
+                    //                od.EntranceStockId = entranceStock.Id;
+                    //                result = entranceStockDetailService.AddEntranceStockDetail(od);
 
 
-                                            //Xoa cu
-                                            List<MaterialInStock> lstOldMaterial = mis.SelectMaterialInStockByWhere(pt => pt.ProductId == original.ProductId && pt.AttributeId == original.AttributeId);
+                    //                //Tao moi
+                    //                List<MaterialInStock> lstMaterial = mis.SelectMaterialInStockByWhere(pt => pt.ProductId == od.ProductId && pt.AttributeId == od.AttributeId);
+                    //                MaterialInStock materialInStock = new MaterialInStock();
+                    //                materialInStock.AttributeId = od.AttributeId;
+                    //                materialInStock.ProductId = od.ProductId;
+                    //                materialInStock.LatestUpdate = DateTime.Now;
+                    //                materialInStock.StatusOfData = (byte)BHConstant.DATA_STATUS_IN_STOCK_FOR_INPUT;
+                    //                if (lstMaterial.Count > 0)
+                    //                {
+                    //                    materialInStock.NumberOfInput = lstMaterial.Last<MaterialInStock>().NumberOfInput + od.NumberUnit;
+                    //                    materialInStock.NumberOfOutput = lstMaterial.Last<MaterialInStock>().NumberOfOutput;
+                    //                    materialInStock.NumberOfItem = lstMaterial.Last<MaterialInStock>().NumberOfItem + od.NumberUnit;
+                    //                }
+                    //                else
+                    //                {
+                    //                    materialInStock.NumberOfInput = od.NumberUnit;
+                    //                    materialInStock.NumberOfOutput = 0;
+                    //                    materialInStock.NumberOfItem = od.NumberUnit;
 
-                                            if (lstOldMaterial.Count > 0)
-                                            {
-                                                MaterialInStock oldMaterialInStock = new MaterialInStock();
-                                                oldMaterialInStock.AttributeId = original.AttributeId;
-                                                oldMaterialInStock.ProductId = original.ProductId;
-                                                oldMaterialInStock.StatusOfData = (byte)BHConstant.DATA_STATUS_IN_STOCK_FOR_EDIT;
-                                                oldMaterialInStock.LatestUpdate = DateTime.Now;
-                                                oldMaterialInStock.NumberOfInput = lstOldMaterial.Last<MaterialInStock>().NumberOfInput - original.NumberUnit;
-                                                oldMaterialInStock.NumberOfOutput = lstOldMaterial.Last<MaterialInStock>().NumberOfOutput;
-                                                oldMaterialInStock.NumberOfItem = lstOldMaterial.Last<MaterialInStock>().NumberOfItem - original.NumberUnit;
-                                                mis.AddMaterialInStock(oldMaterialInStock);
-                                            }
+                    //                }
+                    //                mis.AddMaterialInStock(materialInStock);
+                    //            }
+                    //            else
+                    //            {
+                    //                ProductionRequestDetailModel original = new ProductionRequestDetailModel();
+                    //                original = originalEntranceDetail.Where(p => p.Id == od.Id).ToList().FirstOrDefault();
+                    //                result = entranceStockDetailService.UpdateEntranceStockDetail(od);
+                    //                if (original != null)
+                    //                {
+                    //                    if (od.ProductId == original.ProductId && od.AttributeId == original.AttributeId && od.NumberUnit != original.NumberUnit)
+                    //                    {
+                    //                        //Sua so luong
+                    //                        List<MaterialInStock> lstMaterial = mis.SelectMaterialInStockByWhere(pt => pt.ProductId == od.ProductId && pt.AttributeId == od.AttributeId);
+                    //                        MaterialInStock materialInStock = new MaterialInStock();
+                    //                        materialInStock.AttributeId = od.AttributeId;
+                    //                        materialInStock.ProductId = od.ProductId;
+                    //                        materialInStock.LatestUpdate = DateTime.Now;
+                    //                        materialInStock.StatusOfData = (byte)BHConstant.DATA_STATUS_IN_STOCK_FOR_EDIT;
+                    //                        materialInStock.NumberOfInput = lstMaterial.Last<MaterialInStock>().NumberOfInput + od.NumberUnit - original.NumberUnit;
+                    //                        materialInStock.NumberOfOutput = lstMaterial.Last<MaterialInStock>().NumberOfOutput;
+                    //                        materialInStock.NumberOfItem = lstMaterial.Last<MaterialInStock>().NumberOfItem + od.NumberUnit - original.NumberUnit;
+                    //                        mis.AddMaterialInStock(materialInStock);
+                    //                    }
+                    //                    else if (od.ProductId != original.ProductId || od.AttributeId != original.AttributeId)
+                    //                    {
+                    //                        //Tao moi
+                    //                        List<MaterialInStock> lstNewMaterial = mis.SelectMaterialInStockByWhere(pt => pt.ProductId == od.ProductId && pt.AttributeId == od.AttributeId);
+                    //                        MaterialInStock newMaterialInStock = new MaterialInStock();
+                    //                        newMaterialInStock.AttributeId = od.AttributeId;
+                    //                        newMaterialInStock.ProductId = od.ProductId;
+                    //                        newMaterialInStock.StatusOfData = (byte)BHConstant.DATA_STATUS_IN_STOCK_FOR_INPUT;
+                    //                        newMaterialInStock.LatestUpdate = DateTime.Now;
+                    //                        if (lstNewMaterial.Count > 0)
+                    //                        {
+                    //                            newMaterialInStock.NumberOfInput = lstNewMaterial.Last<MaterialInStock>().NumberOfInput + od.NumberUnit;
+                    //                            newMaterialInStock.NumberOfOutput = lstNewMaterial.Last<MaterialInStock>().NumberOfOutput;
+                    //                            newMaterialInStock.NumberOfItem = lstNewMaterial.Last<MaterialInStock>().NumberOfItem + od.NumberUnit;
+                    //                        }
+                    //                        else
+                    //                        {
+                    //                            newMaterialInStock.NumberOfInput = od.NumberUnit;
+                    //                            newMaterialInStock.NumberOfOutput = 0;
+                    //                            newMaterialInStock.NumberOfItem = od.NumberUnit;
+                    //                        }
+                    //                        mis.AddMaterialInStock(newMaterialInStock);
 
-                                        }
 
-                                    }
-                                }
+                    //                        //Xoa cu
+                    //                        List<MaterialInStock> lstOldMaterial = mis.SelectMaterialInStockByWhere(pt => pt.ProductId == original.ProductId && pt.AttributeId == original.AttributeId);
 
-                                if (!result)
-                                    break;
-                            }
-                        }
-                        if (!result)
-                        {
-                            MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
-                            return;
-                        }
-                        else
-                        {
-                            MessageBox.Show("Phiếu nhập kho đã được cập nhật thành công");
-                        }
-                        if (this.CallFromUserControll != null && this.CallFromUserControll is StockEntranceList)
-                        {
-                            ((StockEntranceList)this.CallFromUserControll).loadEntranceStockList();
-                        }
+                    //                        if (lstOldMaterial.Count > 0)
+                    //                        {
+                    //                            MaterialInStock oldMaterialInStock = new MaterialInStock();
+                    //                            oldMaterialInStock.AttributeId = original.AttributeId;
+                    //                            oldMaterialInStock.ProductId = original.ProductId;
+                    //                            oldMaterialInStock.StatusOfData = (byte)BHConstant.DATA_STATUS_IN_STOCK_FOR_EDIT;
+                    //                            oldMaterialInStock.LatestUpdate = DateTime.Now;
+                    //                            oldMaterialInStock.NumberOfInput = lstOldMaterial.Last<MaterialInStock>().NumberOfInput - original.NumberUnit;
+                    //                            oldMaterialInStock.NumberOfOutput = lstOldMaterial.Last<MaterialInStock>().NumberOfOutput;
+                    //                            oldMaterialInStock.NumberOfItem = lstOldMaterial.Last<MaterialInStock>().NumberOfItem - original.NumberUnit;
+                    //                            mis.AddMaterialInStock(oldMaterialInStock);
+                    //                        }
 
-                        this.Close();
-                    }
+                    //                    }
+
+                    //                }
+                    //            }
+
+                    //            if (!result)
+                    //                break;
+                    //        }
+                    //    }
+                    //    if (!result)
+                    //    {
+                    //        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                    //        return;
+                    //    }
+                    //    else
+                    //    {
+                    //        MessageBox.Show("Phiếu nhập kho đã được cập nhật thành công");
+                    //    }
+                    //    if (this.CallFromUserControll != null && this.CallFromUserControll is StockEntranceList)
+                    //    {
+                    //        ((StockEntranceList)this.CallFromUserControll).loadEntranceStockList();
+                    //    }
+
+                    //    this.Close();
+                    //}
+
+                    #endregion
+
+                    this.Close();
                 }
                 else//add new
                 {
@@ -431,33 +427,21 @@ namespace BaoHien.UI
                                 return;
                             }
 
-                            //Save in Materail In Stock
-                            MaterialInStock materialInStock = new MaterialInStock();
-                            List<MaterialInStock> lstMaterial = mis.SelectMaterialInStockByWhere(pt => pt.ProductId == od.ProductId && pt.AttributeId == od.AttributeId);
-
-                            materialInStock.AttributeId = od.AttributeId;
-                            materialInStock.ProductId = od.ProductId;
-                            materialInStock.NumberOfItem = od.NumberUnit;
-                            materialInStock.LatestUpdate = DateTime.Now;
-                            materialInStock.StatusOfData = (byte)BHConstant.DATA_STATUS_IN_STOCK_FOR_INPUT;
-                            if (lstMaterial.Count > 0)
+                            //Save in Product Log
+                            ProductLog pl = productLogService.GetNewestProductLog(od.ProductId, od.AttributeId);
+                            ProductLog plg = new ProductLog
                             {
-                                materialInStock.NumberOfInput = lstMaterial.Last<MaterialInStock>().NumberOfInput + od.NumberUnit;
-                                materialInStock.NumberOfOutput = lstMaterial.Last<MaterialInStock>().NumberOfOutput;
-                                materialInStock.NumberOfItem = lstMaterial.Last<MaterialInStock>().NumberOfItem + od.NumberUnit;
-                            }
-                            else
-                            {
-                                materialInStock.NumberOfInput = od.NumberUnit;
-                                materialInStock.NumberOfOutput = 0;
-                                materialInStock.NumberOfItem = od.NumberUnit;
-
-                            }
-                            mis.AddMaterialInStock(materialInStock);
+                                AttributeId = od.AttributeId,
+                                ProductId = od.ProductId,
+                                RecordCode = entranceStock.EntranceCode,
+                                BeforeNumber = pl.AfterNumber,
+                                Amount = od.NumberUnit,
+                                AfterNumber = pl.AfterNumber + od.NumberUnit,
+                                CreatedDate = DateTime.Now
+                            };
+                            result = productLogService.AddProductLog(plg);
                         }
                     }
-
-
                     if (result)
                     {
                         MessageBox.Show("Phiếu nhập kho đã được tạo thành công");
@@ -471,11 +455,6 @@ namespace BaoHien.UI
                 }
             }
             
-        }
-
-        private void AddMaterialInStock()
-        { 
-
         }
     }
 }

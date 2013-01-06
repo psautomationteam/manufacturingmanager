@@ -28,6 +28,7 @@ using PDF = iTextSharp.text;
 using iTextSharp.text.pdf;
 using Microsoft.Win32;
 using System.Diagnostics;
+using BaoHien.Services.ProductLogs;
 
 namespace BaoHien.UI
 {
@@ -40,6 +41,7 @@ namespace BaoHien.UI
         BindingList<ProductAttributeModel> productAttrs;
         BindingList<ProductionRequestDetailModel> originalProductions;
         double totalWithTax = 0.0;
+        ProductLogService productLogService;
 
         public AddOrder()
         {
@@ -53,8 +55,7 @@ namespace BaoHien.UI
             {
                 DialogResult dialogResult = MessageBox.Show("Bạn sẽ không thể chỉnh sửa sau khi lưu!Bạn muốn lưu?", "Xác nhận", MessageBoxButtons.YesNo);
                 if (dialogResult == System.Windows.Forms.DialogResult.Yes)
-                {                   
-                    ProductInStockService pis = new ProductInStockService();
+                {
                     double discount = 0;
                     Double.TryParse(txtDiscount.WorkingText, out discount);
                     DateTime createdDate = DateTime.Now;
@@ -78,6 +79,9 @@ namespace BaoHien.UI
                     if (order != null)//update
                     {
                         return true;
+
+                        #region Fix Update
+
                         //order.CustId = (int)cbxCustomer.SelectedValue;
                         //order.Discount = discount;
                         //order.Note = txtNote.Text;
@@ -197,12 +201,14 @@ namespace BaoHien.UI
 
                         //    disableForm();
                         //}
+
+                        #endregion
                     }
                     else//add new
                     {
                         if (cbxCustomer.SelectedValue == null)
                         {
-                            MessageBox.Show("Bạn cần có một khách hành cho phiếu này!");
+                            MessageBox.Show("Bạn cần có một khách hàng cho phiếu này!");
                             return false;
                         }
                         order = new Order
@@ -222,27 +228,24 @@ namespace BaoHien.UI
                         OrderDetailService orderDetailService = new OrderDetailService();
                         foreach (OrderDetail od in orderDetails)
                         {
-                            if (od.ProductId > 0)
+                            if (od.ProductId > 0 && od.AttributeId > 0)
                             {
                                 od.OrderId = (int)newOrderId;
                                 bool ret = orderDetailService.AddOrderDetail(od);
 
-                                //Save in Production In Stock
-                                ProductInStock productInStock = new ProductInStock();
-                                List<ProductInStock> lstProductInStock = pis.SelectProductByWhere(pt => pt.ProductId == od.ProductId && pt.AttributeId == od.AttributeId);
-                                productInStock.AttributeId = od.AttributeId;
-                                productInStock.ProductId = od.ProductId;
-                                productInStock.LatestUpdate = DateTime.Now;
-                                productInStock.StatusOfData = (byte)BHConstant.DATA_STATUS_IN_STOCK_FOR_OUTPUT;
-                                if (lstProductInStock.Count > 0)
+                                //Save in Production Log
+                                ProductLog pl = productLogService.GetNewestProductLog(od.ProductId, od.AttributeId);
+                                ProductLog plg = new ProductLog
                                 {
-                                    productInStock.NumberOfInput = lstProductInStock.Last<ProductInStock>().NumberOfInput;
-                                    productInStock.NumberOfOutput = lstProductInStock.Last<ProductInStock>().NumberOfOutput + od.NumberUnit;
-                                    productInStock.NumberOfItem = (int)lstProductInStock.Last<ProductInStock>().NumberOfItem - od.NumberUnit;
-                                }
-
-                                pis.AddProductInStock(productInStock);
-
+                                    AttributeId = od.AttributeId,
+                                    ProductId = od.ProductId,
+                                    RecordCode = order.OrderCode,
+                                    BeforeNumber = pl.AfterNumber,
+                                    Amount = od.NumberUnit,
+                                    AfterNumber = pl.AfterNumber - od.NumberUnit,
+                                    CreatedDate = DateTime.Now
+                                };
+                                ret = productLogService.AddProductLog(plg);
                                 if (!ret)
                                 {
                                     MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
@@ -359,7 +362,6 @@ namespace BaoHien.UI
         public void loadDataForEditOrder(int orderId)
         {
             disableForm();
-            
             isUpdating = true;
             this.Text = "Chỉnh sửa đơn hàng này";
             this.btnSave.Text = "Cập nhật";
@@ -378,6 +380,7 @@ namespace BaoHien.UI
 
         private void AddOrder_Load(object sender, EventArgs e)
         {
+            productLogService = new ProductLogService();
             loadSomeData();
             SetupColumns();
             updateProductionRequestDetailCells();
@@ -496,7 +499,23 @@ namespace BaoHien.UI
                         } break;
                     case 1:
                         {
-                            orderDetails[e.RowIndex].NumberUnit = (int)dgv.CurrentCell.Value;
+                            ProductLog pl = productLogService.GetNewestProductLog(
+                                orderDetails[e.RowIndex].ProductId,
+                                orderDetails[e.RowIndex].AttributeId);
+                            if (pl.AfterNumber <= 0)
+                            {
+                                MessageBox.Show("Số lượng vật liệu trong kho đã hết.");
+                                dgv.CurrentCell.Value = 0;
+                            }
+                            else if (pl.AfterNumber < (int)dgv.Rows[e.RowIndex].Cells[1].Value)
+                            {
+                                MessageBox.Show("Số lượng vật liệu trong kho còn lại là : " + pl.AfterNumber);
+                                dgv.CurrentCell.Value = 0;
+                            }
+                            else
+                            {
+                                orderDetails[e.RowIndex].NumberUnit = (int)dgv.CurrentCell.Value;
+                            }
                         } break;
                     case 2:
                         {
@@ -652,7 +671,7 @@ namespace BaoHien.UI
 
             doc.Add(FormatConfig.ParaHeader("PHIẾU XUẤT KHO"));
             doc.Add(FormatConfig.ParaRightBelowHeader("Mã số phiếu : " + getOrderCode()));
-            doc.Add(FormatConfig.ParaRightBelowHeader("Ngày xuất : " + DateTime.Now.ToString("dd/MM/yyyy")));
+            doc.Add(FormatConfig.ParaRightBelowHeader("Ngày xuất : " + DateTime.Now.ToString(BHConstant.DATE_FORMAT)));
 
             doc.Add(FormatConfig.ParaCommonInfo("Tên khách hàng : ", getCustomerName()));
             doc.Add(FormatConfig.ParaCommonInfo("Địa chỉ : ", getCustomerAddress()));
@@ -703,7 +722,7 @@ namespace BaoHien.UI
 
             doc.Add(FormatConfig.ParaHeader("PHIẾU BÁN HÀNG"));
             doc.Add(FormatConfig.ParaRightBelowHeader("Mã số phiếu : " + getOrderCode()));
-            doc.Add(FormatConfig.ParaRightBelowHeader("Ngày xuất : " + DateTime.Now.ToString("dd/MM/yyyy")));
+            doc.Add(FormatConfig.ParaRightBelowHeader("Ngày xuất : " + DateTime.Now.ToString(BHConstant.DATE_FORMAT)));
 
             doc.Add(FormatConfig.ParaCommonInfo("Tên khách hàng : ", getCustomerName()));
             doc.Add(FormatConfig.ParaCommonInfo("Địa chỉ : ", getCustomerAddress()));

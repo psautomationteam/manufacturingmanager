@@ -70,6 +70,32 @@ namespace BaoHien.Services.ProductAttributes
             return list;
         }
 
+        public List<ProductAttributeModel> GetProductAndAttributeOfType(int productTypeId)
+        {
+            List<ProductAttributeModel> list = new List<ProductAttributeModel>();
+            using (BaoHienDBDataContext context = new BaoHienDBDataContext(SettingManager.BuildStringConnection()))
+            {
+                var products = context.Products.Where(p => p.Status == null && p.ProductType == productTypeId).ToList();
+                foreach (Product product in products)
+                {
+                    var attrs = from a in context.BaseAttributes
+                                join pa in context.ProductAttributes on a.Id equals pa.AttributeId
+                                where pa.ProductId == product.Id
+                                select a;
+                    foreach (BaseAttribute attr in attrs)
+                    {
+                        ProductAttributeModel pad = new ProductAttributeModel();
+                        pad.Id = GetProductAttribute(product.Id, attr.Id).Id;
+                        pad.AttributeId = attr.Id;
+                        pad.ProductId = product.Id;
+                        pad.ProductAttribute = product.ProductName + " - " + attr.AttributeName;
+                        list.Add(pad);
+                    }
+                }
+            }
+            return list;
+        }
+
         public ProductAttribute GetProductAttribute(int ProductId, int AttributeId)
         {
             ProductAttribute pa = new ProductAttribute();

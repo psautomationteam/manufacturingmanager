@@ -13,6 +13,7 @@ using DAL.Helper;
 using BaoHien.Services.SystemUsers;
 using BaoHien.Model;
 using BaoHien.Common;
+using BaoHien.Services.ProductLogs;
 
 namespace BaoHien.UI
 {
@@ -27,7 +28,9 @@ namespace BaoHien.UI
 
         private void OrderList_Load(object sender, EventArgs e)
         {
-            
+            dtpFrom.Value = DateTime.Today.AddDays(-DateTime.Now.Day + 1);
+            dtpFrom.CustomFormat = BHConstant.DATE_FORMAT;
+            dtpTo.CustomFormat = BHConstant.DATE_FORMAT;
             loadOrderList();
             SetupColumns();
         }
@@ -37,8 +40,7 @@ namespace BaoHien.UI
             loadSomeData();
             OrderService orderService = new OrderService();
             List<Order> orders = orderService.GetOrders();
-            setUpDataGrid(orders);
-            
+            setUpDataGrid(orders);            
         }
 
         private void loadSomeData()
@@ -178,18 +180,13 @@ namespace BaoHien.UI
             totalColumn.Frozen = true;
             totalColumn.ValueType = typeof(string);
             dgwOrderList.Columns.Add(totalColumn);
-
-
-            
+                        
             DataGridViewImageColumn deleteButton = new DataGridViewImageColumn();
             deleteButton.Image = Properties.Resources.erase;
-            deleteButton.Width = 100;
+            deleteButton.Width = 40;
             deleteButton.HeaderText = "Xóa";
             deleteButton.ReadOnly = true;
             deleteButton.ImageLayout = DataGridViewImageCellLayout.Normal;
-
-            
-
             dgwOrderList.Columns.Add(deleteButton);
         }
 
@@ -222,17 +219,32 @@ namespace BaoHien.UI
                         CustomerLog cl = new CustomerLog
                         {
                             CustomerId = order.CustId,
-                            RecordCode = BHConstant.MONEY_BACK_CODE,
+                            RecordCode = order.OrderCode,
                             BeforeDebit = beforeDebit,
                             Amount = order.Total,
                             AfterDebit = beforeDebit - order.Total,
                             CreatedDate = DateTime.Now
                         };
                         bool kq = cls.AddCustomerLog(cl);
+                        ProductLogService productLogService = new ProductLogService();
+                        foreach (OrderDetail od in order.OrderDetails)
+                        {
+                            ProductLog pl = productLogService.GetNewestProductLog(od.ProductId, od.AttributeId);
+                            ProductLog plg = new ProductLog
+                            {
+                                AttributeId = od.AttributeId,
+                                ProductId = od.ProductId,
+                                RecordCode = order.OrderCode,
+                                BeforeNumber = pl.AfterNumber,
+                                Amount = od.NumberUnit,
+                                AfterNumber = pl.AfterNumber + od.NumberUnit,
+                                CreatedDate = DateTime.Now
+                            };
+                            bool ret = productLogService.AddProductLog(plg);
+                        }
                         if (!orderService.DeleteOrder(id) && kq)
                         {
                             MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
-
                         }
                         loadOrderList();
                     }
@@ -253,24 +265,10 @@ namespace BaoHien.UI
             frmAddOrder.CallFromUserControll = this;
             frmAddOrder.ShowDialog();
         }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            OrderSearchCriteria orderSearchCriteria = new OrderSearchCriteria
-            {
-                Code = txtCode.Text != null ? txtCode.Text : "",
-                CreatedBy = cbmCustomers.SelectedValue != null ? (int?)cbmCustomers.SelectedValue : (int?)null,
-                From = dtpFrom.Value != null ? dtpFrom.Value : (DateTime?)null,
-                To = dtpTo.Value != null ? dtpTo.Value : (DateTime?)null,
-            };
-            OrderService orderService = new OrderService();
-            List<Order> orders = orderService.SearchingOrder(orderSearchCriteria);
-            if (orders == null)
-            {
-                orders = new List<Order>();
-            }
-            setUpDataGrid(orders);
-        }
         
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Chức năng chưa hoàn thiện !");
+        }        
     }
 }

@@ -97,21 +97,20 @@ namespace BaoHien.UI
             nameColumn.Frozen = true;
             dgvBaseUnitList.Columns.Add(nameColumn);
 
-            DataGridViewImageColumn deleteButton = new DataGridViewImageColumn();
-            deleteButton.Image = Properties.Resources.erase;
-            deleteButton.Width = 100;
-            deleteButton.HeaderText = "Xóa";
-            deleteButton.ReadOnly = true;
-            deleteButton.ImageLayout = DataGridViewImageCellLayout.Normal;
-
             DataGridViewTextBoxColumn descriptionColumn = new DataGridViewTextBoxColumn();
             descriptionColumn.Width = 400;// dgvBaseUnitList.Width - nameColumn.Width - deleteButton.Width;
             descriptionColumn.DataPropertyName = "Description";
             descriptionColumn.HeaderText = "Đặc tả";
             descriptionColumn.Frozen = true;
             descriptionColumn.ValueType = typeof(string);
-
             dgvBaseUnitList.Columns.Add(descriptionColumn);
+
+            DataGridViewImageColumn deleteButton = new DataGridViewImageColumn();
+            deleteButton.Image = Properties.Resources.erase;
+            deleteButton.Width = 40;
+            deleteButton.HeaderText = "Xóa";
+            deleteButton.ReadOnly = true;
+            deleteButton.ImageLayout = DataGridViewImageCellLayout.Normal;
             dgvBaseUnitList.Columns.Add(deleteButton);
         }
 

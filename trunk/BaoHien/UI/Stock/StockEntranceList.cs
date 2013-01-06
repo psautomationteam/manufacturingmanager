@@ -11,6 +11,8 @@ using BaoHien.Services.SystemUsers;
 using BaoHien.Services;
 using DAL.Helper;
 using BaoHien.Model;
+using BaoHien.Services.ProductLogs;
+using BaoHien.Common;
 
 namespace BaoHien.UI
 {
@@ -18,10 +20,12 @@ namespace BaoHien.UI
     {
         List<EntranceStock> entranceStocks;
         List<SystemUser> systemUsers;
+
         public StockEntranceList()
         {
             InitializeComponent();
         }
+
         private void loadSomeData()
         {
            
@@ -42,6 +46,7 @@ namespace BaoHien.UI
             }
             
         }
+
         private void setUpDataGrid(List<EntranceStock> entranceStocks)
         {
             dgwStockEntranceList.AutoGenerateColumns = false;
@@ -63,6 +68,7 @@ namespace BaoHien.UI
 
             }
         }
+
         private void SetupColumns()
         {
             dgwStockEntranceList.AutoGenerateColumns = false;
@@ -105,12 +111,13 @@ namespace BaoHien.UI
 
             DataGridViewImageColumn deleteButton = new DataGridViewImageColumn();
             deleteButton.Image = Properties.Resources.erase;
-            deleteButton.Width = 100;
+            deleteButton.Width = 40;
             deleteButton.HeaderText = "Xóa";
             deleteButton.ReadOnly = true;
             deleteButton.ImageLayout = DataGridViewImageCellLayout.Normal;
             dgwStockEntranceList.Columns.Add(deleteButton);
         }
+
         public void loadEntranceStockList()
         {
             loadSomeData();
@@ -119,8 +126,12 @@ namespace BaoHien.UI
             setUpDataGrid(entranceStocks);
 
         }
+
         private void StockEntranceList_Load(object sender, EventArgs e)
         {
+            dtpFrom.Value = DateTime.Today.AddDays(-DateTime.Now.Day + 1);
+            dtpFrom.CustomFormat = BHConstant.DATE_FORMAT;
+            dtpTo.CustomFormat = BHConstant.DATE_FORMAT;
             loadEntranceStockList();
             SetupColumns();
         }
@@ -143,6 +154,24 @@ namespace BaoHien.UI
                         EntranceStockService entranceStockService = new EntranceStockService();
                         //Product mu = (Product)dgv.DataBoundItem;
                         int id = ObjectHelper.GetValueFromAnonymousType<int>(currentRow.DataBoundItem, "Id");
+                        EntranceStock es = entranceStockService.GetEntranceStock(id);
+
+                        ProductLogService productLogService = new ProductLogService();
+                        foreach (EntranceStockDetail esd in es.EntranceStockDetails)
+                        {
+                            ProductLog pl = productLogService.GetNewestProductLog(esd.ProductId, esd.AttributeId);
+                            ProductLog plg = new ProductLog
+                            {
+                                AttributeId = esd.AttributeId,
+                                ProductId = esd.ProductId,
+                                RecordCode = es.EntranceCode,
+                                BeforeNumber = pl.AfterNumber,
+                                Amount = esd.NumberUnit,
+                                AfterNumber = (pl.AfterNumber - esd.NumberUnit) > 0 ? (pl.AfterNumber - esd.NumberUnit) : 0,
+                                CreatedDate = DateTime.Now
+                            };
+                            bool ret = productLogService.AddProductLog(plg);
+                        }
                         if (!entranceStockService.DeleteEntranceStock(id))
                         {
                             MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
