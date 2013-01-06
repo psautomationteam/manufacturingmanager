@@ -38,7 +38,7 @@
             this.dgvProductAttributeList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvProductAttributeList.Location = new System.Drawing.Point(23, 67);
             this.dgvProductAttributeList.Name = "dgvProductAttributeList";
-            this.dgvProductAttributeList.Size = new System.Drawing.Size(787, 469);
+            this.dgvProductAttributeList.Size = new System.Drawing.Size(1030, 545);
             this.dgvProductAttributeList.TabIndex = 17;
             this.dgvProductAttributeList.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvProductAttributeList_CellClick);
             this.dgvProductAttributeList.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvProductAttributeList_CellDoubleClick);

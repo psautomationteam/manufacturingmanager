@@ -43,6 +43,7 @@ namespace BaoHien.Common
 
         public static string SAVE_IN_DIRECTORY = AppDomain.CurrentDomain.BaseDirectory + @"\Temp";
 
-        public static string MONEY_BACK_CODE = "MBC_BH";
+        public static string DATETIME_FORMAT = "dd/MM/yyyy HH:mm:ss";
+        public static string DATE_FORMAT = "dd/MM/yyyy";
     }
 }

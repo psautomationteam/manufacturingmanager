@@ -9,7 +9,6 @@ using System.Windows.Forms;
 using DAL;
 using BaoHien.Services.Products;
 using BaoHien.Model;
-using BaoHien.Services.MaterialInStocks;
 using BaoHien.Services.Customers;
 using BaoHien.Common;
 
@@ -18,15 +17,14 @@ namespace BaoHien.UI
     public partial class ArrearReport : UserControl
     {
         List<Customer> customers;
-        List<EntranceStockReport> entranceStockReports;
 
         public ArrearReport()
         {
             InitializeComponent();
             LoadCustomers();
             dtpFrom.Value = DateTime.Today.AddMonths(-1);
-            dtpFrom.CustomFormat = "dd/MM/yyyy";
-            dtpTo.CustomFormat = "dd/MM/yyyy";
+            dtpFrom.CustomFormat = BHConstant.DATE_FORMAT;
+            dtpTo.CustomFormat = BHConstant.DATE_FORMAT;
         }
 
         private void setUpDataGrid(List<CustomerLog> customerLogs)
@@ -35,7 +33,7 @@ namespace BaoHien.UI
             var query = from customerLog in customerLogs
                         select new ArrearReportModel
                         {
-                            Date = customerLog.CreatedDate.ToString("dd/MM/yyyy HH:mm:ss"),
+                            Date = customerLog.CreatedDate.ToString(BHConstant.DATETIME_FORMAT),
                             Amount = Global.formatVNDCurrencyText((customerLog.BeforeDebit - customerLog.AfterDebit).ToString()),
                             RecordCode = customerLog.RecordCode,
                             Index = ++index
@@ -60,7 +58,7 @@ namespace BaoHien.UI
                 if (customerId != 0)
                 {
                     CustomerLogService customerLogService = new CustomerLogService();
-                    List<CustomerLog> customerLogs = customerLogService.GetLogsOfCustomer(customerId, dtpFrom.Value, dtpTo.Value);
+                    List<CustomerLog> customerLogs = customerLogService.GetLogsOfCustomer(customerId, dtpFrom.Value, dtpTo.Value.AddDays(1));
                     setUpDataGrid(customerLogs);
                 }
                 else
@@ -75,7 +73,7 @@ namespace BaoHien.UI
                         CustomerLog ctl = customerLogService.GetNewestCustomerLog(ct.Id);
                         ArrearReportModel arrear = new ArrearReportModel { 
                             CustomerName = ct.CustomerName,
-                            Date = ctl.CreatedDate.ToString("dd/MM/yyyy HH:mm:ss"),
+                            Date = ctl.CreatedDate.ToString(BHConstant.DATETIME_FORMAT),
                             Amount = Global.formatVNDCurrencyText(ctl.AfterDebit.ToString()),
                             RecordCode = ctl.RecordCode,
                             Index = ++index
@@ -126,22 +124,23 @@ namespace BaoHien.UI
             recordCodeColumn.DataPropertyName = "RecordCode";
             recordCodeColumn.HeaderText = "Mã phiếu";
             recordCodeColumn.ValueType = typeof(string);
-            //productCodeColumn.Frozen = true;
+            //recordCodeColumn.Frozen = true;
             dgwStockEntranceList.Columns.Add(recordCodeColumn);
 
             DataGridViewTextBoxColumn dateColumn = new DataGridViewTextBoxColumn();
+            dateColumn.DefaultCellStyle.Format = BHConstant.DATETIME_FORMAT;
             dateColumn.Width = 150;
             dateColumn.DataPropertyName = "Date";
             dateColumn.HeaderText = "Ngày";
             dateColumn.ValueType = typeof(string);
-            //productNameColumn.Frozen = true;
+            //dateColumn.Frozen = true;
             dgwStockEntranceList.Columns.Add(dateColumn);
             
             DataGridViewTextBoxColumn amountColumn = new DataGridViewTextBoxColumn();
             amountColumn.DataPropertyName = "Amount";
             amountColumn.Width = 150;
             amountColumn.HeaderText = "Số tiền";
-            //attributeNameColumn.Frozen = true;
+            //amountColumn.Frozen = true;
             amountColumn.ValueType = typeof(string);
             dgwStockEntranceList.Columns.Add(amountColumn);
         }
@@ -163,7 +162,7 @@ namespace BaoHien.UI
             customerNameColumn.DataPropertyName = "CustomerName";
             customerNameColumn.HeaderText = "Tên khách hàng";
             customerNameColumn.ValueType = typeof(string);
-            //productCodeColumn.Frozen = true;
+            //customerNameColumn.Frozen = true;
             dgwStockEntranceList.Columns.Add(customerNameColumn);
 
             DataGridViewTextBoxColumn recordCodeColumn = new DataGridViewTextBoxColumn();
@@ -171,22 +170,23 @@ namespace BaoHien.UI
             recordCodeColumn.DataPropertyName = "RecordCode";
             recordCodeColumn.HeaderText = "Mã phiếu (giao dịch cuối)";
             recordCodeColumn.ValueType = typeof(string);
-            //productCodeColumn.Frozen = true;
+            //recordCodeColumn.Frozen = true;
             dgwStockEntranceList.Columns.Add(recordCodeColumn);
 
             DataGridViewTextBoxColumn dateColumn = new DataGridViewTextBoxColumn();
+            dateColumn.DefaultCellStyle.Format = BHConstant.DATETIME_FORMAT;
             dateColumn.Width = 150;
             dateColumn.DataPropertyName = "Date";
             dateColumn.HeaderText = "Ngày";
             dateColumn.ValueType = typeof(string);
-            //productNameColumn.Frozen = true;
+            //dateColumn.Frozen = true;
             dgwStockEntranceList.Columns.Add(dateColumn);
 
             DataGridViewTextBoxColumn amountColumn = new DataGridViewTextBoxColumn();
             amountColumn.DataPropertyName = "Amount";
             amountColumn.Width = 150;
             amountColumn.HeaderText = "Số tiền";
-            //attributeNameColumn.Frozen = true;
+            //amountColumn.Frozen = true;
             amountColumn.ValueType = typeof(string);
             dgwStockEntranceList.Columns.Add(amountColumn);
         }

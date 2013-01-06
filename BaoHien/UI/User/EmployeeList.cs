@@ -133,21 +133,20 @@ namespace BaoHien.UI
             typeColumn.ValueType = typeof(string);
             dgvEmployeeList.Columns.Add(typeColumn);
 
-            DataGridViewImageColumn deleteButton = new DataGridViewImageColumn();
-            deleteButton.Image = Properties.Resources.erase;
-            deleteButton.Width = 100;
-            deleteButton.HeaderText = "Xóa";
-            deleteButton.ReadOnly = true;
-            deleteButton.ImageLayout = DataGridViewImageCellLayout.Normal;
-
             DataGridViewTextBoxColumn descriptionColumn = new DataGridViewTextBoxColumn();
             descriptionColumn.DataPropertyName = "Description";
             descriptionColumn.Width = 160;//dgvProductList.Width - productNameColumn.Width - addressColumn.Width - emailColumn.Width - faxColumn.Width - employeeColumn.Width;
             descriptionColumn.HeaderText = "Mô tả nhân viên";
             descriptionColumn.Frozen = true;
             descriptionColumn.ValueType = typeof(string);
-
             dgvEmployeeList.Columns.Add(descriptionColumn);
+
+            DataGridViewImageColumn deleteButton = new DataGridViewImageColumn();
+            deleteButton.Image = Properties.Resources.erase;
+            deleteButton.Width = 40;
+            deleteButton.HeaderText = "Xóa";
+            deleteButton.ReadOnly = true;
+            deleteButton.ImageLayout = DataGridViewImageCellLayout.Normal;
             dgvEmployeeList.Columns.Add(deleteButton);
 
         }

@@ -67,7 +67,7 @@
             this.grpSearch.Controls.Add(this.label1);
             this.grpSearch.Location = new System.Drawing.Point(32, 21);
             this.grpSearch.Name = "grpSearch";
-            this.grpSearch.Size = new System.Drawing.Size(787, 124);
+            this.grpSearch.Size = new System.Drawing.Size(1023, 110);
             this.grpSearch.TabIndex = 12;
             this.grpSearch.TabStop = false;
             this.grpSearch.Text = "Tìm Kiếm";
@@ -77,7 +77,7 @@
             this.cmbSaler.FormattingEnabled = true;
             this.cmbSaler.Location = new System.Drawing.Point(448, 55);
             this.cmbSaler.Name = "cmbSaler";
-            this.cmbSaler.Size = new System.Drawing.Size(170, 21);
+            this.cmbSaler.Size = new System.Drawing.Size(184, 21);
             this.cmbSaler.TabIndex = 3;
             // 
             // label7
@@ -91,7 +91,7 @@
             // 
             // txtPhone
             // 
-            this.txtPhone.Location = new System.Drawing.Point(448, 87);
+            this.txtPhone.Location = new System.Drawing.Point(742, 28);
             this.txtPhone.Name = "txtPhone";
             this.txtPhone.Size = new System.Drawing.Size(170, 20);
             this.txtPhone.TabIndex = 5;
@@ -99,7 +99,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(368, 89);
+            this.label6.Location = new System.Drawing.Point(663, 31);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(73, 13);
             this.label6.TabIndex = 9;
@@ -111,7 +111,7 @@
             this.comboBox2.Items.AddRange(new object[] {
             "Còn giao dịch",
             "Hết giao dịch"});
-            this.comboBox2.Location = new System.Drawing.Point(146, 87);
+            this.comboBox2.Location = new System.Drawing.Point(742, 55);
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(170, 21);
             this.comboBox2.TabIndex = 4;
@@ -127,7 +127,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(66, 93);
+            this.label4.Location = new System.Drawing.Point(663, 62);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(62, 13);
             this.label4.TabIndex = 6;
@@ -144,9 +144,9 @@
             // 
             // btnSearch
             // 
-            this.btnSearch.Location = new System.Drawing.Point(661, 28);
+            this.btnSearch.Location = new System.Drawing.Point(938, 28);
             this.btnSearch.Name = "btnSearch";
-            this.btnSearch.Size = new System.Drawing.Size(75, 54);
+            this.btnSearch.Size = new System.Drawing.Size(75, 47);
             this.btnSearch.TabIndex = 6;
             this.btnSearch.Text = "Tìm";
             this.btnSearch.UseVisualStyleBackColor = true;
@@ -155,7 +155,7 @@
             // 
             this.txtName.Location = new System.Drawing.Point(448, 28);
             this.txtName.Name = "txtName";
-            this.txtName.Size = new System.Drawing.Size(170, 20);
+            this.txtName.Size = new System.Drawing.Size(184, 20);
             this.txtName.TabIndex = 1;
             // 
             // txtCode
@@ -177,7 +177,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(47, 31);
+            this.label1.Location = new System.Drawing.Point(42, 31);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(85, 13);
             this.label1.TabIndex = 0;
@@ -188,14 +188,14 @@
             this.dgvProductList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvProductList.Location = new System.Drawing.Point(32, 200);
             this.dgvProductList.Name = "dgvProductList";
-            this.dgvProductList.Size = new System.Drawing.Size(787, 448);
+            this.dgvProductList.Size = new System.Drawing.Size(1023, 417);
             this.dgvProductList.TabIndex = 14;
             this.dgvProductList.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvProductList_CellClick);
             this.dgvProductList.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvProductList_CellDoubleClick);
             // 
             // btnAdd
             // 
-            this.btnAdd.Location = new System.Drawing.Point(744, 151);
+            this.btnAdd.Location = new System.Drawing.Point(970, 148);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(75, 43);
             this.btnAdd.TabIndex = 0;

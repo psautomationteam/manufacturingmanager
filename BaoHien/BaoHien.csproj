@@ -74,7 +74,7 @@
     <Compile Include="Common\RawPrinter.cs" />
     <Compile Include="Model\BillSearchCriteria.cs" />
     <Compile Include="Model\ArrearReportModel.cs" />
-    <Compile Include="Model\EntranceStockReport.cs" />
+    <Compile Include="Model\ProductReport.cs" />
     <Compile Include="Model\EntranceStockSearchCriteria.cs" />
     <Compile Include="Model\OrderSearchCriteria.cs" />
     <Compile Include="Model\ProductAttributeModel.cs" />
@@ -84,6 +84,7 @@
     <Compile Include="Model\ProductTypeSearchCriteria.cs" />
     <Compile Include="Model\ProductSearchCriteria.cs" />
     <Compile Include="Services\Customer\CustomerLogService.cs" />
+    <Compile Include="Services\Products\ProductLogService.cs" />
     <Compile Include="UI\Configuration\DBConfiguration.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -100,13 +101,11 @@
     <Compile Include="Services\Employee\EmployeeService.cs" />
     <Compile Include="Services\EntranceStock\EntranceStock.cs" />
     <Compile Include="Services\MeasurementUnit\MeasurementUnitService.cs" />
-    <Compile Include="Services\MeterialInStock\MaterialInStockService.cs" />
     <Compile Include="Services\OrderDetail\OrderDetailService.cs" />
     <Compile Include="Services\Order\OrderService.cs" />
     <Compile Include="Services\Price\PriceService.cs" />
     <Compile Include="Services\ProductAttribute\ProductAttributeService.cs" />
     <Compile Include="Services\EntranceStock\EntranceStockDetailService.cs" />
-    <Compile Include="Services\ProductInStock\ProductInStockService.cs" />
     <Compile Include="Services\ProductionRequestDetail\ProductionRequestDetailService.cs" />
     <Compile Include="Services\ProductionRequest\ProductionRequestService.cs" />
     <Compile Include="Services\Products\ProductService.cs" />

@@ -15,19 +15,23 @@ namespace BaoHien.Services.Customers
             CustomerLog customerLog = OnGetItem<CustomerLog>(id.ToString());
             return customerLog;
         }
+
         public List<CustomerLog> GetCustomerLogs()
         {
             List<CustomerLog> customerLogs = OnGetItems<CustomerLog>();
             return customerLogs;
         }
+
         public bool AddCustomerLog(CustomerLog customerLog)
         {
             return OnAddItem<CustomerLog>(customerLog);
         }
+
         public bool DeleteCustomerLog(System.Int32 id)
         {
             return OnDeleteItem<CustomerLog>(id.ToString());
         }
+
         public bool UpdateCustomerLog(CustomerLog customerLog)
         {
             return OnUpdateItem<CustomerLog>(customerLog, customerLog.Id.ToString());
