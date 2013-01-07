@@ -11,7 +11,7 @@ namespace BaoHien.Services.ProductLogs
 {
     class ProductLogService : BaseService<ProductLog>
     {
-        public ProductLog GetProduct(System.Int32 id)
+        public ProductLog GetProductLog(System.Int32 id)
         {
             ProductLog productLog = OnGetItem<ProductLog>(id.ToString());
             return productLog;

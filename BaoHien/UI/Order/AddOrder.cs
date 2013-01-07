@@ -29,6 +29,7 @@ using iTextSharp.text.pdf;
 using Microsoft.Win32;
 using System.Diagnostics;
 using BaoHien.Services.ProductLogs;
+using BaoHien.Services.Employees;
 
 namespace BaoHien.UI
 {
@@ -40,7 +41,7 @@ namespace BaoHien.UI
         BindingList<OrderDetail> orderDetails;
         BindingList<ProductAttributeModel> productAttrs;
         BindingList<ProductionRequestDetailModel> originalProductions;
-        double totalWithTax = 0.0;
+        double totalWithTax = 0.0, totalCommission = 0.0;
         ProductLogService productLogService;
 
         public AddOrder()
@@ -232,6 +233,7 @@ namespace BaoHien.UI
                             {
                                 od.OrderId = (int)newOrderId;
                                 bool ret = orderDetailService.AddOrderDetail(od);
+                                totalCommission += od.Commission;
 
                                 //Save in Production Log
                                 ProductLog pl = productLogService.GetNewestProductLog(od.ProductId, od.AttributeId);
@@ -271,6 +273,19 @@ namespace BaoHien.UI
                             CreatedDate = DateTime.Now
                         };
                         result = cls.AddCustomerLog(cl);
+
+                        EmployeeLogService els = new EmployeeLogService();
+                        EmployeeLog el = els.GetNewestEmployeeLog(order.CreateBy);
+                        EmployeeLog newel = new EmployeeLog
+                        {
+                            EmployeeId = order.CreateBy,
+                            RecordCode = order.OrderCode,
+                            BeforeNumber = el.AfterNumber,
+                            Amount = totalCommission,
+                            AfterNumber = el.AfterNumber + totalCommission,
+                            CreatedDate = DateTime.Now
+                        };
+                        result = els.AddEmployeeLog(newel);
 
                         if (result)
                         {

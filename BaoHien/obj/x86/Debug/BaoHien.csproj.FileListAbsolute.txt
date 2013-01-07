@@ -192,3 +192,4 @@ D:\Work Offline\C#\BaoHien\obj\x86\Debug\GenerateResource.read.1.tlog
 D:\Work Offline\C#\BaoHien\obj\x86\Debug\GenerateResource.write.1.tlog
 D:\Work Offline\C#\BaoHien\obj\x86\Debug\BaoHien.exe
 D:\Work Offline\C#\BaoHien\obj\x86\Debug\BaoHien.pdb
+D:\Pikait\Work\BaoHien\BaoHien\obj\x86\Debug\BaoHien.UI.CommissionReport.resources

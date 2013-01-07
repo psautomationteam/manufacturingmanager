@@ -14,6 +14,7 @@ using BaoHien.Services.SystemUsers;
 using BaoHien.Model;
 using BaoHien.Common;
 using BaoHien.Services.ProductLogs;
+using BaoHien.Services.Employees;
 
 namespace BaoHien.UI
 {
@@ -226,9 +227,12 @@ namespace BaoHien.UI
                             CreatedDate = DateTime.Now
                         };
                         bool kq = cls.AddCustomerLog(cl);
+
+                        double totalCommission = 0.0;
                         ProductLogService productLogService = new ProductLogService();
                         foreach (OrderDetail od in order.OrderDetails)
                         {
+                            totalCommission += od.Commission;
                             ProductLog pl = productLogService.GetNewestProductLog(od.ProductId, od.AttributeId);
                             ProductLog plg = new ProductLog
                             {
@@ -242,6 +246,20 @@ namespace BaoHien.UI
                             };
                             bool ret = productLogService.AddProductLog(plg);
                         }
+
+                        EmployeeLogService els = new EmployeeLogService();
+                        EmployeeLog el = els.GetNewestEmployeeLog(order.CreateBy);
+                        EmployeeLog newel = new EmployeeLog
+                        {
+                            EmployeeId = order.CreateBy,
+                            RecordCode = order.OrderCode,
+                            BeforeNumber = el.AfterNumber,
+                            Amount = totalCommission,
+                            AfterNumber = el.AfterNumber - totalCommission,
+                            CreatedDate = DateTime.Now
+                        };
+                        kq = els.AddEmployeeLog(newel);
+
                         if (!orderService.DeleteOrder(id) && kq)
                         {
                             MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");

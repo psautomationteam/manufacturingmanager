@@ -87,6 +87,9 @@ namespace DAL
     partial void InsertProductLog(ProductLog instance);
     partial void UpdateProductLog(ProductLog instance);
     partial void DeleteProductLog(ProductLog instance);
+    partial void InsertEmployeeLog(EmployeeLog instance);
+    partial void UpdateEmployeeLog(EmployeeLog instance);
+    partial void DeleteEmployeeLog(EmployeeLog instance);
     #endregion
 		
 		public BaoHienDBDataContext() : 
@@ -268,6 +271,14 @@ namespace DAL
 			get
 			{
 				return this.GetTable<ProductLog>();
+			}
+		}
+		
+		public System.Data.Linq.Table<EmployeeLog> EmployeeLogs
+		{
+			get
+			{
+				return this.GetTable<EmployeeLog>();
 			}
 		}
 		
@@ -1935,6 +1946,8 @@ namespace DAL
 		
 		private EntitySet<Customer> _Customers;
 		
+		private EntitySet<EmployeeLog> _EmployeeLogs;
+		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -1966,6 +1979,7 @@ namespace DAL
 		public Employee()
 		{
 			this._Customers = new EntitySet<Customer>(new Action<Customer>(this.attach_Customers), new Action<Customer>(this.detach_Customers));
+			this._EmployeeLogs = new EntitySet<EmployeeLog>(new Action<EmployeeLog>(this.attach_EmployeeLogs), new Action<EmployeeLog>(this.detach_EmployeeLogs));
 			OnCreated();
 		}
 		
@@ -2202,6 +2216,19 @@ namespace DAL
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Employee_EmployeeLog", Storage="_EmployeeLogs", ThisKey="Id", OtherKey="EmployeeId")]
+		public EntitySet<EmployeeLog> EmployeeLogs
+		{
+			get
+			{
+				return this._EmployeeLogs;
+			}
+			set
+			{
+				this._EmployeeLogs.Assign(value);
+			}
+		}
+		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -2229,6 +2256,18 @@ namespace DAL
 		}
 		
 		private void detach_Customers(Customer entity)
+		{
+			this.SendPropertyChanging();
+			entity.Employee = null;
+		}
+		
+		private void attach_EmployeeLogs(EmployeeLog entity)
+		{
+			this.SendPropertyChanging();
+			entity.Employee = this;
+		}
+		
+		private void detach_EmployeeLogs(EmployeeLog entity)
 		{
 			this.SendPropertyChanging();
 			entity.Employee = null;
@@ -5779,6 +5818,253 @@ namespace DAL
 						this._ProductId = default(int);
 					}
 					this.SendPropertyChanged("Product");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.EmployeeLog")]
+	public partial class EmployeeLog : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _Id;
+		
+		private int _EmployeeId;
+		
+		private string _RecordCode;
+		
+		private double _BeforeNumber;
+		
+		private double _Amount;
+		
+		private double _AfterNumber;
+		
+		private System.DateTime _CreatedDate;
+		
+		private EntityRef<Employee> _Employee;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(int value);
+    partial void OnIdChanged();
+    partial void OnEmployeeIdChanging(int value);
+    partial void OnEmployeeIdChanged();
+    partial void OnRecordCodeChanging(string value);
+    partial void OnRecordCodeChanged();
+    partial void OnBeforeNumberChanging(double value);
+    partial void OnBeforeNumberChanged();
+    partial void OnAmountChanging(double value);
+    partial void OnAmountChanged();
+    partial void OnAfterNumberChanging(double value);
+    partial void OnAfterNumberChanged();
+    partial void OnCreatedDateChanging(System.DateTime value);
+    partial void OnCreatedDateChanged();
+    #endregion
+		
+		public EmployeeLog()
+		{
+			this._Employee = default(EntityRef<Employee>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EmployeeId", DbType="Int NOT NULL")]
+		public int EmployeeId
+		{
+			get
+			{
+				return this._EmployeeId;
+			}
+			set
+			{
+				if ((this._EmployeeId != value))
+				{
+					if (this._Employee.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnEmployeeIdChanging(value);
+					this.SendPropertyChanging();
+					this._EmployeeId = value;
+					this.SendPropertyChanged("EmployeeId");
+					this.OnEmployeeIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RecordCode", DbType="VarChar(25) NOT NULL", CanBeNull=false)]
+		public string RecordCode
+		{
+			get
+			{
+				return this._RecordCode;
+			}
+			set
+			{
+				if ((this._RecordCode != value))
+				{
+					this.OnRecordCodeChanging(value);
+					this.SendPropertyChanging();
+					this._RecordCode = value;
+					this.SendPropertyChanged("RecordCode");
+					this.OnRecordCodeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BeforeNumber", DbType="Float NOT NULL")]
+		public double BeforeNumber
+		{
+			get
+			{
+				return this._BeforeNumber;
+			}
+			set
+			{
+				if ((this._BeforeNumber != value))
+				{
+					this.OnBeforeNumberChanging(value);
+					this.SendPropertyChanging();
+					this._BeforeNumber = value;
+					this.SendPropertyChanged("BeforeNumber");
+					this.OnBeforeNumberChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Amount", DbType="Float NOT NULL")]
+		public double Amount
+		{
+			get
+			{
+				return this._Amount;
+			}
+			set
+			{
+				if ((this._Amount != value))
+				{
+					this.OnAmountChanging(value);
+					this.SendPropertyChanging();
+					this._Amount = value;
+					this.SendPropertyChanged("Amount");
+					this.OnAmountChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AfterNumber", DbType="Float NOT NULL")]
+		public double AfterNumber
+		{
+			get
+			{
+				return this._AfterNumber;
+			}
+			set
+			{
+				if ((this._AfterNumber != value))
+				{
+					this.OnAfterNumberChanging(value);
+					this.SendPropertyChanging();
+					this._AfterNumber = value;
+					this.SendPropertyChanged("AfterNumber");
+					this.OnAfterNumberChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreatedDate", DbType="DateTime NOT NULL")]
+		public System.DateTime CreatedDate
+		{
+			get
+			{
+				return this._CreatedDate;
+			}
+			set
+			{
+				if ((this._CreatedDate != value))
+				{
+					this.OnCreatedDateChanging(value);
+					this.SendPropertyChanging();
+					this._CreatedDate = value;
+					this.SendPropertyChanged("CreatedDate");
+					this.OnCreatedDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Employee_EmployeeLog", Storage="_Employee", ThisKey="EmployeeId", OtherKey="Id", IsForeignKey=true)]
+		public Employee Employee
+		{
+			get
+			{
+				return this._Employee.Entity;
+			}
+			set
+			{
+				Employee previousValue = this._Employee.Entity;
+				if (((previousValue != value) 
+							|| (this._Employee.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Employee.Entity = null;
+						previousValue.EmployeeLogs.Remove(this);
+					}
+					this._Employee.Entity = value;
+					if ((value != null))
+					{
+						value.EmployeeLogs.Add(this);
+						this._EmployeeId = value.Id;
+					}
+					else
+					{
+						this._EmployeeId = default(int);
+					}
+					this.SendPropertyChanged("Employee");
 				}
 			}
 		}
