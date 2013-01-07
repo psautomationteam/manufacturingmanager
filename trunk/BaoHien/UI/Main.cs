@@ -49,7 +49,12 @@ namespace BaoHien.UI
             pnlMain.Controls.Clear();
             pnlMain.Controls.Add(productList);
         }
-
+        
+        private void menuDBConfig_Click(object sender, EventArgs e)
+        {
+            DBConfiguration frm = new DBConfiguration();
+            frm.ShowDialog();
+        }
 
         private void menuMeasurementUnit_Click(object sender, EventArgs e)
         {
@@ -127,12 +132,21 @@ namespace BaoHien.UI
             pnlMain.Controls.Clear();
             pnlMain.Controls.Add(ucReport);
         }
+
         private void menuArrear_Click(object sender, EventArgs e)
         {
             ArrearReport arrearReport = new ArrearReport();
             pnlMain.Controls.Clear();
             pnlMain.Controls.Add(arrearReport);
         }
+
+        private void menuCommission_Click(object sender, EventArgs e)
+        {
+            CommissionReport commisionReport = new CommissionReport();
+            pnlMain.Controls.Clear();
+            pnlMain.Controls.Add(commisionReport);
+        }
+
         #endregion 
 
         #region toolbar action
@@ -185,12 +199,6 @@ namespace BaoHien.UI
             //    DBConfiguration dBConfiguration = new DBConfiguration();
             //    dBConfiguration.Show();
             //}
-        }
-
-        private void menuDBConfig_Click(object sender, EventArgs e)
-        {
-            DBConfiguration frm = new DBConfiguration();
-            frm.ShowDialog();
         }
     }
 }

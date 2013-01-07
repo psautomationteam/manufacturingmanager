@@ -74,6 +74,7 @@
     <Compile Include="Common\RawPrinter.cs" />
     <Compile Include="Model\BillSearchCriteria.cs" />
     <Compile Include="Model\ArrearReportModel.cs" />
+    <Compile Include="Model\EmployeeReport.cs" />
     <Compile Include="Model\ProductReport.cs" />
     <Compile Include="Model\EntranceStockSearchCriteria.cs" />
     <Compile Include="Model\OrderSearchCriteria.cs" />
@@ -84,6 +85,7 @@
     <Compile Include="Model\ProductTypeSearchCriteria.cs" />
     <Compile Include="Model\ProductSearchCriteria.cs" />
     <Compile Include="Services\Customer\CustomerLogService.cs" />
+    <Compile Include="Services\Employee\EmployeeLogService.cs" />
     <Compile Include="Services\Products\ProductLogService.cs" />
     <Compile Include="UI\Configuration\DBConfiguration.cs">
       <SubType>Form</SubType>
@@ -240,6 +242,12 @@
     <Compile Include="UI\Report\ArrearReport.designer.cs">
       <DependentUpon>ArrearReport.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\Report\CommissionReport.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\Report\CommissionReport.Designer.cs">
+      <DependentUpon>CommissionReport.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\Report\ProductAndMaterialReport.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -366,6 +374,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Report\ArrearReport.resx">
       <DependentUpon>ArrearReport.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Report\CommissionReport.resx">
+      <DependentUpon>CommissionReport.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Report\ProductAndMaterialReport.resx">
       <DependentUpon>ProductAndMaterialReport.cs</DependentUpon>

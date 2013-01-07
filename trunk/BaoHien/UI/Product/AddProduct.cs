@@ -15,6 +15,7 @@ using BaoHien.Services.BaseAttributes;
 using BaoHien.UI.Base;
 using BaoHien.Services.ProductAttributes;
 using BaoHien.Common;
+using BaoHien.Services.ProductLogs;
 
 
 namespace BaoHien.UI
@@ -28,6 +29,7 @@ namespace BaoHien.UI
         int mode = 0; // default "New status"
         string code = "";
         List<int> oldAttr;
+        ProductLogService productLogService;
 
         public AddProduct()
         {
@@ -116,6 +118,7 @@ namespace BaoHien.UI
 
         private void AddProduct_Load(object sender, EventArgs e)
         {
+            productLogService = new ProductLogService();
             dgvBaseAttributes.AutoGenerateColumns = false;
             loadSomeData();
             SetupColumns();
@@ -133,6 +136,13 @@ namespace BaoHien.UI
                         if ((BaseAttribute)dgv.DataBoundItem == pa.BaseAttribute)
                         {
                             checkbox.Value = 1;
+                            if (productLogService.GetNewestProductLog(product.Id, pa.AttributeId).Id != 0)
+                            {
+                                checkbox.FlatStyle = FlatStyle.Flat;
+                                checkbox.Style.ForeColor = Color.DarkGray;
+                                checkbox.ReadOnly = true;
+                                checkbox.ToolTipText = "Thuộc tính của sản phẩm đang được sử dụng";
+                            }
                             break;
                         }
                     }

@@ -32,6 +32,7 @@ namespace BaoHien.UI
             SetupColumns();
             loadProductTypeList();
         }
+
         public void loadProductTypeList()
         {
             
@@ -43,6 +44,7 @@ namespace BaoHien.UI
                 //dgvProductTypeList.DataSource = productTypes;
             }
         }
+
         private void setUpDataGrid(List<ProductType> productTypes)
         {
             if (productTypes != null)
@@ -64,6 +66,7 @@ namespace BaoHien.UI
                 lblTotalResult.Text = productTypes.Count.ToString();
             }
         }
+
         private void btnDelete_Click(object sender, EventArgs e)
         {
             DataGridViewSelectedRowCollection selectedRows = dgvProductTypeList.SelectedRows;
@@ -99,6 +102,7 @@ namespace BaoHien.UI
         {
             searchProductType();
         }
+
         private void searchProductType()
         {
             ProductTypeSearchCriteria producTypeSearchCriteria = new ProductTypeSearchCriteria();
@@ -122,6 +126,7 @@ namespace BaoHien.UI
                 lblTotalResult.Text = productTypes.Count.ToString();
             }
         }
+
         private void SetupColumns()
         {
             dgvProductTypeList.AutoGenerateColumns = false;
@@ -168,8 +173,6 @@ namespace BaoHien.UI
             dgvProductTypeList.Columns.Add(deleteButton);
         }
 
-        
-
         private void dgvProductTypeList_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             AddProductType frmAddProductType = new AddProductType();
@@ -199,24 +202,20 @@ namespace BaoHien.UI
 
                         int id = ObjectHelper.GetValueFromAnonymousType<int>(currentRow.DataBoundItem, "Id");
                         ProductService productService = new ProductService();
-                        List<Product> productList = productService.SelectProductByWhere(pt => pt.ProductType == id);
-                        bool deleteAllProductForThisType = true;
-                        foreach (Product p in productList)
-                        {
-                            if (!productService.DeleteProduct(p.Id))
-                            {
-                                deleteAllProductForThisType = false;
-                                MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
-                                break;
-                            }
-                        }
                         ProductTypeService producTypeService = new ProductTypeService();
-                        if (!deleteAllProductForThisType || !producTypeService.DeleteProductType(id))
+                        List<Product> productList = productService.SelectProductByWhere(pt => pt.ProductType == id);
+                        if (productList.Count > 0)
                         {
-                            MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
-
+                            MessageBox.Show("Loại này hiện có nhiều sản phẩm. Không xóa được!");
                         }
-                        loadProductTypeList();
+                        else
+                        {
+                            if (!producTypeService.DeleteProductType(id))
+                            {
+                                MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                            }
+                            loadProductTypeList();
+                        }
                     }
                     
                 }

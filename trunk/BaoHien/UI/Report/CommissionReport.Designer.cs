@@ -1,6 +1,6 @@
 ﻿namespace BaoHien.UI
 {
-    partial class ArrearReport
+    partial class CommissionReport
     {
         /// <summary> 
         /// Required designer variable.
@@ -28,34 +28,18 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.dtpTo = new System.Windows.Forms.DateTimePicker();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label2 = new System.Windows.Forms.Label();
             this.btnSearch = new System.Windows.Forms.Button();
-            this.cbmCustomers = new System.Windows.Forms.ComboBox();
+            this.cbmEmployees = new System.Windows.Forms.ComboBox();
             this.label5 = new System.Windows.Forms.Label();
             this.dtpFrom = new System.Windows.Forms.DateTimePicker();
             this.label1 = new System.Windows.Forms.Label();
-            this.dgwStockEntranceList = new System.Windows.Forms.DataGridView();
+            this.dgwEmployeeCommissionList = new System.Windows.Forms.DataGridView();
             this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgwStockEntranceList)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgwEmployeeCommissionList)).BeginInit();
             this.SuspendLayout();
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.dtpTo);
-            this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Controls.Add(this.btnSearch);
-            this.groupBox1.Controls.Add(this.cbmCustomers);
-            this.groupBox1.Controls.Add(this.label5);
-            this.groupBox1.Controls.Add(this.dtpFrom);
-            this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Location = new System.Drawing.Point(19, 16);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(1053, 63);
-            this.groupBox1.TabIndex = 0;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Thông tin tạo báo cáo";
             // 
             // dtpTo
             // 
@@ -65,14 +49,30 @@
             this.dtpTo.Size = new System.Drawing.Size(149, 20);
             this.dtpTo.TabIndex = 10;
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.dtpTo);
+            this.groupBox1.Controls.Add(this.label2);
+            this.groupBox1.Controls.Add(this.btnSearch);
+            this.groupBox1.Controls.Add(this.cbmEmployees);
+            this.groupBox1.Controls.Add(this.label5);
+            this.groupBox1.Controls.Add(this.dtpFrom);
+            this.groupBox1.Controls.Add(this.label1);
+            this.groupBox1.Location = new System.Drawing.Point(17, 18);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(1053, 63);
+            this.groupBox1.TabIndex = 22;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Thông tin tạo báo cáo";
+            // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(262, 28);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(59, 13);
+            this.label2.Size = new System.Drawing.Size(56, 13);
             this.label2.TabIndex = 9;
-            this.label2.Text = "Đến ngày :";
+            this.label2.Text = "Đến ngày:";
             // 
             // btnSearch
             // 
@@ -84,23 +84,23 @@
             this.btnSearch.UseVisualStyleBackColor = true;
             this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
             // 
-            // cbmCustomers
+            // cbmEmployees
             // 
-            this.cbmCustomers.FormattingEnabled = true;
-            this.cbmCustomers.Location = new System.Drawing.Point(643, 24);
-            this.cbmCustomers.Name = "cbmCustomers";
-            this.cbmCustomers.Size = new System.Drawing.Size(208, 21);
-            this.cbmCustomers.TabIndex = 1;
-            this.cbmCustomers.SelectedIndexChanged += new System.EventHandler(this.cbmCustomers_SelectedIndexChanged);
+            this.cbmEmployees.FormattingEnabled = true;
+            this.cbmEmployees.Location = new System.Drawing.Point(643, 24);
+            this.cbmEmployees.Name = "cbmEmployees";
+            this.cbmEmployees.Size = new System.Drawing.Size(208, 21);
+            this.cbmEmployees.TabIndex = 1;
+            this.cbmEmployees.SelectedIndexChanged += new System.EventHandler(this.cbmEmployees_SelectedIndexChanged);
             // 
             // label5
             // 
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(546, 28);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(68, 13);
+            this.label5.Size = new System.Drawing.Size(59, 13);
             this.label5.TabIndex = 8;
-            this.label5.Text = "Khách hàng:";
+            this.label5.Text = "Nhân viên:";
             // 
             // dtpFrom
             // 
@@ -115,43 +115,43 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(29, 27);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(52, 13);
+            this.label1.Size = new System.Drawing.Size(49, 13);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Từ ngày :";
+            this.label1.Text = "Từ ngày:";
             // 
-            // dgwStockEntranceList
+            // dgwEmployeeCommissionList
             // 
-            this.dgwStockEntranceList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgwStockEntranceList.Location = new System.Drawing.Point(19, 103);
-            this.dgwStockEntranceList.Name = "dgwStockEntranceList";
-            this.dgwStockEntranceList.Size = new System.Drawing.Size(1053, 518);
-            this.dgwStockEntranceList.TabIndex = 21;
+            this.dgwEmployeeCommissionList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgwEmployeeCommissionList.Location = new System.Drawing.Point(17, 101);
+            this.dgwEmployeeCommissionList.Name = "dgwEmployeeCommissionList";
+            this.dgwEmployeeCommissionList.Size = new System.Drawing.Size(1053, 517);
+            this.dgwEmployeeCommissionList.TabIndex = 24;
             // 
-            // ArrearReport
+            // CommissionReport
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.dgwStockEntranceList);
-            this.Name = "ArrearReport";
+            this.Controls.Add(this.dgwEmployeeCommissionList);
+            this.Name = "CommissionReport";
             this.Size = new System.Drawing.Size(1084, 641);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgwStockEntranceList)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgwEmployeeCommissionList)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
+        private System.Windows.Forms.DateTimePicker dtpTo;
         private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button btnSearch;
-        private System.Windows.Forms.ComboBox cbmCustomers;
+        private System.Windows.Forms.ComboBox cbmEmployees;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.DateTimePicker dtpFrom;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.DataGridView dgwStockEntranceList;
-        private System.Windows.Forms.DateTimePicker dtpTo;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.DataGridView dgwEmployeeCommissionList;
     }
 }

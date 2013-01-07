@@ -15,20 +15,24 @@ namespace BaoHien.Services.Employees
 
             return employee;
         }
+
         public List<Employee> GetEmployees()
         {
             List<Employee> employees = OnGetItems<Employee>();
 
             return employees;
         }
+
         public bool AddEmployee(Employee employee)
         {
             return OnAddItem<Employee>(employee);
         }
+
         public bool DeleteEmployee(System.Int32 id)
         {
             return OnDeleteItem<Employee>(id.ToString());
         }
+
         public bool UpdateEmployee(Employee employee)
         {
             return OnUpdateItem<Employee>(employee, employee.Id.ToString());
