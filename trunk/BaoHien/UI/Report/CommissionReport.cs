@@ -62,11 +62,13 @@ namespace BaoHien.UI
                 if (employeeId == 0)
                 {
                     employeeLogs = employeeLogService.GetReportsOfEmployees(dtpFrom.Value, dtpTo.Value.AddDays(1));
+                    dgwEmployeeCommissionList.DataSource = employeeLogs;
                     SetupDataGrid(employeeLogs);
                 }
                 else
                 {
                     employeeLogs = employeeLogService.GetReportsOfEmployee(employeeId, dtpFrom.Value, dtpTo.Value.AddDays(1));
+                    dgwEmployeeCommissionList.DataSource = employeeLogs;
                     SetupDataGridDetail(employeeLogs);
                 }
             }
@@ -108,7 +110,7 @@ namespace BaoHien.UI
             DataGridViewTextBoxColumn dateColumn = new DataGridViewTextBoxColumn();
             dateColumn.DefaultCellStyle.Format = BHConstant.DATETIME_FORMAT;
             dateColumn.Width = 150;
-            dateColumn.DataPropertyName = "Date";
+            dateColumn.DataPropertyName = "CreatedDate";
             dateColumn.HeaderText = "Ngày";
             dateColumn.ValueType = typeof(string);
             //dateColumn.Frozen = true;
@@ -146,7 +148,7 @@ namespace BaoHien.UI
             DataGridViewTextBoxColumn dateColumn = new DataGridViewTextBoxColumn();
             dateColumn.DefaultCellStyle.Format = BHConstant.DATETIME_FORMAT;
             dateColumn.Width = 150;
-            dateColumn.DataPropertyName = "Date";
+            dateColumn.DataPropertyName = "CreatedDate";
             dateColumn.HeaderText = "Ngày";
             dateColumn.ValueType = typeof(string);
             //dateColumn.Frozen = true;

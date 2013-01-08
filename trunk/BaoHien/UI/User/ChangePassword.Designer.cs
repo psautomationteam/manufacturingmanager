@@ -70,16 +70,18 @@
             // 
             // txtCurrentPass
             // 
-            this.txtCurrentPass.Location = new System.Drawing.Point(154, 13);
+            this.txtCurrentPass.Location = new System.Drawing.Point(153, 18);
             this.txtCurrentPass.Name = "txtCurrentPass";
+            this.txtCurrentPass.PasswordChar = '*';
             this.txtCurrentPass.Size = new System.Drawing.Size(225, 20);
             this.txtCurrentPass.TabIndex = 0;
             this.validator1.SetType(this.txtCurrentPass, Itboy.Components.ValidationType.Required);
             // 
             // txtNewPass
             // 
-            this.txtNewPass.Location = new System.Drawing.Point(154, 48);
+            this.txtNewPass.Location = new System.Drawing.Point(153, 52);
             this.txtNewPass.Name = "txtNewPass";
+            this.txtNewPass.PasswordChar = '*';
             this.txtNewPass.Size = new System.Drawing.Size(225, 20);
             this.txtNewPass.TabIndex = 1;
             this.validator1.SetType(this.txtNewPass, Itboy.Components.ValidationType.Required);
@@ -88,8 +90,9 @@
             // 
             this.validator1.SetComparedControl(this.txtConfirmPass, this.txtNewPass);
             this.validator1.SetCompareOperator(this.txtConfirmPass, Itboy.Components.ValidationCompareOperator.Equal);
-            this.txtConfirmPass.Location = new System.Drawing.Point(154, 80);
+            this.txtConfirmPass.Location = new System.Drawing.Point(154, 88);
             this.txtConfirmPass.Name = "txtConfirmPass";
+            this.txtConfirmPass.PasswordChar = '*';
             this.txtConfirmPass.Size = new System.Drawing.Size(225, 20);
             this.txtConfirmPass.TabIndex = 2;
             this.validator1.SetType(this.txtConfirmPass, ((Itboy.Components.ValidationType)((Itboy.Components.ValidationType.Required | Itboy.Components.ValidationType.Compare))));

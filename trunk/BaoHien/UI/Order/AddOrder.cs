@@ -274,18 +274,22 @@ namespace BaoHien.UI
                         };
                         result = cls.AddCustomerLog(cl);
 
-                        EmployeeLogService els = new EmployeeLogService();
-                        EmployeeLog el = els.GetNewestEmployeeLog(order.CreateBy);
-                        EmployeeLog newel = new EmployeeLog
+                        int salerId = (int)order.Customer.SalerId;
+                        if(salerId > 0)
                         {
-                            EmployeeId = order.CreateBy,
-                            RecordCode = order.OrderCode,
-                            BeforeNumber = el.AfterNumber,
-                            Amount = totalCommission,
-                            AfterNumber = el.AfterNumber + totalCommission,
-                            CreatedDate = DateTime.Now
-                        };
-                        result = els.AddEmployeeLog(newel);
+                            EmployeeLogService els = new EmployeeLogService();
+                            EmployeeLog el = els.GetNewestEmployeeLog(order.CreateBy);
+                            EmployeeLog newel = new EmployeeLog
+                            {
+                                EmployeeId = salerId,
+                                RecordCode = order.OrderCode,
+                                BeforeNumber = el.AfterNumber,
+                                Amount = totalCommission,
+                                AfterNumber = el.AfterNumber + totalCommission,
+                                CreatedDate = DateTime.Now
+                            };
+                            result = els.AddEmployeeLog(newel);                            
+                        }
 
                         if (result)
                         {
