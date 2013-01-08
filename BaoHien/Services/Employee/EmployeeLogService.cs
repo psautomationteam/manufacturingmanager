@@ -116,7 +116,7 @@ namespace BaoHien.Services.Employees
                     EmployeeName = log.Employee.FullName,
                     RecordCode = log.RecordCode,
                     BeforeNumber = log.BeforeNumber.ToString(),
-                    Amount = log.Amount.ToString(),
+                    Amount = (log.AfterNumber - log.BeforeNumber).ToString(),
                     AfterNumber = log.AfterNumber.ToString(),
                     CreatedDate = log.CreatedDate,
                     Index = ++index

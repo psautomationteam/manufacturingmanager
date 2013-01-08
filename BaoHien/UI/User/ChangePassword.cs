@@ -6,6 +6,9 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using BaoHien.Services.SystemUsers;
+using DAL;
+using BaoHien.Common;
 
 namespace BaoHien.UI
 {
@@ -20,6 +23,37 @@ namespace BaoHien.UI
         {
             if (validator1.Validate())
             {
+                if (txtNewPass.Text != txtConfirmPass.Text)
+                {
+                    MessageBox.Show("Mật khẩu mới không khớp với nhau!");
+                    txtNewPass.Text = "";
+                    txtCurrentPass.Text = "";
+                }
+                else
+                {
+                    SystemUserService systemUserService = new SystemUserService();
+                    SystemUser user = systemUserService.GetSystemUsers().Where(u => u.username == Global.CurrentUser.username && u.password == txtCurrentPass.Text).FirstOrDefault();
+                    if (user != null)
+                    {
+                        user.password = txtNewPass.Text;
+                        bool result = systemUserService.UpdateSystemUser(user);
+                        if (result)
+                        { 
+                            MessageBox.Show("Mật khẩu đã được thay đổi thành công!");
+                        }
+                        else
+                        {
+                            MessageBox.Show("Hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                        }
+                        this.Close();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Mật khẩu hiện tại không đúng!");
+                        txtNewPass.Text = "";
+                        txtCurrentPass.Text = "";
+                    }
+                }
             }
         }
     }
