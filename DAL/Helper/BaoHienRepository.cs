@@ -75,34 +75,31 @@ namespace DAL.Helper
             return checkExistingContext();
         }
 
-        public static bool testDBConnection(string DBServerName, string DatabaseName, string DatabaseUserID, string DatabasePwd)
+        public static bool testDBConnection(string DBServerName, string Port, string NetworkLibrary, string DatabaseName,
+            string DatabaseUserID, string DatabasePwd)
         {
             BaoHienDBDataContext contextForTest = null;
             try
             {
-                contextForTest = new BaoHienDBDataContext(SettingManager.BuildStringConnectionForTest(DBServerName, DatabaseName, DatabaseUserID, DatabasePwd));
+                contextForTest = new BaoHienDBDataContext(SettingManager.BuildStringConnectionForTest(DBServerName, Port, NetworkLibrary,
+                    DatabaseName, DatabaseUserID, DatabasePwd));
                 if (contextForTest != null)
                 {
                     if (contextForTest.Connection != null)
                     {
-                        if (!contextForTest.DatabaseExists())
+                        if (contextForTest.DatabaseExists())
                         {
-                            return false;
+                            contextForTest.Connection.Close();
+                            return true;
                         }
-                        contextForTest.Connection.Close();
                     }
-                }
-                else
-                {
-                    return false;
                 }
             }
             catch (Exception)
             {
                 context = null;
-                return false;
             }
-            return true;
+            return false;
         }
 
         static Expression<Func<T, T2>> CreateLambdaForDeletedField<T, T2>()

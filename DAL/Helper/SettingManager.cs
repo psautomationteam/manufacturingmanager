@@ -29,14 +29,15 @@ namespace DAL.Helper
                 }
             }
         }
+
         public static string BuildStringConnection()
-        {
-            
+        {            
             SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
 
-            builder["Data Source"] = Settings.Default.DBServerName;
-            builder["integrated Security"] = true;
-            builder["Initial Catalog"] = DAL.Properties.Settings.Default.DatabaseName;
+            builder.NetworkLibrary = DAL.Properties.Settings.Default.NetworkLibrary;
+            builder.DataSource = DAL.Properties.Settings.Default.DBServerName + "," + DAL.Properties.Settings.Default.Port;
+            builder.IntegratedSecurity = true;
+            builder.InitialCatalog = DAL.Properties.Settings.Default.DatabaseName;
             if (DAL.Properties.Settings.Default.DatabaseUserID != "" && DAL.Properties.Settings.Default.DatabasePwd != "")
             {
                 builder.UserID = DAL.Properties.Settings.Default.DatabaseUserID;
@@ -48,14 +49,17 @@ namespace DAL.Helper
             Console.WriteLine(builder.ConnectionString);
             return builder.ConnectionString;
         }
-        public static string BuildStringConnectionForTest(string DBServerName, string DatabaseName, string DatabaseUserID, string DatabasePwd)
+
+        public static string BuildStringConnectionForTest(string DBServerName, string Port, string NetworkLibrary,
+            string DatabaseName, string DatabaseUserID, string DatabasePwd)
         {
 
             SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
 
-            builder["Data Source"] = DBServerName + INSTANCE;
-            builder["integrated Security"] = true;
-            builder["Initial Catalog"] = DatabaseName;
+            builder.NetworkLibrary = NetworkLibrary;
+            builder.DataSource = DBServerName + "," + Port;
+            builder.IntegratedSecurity = true;
+            builder.InitialCatalog = DatabaseName;
             if (DatabaseUserID != "" && DatabasePwd != "")
             {
                 builder.UserID = DatabaseUserID;
@@ -67,13 +71,23 @@ namespace DAL.Helper
             Console.WriteLine(builder.ConnectionString);
             return builder.ConnectionString;
         }
-        public static void UpdateSetting(string DBServerName,string DatabaseName,string DatabaseUserID,string DatabasePwd)
+
+        public static void UpdateSetting(string DBServerName, string Port, string NetworkLibrary,
+            string DatabaseName, string DatabaseUserID, string DatabasePwd)
         {
             if (DBServerName != null)
             {
-                DAL.Properties.Settings.Default.DBServerName = DBServerName + INSTANCE;
+                DAL.Properties.Settings.Default.DBServerName = DBServerName;
             }
-            if(DatabaseName != null)
+            if (Port != null)
+            {
+                DAL.Properties.Settings.Default.Port = Port;
+            }
+            if (NetworkLibrary != null)
+            {
+                DAL.Properties.Settings.Default.NetworkLibrary = NetworkLibrary;
+            }
+            if (DatabaseName != null)
             {
                 DAL.Properties.Settings.Default.DatabaseName = DatabaseName;
             }

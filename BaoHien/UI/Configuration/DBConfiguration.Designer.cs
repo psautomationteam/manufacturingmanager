@@ -37,11 +37,17 @@
             this.txtUsername = new System.Windows.Forms.TextBox();
             this.txtPass = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
+            this.txtPort = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.txtDataName = new System.Windows.Forms.TextBox();
+            this.txtNet = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(230, 113);
+            this.btnSave.Location = new System.Drawing.Point(251, 183);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 4;
@@ -52,7 +58,7 @@
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(147, 113);
+            this.btnCancel.Location = new System.Drawing.Point(168, 183);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 5;
@@ -63,7 +69,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 19);
+            this.label1.Location = new System.Drawing.Point(16, 19);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(83, 13);
             this.label1.TabIndex = 2;
@@ -72,7 +78,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(37, 48);
+            this.label2.Location = new System.Drawing.Point(16, 123);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(58, 13);
             this.label2.TabIndex = 3;
@@ -81,7 +87,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(39, 77);
+            this.label3.Location = new System.Drawing.Point(16, 149);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(56, 13);
             this.label3.TabIndex = 4;
@@ -89,28 +95,28 @@
             // 
             // txtIP
             // 
-            this.txtIP.Location = new System.Drawing.Point(101, 12);
+            this.txtIP.Location = new System.Drawing.Point(122, 16);
             this.txtIP.Name = "txtIP";
             this.txtIP.Size = new System.Drawing.Size(204, 20);
             this.txtIP.TabIndex = 0;
             // 
             // txtUsername
             // 
-            this.txtUsername.Location = new System.Drawing.Point(101, 41);
+            this.txtUsername.Location = new System.Drawing.Point(122, 120);
             this.txtUsername.Name = "txtUsername";
             this.txtUsername.Size = new System.Drawing.Size(204, 20);
             this.txtUsername.TabIndex = 1;
             // 
             // txtPass
             // 
-            this.txtPass.Location = new System.Drawing.Point(101, 70);
+            this.txtPass.Location = new System.Drawing.Point(122, 146);
             this.txtPass.Name = "txtPass";
             this.txtPass.Size = new System.Drawing.Size(204, 20);
             this.txtPass.TabIndex = 2;
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(62, 113);
+            this.button1.Location = new System.Drawing.Point(83, 183);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 3;
@@ -118,13 +124,67 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // txtPort
+            // 
+            this.txtPort.Location = new System.Drawing.Point(122, 42);
+            this.txtPort.Name = "txtPort";
+            this.txtPort.Size = new System.Drawing.Size(204, 20);
+            this.txtPort.TabIndex = 8;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(16, 45);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(29, 13);
+            this.label5.TabIndex = 9;
+            this.label5.Text = "Port:";
+            // 
+            // txtDataName
+            // 
+            this.txtDataName.Location = new System.Drawing.Point(122, 94);
+            this.txtDataName.Name = "txtDataName";
+            this.txtDataName.Size = new System.Drawing.Size(204, 20);
+            this.txtDataName.TabIndex = 11;
+            // 
+            // txtNet
+            // 
+            this.txtNet.Location = new System.Drawing.Point(122, 68);
+            this.txtNet.Name = "txtNet";
+            this.txtNet.Size = new System.Drawing.Size(204, 20);
+            this.txtNet.TabIndex = 10;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(16, 97);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(87, 13);
+            this.label4.TabIndex = 13;
+            this.label4.Text = "Database Name:";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(16, 71);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(84, 13);
+            this.label6.TabIndex = 12;
+            this.label6.Text = "Network Library:";
+            // 
             // DBConfiguration
             // 
             this.AcceptButton = this.btnSave;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(347, 145);
+            this.ClientSize = new System.Drawing.Size(347, 217);
+            this.Controls.Add(this.txtDataName);
+            this.Controls.Add(this.txtNet);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.txtPort);
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.txtPass);
             this.Controls.Add(this.txtUsername);
@@ -153,5 +213,11 @@
         private System.Windows.Forms.TextBox txtUsername;
         private System.Windows.Forms.TextBox txtPass;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.TextBox txtPort;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox txtDataName;
+        private System.Windows.Forms.TextBox txtNet;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label6;
     }
 }

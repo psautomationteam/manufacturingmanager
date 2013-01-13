@@ -23,21 +23,6 @@ D:\Work Offline\BaoHienCompany\BaoHienTest\obj\Debug\BaoHienTest.pdb
 D:\Work Offline\BaoHienCompany\BaoHienTest\bin\Debug\JRINCCustomControls.dll
 D:\Work Offline\BaoHienCompany\BaoHienTest\bin\Debug\JRINCCustomControls.pdb
 D:\Work Offline\BaoHienCompany\BaoHienTest\bin\Debug\JRINCCustomControls.xml
-D:\Pikait\Work\BaoHien\BaoHienTest\obj\Debug\ResolveAssemblyReference.cache
-D:\Pikait\Work\BaoHien\BaoHienTest\bin\Debug\BaoHienTest.dll
-D:\Pikait\Work\BaoHien\BaoHienTest\bin\Debug\BaoHienTest.pdb
-D:\Pikait\Work\BaoHien\BaoHienTest\bin\Debug\BaoHien.exe
-D:\Pikait\Work\BaoHien\BaoHienTest\bin\Debug\DAL.dll
-D:\Pikait\Work\BaoHien\BaoHienTest\bin\Debug\Validator.dll
-D:\Pikait\Work\BaoHien\BaoHienTest\bin\Debug\JRINCCustomControls.dll
-D:\Pikait\Work\BaoHien\BaoHienTest\bin\Debug\BaoHien.pdb
-D:\Pikait\Work\BaoHien\BaoHienTest\bin\Debug\DAL.pdb
-D:\Pikait\Work\BaoHien\BaoHienTest\bin\Debug\Validator.pdb
-D:\Pikait\Work\BaoHien\BaoHienTest\bin\Debug\JRINCCustomControls.pdb
-D:\Pikait\Work\BaoHien\BaoHienTest\bin\Debug\JRINCCustomControls.xml
-D:\Pikait\Work\BaoHien\BaoHienTest\obj\Debug\BaoHienTest.dll
-D:\Pikait\Work\BaoHien\BaoHienTest\obj\Debug\BaoHienTest.pdb
-D:\Pikait\Work\BaoHien\BaoHienTest\bin\Debug\itextsharp.dll
 D:\Work Offline\C#\BaoHienTest\bin\Debug\BaoHienTest.dll
 D:\Work Offline\C#\BaoHienTest\bin\Debug\BaoHienTest.pdb
 D:\Work Offline\C#\BaoHienTest\bin\Debug\BaoHien.exe
@@ -53,3 +38,18 @@ D:\Work Offline\C#\BaoHienTest\bin\Debug\JRINCCustomControls.xml
 D:\Work Offline\C#\BaoHienTest\obj\Debug\ResolveAssemblyReference.cache
 D:\Work Offline\C#\BaoHienTest\obj\Debug\BaoHienTest.dll
 D:\Work Offline\C#\BaoHienTest\obj\Debug\BaoHienTest.pdb
+D:\Pikait\Work\BaoHien\BaoHienTest\bin\Debug\BaoHienTest.dll
+D:\Pikait\Work\BaoHien\BaoHienTest\bin\Debug\BaoHienTest.pdb
+D:\Pikait\Work\BaoHien\BaoHienTest\bin\Debug\BaoHien.exe
+D:\Pikait\Work\BaoHien\BaoHienTest\bin\Debug\DAL.dll
+D:\Pikait\Work\BaoHien\BaoHienTest\bin\Debug\Validator.dll
+D:\Pikait\Work\BaoHien\BaoHienTest\bin\Debug\JRINCCustomControls.dll
+D:\Pikait\Work\BaoHien\BaoHienTest\bin\Debug\itextsharp.dll
+D:\Pikait\Work\BaoHien\BaoHienTest\bin\Debug\BaoHien.pdb
+D:\Pikait\Work\BaoHien\BaoHienTest\bin\Debug\DAL.pdb
+D:\Pikait\Work\BaoHien\BaoHienTest\bin\Debug\Validator.pdb
+D:\Pikait\Work\BaoHien\BaoHienTest\bin\Debug\JRINCCustomControls.pdb
+D:\Pikait\Work\BaoHien\BaoHienTest\bin\Debug\JRINCCustomControls.xml
+D:\Pikait\Work\BaoHien\BaoHienTest\obj\Debug\ResolveAssemblyReference.cache
+D:\Pikait\Work\BaoHien\BaoHienTest\obj\Debug\BaoHienTest.dll
+D:\Pikait\Work\BaoHien\BaoHienTest\obj\Debug\BaoHienTest.pdb
