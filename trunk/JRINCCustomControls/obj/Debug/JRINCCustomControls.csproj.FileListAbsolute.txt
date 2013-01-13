@@ -4,15 +4,15 @@ D:\Work Offline\BaoHienCompany\JRINCCustomControls\bin\Debug\JRINCCustomControls
 D:\Work Offline\BaoHienCompany\JRINCCustomControls\obj\Debug\ResolveAssemblyReference.cache
 D:\Work Offline\BaoHienCompany\JRINCCustomControls\obj\Debug\JRINCCustomControls.dll
 D:\Work Offline\BaoHienCompany\JRINCCustomControls\obj\Debug\JRINCCustomControls.pdb
-D:\Pikait\Work\BaoHien\JRINCCustomControls\bin\Debug\JRINCCustomControls.XML
-D:\Pikait\Work\BaoHien\JRINCCustomControls\bin\Debug\JRINCCustomControls.dll
-D:\Pikait\Work\BaoHien\JRINCCustomControls\bin\Debug\JRINCCustomControls.pdb
-D:\Pikait\Work\BaoHien\JRINCCustomControls\obj\Debug\ResolveAssemblyReference.cache
-D:\Pikait\Work\BaoHien\JRINCCustomControls\obj\Debug\JRINCCustomControls.dll
-D:\Pikait\Work\BaoHien\JRINCCustomControls\obj\Debug\JRINCCustomControls.pdb
 D:\Work Offline\C#\JRINCCustomControls\bin\Debug\JRINCCustomControls.XML
 D:\Work Offline\C#\JRINCCustomControls\bin\Debug\JRINCCustomControls.dll
 D:\Work Offline\C#\JRINCCustomControls\bin\Debug\JRINCCustomControls.pdb
 D:\Work Offline\C#\JRINCCustomControls\obj\Debug\ResolveAssemblyReference.cache
 D:\Work Offline\C#\JRINCCustomControls\obj\Debug\JRINCCustomControls.dll
 D:\Work Offline\C#\JRINCCustomControls\obj\Debug\JRINCCustomControls.pdb
+D:\Pikait\Work\BaoHien\JRINCCustomControls\bin\Debug\JRINCCustomControls.XML
+D:\Pikait\Work\BaoHien\JRINCCustomControls\bin\Debug\JRINCCustomControls.dll
+D:\Pikait\Work\BaoHien\JRINCCustomControls\bin\Debug\JRINCCustomControls.pdb
+D:\Pikait\Work\BaoHien\JRINCCustomControls\obj\Debug\ResolveAssemblyReference.cache
+D:\Pikait\Work\BaoHien\JRINCCustomControls\obj\Debug\JRINCCustomControls.dll
+D:\Pikait\Work\BaoHien\JRINCCustomControls\obj\Debug\JRINCCustomControls.pdb

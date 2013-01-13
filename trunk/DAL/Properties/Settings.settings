@@ -2,40 +2,8 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="DAL.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="BaoHienCompanyConnectionString" Type="(Connection string)" Scope="Application">
-      <DesignTimeValue Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
-&lt;SerializableConnectionString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
-  &lt;ConnectionString&gt;Data Source=bryanpham-pc\sqlexpress;Initial Catalog=BaoHienCompany;Integrated Security=True;Pooling=False&lt;/ConnectionString&gt;
-  &lt;ProviderName&gt;System.Data.SqlClient&lt;/ProviderName&gt;
-&lt;/SerializableConnectionString&gt;</DesignTimeValue>
-      <Value Profile="(Default)">Data Source=bryanpham-pc\sqlexpress;Initial Catalog=BaoHienCompany;Integrated Security=True;Pooling=False</Value>
-    </Setting>
-    <Setting Name="BaoHienDBConnectionString" Type="(Connection string)" Scope="Application">
-      <DesignTimeValue Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
-&lt;SerializableConnectionString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
-  &lt;ConnectionString&gt;Data Source=BRYANPHAM-PC\sqlexpress;Initial Catalog=BaoHienCompany;Integrated Security=True;Pooling=False&lt;/ConnectionString&gt;
-  &lt;ProviderName&gt;System.Data.SqlClient&lt;/ProviderName&gt;
-&lt;/SerializableConnectionString&gt;</DesignTimeValue>
-      <Value Profile="(Default)">Data Source=BRYANPHAM-PC\sqlexpress;Initial Catalog=BaoHienCompany;Integrated Security=True;Pooling=False</Value>
-    </Setting>
-    <Setting Name="BaoHienDBConnectionString1" Type="(Connection string)" Scope="Application">
-      <DesignTimeValue Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
-&lt;SerializableConnectionString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
-  &lt;ConnectionString&gt;Data Source=.\SQLExpress;Initial Catalog=BaoHienDB;Integrated Security=True;Pooling=False&lt;/ConnectionString&gt;
-  &lt;ProviderName&gt;System.Data.SqlClient&lt;/ProviderName&gt;
-&lt;/SerializableConnectionString&gt;</DesignTimeValue>
-      <Value Profile="(Default)">Data Source=.\SQLExpress;Initial Catalog=BaoHienDB;Integrated Security=True;Pooling=False</Value>
-    </Setting>
-    <Setting Name="BaoHienCompanyConnectionString1" Type="(Connection string)" Scope="Application">
-      <DesignTimeValue Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
-&lt;SerializableConnectionString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
-  &lt;ConnectionString&gt;Data Source=BRYANPHAM-PC\sqlexpress;Initial Catalog=BaoHienCompany;Integrated Security=True&lt;/ConnectionString&gt;
-  &lt;ProviderName&gt;System.Data.SqlClient&lt;/ProviderName&gt;
-&lt;/SerializableConnectionString&gt;</DesignTimeValue>
-      <Value Profile="(Default)">Data Source=BRYANPHAM-PC\sqlexpress;Initial Catalog=BaoHienCompany;Integrated Security=True</Value>
-    </Setting>
     <Setting Name="DBServerName" Type="System.String" Scope="User">
-      <Value Profile="(Default)">BRYANPHAM-PC\sqlexpress</Value>
+      <Value Profile="(Default)">127.0.0.1</Value>
     </Setting>
     <Setting Name="DatabaseName" Type="System.String" Scope="User">
       <Value Profile="(Default)">BaoHienCompany</Value>
@@ -46,13 +14,19 @@
     <Setting Name="DatabasePwd" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="BaoHienCompanyConnectionString2" Type="(Connection string)" Scope="Application">
+    <Setting Name="NetworkLibrary" Type="System.String" Scope="User">
+      <Value Profile="(Default)">DBMSSOCN</Value>
+    </Setting>
+    <Setting Name="Port" Type="System.String" Scope="User">
+      <Value Profile="(Default)">1433</Value>
+    </Setting>
+    <Setting Name="BaoHienCompanyConnectionString" Type="(Connection string)" Scope="Application">
       <DesignTimeValue Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
 &lt;SerializableConnectionString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
-  &lt;ConnectionString&gt;Data Source=NTKHA;Initial Catalog=BaoHienCompany;Integrated Security=True&lt;/ConnectionString&gt;
+  &lt;ConnectionString&gt;Data Source=bryanpham-pc\sqlexpress;Initial Catalog=BaoHienCompany;Integrated Security=True;Pooling=False&lt;/ConnectionString&gt;
   &lt;ProviderName&gt;System.Data.SqlClient&lt;/ProviderName&gt;
 &lt;/SerializableConnectionString&gt;</DesignTimeValue>
-      <Value Profile="(Default)">Data Source=NTKHA;Initial Catalog=BaoHienCompany;Integrated Security=True</Value>
+      <Value Profile="(Default)">Data Source=bryanpham-pc\sqlexpress;Initial Catalog=BaoHienCompany;Integrated Security=True;Pooling=False</Value>
     </Setting>
   </Settings>
 </SettingsFile>

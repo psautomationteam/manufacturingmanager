@@ -45,5 +45,13 @@ namespace BaoHien.Common
 
         public static string DATETIME_FORMAT = "dd/MM/yyyy HH:mm:ss";
         public static string DATE_FORMAT = "dd/MM/yyyy";
+
+        // FOR DB CONFIG
+        public const string INIT_IP = "127.0.0.1";
+        public const string INIT_PORT = "1433";
+        public const string INIT_NETWORK_LIBRARY = "DBMSSOCN";
+        public const string INIT_DATABASE_NAME = "BaoHienCompany";
+        public const string INIT_USER_ID = "";
+        public const string INIT_PW = "";
     }
 }

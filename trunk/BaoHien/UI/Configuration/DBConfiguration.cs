@@ -19,6 +19,12 @@ namespace BaoHien.UI
         public DBConfiguration()
         {
             InitializeComponent();
+            txtIP.Text = BHConstant.INIT_IP;
+            txtPort.Text = BHConstant.INIT_PORT;
+            txtNet.Text = BHConstant.INIT_NETWORK_LIBRARY;
+            txtDataName.Text = BHConstant.INIT_DATABASE_NAME;
+            txtUsername.Text = BHConstant.INIT_USER_ID;
+            txtPass.Text = BHConstant.INIT_PW;
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
@@ -28,22 +34,24 @@ namespace BaoHien.UI
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            if (BaoHienRepository.testDBConnection(txtIP.Text, BHConstant.DATABASE_NAME, txtUsername.Text, txtPass.Text))
+            if (BaoHienRepository.testDBConnection(txtIP.Text, txtPort.Text, txtNet.Text, txtDataName.Text,
+                txtUsername.Text, txtPass.Text))
             {
 
-                SettingManager.UpdateSetting(txtIP.Text, BHConstant.DATABASE_NAME, txtUsername.Text, txtPass.Text);
+                SettingManager.UpdateSetting(txtIP.Text, txtPort.Text, txtNet.Text, txtDataName.Text,
+                    txtUsername.Text, txtPass.Text);
                 BaoHienRepository.ResetDBDataContext();
                 MessageBox.Show("Cơ sở dữ liệu đã được chuyển");
                 this.Hide();
                 if (Global.CurrentUser == null)
                 {
                     MessageBox.Show("Cơ sở dữ liệu đã được chuyển");
-                    SettingManager.UpdateSetting(txtIP.Text, BHConstant.DATABASE_NAME, txtUsername.Text, txtPass.Text);
+                    SettingManager.UpdateSetting(txtIP.Text, txtPort.Text, txtNet.Text, txtDataName.Text,
+                        txtUsername.Text, txtPass.Text);
                     
                     //Application.Run(new Login());
                     Login frmLogin = new Login();
                     frmLogin.ShowDialog();
-                    
                 }
                 else
                 {
@@ -51,20 +59,15 @@ namespace BaoHien.UI
                     SystemUser user = systemUserService.GetSystemUsers().Single(u => (u.username == Global.CurrentUser.username) && (u.password == Global.CurrentUser.password));
                     if (user == null)
                     {
-                        MessageBox.Show("Cần đăng nhập lại!");
-                        
+                        MessageBox.Show("Cần đăng nhập lại!");                        
                         //Application.Run(new Login());
                         Login frmLogin = new Login();
-                        frmLogin.ShowDialog();
-                        
+                        frmLogin.ShowDialog();                        
                     }
                     else
                     {
-                        Global.CurrentUser = user;
-                        
+                        Global.CurrentUser = user;                        
                     }
-                   
-                    
                 }
 
                 this.Close();
@@ -81,7 +84,8 @@ namespace BaoHien.UI
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (BaoHienRepository.testDBConnection(txtIP.Text, BHConstant.DATABASE_NAME, txtUsername.Text, txtPass.Text))
+            if (BaoHienRepository.testDBConnection(txtIP.Text, txtPort.Text, txtNet.Text, txtDataName.Text,
+                txtUsername.Text, txtPass.Text))
             {
                 MessageBox.Show("Cơ sở dữ liệu kết nối thành công!");
             }

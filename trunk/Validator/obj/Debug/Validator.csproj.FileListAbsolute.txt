@@ -30,14 +30,6 @@ D:\Work Offline\BaoHienCompany\Validator\obj\Debug\GenerateResource.read.1.tlog
 D:\Work Offline\BaoHienCompany\Validator\obj\Debug\GenerateResource.write.1.tlog
 D:\Work Offline\BaoHienCompany\Validator\obj\Debug\Validator.dll
 D:\Work Offline\BaoHienCompany\Validator\obj\Debug\Validator.pdb
-D:\Pikait\Work\BaoHien\Validator\bin\Debug\Validator.dll
-D:\Pikait\Work\BaoHien\Validator\bin\Debug\Validator.pdb
-D:\Pikait\Work\BaoHien\Validator\obj\Debug\ResolveAssemblyReference.cache
-D:\Pikait\Work\BaoHien\Validator\obj\Debug\Itboy.Properties.Resources.resources
-D:\Pikait\Work\BaoHien\Validator\obj\Debug\GenerateResource.read.1.tlog
-D:\Pikait\Work\BaoHien\Validator\obj\Debug\GenerateResource.write.1.tlog
-D:\Pikait\Work\BaoHien\Validator\obj\Debug\Validator.dll
-D:\Pikait\Work\BaoHien\Validator\obj\Debug\Validator.pdb
 D:\Work Offline\C#\Validator\bin\Debug\Validator.dll
 D:\Work Offline\C#\Validator\bin\Debug\Validator.pdb
 D:\Work Offline\C#\Validator\obj\Debug\ResolveAssemblyReference.cache
@@ -46,3 +38,11 @@ D:\Work Offline\C#\Validator\obj\Debug\GenerateResource.read.1.tlog
 D:\Work Offline\C#\Validator\obj\Debug\GenerateResource.write.1.tlog
 D:\Work Offline\C#\Validator\obj\Debug\Validator.dll
 D:\Work Offline\C#\Validator\obj\Debug\Validator.pdb
+D:\Pikait\Work\BaoHien\Validator\bin\Debug\Validator.dll
+D:\Pikait\Work\BaoHien\Validator\bin\Debug\Validator.pdb
+D:\Pikait\Work\BaoHien\Validator\obj\Debug\ResolveAssemblyReference.cache
+D:\Pikait\Work\BaoHien\Validator\obj\Debug\Itboy.Properties.Resources.resources
+D:\Pikait\Work\BaoHien\Validator\obj\Debug\GenerateResource.read.1.tlog
+D:\Pikait\Work\BaoHien\Validator\obj\Debug\GenerateResource.write.1.tlog
+D:\Pikait\Work\BaoHien\Validator\obj\Debug\Validator.dll
+D:\Pikait\Work\BaoHien\Validator\obj\Debug\Validator.pdb
