@@ -11,6 +11,9 @@ using BaoHien.Services.Products;
 using BaoHien.Model;
 using BaoHien.Services.Customers;
 using BaoHien.Common;
+using DAL.Helper;
+using BaoHien.Services.Orders;
+using BaoHien.Services.Bills;
 
 namespace BaoHien.UI
 {
@@ -26,28 +29,19 @@ namespace BaoHien.UI
             dtpFrom.CustomFormat = BHConstant.DATE_FORMAT;
             dtpTo.CustomFormat = BHConstant.DATE_FORMAT;
         }
-
-        private void setUpDataGrid(List<CustomerLog> customerLogs)
-        {
-            int index = 0;
-            var query = from customerLog in customerLogs
-                        select new ArrearReportModel
-                        {
-                            Date = customerLog.CreatedDate.ToString(BHConstant.DATETIME_FORMAT),
-                            Amount = Global.formatVNDCurrencyText((customerLog.BeforeDebit - customerLog.AfterDebit).ToString()),
-                            RecordCode = customerLog.RecordCode,
-                            Index = ++index
-                        };
-            dgwStockEntranceList.DataSource = query.ToList();
-            SetupColumnOneCustomer();
-            setColorRow(3);
-        }
-
-        private void setUpDataGridAllCustomers(List<ArrearReportModel> arrearReportModel)
+        
+        private void setUpDataGrid(List<ArrearReportModel> arrearReportModel, int colColor)
         {
             dgwStockEntranceList.DataSource = arrearReportModel;
-            SetupColumnAllCustomers();
-            setColorRow(4);
+            if (colColor == 3)
+            {
+                SetupColumnOneCustomer();
+            }
+            else
+            {
+                SetupColumnAllCustomers();
+            }
+            setColorRow(colColor);
         }
 
         void LoadReport()
@@ -58,29 +52,14 @@ namespace BaoHien.UI
                 if (customerId != 0)
                 {
                     CustomerLogService customerLogService = new CustomerLogService();
-                    List<CustomerLog> customerLogs = customerLogService.GetLogsOfCustomer(customerId, dtpFrom.Value, dtpTo.Value.AddDays(1));
-                    setUpDataGrid(customerLogs);
+                    List<ArrearReportModel> arrearReportModels = customerLogService.GetReportsOfCustomer(customerId, dtpFrom.Value, dtpTo.Value.AddDays(1));
+                    setUpDataGrid(arrearReportModels, 3);
                 }
                 else
                 {
-                    CustomerService customerService = new CustomerService();
-                    var customers = customerService.GetCustomers();
                     CustomerLogService customerLogService = new CustomerLogService();
-                    List<ArrearReportModel> arrearReportModel = new List<ArrearReportModel>();
-                    int index = 0;
-                    foreach (Customer ct in customers)
-                    {
-                        CustomerLog ctl = customerLogService.GetNewestCustomerLog(ct.Id);
-                        ArrearReportModel arrear = new ArrearReportModel { 
-                            CustomerName = ct.CustomerName,
-                            Date = ctl.CreatedDate.ToString(BHConstant.DATETIME_FORMAT),
-                            Amount = Global.formatVNDCurrencyText(ctl.AfterDebit.ToString()),
-                            RecordCode = ctl.RecordCode,
-                            Index = ++index
-                        };
-                        arrearReportModel.Add(arrear);
-                    }
-                    setUpDataGridAllCustomers(arrearReportModel);
+                    List<ArrearReportModel> arrearReportModels = customerLogService.GetReportsOfCustomers(dtpFrom.Value, dtpTo.Value.AddDays(1));
+                    setUpDataGrid(arrearReportModels, 4);
                 }
             }
             else
@@ -183,7 +162,7 @@ namespace BaoHien.UI
             dgwStockEntranceList.Columns.Add(dateColumn);
 
             DataGridViewTextBoxColumn amountColumn = new DataGridViewTextBoxColumn();
-            amountColumn.DataPropertyName = "Amount";
+            amountColumn.DataPropertyName = "AfterDebit";
             amountColumn.Width = 150;
             amountColumn.HeaderText = "Số tiền";
             //amountColumn.Frozen = true;
@@ -225,6 +204,42 @@ namespace BaoHien.UI
                 {
                     row.DefaultCellStyle.BackColor = Color.Red;
                 }
+            }
+        }
+
+        private void dgwStockEntranceList_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            DataGridViewRow currentRow = dgwStockEntranceList.Rows[e.RowIndex];
+            string RecordCode = ObjectHelper.GetValueFromAnonymousType<string>(currentRow.DataBoundItem, "RecordCode");
+            string prefix = RecordCode.Substring(0, 2);
+            switch (prefix)
+            {
+                case BHConstant.PREFIX_FOR_ORDER:
+                    {
+                        OrderService orderService = new OrderService();
+                        Order order = orderService.GetOrders().Where(o => o.OrderCode == RecordCode).FirstOrDefault();
+                        if (order != null)
+                        {
+                            AddOrder frmAddOrder = new AddOrder();
+                            frmAddOrder.loadDataForEditOrder(order.Id);
+
+                            frmAddOrder.CallFromUserControll = this;
+                            frmAddOrder.ShowDialog();
+                        }
+                    } break;
+                case BHConstant.PREFIX_FOR_BILLING:
+                    {
+                        BillService billService = new BillService();
+                        Bill bill = billService.GetBills().Where(b => b.BillCode == RecordCode).FirstOrDefault();
+                        if (bill != null)
+                        {
+                            AddBill frmAddBill = new AddBill();
+                            frmAddBill.loadDataForEditBill(bill.Id);
+
+                            frmAddBill.CallFromUserControll = this;
+                            frmAddBill.ShowDialog();
+                        }
+                    } break;
             }
         }
     }

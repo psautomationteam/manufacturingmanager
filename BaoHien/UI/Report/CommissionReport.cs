@@ -10,6 +10,8 @@ using DAL;
 using BaoHien.Services.Employees;
 using BaoHien.Common;
 using BaoHien.Model;
+using DAL.Helper;
+using BaoHien.Services.Orders;
 
 namespace BaoHien.UI
 {
@@ -140,7 +142,7 @@ namespace BaoHien.UI
             DataGridViewTextBoxColumn recordCodeColumn = new DataGridViewTextBoxColumn();
             recordCodeColumn.Width = 150;
             recordCodeColumn.DataPropertyName = "RecordCode";
-            recordCodeColumn.HeaderText = "Mã phiếu (giao dịch cuối)";
+            recordCodeColumn.HeaderText = "Mã phiếu";
             recordCodeColumn.ValueType = typeof(string);
             //recordCodeColumn.Frozen = true;
             dgwEmployeeCommissionList.Columns.Add(recordCodeColumn);
@@ -161,6 +163,22 @@ namespace BaoHien.UI
             //amountColumn.Frozen = true;
             amountColumn.ValueType = typeof(string);
             dgwEmployeeCommissionList.Columns.Add(amountColumn);
+        }
+
+        private void dgwEmployeeCommissionList_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            DataGridViewRow currentRow = dgwEmployeeCommissionList.Rows[e.RowIndex];
+            string RecordCode = ObjectHelper.GetValueFromAnonymousType<string>(currentRow.DataBoundItem, "RecordCode");
+            OrderService orderService = new OrderService();
+            Order order = orderService.GetOrders().Where(o => o.OrderCode == RecordCode).FirstOrDefault();
+            if (order != null)
+            {
+                AddOrder frmAddOrder = new AddOrder();
+                frmAddOrder.loadDataForEditOrder(order.Id);
+
+                frmAddOrder.CallFromUserControll = this;
+                frmAddOrder.ShowDialog();
+            }
         }
     }
 }

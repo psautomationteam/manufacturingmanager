@@ -183,11 +183,12 @@ namespace BaoHien.UI
                                 List<int> ids = new List<int>();
                                 ids.Add(prd.Id);
                                 ids.Add(prd.ProductionRequestId);
-                                ProductLog pl = productLogService.GetNewestProductLog(prd.ProductId, prd.AttributeId);
+                                ProductLog pl = productLogService.GetNewestProductUnitLog(prd.ProductId, prd.AttributeId, prd.UnitId);
                                 ProductLog plg = new ProductLog
                                 {
                                     AttributeId = prd.AttributeId,
                                     ProductId = prd.ProductId,
+                                    UnitId = prd.UnitId,
                                     RecordCode = pr.ReqCode,
                                     BeforeNumber = pl.AfterNumber,
                                     Amount = prd.NumberUnit,

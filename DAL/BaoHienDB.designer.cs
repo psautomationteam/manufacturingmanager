@@ -48,6 +48,9 @@ namespace DAL
     partial void InsertEmployee(Employee instance);
     partial void UpdateEmployee(Employee instance);
     partial void DeleteEmployee(Employee instance);
+    partial void InsertEmployeeLog(EmployeeLog instance);
+    partial void UpdateEmployeeLog(EmployeeLog instance);
+    partial void DeleteEmployeeLog(EmployeeLog instance);
     partial void InsertEntranceStock(EntranceStock instance);
     partial void UpdateEntranceStock(EntranceStock instance);
     partial void DeleteEntranceStock(EntranceStock instance);
@@ -81,15 +84,12 @@ namespace DAL
     partial void InsertProductionRequestDetail(ProductionRequestDetail instance);
     partial void UpdateProductionRequestDetail(ProductionRequestDetail instance);
     partial void DeleteProductionRequestDetail(ProductionRequestDetail instance);
-    partial void InsertProductType(ProductType instance);
-    partial void UpdateProductType(ProductType instance);
-    partial void DeleteProductType(ProductType instance);
     partial void InsertProductLog(ProductLog instance);
     partial void UpdateProductLog(ProductLog instance);
     partial void DeleteProductLog(ProductLog instance);
-    partial void InsertEmployeeLog(EmployeeLog instance);
-    partial void UpdateEmployeeLog(EmployeeLog instance);
-    partial void DeleteEmployeeLog(EmployeeLog instance);
+    partial void InsertProductType(ProductType instance);
+    partial void UpdateProductType(ProductType instance);
+    partial void DeleteProductType(ProductType instance);
     #endregion
 		
 		public BaoHienDBDataContext() : 
@@ -167,6 +167,14 @@ namespace DAL
 			get
 			{
 				return this.GetTable<Employee>();
+			}
+		}
+		
+		public System.Data.Linq.Table<EmployeeLog> EmployeeLogs
+		{
+			get
+			{
+				return this.GetTable<EmployeeLog>();
 			}
 		}
 		
@@ -258,14 +266,6 @@ namespace DAL
 			}
 		}
 		
-		public System.Data.Linq.Table<ProductType> ProductTypes
-		{
-			get
-			{
-				return this.GetTable<ProductType>();
-			}
-		}
-		
 		public System.Data.Linq.Table<ProductLog> ProductLogs
 		{
 			get
@@ -274,11 +274,11 @@ namespace DAL
 			}
 		}
 		
-		public System.Data.Linq.Table<EmployeeLog> EmployeeLogs
+		public System.Data.Linq.Table<ProductType> ProductTypes
 		{
 			get
 			{
-				return this.GetTable<EmployeeLog>();
+				return this.GetTable<ProductType>();
 			}
 		}
 		
@@ -2274,6 +2274,253 @@ namespace DAL
 		}
 	}
 	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.EmployeeLog")]
+	public partial class EmployeeLog : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _Id;
+		
+		private int _EmployeeId;
+		
+		private string _RecordCode;
+		
+		private double _BeforeNumber;
+		
+		private double _Amount;
+		
+		private double _AfterNumber;
+		
+		private System.DateTime _CreatedDate;
+		
+		private EntityRef<Employee> _Employee;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(int value);
+    partial void OnIdChanged();
+    partial void OnEmployeeIdChanging(int value);
+    partial void OnEmployeeIdChanged();
+    partial void OnRecordCodeChanging(string value);
+    partial void OnRecordCodeChanged();
+    partial void OnBeforeNumberChanging(double value);
+    partial void OnBeforeNumberChanged();
+    partial void OnAmountChanging(double value);
+    partial void OnAmountChanged();
+    partial void OnAfterNumberChanging(double value);
+    partial void OnAfterNumberChanged();
+    partial void OnCreatedDateChanging(System.DateTime value);
+    partial void OnCreatedDateChanged();
+    #endregion
+		
+		public EmployeeLog()
+		{
+			this._Employee = default(EntityRef<Employee>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EmployeeId", DbType="Int NOT NULL")]
+		public int EmployeeId
+		{
+			get
+			{
+				return this._EmployeeId;
+			}
+			set
+			{
+				if ((this._EmployeeId != value))
+				{
+					if (this._Employee.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnEmployeeIdChanging(value);
+					this.SendPropertyChanging();
+					this._EmployeeId = value;
+					this.SendPropertyChanged("EmployeeId");
+					this.OnEmployeeIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RecordCode", DbType="VarChar(25) NOT NULL", CanBeNull=false)]
+		public string RecordCode
+		{
+			get
+			{
+				return this._RecordCode;
+			}
+			set
+			{
+				if ((this._RecordCode != value))
+				{
+					this.OnRecordCodeChanging(value);
+					this.SendPropertyChanging();
+					this._RecordCode = value;
+					this.SendPropertyChanged("RecordCode");
+					this.OnRecordCodeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BeforeNumber", DbType="Float NOT NULL")]
+		public double BeforeNumber
+		{
+			get
+			{
+				return this._BeforeNumber;
+			}
+			set
+			{
+				if ((this._BeforeNumber != value))
+				{
+					this.OnBeforeNumberChanging(value);
+					this.SendPropertyChanging();
+					this._BeforeNumber = value;
+					this.SendPropertyChanged("BeforeNumber");
+					this.OnBeforeNumberChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Amount", DbType="Float NOT NULL")]
+		public double Amount
+		{
+			get
+			{
+				return this._Amount;
+			}
+			set
+			{
+				if ((this._Amount != value))
+				{
+					this.OnAmountChanging(value);
+					this.SendPropertyChanging();
+					this._Amount = value;
+					this.SendPropertyChanged("Amount");
+					this.OnAmountChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AfterNumber", DbType="Float NOT NULL")]
+		public double AfterNumber
+		{
+			get
+			{
+				return this._AfterNumber;
+			}
+			set
+			{
+				if ((this._AfterNumber != value))
+				{
+					this.OnAfterNumberChanging(value);
+					this.SendPropertyChanging();
+					this._AfterNumber = value;
+					this.SendPropertyChanged("AfterNumber");
+					this.OnAfterNumberChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreatedDate", DbType="DateTime NOT NULL")]
+		public System.DateTime CreatedDate
+		{
+			get
+			{
+				return this._CreatedDate;
+			}
+			set
+			{
+				if ((this._CreatedDate != value))
+				{
+					this.OnCreatedDateChanging(value);
+					this.SendPropertyChanging();
+					this._CreatedDate = value;
+					this.SendPropertyChanged("CreatedDate");
+					this.OnCreatedDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Employee_EmployeeLog", Storage="_Employee", ThisKey="EmployeeId", OtherKey="Id", IsForeignKey=true)]
+		public Employee Employee
+		{
+			get
+			{
+				return this._Employee.Entity;
+			}
+			set
+			{
+				Employee previousValue = this._Employee.Entity;
+				if (((previousValue != value) 
+							|| (this._Employee.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Employee.Entity = null;
+						previousValue.EmployeeLogs.Remove(this);
+					}
+					this._Employee.Entity = value;
+					if ((value != null))
+					{
+						value.EmployeeLogs.Add(this);
+						this._EmployeeId = value.Id;
+					}
+					else
+					{
+						this._EmployeeId = default(int);
+					}
+					this.SendPropertyChanged("Employee");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.EntranceStock")]
 	public partial class EntranceStock : INotifyPropertyChanging, INotifyPropertyChanged
 	{
@@ -2539,6 +2786,8 @@ namespace DAL
 		
 		private int _AttributeId;
 		
+		private int _UnitId;
+		
 		private int _NumberUnit;
 		
 		private string _Note;
@@ -2546,6 +2795,8 @@ namespace DAL
 		private EntityRef<BaseAttribute> _BaseAttribute;
 		
 		private EntityRef<EntranceStock> _EntranceStock;
+		
+		private EntityRef<MeasurementUnit> _MeasurementUnit;
 		
 		private EntityRef<Product> _Product;
 		
@@ -2561,6 +2812,8 @@ namespace DAL
     partial void OnProductIdChanged();
     partial void OnAttributeIdChanging(int value);
     partial void OnAttributeIdChanged();
+    partial void OnUnitIdChanging(int value);
+    partial void OnUnitIdChanged();
     partial void OnNumberUnitChanging(int value);
     partial void OnNumberUnitChanged();
     partial void OnNoteChanging(string value);
@@ -2571,6 +2824,7 @@ namespace DAL
 		{
 			this._BaseAttribute = default(EntityRef<BaseAttribute>);
 			this._EntranceStock = default(EntityRef<EntranceStock>);
+			this._MeasurementUnit = default(EntityRef<MeasurementUnit>);
 			this._Product = default(EntityRef<Product>);
 			OnCreated();
 		}
@@ -2663,6 +2917,30 @@ namespace DAL
 					this._AttributeId = value;
 					this.SendPropertyChanged("AttributeId");
 					this.OnAttributeIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UnitId", DbType="Int NOT NULL")]
+		public int UnitId
+		{
+			get
+			{
+				return this._UnitId;
+			}
+			set
+			{
+				if ((this._UnitId != value))
+				{
+					if (this._MeasurementUnit.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnUnitIdChanging(value);
+					this.SendPropertyChanging();
+					this._UnitId = value;
+					this.SendPropertyChanged("UnitId");
+					this.OnUnitIdChanged();
 				}
 			}
 		}
@@ -2771,6 +3049,40 @@ namespace DAL
 						this._EntranceStockId = default(int);
 					}
 					this.SendPropertyChanged("EntranceStock");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MeasurementUnit_EntranceStockDetail", Storage="_MeasurementUnit", ThisKey="UnitId", OtherKey="Id", IsForeignKey=true)]
+		public MeasurementUnit MeasurementUnit
+		{
+			get
+			{
+				return this._MeasurementUnit.Entity;
+			}
+			set
+			{
+				MeasurementUnit previousValue = this._MeasurementUnit.Entity;
+				if (((previousValue != value) 
+							|| (this._MeasurementUnit.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._MeasurementUnit.Entity = null;
+						previousValue.EntranceStockDetails.Remove(this);
+					}
+					this._MeasurementUnit.Entity = value;
+					if ((value != null))
+					{
+						value.EntranceStockDetails.Add(this);
+						this._UnitId = value.Id;
+					}
+					else
+					{
+						this._UnitId = default(int);
+					}
+					this.SendPropertyChanged("MeasurementUnit");
 				}
 			}
 		}
@@ -3098,7 +3410,13 @@ namespace DAL
 		
 		private string _UnitCode;
 		
-		private EntitySet<Product> _Products;
+		private EntitySet<EntranceStockDetail> _EntranceStockDetails;
+		
+		private EntitySet<OrderDetail> _OrderDetails;
+		
+		private EntitySet<ProductionRequestDetail> _ProductionRequestDetails;
+		
+		private EntitySet<ProductLog> _ProductLogs;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -3116,7 +3434,10 @@ namespace DAL
 		
 		public MeasurementUnit()
 		{
-			this._Products = new EntitySet<Product>(new Action<Product>(this.attach_Products), new Action<Product>(this.detach_Products));
+			this._EntranceStockDetails = new EntitySet<EntranceStockDetail>(new Action<EntranceStockDetail>(this.attach_EntranceStockDetails), new Action<EntranceStockDetail>(this.detach_EntranceStockDetails));
+			this._OrderDetails = new EntitySet<OrderDetail>(new Action<OrderDetail>(this.attach_OrderDetails), new Action<OrderDetail>(this.detach_OrderDetails));
+			this._ProductionRequestDetails = new EntitySet<ProductionRequestDetail>(new Action<ProductionRequestDetail>(this.attach_ProductionRequestDetails), new Action<ProductionRequestDetail>(this.detach_ProductionRequestDetails));
+			this._ProductLogs = new EntitySet<ProductLog>(new Action<ProductLog>(this.attach_ProductLogs), new Action<ProductLog>(this.detach_ProductLogs));
 			OnCreated();
 		}
 		
@@ -3200,16 +3521,55 @@ namespace DAL
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MeasurementUnit_Product", Storage="_Products", ThisKey="Id", OtherKey="BaseUnit")]
-		public EntitySet<Product> Products
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MeasurementUnit_EntranceStockDetail", Storage="_EntranceStockDetails", ThisKey="Id", OtherKey="UnitId")]
+		public EntitySet<EntranceStockDetail> EntranceStockDetails
 		{
 			get
 			{
-				return this._Products;
+				return this._EntranceStockDetails;
 			}
 			set
 			{
-				this._Products.Assign(value);
+				this._EntranceStockDetails.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MeasurementUnit_OrderDetail", Storage="_OrderDetails", ThisKey="Id", OtherKey="UnitId")]
+		public EntitySet<OrderDetail> OrderDetails
+		{
+			get
+			{
+				return this._OrderDetails;
+			}
+			set
+			{
+				this._OrderDetails.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MeasurementUnit_ProductionRequestDetail", Storage="_ProductionRequestDetails", ThisKey="Id", OtherKey="UnitId")]
+		public EntitySet<ProductionRequestDetail> ProductionRequestDetails
+		{
+			get
+			{
+				return this._ProductionRequestDetails;
+			}
+			set
+			{
+				this._ProductionRequestDetails.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MeasurementUnit_ProductLog", Storage="_ProductLogs", ThisKey="Id", OtherKey="UnitId")]
+		public EntitySet<ProductLog> ProductLogs
+		{
+			get
+			{
+				return this._ProductLogs;
+			}
+			set
+			{
+				this._ProductLogs.Assign(value);
 			}
 		}
 		
@@ -3233,13 +3593,49 @@ namespace DAL
 			}
 		}
 		
-		private void attach_Products(Product entity)
+		private void attach_EntranceStockDetails(EntranceStockDetail entity)
 		{
 			this.SendPropertyChanging();
 			entity.MeasurementUnit = this;
 		}
 		
-		private void detach_Products(Product entity)
+		private void detach_EntranceStockDetails(EntranceStockDetail entity)
+		{
+			this.SendPropertyChanging();
+			entity.MeasurementUnit = null;
+		}
+		
+		private void attach_OrderDetails(OrderDetail entity)
+		{
+			this.SendPropertyChanging();
+			entity.MeasurementUnit = this;
+		}
+		
+		private void detach_OrderDetails(OrderDetail entity)
+		{
+			this.SendPropertyChanging();
+			entity.MeasurementUnit = null;
+		}
+		
+		private void attach_ProductionRequestDetails(ProductionRequestDetail entity)
+		{
+			this.SendPropertyChanging();
+			entity.MeasurementUnit = this;
+		}
+		
+		private void detach_ProductionRequestDetails(ProductionRequestDetail entity)
+		{
+			this.SendPropertyChanging();
+			entity.MeasurementUnit = null;
+		}
+		
+		private void attach_ProductLogs(ProductLog entity)
+		{
+			this.SendPropertyChanging();
+			entity.MeasurementUnit = this;
+		}
+		
+		private void detach_ProductLogs(ProductLog entity)
 		{
 			this.SendPropertyChanging();
 			entity.MeasurementUnit = null;
@@ -3644,13 +4040,15 @@ namespace DAL
 		
 		private int _ProductId;
 		
+		private int _AttributeId;
+		
+		private int _UnitId;
+		
 		private int _NumberUnit;
 		
 		private double _Price;
 		
 		private double _Cost;
-		
-		private int _AttributeId;
 		
 		private string _Note;
 		
@@ -3659,6 +4057,8 @@ namespace DAL
 		private double _Commission;
 		
 		private EntityRef<BaseAttribute> _BaseAttribute;
+		
+		private EntityRef<MeasurementUnit> _MeasurementUnit;
 		
 		private EntityRef<Order> _Order;
 		
@@ -3672,14 +4072,16 @@ namespace DAL
     partial void OnIdChanged();
     partial void OnProductIdChanging(int value);
     partial void OnProductIdChanged();
+    partial void OnAttributeIdChanging(int value);
+    partial void OnAttributeIdChanged();
+    partial void OnUnitIdChanging(int value);
+    partial void OnUnitIdChanged();
     partial void OnNumberUnitChanging(int value);
     partial void OnNumberUnitChanged();
     partial void OnPriceChanging(double value);
     partial void OnPriceChanged();
     partial void OnCostChanging(double value);
     partial void OnCostChanged();
-    partial void OnAttributeIdChanging(int value);
-    partial void OnAttributeIdChanged();
     partial void OnNoteChanging(string value);
     partial void OnNoteChanged();
     partial void OnOrderIdChanging(int value);
@@ -3691,6 +4093,7 @@ namespace DAL
 		public OrderDetail()
 		{
 			this._BaseAttribute = default(EntityRef<BaseAttribute>);
+			this._MeasurementUnit = default(EntityRef<MeasurementUnit>);
 			this._Order = default(EntityRef<Order>);
 			this._Product = default(EntityRef<Product>);
 			OnCreated();
@@ -3736,6 +4139,54 @@ namespace DAL
 					this._ProductId = value;
 					this.SendPropertyChanged("ProductId");
 					this.OnProductIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AttributeId", DbType="Int NOT NULL")]
+		public int AttributeId
+		{
+			get
+			{
+				return this._AttributeId;
+			}
+			set
+			{
+				if ((this._AttributeId != value))
+				{
+					if (this._BaseAttribute.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnAttributeIdChanging(value);
+					this.SendPropertyChanging();
+					this._AttributeId = value;
+					this.SendPropertyChanged("AttributeId");
+					this.OnAttributeIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UnitId", DbType="Int NOT NULL")]
+		public int UnitId
+		{
+			get
+			{
+				return this._UnitId;
+			}
+			set
+			{
+				if ((this._UnitId != value))
+				{
+					if (this._MeasurementUnit.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnUnitIdChanging(value);
+					this.SendPropertyChanging();
+					this._UnitId = value;
+					this.SendPropertyChanged("UnitId");
+					this.OnUnitIdChanged();
 				}
 			}
 		}
@@ -3796,30 +4247,6 @@ namespace DAL
 					this._Cost = value;
 					this.SendPropertyChanged("Cost");
 					this.OnCostChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AttributeId", DbType="Int NOT NULL")]
-		public int AttributeId
-		{
-			get
-			{
-				return this._AttributeId;
-			}
-			set
-			{
-				if ((this._AttributeId != value))
-				{
-					if (this._BaseAttribute.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnAttributeIdChanging(value);
-					this.SendPropertyChanging();
-					this._AttributeId = value;
-					this.SendPropertyChanged("AttributeId");
-					this.OnAttributeIdChanged();
 				}
 			}
 		}
@@ -3918,6 +4345,40 @@ namespace DAL
 						this._AttributeId = default(int);
 					}
 					this.SendPropertyChanged("BaseAttribute");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MeasurementUnit_OrderDetail", Storage="_MeasurementUnit", ThisKey="UnitId", OtherKey="Id", IsForeignKey=true)]
+		public MeasurementUnit MeasurementUnit
+		{
+			get
+			{
+				return this._MeasurementUnit.Entity;
+			}
+			set
+			{
+				MeasurementUnit previousValue = this._MeasurementUnit.Entity;
+				if (((previousValue != value) 
+							|| (this._MeasurementUnit.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._MeasurementUnit.Entity = null;
+						previousValue.OrderDetails.Remove(this);
+					}
+					this._MeasurementUnit.Entity = value;
+					if ((value != null))
+					{
+						value.OrderDetails.Add(this);
+						this._UnitId = value.Id;
+					}
+					else
+					{
+						this._UnitId = default(int);
+					}
+					this.SendPropertyChanged("MeasurementUnit");
 				}
 			}
 		}
@@ -4135,8 +4596,6 @@ namespace DAL
 		
 		private string _Description;
 		
-		private System.Nullable<int> _BaseUnit;
-		
 		private int _ProductType;
 		
 		private System.Nullable<byte> _Status;
@@ -4153,8 +4612,6 @@ namespace DAL
 		
 		private EntitySet<ProductLog> _ProductLogs;
 		
-		private EntityRef<MeasurementUnit> _MeasurementUnit;
-		
 		private EntityRef<ProductType> _ProductType1;
 		
     #region Extensibility Method Definitions
@@ -4169,8 +4626,6 @@ namespace DAL
     partial void OnProductNameChanged();
     partial void OnDescriptionChanging(string value);
     partial void OnDescriptionChanged();
-    partial void OnBaseUnitChanging(System.Nullable<int> value);
-    partial void OnBaseUnitChanged();
     partial void OnProductTypeChanging(int value);
     partial void OnProductTypeChanged();
     partial void OnStatusChanging(System.Nullable<byte> value);
@@ -4186,7 +4641,6 @@ namespace DAL
 			this._ProductAttributes = new EntitySet<ProductAttribute>(new Action<ProductAttribute>(this.attach_ProductAttributes), new Action<ProductAttribute>(this.detach_ProductAttributes));
 			this._ProductionRequestDetails = new EntitySet<ProductionRequestDetail>(new Action<ProductionRequestDetail>(this.attach_ProductionRequestDetails), new Action<ProductionRequestDetail>(this.detach_ProductionRequestDetails));
 			this._ProductLogs = new EntitySet<ProductLog>(new Action<ProductLog>(this.attach_ProductLogs), new Action<ProductLog>(this.detach_ProductLogs));
-			this._MeasurementUnit = default(EntityRef<MeasurementUnit>);
 			this._ProductType1 = default(EntityRef<ProductType>);
 			OnCreated();
 		}
@@ -4267,30 +4721,6 @@ namespace DAL
 					this._Description = value;
 					this.SendPropertyChanged("Description");
 					this.OnDescriptionChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BaseUnit", DbType="Int")]
-		public System.Nullable<int> BaseUnit
-		{
-			get
-			{
-				return this._BaseUnit;
-			}
-			set
-			{
-				if ((this._BaseUnit != value))
-				{
-					if (this._MeasurementUnit.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnBaseUnitChanging(value);
-					this.SendPropertyChanging();
-					this._BaseUnit = value;
-					this.SendPropertyChanged("BaseUnit");
-					this.OnBaseUnitChanged();
 				}
 			}
 		}
@@ -4421,40 +4851,6 @@ namespace DAL
 			set
 			{
 				this._ProductLogs.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MeasurementUnit_Product", Storage="_MeasurementUnit", ThisKey="BaseUnit", OtherKey="Id", IsForeignKey=true)]
-		public MeasurementUnit MeasurementUnit
-		{
-			get
-			{
-				return this._MeasurementUnit.Entity;
-			}
-			set
-			{
-				MeasurementUnit previousValue = this._MeasurementUnit.Entity;
-				if (((previousValue != value) 
-							|| (this._MeasurementUnit.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._MeasurementUnit.Entity = null;
-						previousValue.Products.Remove(this);
-					}
-					this._MeasurementUnit.Entity = value;
-					if ((value != null))
-					{
-						value.Products.Add(this);
-						this._BaseUnit = value.Id;
-					}
-					else
-					{
-						this._BaseUnit = default(Nullable<int>);
-					}
-					this.SendPropertyChanged("MeasurementUnit");
-				}
 			}
 		}
 		
@@ -5024,19 +5420,23 @@ namespace DAL
 		
 		private int _Id;
 		
-		private int _ProductId;
+		private int _ProductionRequestId;
 		
-		private int _NumberUnit;
+		private int _ProductId;
 		
 		private int _AttributeId;
 		
-		private string _Note;
+		private int _UnitId;
 		
-		private int _ProductionRequestId;
+		private int _NumberUnit;
+		
+		private string _Note;
 		
 		private bool _Direction;
 		
 		private EntityRef<BaseAttribute> _BaseAttribute;
+		
+		private EntityRef<MeasurementUnit> _MeasurementUnit;
 		
 		private EntityRef<Product> _Product;
 		
@@ -5048,16 +5448,18 @@ namespace DAL
     partial void OnCreated();
     partial void OnIdChanging(int value);
     partial void OnIdChanged();
-    partial void OnProductIdChanging(int value);
-    partial void OnProductIdChanged();
-    partial void OnNumberUnitChanging(int value);
-    partial void OnNumberUnitChanged();
-    partial void OnAttributeIdChanging(int value);
-    partial void OnAttributeIdChanged();
-    partial void OnNoteChanging(string value);
-    partial void OnNoteChanged();
     partial void OnProductionRequestIdChanging(int value);
     partial void OnProductionRequestIdChanged();
+    partial void OnProductIdChanging(int value);
+    partial void OnProductIdChanged();
+    partial void OnAttributeIdChanging(int value);
+    partial void OnAttributeIdChanged();
+    partial void OnUnitIdChanging(int value);
+    partial void OnUnitIdChanged();
+    partial void OnNumberUnitChanging(int value);
+    partial void OnNumberUnitChanged();
+    partial void OnNoteChanging(string value);
+    partial void OnNoteChanged();
     partial void OnDirectionChanging(bool value);
     partial void OnDirectionChanged();
     #endregion
@@ -5065,6 +5467,7 @@ namespace DAL
 		public ProductionRequestDetail()
 		{
 			this._BaseAttribute = default(EntityRef<BaseAttribute>);
+			this._MeasurementUnit = default(EntityRef<MeasurementUnit>);
 			this._Product = default(EntityRef<Product>);
 			this._ProductionRequest = default(EntityRef<ProductionRequest>);
 			OnCreated();
@@ -5086,6 +5489,30 @@ namespace DAL
 					this._Id = value;
 					this.SendPropertyChanged("Id");
 					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ProductionRequestId", DbType="Int NOT NULL")]
+		public int ProductionRequestId
+		{
+			get
+			{
+				return this._ProductionRequestId;
+			}
+			set
+			{
+				if ((this._ProductionRequestId != value))
+				{
+					if (this._ProductionRequest.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnProductionRequestIdChanging(value);
+					this.SendPropertyChanging();
+					this._ProductionRequestId = value;
+					this.SendPropertyChanged("ProductionRequestId");
+					this.OnProductionRequestIdChanged();
 				}
 			}
 		}
@@ -5114,26 +5541,6 @@ namespace DAL
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_NumberUnit", DbType="Int NOT NULL")]
-		public int NumberUnit
-		{
-			get
-			{
-				return this._NumberUnit;
-			}
-			set
-			{
-				if ((this._NumberUnit != value))
-				{
-					this.OnNumberUnitChanging(value);
-					this.SendPropertyChanging();
-					this._NumberUnit = value;
-					this.SendPropertyChanged("NumberUnit");
-					this.OnNumberUnitChanged();
-				}
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AttributeId", DbType="Int NOT NULL")]
 		public int AttributeId
 		{
@@ -5158,6 +5565,50 @@ namespace DAL
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UnitId", DbType="Int NOT NULL")]
+		public int UnitId
+		{
+			get
+			{
+				return this._UnitId;
+			}
+			set
+			{
+				if ((this._UnitId != value))
+				{
+					if (this._MeasurementUnit.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnUnitIdChanging(value);
+					this.SendPropertyChanging();
+					this._UnitId = value;
+					this.SendPropertyChanged("UnitId");
+					this.OnUnitIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_NumberUnit", DbType="Int NOT NULL")]
+		public int NumberUnit
+		{
+			get
+			{
+				return this._NumberUnit;
+			}
+			set
+			{
+				if ((this._NumberUnit != value))
+				{
+					this.OnNumberUnitChanging(value);
+					this.SendPropertyChanging();
+					this._NumberUnit = value;
+					this.SendPropertyChanged("NumberUnit");
+					this.OnNumberUnitChanged();
+				}
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Note", DbType="NVarChar(250)")]
 		public string Note
 		{
@@ -5174,30 +5625,6 @@ namespace DAL
 					this._Note = value;
 					this.SendPropertyChanged("Note");
 					this.OnNoteChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ProductionRequestId", DbType="Int NOT NULL")]
-		public int ProductionRequestId
-		{
-			get
-			{
-				return this._ProductionRequestId;
-			}
-			set
-			{
-				if ((this._ProductionRequestId != value))
-				{
-					if (this._ProductionRequest.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnProductionRequestIdChanging(value);
-					this.SendPropertyChanging();
-					this._ProductionRequestId = value;
-					this.SendPropertyChanged("ProductionRequestId");
-					this.OnProductionRequestIdChanged();
 				}
 			}
 		}
@@ -5252,6 +5679,40 @@ namespace DAL
 						this._AttributeId = default(int);
 					}
 					this.SendPropertyChanged("BaseAttribute");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MeasurementUnit_ProductionRequestDetail", Storage="_MeasurementUnit", ThisKey="UnitId", OtherKey="Id", IsForeignKey=true)]
+		public MeasurementUnit MeasurementUnit
+		{
+			get
+			{
+				return this._MeasurementUnit.Entity;
+			}
+			set
+			{
+				MeasurementUnit previousValue = this._MeasurementUnit.Entity;
+				if (((previousValue != value) 
+							|| (this._MeasurementUnit.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._MeasurementUnit.Entity = null;
+						previousValue.ProductionRequestDetails.Remove(this);
+					}
+					this._MeasurementUnit.Entity = value;
+					if ((value != null))
+					{
+						value.ProductionRequestDetails.Add(this);
+						this._UnitId = value.Id;
+					}
+					else
+					{
+						this._UnitId = default(int);
+					}
+					this.SendPropertyChanged("MeasurementUnit");
 				}
 			}
 		}
@@ -5320,6 +5781,383 @@ namespace DAL
 						this._ProductionRequestId = default(int);
 					}
 					this.SendPropertyChanged("ProductionRequest");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.ProductLog")]
+	public partial class ProductLog : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _Id;
+		
+		private int _ProductId;
+		
+		private int _AttributeId;
+		
+		private int _UnitId;
+		
+		private string _RecordCode;
+		
+		private double _BeforeNumber;
+		
+		private double _Amount;
+		
+		private double _AfterNumber;
+		
+		private System.DateTime _CreatedDate;
+		
+		private EntityRef<BaseAttribute> _BaseAttribute;
+		
+		private EntityRef<MeasurementUnit> _MeasurementUnit;
+		
+		private EntityRef<Product> _Product;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(int value);
+    partial void OnIdChanged();
+    partial void OnProductIdChanging(int value);
+    partial void OnProductIdChanged();
+    partial void OnAttributeIdChanging(int value);
+    partial void OnAttributeIdChanged();
+    partial void OnUnitIdChanging(int value);
+    partial void OnUnitIdChanged();
+    partial void OnRecordCodeChanging(string value);
+    partial void OnRecordCodeChanged();
+    partial void OnBeforeNumberChanging(double value);
+    partial void OnBeforeNumberChanged();
+    partial void OnAmountChanging(double value);
+    partial void OnAmountChanged();
+    partial void OnAfterNumberChanging(double value);
+    partial void OnAfterNumberChanged();
+    partial void OnCreatedDateChanging(System.DateTime value);
+    partial void OnCreatedDateChanged();
+    #endregion
+		
+		public ProductLog()
+		{
+			this._BaseAttribute = default(EntityRef<BaseAttribute>);
+			this._MeasurementUnit = default(EntityRef<MeasurementUnit>);
+			this._Product = default(EntityRef<Product>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ProductId", DbType="Int NOT NULL")]
+		public int ProductId
+		{
+			get
+			{
+				return this._ProductId;
+			}
+			set
+			{
+				if ((this._ProductId != value))
+				{
+					if (this._Product.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnProductIdChanging(value);
+					this.SendPropertyChanging();
+					this._ProductId = value;
+					this.SendPropertyChanged("ProductId");
+					this.OnProductIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AttributeId", DbType="Int NOT NULL")]
+		public int AttributeId
+		{
+			get
+			{
+				return this._AttributeId;
+			}
+			set
+			{
+				if ((this._AttributeId != value))
+				{
+					if (this._BaseAttribute.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnAttributeIdChanging(value);
+					this.SendPropertyChanging();
+					this._AttributeId = value;
+					this.SendPropertyChanged("AttributeId");
+					this.OnAttributeIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UnitId", DbType="Int NOT NULL")]
+		public int UnitId
+		{
+			get
+			{
+				return this._UnitId;
+			}
+			set
+			{
+				if ((this._UnitId != value))
+				{
+					if (this._MeasurementUnit.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnUnitIdChanging(value);
+					this.SendPropertyChanging();
+					this._UnitId = value;
+					this.SendPropertyChanged("UnitId");
+					this.OnUnitIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RecordCode", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string RecordCode
+		{
+			get
+			{
+				return this._RecordCode;
+			}
+			set
+			{
+				if ((this._RecordCode != value))
+				{
+					this.OnRecordCodeChanging(value);
+					this.SendPropertyChanging();
+					this._RecordCode = value;
+					this.SendPropertyChanged("RecordCode");
+					this.OnRecordCodeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BeforeNumber", DbType="Float NOT NULL")]
+		public double BeforeNumber
+		{
+			get
+			{
+				return this._BeforeNumber;
+			}
+			set
+			{
+				if ((this._BeforeNumber != value))
+				{
+					this.OnBeforeNumberChanging(value);
+					this.SendPropertyChanging();
+					this._BeforeNumber = value;
+					this.SendPropertyChanged("BeforeNumber");
+					this.OnBeforeNumberChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Amount", DbType="Float NOT NULL")]
+		public double Amount
+		{
+			get
+			{
+				return this._Amount;
+			}
+			set
+			{
+				if ((this._Amount != value))
+				{
+					this.OnAmountChanging(value);
+					this.SendPropertyChanging();
+					this._Amount = value;
+					this.SendPropertyChanged("Amount");
+					this.OnAmountChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AfterNumber", DbType="Float NOT NULL")]
+		public double AfterNumber
+		{
+			get
+			{
+				return this._AfterNumber;
+			}
+			set
+			{
+				if ((this._AfterNumber != value))
+				{
+					this.OnAfterNumberChanging(value);
+					this.SendPropertyChanging();
+					this._AfterNumber = value;
+					this.SendPropertyChanged("AfterNumber");
+					this.OnAfterNumberChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreatedDate", DbType="DateTime NOT NULL")]
+		public System.DateTime CreatedDate
+		{
+			get
+			{
+				return this._CreatedDate;
+			}
+			set
+			{
+				if ((this._CreatedDate != value))
+				{
+					this.OnCreatedDateChanging(value);
+					this.SendPropertyChanging();
+					this._CreatedDate = value;
+					this.SendPropertyChanged("CreatedDate");
+					this.OnCreatedDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="BaseAttribute_ProductLog", Storage="_BaseAttribute", ThisKey="AttributeId", OtherKey="Id", IsForeignKey=true)]
+		public BaseAttribute BaseAttribute
+		{
+			get
+			{
+				return this._BaseAttribute.Entity;
+			}
+			set
+			{
+				BaseAttribute previousValue = this._BaseAttribute.Entity;
+				if (((previousValue != value) 
+							|| (this._BaseAttribute.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._BaseAttribute.Entity = null;
+						previousValue.ProductLogs.Remove(this);
+					}
+					this._BaseAttribute.Entity = value;
+					if ((value != null))
+					{
+						value.ProductLogs.Add(this);
+						this._AttributeId = value.Id;
+					}
+					else
+					{
+						this._AttributeId = default(int);
+					}
+					this.SendPropertyChanged("BaseAttribute");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MeasurementUnit_ProductLog", Storage="_MeasurementUnit", ThisKey="UnitId", OtherKey="Id", IsForeignKey=true)]
+		public MeasurementUnit MeasurementUnit
+		{
+			get
+			{
+				return this._MeasurementUnit.Entity;
+			}
+			set
+			{
+				MeasurementUnit previousValue = this._MeasurementUnit.Entity;
+				if (((previousValue != value) 
+							|| (this._MeasurementUnit.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._MeasurementUnit.Entity = null;
+						previousValue.ProductLogs.Remove(this);
+					}
+					this._MeasurementUnit.Entity = value;
+					if ((value != null))
+					{
+						value.ProductLogs.Add(this);
+						this._UnitId = value.Id;
+					}
+					else
+					{
+						this._UnitId = default(int);
+					}
+					this.SendPropertyChanged("MeasurementUnit");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Product_ProductLog", Storage="_Product", ThisKey="ProductId", OtherKey="Id", IsForeignKey=true)]
+		public Product Product
+		{
+			get
+			{
+				return this._Product.Entity;
+			}
+			set
+			{
+				Product previousValue = this._Product.Entity;
+				if (((previousValue != value) 
+							|| (this._Product.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Product.Entity = null;
+						previousValue.ProductLogs.Remove(this);
+					}
+					this._Product.Entity = value;
+					if ((value != null))
+					{
+						value.ProductLogs.Add(this);
+						this._ProductId = value.Id;
+					}
+					else
+					{
+						this._ProductId = default(int);
+					}
+					this.SendPropertyChanged("Product");
 				}
 			}
 		}
@@ -5528,565 +6366,6 @@ namespace DAL
 		{
 			this.SendPropertyChanging();
 			entity.ProductType1 = null;
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.ProductLog")]
-	public partial class ProductLog : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _Id;
-		
-		private int _ProductId;
-		
-		private int _AttributeId;
-		
-		private string _RecordCode;
-		
-		private double _BeforeNumber;
-		
-		private double _Amount;
-		
-		private double _AfterNumber;
-		
-		private System.DateTime _CreatedDate;
-		
-		private EntityRef<BaseAttribute> _BaseAttribute;
-		
-		private EntityRef<Product> _Product;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnIdChanging(int value);
-    partial void OnIdChanged();
-    partial void OnProductIdChanging(int value);
-    partial void OnProductIdChanged();
-    partial void OnAttributeIdChanging(int value);
-    partial void OnAttributeIdChanged();
-    partial void OnRecordCodeChanging(string value);
-    partial void OnRecordCodeChanged();
-    partial void OnBeforeNumberChanging(double value);
-    partial void OnBeforeNumberChanged();
-    partial void OnAmountChanging(double value);
-    partial void OnAmountChanged();
-    partial void OnAfterNumberChanging(double value);
-    partial void OnAfterNumberChanged();
-    partial void OnCreatedDateChanging(System.DateTime value);
-    partial void OnCreatedDateChanged();
-    #endregion
-		
-		public ProductLog()
-		{
-			this._BaseAttribute = default(EntityRef<BaseAttribute>);
-			this._Product = default(EntityRef<Product>);
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int Id
-		{
-			get
-			{
-				return this._Id;
-			}
-			set
-			{
-				if ((this._Id != value))
-				{
-					this.OnIdChanging(value);
-					this.SendPropertyChanging();
-					this._Id = value;
-					this.SendPropertyChanged("Id");
-					this.OnIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ProductId", DbType="Int NOT NULL")]
-		public int ProductId
-		{
-			get
-			{
-				return this._ProductId;
-			}
-			set
-			{
-				if ((this._ProductId != value))
-				{
-					if (this._Product.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnProductIdChanging(value);
-					this.SendPropertyChanging();
-					this._ProductId = value;
-					this.SendPropertyChanged("ProductId");
-					this.OnProductIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AttributeId", DbType="Int NOT NULL")]
-		public int AttributeId
-		{
-			get
-			{
-				return this._AttributeId;
-			}
-			set
-			{
-				if ((this._AttributeId != value))
-				{
-					if (this._BaseAttribute.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnAttributeIdChanging(value);
-					this.SendPropertyChanging();
-					this._AttributeId = value;
-					this.SendPropertyChanged("AttributeId");
-					this.OnAttributeIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RecordCode", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
-		public string RecordCode
-		{
-			get
-			{
-				return this._RecordCode;
-			}
-			set
-			{
-				if ((this._RecordCode != value))
-				{
-					this.OnRecordCodeChanging(value);
-					this.SendPropertyChanging();
-					this._RecordCode = value;
-					this.SendPropertyChanged("RecordCode");
-					this.OnRecordCodeChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BeforeNumber", DbType="Float NOT NULL")]
-		public double BeforeNumber
-		{
-			get
-			{
-				return this._BeforeNumber;
-			}
-			set
-			{
-				if ((this._BeforeNumber != value))
-				{
-					this.OnBeforeNumberChanging(value);
-					this.SendPropertyChanging();
-					this._BeforeNumber = value;
-					this.SendPropertyChanged("BeforeNumber");
-					this.OnBeforeNumberChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Amount", DbType="Float NOT NULL")]
-		public double Amount
-		{
-			get
-			{
-				return this._Amount;
-			}
-			set
-			{
-				if ((this._Amount != value))
-				{
-					this.OnAmountChanging(value);
-					this.SendPropertyChanging();
-					this._Amount = value;
-					this.SendPropertyChanged("Amount");
-					this.OnAmountChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AfterNumber", DbType="Float NOT NULL")]
-		public double AfterNumber
-		{
-			get
-			{
-				return this._AfterNumber;
-			}
-			set
-			{
-				if ((this._AfterNumber != value))
-				{
-					this.OnAfterNumberChanging(value);
-					this.SendPropertyChanging();
-					this._AfterNumber = value;
-					this.SendPropertyChanged("AfterNumber");
-					this.OnAfterNumberChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreatedDate", DbType="DateTime NOT NULL")]
-		public System.DateTime CreatedDate
-		{
-			get
-			{
-				return this._CreatedDate;
-			}
-			set
-			{
-				if ((this._CreatedDate != value))
-				{
-					this.OnCreatedDateChanging(value);
-					this.SendPropertyChanging();
-					this._CreatedDate = value;
-					this.SendPropertyChanged("CreatedDate");
-					this.OnCreatedDateChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="BaseAttribute_ProductLog", Storage="_BaseAttribute", ThisKey="AttributeId", OtherKey="Id", IsForeignKey=true)]
-		public BaseAttribute BaseAttribute
-		{
-			get
-			{
-				return this._BaseAttribute.Entity;
-			}
-			set
-			{
-				BaseAttribute previousValue = this._BaseAttribute.Entity;
-				if (((previousValue != value) 
-							|| (this._BaseAttribute.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._BaseAttribute.Entity = null;
-						previousValue.ProductLogs.Remove(this);
-					}
-					this._BaseAttribute.Entity = value;
-					if ((value != null))
-					{
-						value.ProductLogs.Add(this);
-						this._AttributeId = value.Id;
-					}
-					else
-					{
-						this._AttributeId = default(int);
-					}
-					this.SendPropertyChanged("BaseAttribute");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Product_ProductLog", Storage="_Product", ThisKey="ProductId", OtherKey="Id", IsForeignKey=true)]
-		public Product Product
-		{
-			get
-			{
-				return this._Product.Entity;
-			}
-			set
-			{
-				Product previousValue = this._Product.Entity;
-				if (((previousValue != value) 
-							|| (this._Product.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Product.Entity = null;
-						previousValue.ProductLogs.Remove(this);
-					}
-					this._Product.Entity = value;
-					if ((value != null))
-					{
-						value.ProductLogs.Add(this);
-						this._ProductId = value.Id;
-					}
-					else
-					{
-						this._ProductId = default(int);
-					}
-					this.SendPropertyChanged("Product");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.EmployeeLog")]
-	public partial class EmployeeLog : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _Id;
-		
-		private int _EmployeeId;
-		
-		private string _RecordCode;
-		
-		private double _BeforeNumber;
-		
-		private double _Amount;
-		
-		private double _AfterNumber;
-		
-		private System.DateTime _CreatedDate;
-		
-		private EntityRef<Employee> _Employee;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnIdChanging(int value);
-    partial void OnIdChanged();
-    partial void OnEmployeeIdChanging(int value);
-    partial void OnEmployeeIdChanged();
-    partial void OnRecordCodeChanging(string value);
-    partial void OnRecordCodeChanged();
-    partial void OnBeforeNumberChanging(double value);
-    partial void OnBeforeNumberChanged();
-    partial void OnAmountChanging(double value);
-    partial void OnAmountChanged();
-    partial void OnAfterNumberChanging(double value);
-    partial void OnAfterNumberChanged();
-    partial void OnCreatedDateChanging(System.DateTime value);
-    partial void OnCreatedDateChanged();
-    #endregion
-		
-		public EmployeeLog()
-		{
-			this._Employee = default(EntityRef<Employee>);
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int Id
-		{
-			get
-			{
-				return this._Id;
-			}
-			set
-			{
-				if ((this._Id != value))
-				{
-					this.OnIdChanging(value);
-					this.SendPropertyChanging();
-					this._Id = value;
-					this.SendPropertyChanged("Id");
-					this.OnIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EmployeeId", DbType="Int NOT NULL")]
-		public int EmployeeId
-		{
-			get
-			{
-				return this._EmployeeId;
-			}
-			set
-			{
-				if ((this._EmployeeId != value))
-				{
-					if (this._Employee.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnEmployeeIdChanging(value);
-					this.SendPropertyChanging();
-					this._EmployeeId = value;
-					this.SendPropertyChanged("EmployeeId");
-					this.OnEmployeeIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RecordCode", DbType="VarChar(25) NOT NULL", CanBeNull=false)]
-		public string RecordCode
-		{
-			get
-			{
-				return this._RecordCode;
-			}
-			set
-			{
-				if ((this._RecordCode != value))
-				{
-					this.OnRecordCodeChanging(value);
-					this.SendPropertyChanging();
-					this._RecordCode = value;
-					this.SendPropertyChanged("RecordCode");
-					this.OnRecordCodeChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BeforeNumber", DbType="Float NOT NULL")]
-		public double BeforeNumber
-		{
-			get
-			{
-				return this._BeforeNumber;
-			}
-			set
-			{
-				if ((this._BeforeNumber != value))
-				{
-					this.OnBeforeNumberChanging(value);
-					this.SendPropertyChanging();
-					this._BeforeNumber = value;
-					this.SendPropertyChanged("BeforeNumber");
-					this.OnBeforeNumberChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Amount", DbType="Float NOT NULL")]
-		public double Amount
-		{
-			get
-			{
-				return this._Amount;
-			}
-			set
-			{
-				if ((this._Amount != value))
-				{
-					this.OnAmountChanging(value);
-					this.SendPropertyChanging();
-					this._Amount = value;
-					this.SendPropertyChanged("Amount");
-					this.OnAmountChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AfterNumber", DbType="Float NOT NULL")]
-		public double AfterNumber
-		{
-			get
-			{
-				return this._AfterNumber;
-			}
-			set
-			{
-				if ((this._AfterNumber != value))
-				{
-					this.OnAfterNumberChanging(value);
-					this.SendPropertyChanging();
-					this._AfterNumber = value;
-					this.SendPropertyChanged("AfterNumber");
-					this.OnAfterNumberChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreatedDate", DbType="DateTime NOT NULL")]
-		public System.DateTime CreatedDate
-		{
-			get
-			{
-				return this._CreatedDate;
-			}
-			set
-			{
-				if ((this._CreatedDate != value))
-				{
-					this.OnCreatedDateChanging(value);
-					this.SendPropertyChanging();
-					this._CreatedDate = value;
-					this.SendPropertyChanged("CreatedDate");
-					this.OnCreatedDateChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Employee_EmployeeLog", Storage="_Employee", ThisKey="EmployeeId", OtherKey="Id", IsForeignKey=true)]
-		public Employee Employee
-		{
-			get
-			{
-				return this._Employee.Entity;
-			}
-			set
-			{
-				Employee previousValue = this._Employee.Entity;
-				if (((previousValue != value) 
-							|| (this._Employee.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Employee.Entity = null;
-						previousValue.EmployeeLogs.Remove(this);
-					}
-					this._Employee.Entity = value;
-					if ((value != null))
-					{
-						value.EmployeeLogs.Add(this);
-						this._EmployeeId = value.Id;
-					}
-					else
-					{
-						this._EmployeeId = default(int);
-					}
-					this.SendPropertyChanged("Employee");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
 		}
 	}
 	

@@ -21,6 +21,7 @@ namespace BaoHien.Model
                 productTypeCode = value;
             }
         }
+
         public string ProductTypeName
         {
             get
@@ -31,7 +32,6 @@ namespace BaoHien.Model
             {
                 productTypeName = value;
             }
-        }
-        
+        }        
     }
 }

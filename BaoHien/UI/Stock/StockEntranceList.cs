@@ -159,11 +159,12 @@ namespace BaoHien.UI
                         ProductLogService productLogService = new ProductLogService();
                         foreach (EntranceStockDetail esd in es.EntranceStockDetails)
                         {
-                            ProductLog pl = productLogService.GetNewestProductLog(esd.ProductId, esd.AttributeId);
+                            ProductLog pl = productLogService.GetNewestProductUnitLog(esd.ProductId, esd.AttributeId, esd.UnitId);
                             ProductLog plg = new ProductLog
                             {
                                 AttributeId = esd.AttributeId,
                                 ProductId = esd.ProductId,
+                                UnitId = esd.UnitId,
                                 RecordCode = es.EntranceCode,
                                 BeforeNumber = pl.AfterNumber,
                                 Amount = esd.NumberUnit,

@@ -233,11 +233,12 @@ namespace BaoHien.UI
                         foreach (OrderDetail od in order.OrderDetails)
                         {
                             totalCommission += od.Commission;
-                            ProductLog pl = productLogService.GetNewestProductLog(od.ProductId, od.AttributeId);
+                            ProductLog pl = productLogService.GetNewestProductUnitLog(od.ProductId, od.AttributeId, od.UnitId);
                             ProductLog plg = new ProductLog
                             {
                                 AttributeId = od.AttributeId,
                                 ProductId = od.ProductId,
+                                UnitId = od.UnitId,
                                 RecordCode = order.OrderCode,
                                 BeforeNumber = pl.AfterNumber,
                                 Amount = od.NumberUnit,

@@ -17,6 +17,7 @@ using BaoHien.Common;
 using BaoHien.UI.Base;
 using DAL.Helper;
 using BaoHien.Services.ProductLogs;
+using BaoHien.Services.MeasurementUnits;
 
 namespace BaoHien.UI
 {
@@ -25,9 +26,13 @@ namespace BaoHien.UI
         bool isUpdating = false;
         EntranceStock entranceStock;
         ProductLogService productLogService;
+        MeasurementUnitService unitService;
         BindingList<EntranceStockDetail> entranceStockDetails;
         BindingList<ProductAttributeModel> products;
+        BindingList<MeasurementUnit> units;
         BindingList<ProductionRequestDetailModel> originalEntranceDetail;
+
+        const int ProductAttrCell = 0, NumberUnitCell = 1, UnitCell = 2, NoteCell = 3;
 
         public AddEntranceStock()
         {
@@ -42,6 +47,7 @@ namespace BaoHien.UI
         private void EntranceStock_Load(object sender, EventArgs e)
         {
             productLogService = new ProductLogService();
+            unitService = new MeasurementUnitService();
             loadSomeData();
             SetupColumns();
             updateProductionRequestDetailCells();
@@ -51,6 +57,7 @@ namespace BaoHien.UI
         {
             ProductAttributeService productAttrService = new ProductAttributeService();
             products = new BindingList<ProductAttributeModel>(productAttrService.GetProductAndAttribute());
+            units = new BindingList<MeasurementUnit>(unitService.GetMeasurementUnits());
             if (entranceStock != null)
             {
                 txtCode.Text = entranceStock.EntranceCode;
@@ -85,6 +92,7 @@ namespace BaoHien.UI
                             Id=entranceStockDetail.Id,
                             ProductId = entranceStockDetail.ProductId,
                             AttributeId = entranceStockDetail.AttributeId,
+                            UnitId = entranceStockDetail.UnitId,
                             NumberUnit = entranceStockDetail.NumberUnit,
                             Note = entranceStockDetail.Note,                            
                         };
@@ -109,7 +117,16 @@ namespace BaoHien.UI
             //numberUnitColumn.Frozen = true;
             numberUnitColumn.ValueType = typeof(int);
             dgvStockEntranceDetails.Columns.Add(numberUnitColumn);
-            
+
+            DataGridViewComboBoxColumn unitColumn = new DataGridViewComboBoxColumn();
+            unitColumn.Width = 140;
+            productColumn.AutoComplete = false;
+            unitColumn.HeaderText = "Đơn vị tính";
+            unitColumn.DataSource = units;
+            unitColumn.DisplayMember = "Name";
+            unitColumn.ValueMember = "Id";
+            dgvStockEntranceDetails.Columns.Add(unitColumn);
+
             DataGridViewTextBoxColumn noteColumn = new DataGridViewTextBoxColumn();
             noteColumn.DataPropertyName = "Note";
             noteColumn.Width = 300;
@@ -126,13 +143,24 @@ namespace BaoHien.UI
                 ProductAttributeService productAttrService = new ProductAttributeService();
                 for (int i = 0; i < entranceStockDetails.Count; i++)
                 {
-                    if (dgvStockEntranceDetails.Rows[i].Cells[0] is DataGridViewComboBoxCell)
+                    // Product + Attribute
+                    if (dgvStockEntranceDetails.Rows[i].Cells[ProductAttrCell] is DataGridViewComboBoxCell)
                     {
-                        DataGridViewComboBoxCell pkgBoxCell = (DataGridViewComboBoxCell)dgvStockEntranceDetails.Rows[i].Cells[0];
+                        DataGridViewComboBoxCell pkgBoxCell = (DataGridViewComboBoxCell)dgvStockEntranceDetails.Rows[i].Cells[ProductAttrCell];
                         try
                         {
                             pkgBoxCell.Value = productAttrService.GetProductAttribute(entranceStockDetails[i].ProductId,
                                 entranceStockDetails[i].AttributeId).Id;
+                        }
+                        catch { }
+                    }
+                    // Unit
+                    if (dgvStockEntranceDetails.Rows[i].Cells[UnitCell] is DataGridViewComboBoxCell)
+                    {
+                        DataGridViewComboBoxCell pkgBoxCell = (DataGridViewComboBoxCell)dgvStockEntranceDetails.Rows[i].Cells[UnitCell];
+                        try
+                        {
+                            pkgBoxCell.Value = entranceStockDetails[i].UnitId;
                         }
                         catch { }
                     }
@@ -156,7 +184,7 @@ namespace BaoHien.UI
             {
                 switch (e.ColumnIndex)
                 {
-                    case 0:
+                    case ProductAttrCell:
                         {
                             ProductAttributeService productAttrService = new ProductAttributeService();
                             ProductAttribute pa = productAttrService.GetProductAttribute((int)dgv.CurrentCell.Value);
@@ -166,10 +194,13 @@ namespace BaoHien.UI
                                 entranceStockDetails[e.RowIndex].AttributeId = pa.AttributeId;
                             }
                         } break;
-                    case 1:
+                    case NumberUnitCell:
                         entranceStockDetails[e.RowIndex].NumberUnit = (int)dgv.CurrentCell.Value;
                         break;
-                    case 2:
+                    case UnitCell:
+                        entranceStockDetails[e.RowIndex].UnitId = (int)dgv.CurrentCell.Value;
+                        break;
+                    case NoteCell:
                         entranceStockDetails[e.RowIndex].Note = (string)dgv.CurrentCell.Value;
                         break;
                 }
@@ -185,7 +216,7 @@ namespace BaoHien.UI
         {
             switch (dgvStockEntranceDetails.CurrentCell.ColumnIndex)
             {
-                case 0:
+                case ProductAttrCell:
                     {
                         var source = new AutoCompleteStringCollection();
                         String[] stringArray = Array.ConvertAll<ProductAttributeModel, String>(products.ToArray(), delegate(ProductAttributeModel row) { return (String)row.ProductAttribute; });
@@ -199,18 +230,34 @@ namespace BaoHien.UI
                             prodCode.AutoCompleteCustomSource = source;
                             prodCode.AutoCompleteSource = AutoCompleteSource.CustomSource;
                             prodCode.MaxDropDownItems = 5;
-
                         }
                         //this.validator1.SetType(prodCode, Itboy.Components.ValidationType.Required);
                     } break;
-                case 1:
+                case NumberUnitCell:
                     { 
                         TextBox numberOfUnit = e.Control as TextBox;
                         this.validator1.SetRegularExpression(numberOfUnit, BHConstant.REGULAR_EXPRESSION_FOR_NUMBER);
                         this.validator1.SetType(numberOfUnit, Itboy.Components.ValidationType.RegularExpression);
                     }
                     break;
-                case 2:
+                case UnitCell:
+                    {
+                        var source = new AutoCompleteStringCollection();
+                        String[] stringArray = Array.ConvertAll<MeasurementUnit, String>(units.ToArray(), delegate(MeasurementUnit row) { return (String)row.Name; });
+                        source.AddRange(stringArray);
+
+                        ComboBox prodCode = e.Control as ComboBox;
+                        if (prodCode != null)
+                        {
+                            prodCode.DropDownStyle = ComboBoxStyle.DropDown;
+                            prodCode.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+                            prodCode.AutoCompleteCustomSource = source;
+                            prodCode.AutoCompleteSource = AutoCompleteSource.CustomSource;
+                            prodCode.MaxDropDownItems = 5;
+                        }
+                        //this.validator1.SetType(prodCode, Itboy.Components.ValidationType.Required);
+                    } break;
+                case NoteCell:
                     {
                         if (e.Control is TextBox)
                         {
@@ -417,7 +464,7 @@ namespace BaoHien.UI
                     EntranceStockDetailService entranceStockDetailService = new EntranceStockDetailService();
                     foreach (EntranceStockDetail od in entranceStockDetails)
                     {
-                        if (od.ProductId > 0 && od.AttributeId > 0)
+                        if (od.ProductId > 0 && od.AttributeId > 0 && od.UnitId > 0)
                         {
                             od.EntranceStockId = (int)newOrderId;
                             bool ret = entranceStockDetailService.AddEntranceStockDetail(od);
@@ -428,11 +475,12 @@ namespace BaoHien.UI
                             }
 
                             //Save in Product Log
-                            ProductLog pl = productLogService.GetNewestProductLog(od.ProductId, od.AttributeId);
+                            ProductLog pl = productLogService.GetNewestProductUnitLog(od.ProductId, od.AttributeId, od.UnitId);
                             ProductLog plg = new ProductLog
                             {
                                 AttributeId = od.AttributeId,
                                 ProductId = od.ProductId,
+                                UnitId = od.UnitId,
                                 RecordCode = entranceStock.EntranceCode,
                                 BeforeNumber = pl.AfterNumber,
                                 Amount = od.NumberUnit,

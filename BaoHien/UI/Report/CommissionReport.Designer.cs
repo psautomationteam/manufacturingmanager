@@ -126,6 +126,7 @@
             this.dgwEmployeeCommissionList.Name = "dgwEmployeeCommissionList";
             this.dgwEmployeeCommissionList.Size = new System.Drawing.Size(1053, 517);
             this.dgwEmployeeCommissionList.TabIndex = 24;
+            this.dgwEmployeeCommissionList.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgwEmployeeCommissionList_CellDoubleClick);
             // 
             // CommissionReport
             // 

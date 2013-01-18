@@ -8,24 +8,20 @@ namespace BaoHien.Model
     public class ProductionRequestDetailModel
     {
         int id;
-
         public int Id
         {
             get { return id; }
             set { id = value; }
         }
-        int productId;
-        int attributeId;
-        int numberUnit;
-        double price;
-        double commission;
 
+        double price;
         public double Price
         {
             get { return price; }
             set { price = value; }
         }
 
+        double commission;
         public double Commission
         {
             get { return commission; }
@@ -33,20 +29,20 @@ namespace BaoHien.Model
         }
 
         double tax;
-
         public double Tax
         {
             get { return tax; }
             set { tax = value; }
         }
-        double total;
 
+        double total;
         public double Total
         {
             get { return total; }
             set { total = value; }
         }
-        string note;
+
+        int productId;
         public int ProductId
         {
             get
@@ -58,6 +54,8 @@ namespace BaoHien.Model
                 productId = value;
             }
         }
+
+        int attributeId;
         public int AttributeId
         {
             get
@@ -69,6 +67,21 @@ namespace BaoHien.Model
                 attributeId = value;
             }
         }
+
+        int unitId;
+        public int UnitId
+        {
+            get
+            {
+                return unitId;
+            }
+            set
+            {
+                unitId = value;
+            }
+        }
+
+        int numberUnit;
         public int NumberUnit
         {
             get
@@ -80,6 +93,8 @@ namespace BaoHien.Model
                 numberUnit = value;
             }
         }
+
+        string note;
         public string Note
         {
             get
