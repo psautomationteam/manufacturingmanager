@@ -52,11 +52,7 @@ namespace BaoHien.UI
                     //product.BaseUnit = cmbUnit.SelectedValue != null ? (int)cmbUnit.SelectedValue : (int?)null;
                     product.ProductCode = txtCode.Text;
                     //product.ProductType = (int)cmbType.SelectedValue;
-                    if (cmbUnit.SelectedValue != null)
-                    {
-                        MeasurementUnit refMeasurementUnit = measurementUnits.Single(mu => mu.Id == (int)cmbUnit.SelectedValue);
-                        product.MeasurementUnit = refMeasurementUnit;
-                    }
+
                     ProductType refProductType = productTypes.Single(pt => pt.Id == (int)cmbType.SelectedValue);
                     product.ProductType1 = refProductType;
                     ProductService productService = new ProductService();
@@ -79,7 +75,6 @@ namespace BaoHien.UI
                     {
                         Description = txtDescription.Text,
                         ProductName = txtName.Text,
-                        BaseUnit = cmbUnit.SelectedValue != null ? (int)cmbUnit.SelectedValue : (int?)null,
                         ProductCode = txtCode.Text,
                         ProductType = (int)cmbType.SelectedValue
                     };
@@ -152,17 +147,6 @@ namespace BaoHien.UI
 
         private void loadSomeData()
         {
-            if (measurementUnits == null)
-            {
-                MeasurementUnitService measurementUnitService = new MeasurementUnitService();
-                measurementUnits = measurementUnitService.GetMeasurementUnits();
-            }            
-            if (measurementUnits != null)
-            {
-                cmbUnit.DataSource = measurementUnits;
-                cmbUnit.DisplayMember = "Name";
-                cmbUnit.ValueMember = "Id";
-            }
             if (productTypes == null)
             {
                 ProductTypeService productTypeService = new ProductTypeService();
@@ -194,10 +178,6 @@ namespace BaoHien.UI
             if (product != null)
             {
                 mode = 1; // Edit mode
-                if (measurementUnits != null && product.BaseUnit.HasValue)
-                {
-                    cmbUnit.SelectedIndex = measurementUnits.FindIndex(mu => mu.Id == product.BaseUnit);
-                }
                 if (productTypes != null)
                 {
                     cmbType.SelectedIndex = productTypes.FindIndex(p => p.Id == product.ProductType);

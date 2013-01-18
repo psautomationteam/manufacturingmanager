@@ -35,6 +35,13 @@ namespace BaoHien.Model
             set { amount = value; }
         }
 
+        string afterDebit;
+        public string AfterDebit
+        {
+            get { return afterDebit; }
+            set { afterDebit = value; }
+        }
+
         string customerName;
         public string CustomerName
         {

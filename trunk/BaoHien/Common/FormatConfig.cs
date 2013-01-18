@@ -16,11 +16,18 @@ namespace BaoHien.Common
             return pHeader;
         }
 
-        public static Paragraph ParaRightBelowHeader(string content)
+        public static Paragraph ParaRightBeforeHeader(string content)
         {
             Paragraph msp = new Paragraph(content, FontConfig.SmallItalicFont);
             msp.IndentationLeft = 350;
             msp.Alignment = Element.ALIGN_LEFT;
+            return msp;
+        }
+
+        public static Paragraph ParaRightBelowHeader(string content)
+        {
+            Paragraph msp = new Paragraph(content, FontConfig.ItalicFont);
+            msp.Alignment = Element.ALIGN_CENTER;
             return msp;
         }
 

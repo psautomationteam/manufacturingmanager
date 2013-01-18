@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using BaoHien.Services.MeasurementUnits;
 using DAL;
 using DAL.Helper;
+using BaoHien.Services.ProductLogs;
 
 namespace BaoHien.UI
 {
@@ -51,6 +52,7 @@ namespace BaoHien.UI
             }
             loadMeasurementUnitList();
         }
+
         public void loadMeasurementUnitList()
         {
             MeasurementUnitService measurementUnitService = new MeasurementUnitService();
@@ -60,6 +62,7 @@ namespace BaoHien.UI
                 setUpDataGrid(measurementUnits);
             }
         }
+
         private void setUpDataGrid(List<MeasurementUnit> measurementUnits)
         {
             if (measurementUnits != null)
@@ -78,6 +81,7 @@ namespace BaoHien.UI
 
             }
         }
+
         private void SetupColumns()
         {
             dgvBaseUnitList.AutoGenerateColumns = false;
@@ -133,8 +137,8 @@ namespace BaoHien.UI
                 DataGridViewCell cell = ((DataGridView)sender).CurrentCell;
                 if (cell.ColumnIndex == ((DataGridView)sender).ColumnCount - 1)
                 {
-                    DialogResult result = MessageBox.Show("Bạn có muốn xóa đơn vị sản phẩm này?",
-                    "Xoá đơn vị sản phẩm này",
+                    DialogResult result = MessageBox.Show("Bạn có muốn xóa đơn vị tính này?",
+                    "Xoá đơn vị tính này",
                      MessageBoxButtons.YesNo,
                     MessageBoxIcon.Question);
                     if (result == DialogResult.Yes)
@@ -143,12 +147,20 @@ namespace BaoHien.UI
 
                         MeasurementUnitService measurementUnitService = new MeasurementUnitService();
                         int id = ObjectHelper.GetValueFromAnonymousType<int>(currentRow.DataBoundItem, "Id");
-                        if (!measurementUnitService.DeleteMeasurementUnit(id))
+                        ProductLogService productLogService = new ProductLogService();
+                        ProductLog log = productLogService.GetProductLogs().Where(p => p.UnitId == id).FirstOrDefault();
+                        if (log == null)
                         {
-                            MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
-                           
+                            if (!measurementUnitService.DeleteMeasurementUnit(id))
+                            {
+                                MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                            }
+                            loadMeasurementUnitList();
                         }
-                        loadMeasurementUnitList();
+                        else
+                        {
+                            MessageBox.Show("Đơn vị này đang được sử dụng!");
+                        }
                     }
 
                 }

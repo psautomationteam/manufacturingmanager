@@ -35,6 +35,19 @@ namespace BaoHien.Model
             set { attributeName = value; }
         }
 
+        string unitName;
+        public string UnitName
+        {
+            get
+            {
+                return unitName;
+            }
+            set
+            {
+                unitName = value;
+            }
+        }
+
         string quantity;
         public string Quantity
         {

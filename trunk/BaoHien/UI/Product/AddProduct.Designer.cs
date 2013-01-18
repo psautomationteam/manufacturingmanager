@@ -38,8 +38,6 @@
             this.label9 = new System.Windows.Forms.Label();
             this.txtDescription = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
-            this.cmbUnit = new System.Windows.Forms.ComboBox();
-            this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.cmbType = new System.Windows.Forms.ComboBox();
             this.chkAuto = new System.Windows.Forms.CheckBox();
@@ -104,8 +102,6 @@
             this.groupBox1.Controls.Add(this.label9);
             this.groupBox1.Controls.Add(this.txtDescription);
             this.groupBox1.Controls.Add(this.label7);
-            this.groupBox1.Controls.Add(this.cmbUnit);
-            this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.cmbType);
             this.groupBox1.Controls.Add(this.chkAuto);
@@ -147,23 +143,6 @@
             this.label7.Size = new System.Drawing.Size(37, 13);
             this.label7.TabIndex = 12;
             this.label7.Text = "Mổ tả:";
-            // 
-            // cmbUnit
-            // 
-            this.cmbUnit.FormattingEnabled = true;
-            this.cmbUnit.Location = new System.Drawing.Point(505, 46);
-            this.cmbUnit.Name = "cmbUnit";
-            this.cmbUnit.Size = new System.Drawing.Size(146, 21);
-            this.cmbUnit.TabIndex = 3;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(418, 49);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(63, 13);
-            this.label4.TabIndex = 7;
-            this.label4.Text = "Đơn vị tính:";
             // 
             // label3
             // 
@@ -261,8 +240,6 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.TextBox txtDescription;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.ComboBox cmbUnit;
-        private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ComboBox cmbType;
         private System.Windows.Forms.CheckBox chkAuto;

@@ -11,6 +11,7 @@ namespace BaoHien.Model
         string productName = null;
         int? productTypeId = null;
         int? purchaseStatus = null;
+
         public string ProductCode
         {
             get
@@ -22,6 +23,7 @@ namespace BaoHien.Model
                 productCode = value;
             }
         }
+
         public string ProductName
         {
             get
@@ -33,6 +35,7 @@ namespace BaoHien.Model
                 productName = value;
             }
         }
+
         public int? ProductTypeId
         {
             get
@@ -44,6 +47,7 @@ namespace BaoHien.Model
                 productTypeId = value;
             }
         }
+
         public int? PurchaseStatus
         {
             get

@@ -13,6 +13,11 @@ using BaoHien.Services.ProductAttributes;
 using BaoHien.Services.BaseAttributes;
 using BaoHien.Services.ProductLogs;
 using BaoHien.Common;
+using BaoHien.Services.MeasurementUnits;
+using DAL.Helper;
+using BaoHien.Services.Orders;
+using BaoHien.Services.ProductionRequests;
+using BaoHien.Services;
 
 namespace BaoHien.UI
 {
@@ -22,8 +27,9 @@ namespace BaoHien.UI
         List<Product> products;
         List<BaseAttribute> attrs;
         List<ProductType> productTypes;
+        List<MeasurementUnit> units;
         ProductLogService productLogService;
-        List<ProductLog> productLogs;
+        int modeReport = 0;
 
         public ProductAndMaterialReport()
         {
@@ -42,6 +48,8 @@ namespace BaoHien.UI
             int productTypeId = cbmProductTypes.SelectedValue == null ? 0 : (int)cbmProductTypes.SelectedValue;
             int productId = cbmProducts.SelectedValue == null ? 0 : (int)cbmProducts.SelectedValue;
             int attrId = cbmAttrs.SelectedValue == null ? 0 : (int)cbmAttrs.SelectedValue;
+            int unitId = cbmUnits.SelectedValue == null ? 0 : (int)cbmUnits.SelectedValue;
+            modeReport = 0;
             if (productTypeId == 0)
             {
                 productReports = productLogService.GetReportsOfProducts(dtFrom, dtTo);
@@ -63,8 +71,17 @@ namespace BaoHien.UI
                     }
                     else
                     {
-                        productReports = productLogService.GetReportsOfProductAttribute(productId, attrId, dtFrom, dtTo);
-                        SetupColumnProductDetails(productReports);
+                        if (unitId == 0)
+                        {
+                            productReports = productLogService.GetReportsOfProductAttribute(productId, attrId, dtFrom, dtTo);
+                            SetupColumnProducts(productReports);
+                        }
+                        else
+                        {
+                            modeReport = 1;
+                            productReports = productLogService.GetReportsOfProductAttributeUnit(productId, attrId, unitId, dtFrom, dtTo);
+                            SetupColumnProductDetails(productReports);
+                        }
                     }
                 }
             }
@@ -118,14 +135,6 @@ namespace BaoHien.UI
             productNameColumn.ValueType = typeof(string);
             //productNameColumn.Frozen = true;
             dgwStockEntranceList.Columns.Add(productNameColumn);
-    
-            DataGridViewTextBoxColumn attributeNameColumn = new DataGridViewTextBoxColumn();
-            attributeNameColumn.DataPropertyName = "AttributeName";
-            attributeNameColumn.Width = 100;
-            attributeNameColumn.HeaderText = "Quy cách";
-            //attributeNameColumn.Frozen = true;
-            attributeNameColumn.ValueType = typeof(string);
-            dgwStockEntranceList.Columns.Add(attributeNameColumn);
 
             DataGridViewTextBoxColumn createdDateColumn = new DataGridViewTextBoxColumn();
             createdDateColumn.DefaultCellStyle.Format = BHConstant.DATETIME_FORMAT;
@@ -143,7 +152,15 @@ namespace BaoHien.UI
             quantityColumn.HeaderText = "Số lượng tồn";
             //quantityColumn.Frozen = true;
             quantityColumn.ValueType = typeof(string);
-            dgwStockEntranceList.Columns.Add(quantityColumn);            
+            dgwStockEntranceList.Columns.Add(quantityColumn);
+
+            DataGridViewTextBoxColumn unitColumn = new DataGridViewTextBoxColumn();
+            unitColumn.DataPropertyName = "UnitName";
+            unitColumn.Width = 100;
+            unitColumn.HeaderText = "Đơn vị tính";
+            //attributeNameColumn.Frozen = true;
+            unitColumn.ValueType = typeof(string);
+            dgwStockEntranceList.Columns.Add(unitColumn);         
         }
         
         private void SetupColumnProductDetails(List<ProductReport> productReports)
@@ -217,6 +234,7 @@ namespace BaoHien.UI
             {
                 cbmProducts.Enabled = false;
                 cbmAttrs.Enabled = false;
+                cbmUnits.Enabled = false;
             }
             else
             {
@@ -245,6 +263,7 @@ namespace BaoHien.UI
             if (productId == 0)
             {
                 cbmAttrs.Enabled = false;
+                cbmUnits.Enabled = false;
             }
             else
             {
@@ -272,6 +291,35 @@ namespace BaoHien.UI
                     cbmAttrs.DisplayMember = "AttributeName";
                     cbmAttrs.ValueMember = "Id";
                 }
+                LoadUnits(productId, 0);
+            }
+        }
+
+        private void LoadUnits(int productId, int attrId)
+        {
+            if (attrId == 0)
+            {
+                cbmUnits.Enabled = false;
+            }
+            else
+            {
+                cbmUnits.Enabled = true;
+                MeasurementUnitService unitService = new MeasurementUnitService();
+                MeasurementUnit u = new MeasurementUnit
+                {
+                    Name = "Tất cả",
+                    Id = 0
+                };
+
+                units = productLogService.GetUnitsOfProductAttribute(productId, attrId);
+                units.Add(u);
+                units = units.OrderBy(a => a.Id).ToList();
+                if (units != null)
+                {
+                    cbmUnits.DataSource = units;
+                    cbmUnits.DisplayMember = "Name";
+                    cbmUnits.ValueMember = "Id";
+                }
             }
         }
 
@@ -285,6 +333,65 @@ namespace BaoHien.UI
         {
             int productId = products[cbmProducts.SelectedIndex].Id;
             LoadAttributes(productId);
+        }
+
+        private void cbmAttrs_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int productId = products[cbmProducts.SelectedIndex].Id;
+            int attrId = attrs[cbmAttrs.SelectedIndex].Id;
+            LoadUnits(productId, attrId);
+        }
+
+        private void dgwStockEntranceList_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (modeReport == 1)
+            {
+                DataGridViewRow currentRow = dgwStockEntranceList.Rows[e.RowIndex];
+                string RecordCode = ObjectHelper.GetValueFromAnonymousType<string>(currentRow.DataBoundItem, "RecordCode");
+                string prefix = RecordCode.Substring(0, 2);
+                switch (prefix)
+                {
+                    case BHConstant.PREFIX_FOR_ORDER:
+                        {
+                            OrderService orderService = new OrderService();
+                            Order order = orderService.GetOrders().Where(o => o.OrderCode == RecordCode).FirstOrDefault();
+                            if (order != null)
+                            {
+                                AddOrder frmAddOrder = new AddOrder();
+                                frmAddOrder.loadDataForEditOrder(order.Id);
+
+                                frmAddOrder.CallFromUserControll = this;
+                                frmAddOrder.ShowDialog();
+                            }
+                        } break;
+                    case BHConstant.PREFIX_FOR_ENTRANCE:
+                        {
+                            EntranceStockService stockService = new EntranceStockService();
+                            EntranceStock stock = stockService.GetEntranceStocks().Where(r => r.EntranceCode == RecordCode).FirstOrDefault();
+                            if (stock != null)
+                            {
+                                AddEntranceStock frmAddEntranceStock = new AddEntranceStock();
+                                frmAddEntranceStock.loadDataForEditEntranceStock(stock.Id);
+
+                                frmAddEntranceStock.CallFromUserControll = this;
+                                frmAddEntranceStock.ShowDialog();
+                            }
+                        } break;
+                    case BHConstant.PREFIX_FOR_PRODUCTION:
+                        {
+                            ProductionRequestService requestService = new ProductionRequestService();
+                            ProductionRequest request = requestService.GetProductionRequests().Where(r => r.ReqCode == RecordCode).FirstOrDefault();
+                            if (request != null)
+                            {
+                                AddProductionRequest addProductionRequest = new AddProductionRequest();
+                                addProductionRequest.loadDataForEditProductRequest(request.Id);
+
+                                addProductionRequest.CallFromUserControll = this;
+                                addProductionRequest.ShowDialog();
+                            }
+                        } break;
+                }
+            }
         }
     }
 }

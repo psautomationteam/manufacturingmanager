@@ -25,6 +25,7 @@ namespace BaoHien.UI
             SetupColumns();
             loadProductList(); 
         }
+
         private void searchProduct()
         {
             ProductSearchCriteria productSearchCriteria = new ProductSearchCriteria();
@@ -54,13 +55,13 @@ namespace BaoHien.UI
                 lblTotalResult.Text = products.Count.ToString();
             }
         }
+
         private void setUpDataGrid(List<Product> products)
         {
             if (products != null)
             {
                 int index = 0;
                 var query = from product in products
-
                             select new
                             {
                                 ProductName = product.ProductName,
@@ -68,14 +69,14 @@ namespace BaoHien.UI
                                 Description = product.Description,
                                 Id = product.Id,
                                 Status = product.Status,
-                                ProductType = (product.ProductType1 != null)?product.ProductType1.ProductName:"",
-                                BaseUnit = (product.MeasurementUnit != null)?product.MeasurementUnit.Name:"",
+                                ProductType = (product.ProductType1 != null) ? product.ProductType1.ProductName : "",
                                 Index = ++index
                             };
                 dgvProductList.DataSource = query.ToList();
                 lblTotalResult.Text = products.Count.ToString();
             }
         }
+
         public void loadProductList()
         {            
             ProductService productService = new ProductService();
@@ -85,13 +86,9 @@ namespace BaoHien.UI
             List<ProductType> productTypes = productTypeService.GetProductTypes();
             if (productTypes != null)
             {
-                
-                
                 cbProductTypes.DataSource = productTypes;
-
                 cbProductTypes.DisplayMember = "ProductName";
                 cbProductTypes.ValueMember = "Id";
-
             }
         }
 
@@ -126,6 +123,7 @@ namespace BaoHien.UI
         {
             searchProduct();
         }
+
         private void SetupColumns()
         {
             dgvProductList.AutoGenerateColumns = false;
@@ -143,9 +141,7 @@ namespace BaoHien.UI
             productNameColumn.ValueType = typeof(string);
             productNameColumn.Frozen = true;
             dgvProductList.Columns.Add(productNameColumn);
-
-
-
+            
             DataGridViewTextBoxColumn typeCodeColumn = new DataGridViewTextBoxColumn();
             typeCodeColumn.DataPropertyName = "ProductCode";
             typeCodeColumn.Width = 100;
@@ -161,15 +157,7 @@ namespace BaoHien.UI
             productTypeColumn.Frozen = true;
             productTypeColumn.ValueType = typeof(string);
             dgvProductList.Columns.Add(productTypeColumn);
-
-            DataGridViewTextBoxColumn baseUnitColumn = new DataGridViewTextBoxColumn();
-            baseUnitColumn.DataPropertyName = "BaseUnit";
-            baseUnitColumn.Width = 100;
-            baseUnitColumn.HeaderText = "Đơn vị tính";
-            baseUnitColumn.Frozen = true;
-            baseUnitColumn.ValueType = typeof(string);
-            dgvProductList.Columns.Add(baseUnitColumn);
-
+            
             DataGridViewTextBoxColumn descriptionColumn = new DataGridViewTextBoxColumn();
             descriptionColumn.Width = 170;// dgvProductList.Width - productNameColumn.Width - typeCodeColumn.Width - deleteButton.Width;
             descriptionColumn.DataPropertyName = "Description";

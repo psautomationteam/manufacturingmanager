@@ -126,6 +126,7 @@
             this.dgwStockEntranceList.Name = "dgwStockEntranceList";
             this.dgwStockEntranceList.Size = new System.Drawing.Size(1053, 518);
             this.dgwStockEntranceList.TabIndex = 21;
+            this.dgwStockEntranceList.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgwStockEntranceList_CellDoubleClick);
             // 
             // ArrearReport
             // 

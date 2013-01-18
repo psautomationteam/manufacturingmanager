@@ -27,13 +27,17 @@ namespace BaoHien.UI
         bool isUpdating = false;
         ProductionRequest productionRequest;
         ProductLogService productLogService;
+        MeasurementUnitService unitService;
+        BindingList<MeasurementUnit> units;
         BindingList<ProductionRequestDetail> productionRequestDetailInProductions;
         BindingList<ProductionRequestDetail> productionRequestDetailInMaterials;
         BindingList<ProductAttributeModel> productForProducts;
         BindingList<ProductAttributeModel> productForMaterials;
         BindingList<ProductionRequestDetailModel> originalMaterials;
         BindingList<ProductionRequestDetailModel> originalProductions;
-       
+
+        const int ProductAttrCell = 0, NumberUnitCell = 1, UnitCell = 2, NoteCell = 3;
+
         public AddProductionRequest()
         {
             InitializeComponent();
@@ -76,6 +80,15 @@ namespace BaoHien.UI
             //numberUnitColumn.Frozen = true;
             //numberUnitColumn.ValueType = typeof(int);
             dgvMaterial.Columns.Add(numberUnitColumn);
+
+            DataGridViewComboBoxColumn unitColumn = new DataGridViewComboBoxColumn();
+            unitColumn.Width = 140;
+            productColumn.AutoComplete = false;
+            unitColumn.HeaderText = "Đơn vị tính";
+            unitColumn.DataSource = units;
+            unitColumn.DisplayMember = "Name";
+            unitColumn.ValueMember = "Id";
+            dgvMaterial.Columns.Add(unitColumn);
 
             DataGridViewTextBoxColumn noteColumn = new DataGridViewTextBoxColumn();
             noteColumn.DataPropertyName = "Note";
@@ -124,6 +137,15 @@ namespace BaoHien.UI
             //numberUnitColumn.ValueType = typeof(int);
             dgvProduct.Columns.Add(numberUnitColumn);
 
+            DataGridViewComboBoxColumn unitColumn = new DataGridViewComboBoxColumn();
+            unitColumn.Width = 140;
+            productColumn.AutoComplete = false;
+            unitColumn.HeaderText = "Đơn vị tính";
+            unitColumn.DataSource = units;
+            unitColumn.DisplayMember = "Name";
+            unitColumn.ValueMember = "Id";
+            dgvProduct.Columns.Add(unitColumn);
+
             DataGridViewTextBoxColumn noteColumn = new DataGridViewTextBoxColumn();           
             noteColumn.DataPropertyName = "Note";
             noteColumn.Width = 200;
@@ -135,6 +157,7 @@ namespace BaoHien.UI
 
         private void AddProductionRequest_Load(object sender, EventArgs e)
         {
+            unitService = new MeasurementUnitService();
             productLogService = new ProductLogService();
             loadSomeData();
             SetupColumnsForMaterial();
@@ -163,7 +186,8 @@ namespace BaoHien.UI
             }
             ProductAttributeService productAttrService = new ProductAttributeService();
             productForProducts = new BindingList<ProductAttributeModel>(productAttrService.GetProductAndAttribute());
-            productForMaterials = new BindingList<ProductAttributeModel>(productAttrService.GetProductAndAttribute());
+            productForMaterials = productForProducts;
+            units = new BindingList<MeasurementUnit>(unitService.GetMeasurementUnits());
         }
 
         private void dgvMaterial_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
@@ -172,7 +196,7 @@ namespace BaoHien.UI
             {
                 switch (dgvMaterial.CurrentCell.ColumnIndex)
                 {
-                    case 0:
+                    case ProductAttrCell:
                         {
                             var source = new AutoCompleteStringCollection();
                             String[] stringArray = Array.ConvertAll<ProductAttributeModel, String>(productForProducts.ToArray(), delegate(ProductAttributeModel row) { return (String)row.ProductAttribute; });
@@ -191,13 +215,30 @@ namespace BaoHien.UI
                             //DataGridViewComboBoxEditingControl avcbe = e.Control as DataGridViewComboBoxEditingControl;
                             //this.validator1.SetType(avcbe, Itboy.Components.ValidationType.Required);
                         } break;
-                    case 1:
+                    case NumberUnitCell:
                         {
                             TextBox numberOfUnit = e.Control as TextBox;
                             this.validator1.SetRegularExpression(numberOfUnit, BHConstant.REGULAR_EXPRESSION_FOR_NUMBER);
                             this.validator1.SetType(numberOfUnit, Itboy.Components.ValidationType.RegularExpression);
                         } break;
-                    default:
+                    case UnitCell:
+                        {
+                            var source = new AutoCompleteStringCollection();
+                            String[] stringArray = Array.ConvertAll<MeasurementUnit, String>(units.ToArray(), delegate(MeasurementUnit row) { return (String)row.Name; });
+                            source.AddRange(stringArray);
+
+                            ComboBox prodCode = e.Control as ComboBox;
+                            if (prodCode != null)
+                            {
+                                prodCode.DropDownStyle = ComboBoxStyle.DropDown;
+                                prodCode.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+                                prodCode.AutoCompleteCustomSource = source;
+                                prodCode.AutoCompleteSource = AutoCompleteSource.CustomSource;
+                                prodCode.MaxDropDownItems = 5;
+                            }
+                            //this.validator1.SetType(prodCode, Itboy.Components.ValidationType.Required);
+                        } break;
+                    case NoteCell:
                         {
                             if (e.Control is TextBox)
                             {
@@ -233,7 +274,7 @@ namespace BaoHien.UI
             {
                 switch (e.ColumnIndex)
                 {
-                    case 0:
+                    case ProductAttrCell:
                         {
                             ProductAttributeService productAttrService = new ProductAttributeService();
                             ProductAttribute pa = productAttrService.GetProductAttribute((int)dgv.CurrentCell.Value);
@@ -243,42 +284,12 @@ namespace BaoHien.UI
                                 productionRequestDetailInMaterials[e.RowIndex].AttributeId = pa.AttributeId;
                             }
                         } break;
-                    case 1:
-                        {
-                            ProductLog pl = productLogService.GetNewestProductLog(
-                                productionRequestDetailInMaterials[e.RowIndex].ProductId, 
-                                productionRequestDetailInMaterials[e.RowIndex].AttributeId);
-                            if (pl.AfterNumber <= 0)
-                            {
-                                MessageBox.Show("Số lượng vật liệu trong kho đã hết.");
-                                dgv.CurrentCell.Value = 0;
-                            }
-                            else if (pl.AfterNumber < (int)dgv.Rows[e.RowIndex].Cells[1].Value)
-                            {
-                                MessageBox.Show("Số lượng vật liệu trong kho còn lại là : " + pl.AfterNumber);
-                                dgv.CurrentCell.Value = 0;
-                            }
-                            else
-                            {
-                                productionRequestDetailInMaterials[e.RowIndex].NumberUnit = (int)dgv.CurrentCell.Value;
-                            }
-                        } break;
-                    case 2:
+                    case NoteCell:
                         productionRequestDetailInMaterials[e.RowIndex].Note = (string)dgv.CurrentCell.Value;
                         break;
                 }
             }
-            calculateTotalForMaterialGrid();            
-        }
-        
-        private void calculateTotalForMaterialGrid()
-        {
-
-        }
-
-        private void calculateTotalForProductGrid()
-        {
-
+            calculateNumberUnit(dgv, e.RowIndex, e.ColumnIndex);
         }
 
         private void dgvMaterial_DataError(object sender, DataGridViewDataErrorEventArgs e)
@@ -292,7 +303,7 @@ namespace BaoHien.UI
             {
                 switch (dgvProduct.CurrentCell.ColumnIndex)
                 {
-                    case 0:
+                    case ProductAttrCell:
                         {
                             var source = new AutoCompleteStringCollection();
                             String[] stringArray = Array.ConvertAll<ProductAttributeModel, String>(productForProducts.ToArray(), delegate(ProductAttributeModel row) { return (String)row.ProductAttribute; });
@@ -311,13 +322,30 @@ namespace BaoHien.UI
                             //DataGridViewComboBoxEditingControl avcbe = e.Control as DataGridViewComboBoxEditingControl;
                             //this.validator1.SetType(avcbe, Itboy.Components.ValidationType.Required);
                         } break;
-                    case 1:
+                    case NumberUnitCell:
                         {
                             TextBox numberOfUnit = e.Control as TextBox;
                             this.validator1.SetRegularExpression(numberOfUnit, BHConstant.REGULAR_EXPRESSION_FOR_NUMBER);
                             this.validator1.SetType(numberOfUnit, Itboy.Components.ValidationType.RegularExpression);
                         } break;
-                    case 2:
+                    case UnitCell:
+                        {
+                            var source = new AutoCompleteStringCollection();
+                            String[] stringArray = Array.ConvertAll<MeasurementUnit, String>(units.ToArray(), delegate(MeasurementUnit row) { return (String)row.Name; });
+                            source.AddRange(stringArray);
+
+                            ComboBox prodCode = e.Control as ComboBox;
+                            if (prodCode != null)
+                            {
+                                prodCode.DropDownStyle = ComboBoxStyle.DropDown;
+                                prodCode.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+                                prodCode.AutoCompleteCustomSource = source;
+                                prodCode.AutoCompleteSource = AutoCompleteSource.CustomSource;
+                                prodCode.MaxDropDownItems = 5;
+                            }
+                            //this.validator1.SetType(prodCode, Itboy.Components.ValidationType.Required);
+                        } break;
+                    case NoteCell :
                         {
                             if (e.Control is TextBox)
                             {
@@ -347,7 +375,7 @@ namespace BaoHien.UI
             {
                 switch (e.ColumnIndex)
                 {
-                    case 0:
+                    case ProductAttrCell:
                         {
                             ProductAttributeService productAttrService = new ProductAttributeService();
                             ProductAttribute pa = productAttrService.GetProductAttribute((int)dgv.CurrentCell.Value);
@@ -357,15 +385,17 @@ namespace BaoHien.UI
                                 productionRequestDetailInProductions[e.RowIndex].AttributeId = pa.AttributeId;
                             }
                         } break;
-                    case 1:
+                    case NumberUnitCell:
                         productionRequestDetailInProductions[e.RowIndex].NumberUnit = (int)dgv.CurrentCell.Value;
                         break;
-                    case 2:
+                    case UnitCell:
+                        productionRequestDetailInProductions[e.RowIndex].UnitId = (int)dgv.CurrentCell.Value;
+                        break;
+                    case NoteCell:
                         productionRequestDetailInProductions[e.RowIndex].Note = (string)dgv.CurrentCell.Value;
                         break;
                 }
-            }
-            calculateTotalForProductGrid();            
+            }           
         }
 
         private void dgvProduct_CellEnter(object sender, DataGridViewCellEventArgs e)
@@ -623,7 +653,7 @@ namespace BaoHien.UI
                             long newProductionRequestId = BaoHienRepository.GetMaxId<ProductionRequest>();
                             foreach (ProductionRequestDetail prd in productionRequestDetailInProductions)
                             {
-                                if (prd.ProductId > 0 && prd.AttributeId > 0)
+                                if (prd.ProductId > 0 && prd.AttributeId > 0 && prd.UnitId > 0)
                                 {
                                     prd.ProductionRequestId = (int)newProductionRequestId;
                                     bool ret = productionRequestDetailService.AddProductionRequestDetail(prd);
@@ -634,11 +664,12 @@ namespace BaoHien.UI
                                     }
 
                                     //Save in Production Log
-                                    ProductLog pl = productLogService.GetNewestProductLog(prd.ProductId, prd.AttributeId);
+                                    ProductLog pl = productLogService.GetNewestProductUnitLog(prd.ProductId, prd.AttributeId, prd.UnitId);
                                     ProductLog plg = new ProductLog
                                     {
                                         AttributeId = prd.AttributeId,
                                         ProductId = prd.ProductId,
+                                        UnitId = prd.UnitId,
                                         RecordCode = productionRequest.ReqCode,
                                         BeforeNumber = pl.AfterNumber,
                                         Amount = prd.NumberUnit,
@@ -651,7 +682,7 @@ namespace BaoHien.UI
                             }
                             foreach (ProductionRequestDetail prd in productionRequestDetailInMaterials)
                             {
-                                if (prd.ProductId > 0 && prd.AttributeId > 0)
+                                if (prd.ProductId > 0 && prd.AttributeId > 0 && prd.UnitId > 0)
                                 {
                                     prd.ProductionRequestId = (int)newProductionRequestId;
                                     bool ret = productionRequestDetailService.AddProductionRequestDetail(prd);
@@ -662,11 +693,12 @@ namespace BaoHien.UI
                                     }
 
                                     //Save in Product Log
-                                    ProductLog pl = productLogService.GetNewestProductLog(prd.ProductId, prd.AttributeId);
+                                    ProductLog pl = productLogService.GetNewestProductUnitLog(prd.ProductId, prd.AttributeId, prd.UnitId);
                                     ProductLog plg = new ProductLog
                                     {
                                         AttributeId = prd.AttributeId,
                                         ProductId = prd.ProductId,
+                                        UnitId = prd.UnitId,
                                         RecordCode = productionRequest.ReqCode,
                                         BeforeNumber = pl.AfterNumber,
                                         Amount = prd.NumberUnit,
@@ -711,13 +743,23 @@ namespace BaoHien.UI
             {
                 for (int i = 0; i < productionRequestDetailInProductions.Count; i++)
                 {
-                    if (dgvProduct.Rows[i].Cells[0] is DataGridViewComboBoxCell)
+                    if (dgvProduct.Rows[i].Cells[ProductAttrCell] is DataGridViewComboBoxCell)
                     {
-                        DataGridViewComboBoxCell pkgBoxCell = (DataGridViewComboBoxCell)dgvProduct.Rows[i].Cells[0];
+                        DataGridViewComboBoxCell pkgBoxCell = (DataGridViewComboBoxCell)dgvProduct.Rows[i].Cells[ProductAttrCell];
                         try
                         {
                             pkgBoxCell.Value = productAttrService.GetProductAttribute(productionRequestDetailInProductions[i].ProductId,
                                 productionRequestDetailInProductions[i].AttributeId).Id;
+                        }
+                        catch { }
+                    }
+                    // Unit
+                    if (dgvProduct.Rows[i].Cells[UnitCell] is DataGridViewComboBoxCell)
+                    {
+                        DataGridViewComboBoxCell pkgBoxCell = (DataGridViewComboBoxCell)dgvProduct.Rows[i].Cells[UnitCell];
+                        try
+                        {
+                            pkgBoxCell.Value = productionRequestDetailInProductions[i].UnitId;
                         }
                         catch { }
                     }
@@ -727,13 +769,23 @@ namespace BaoHien.UI
             {
                 for (int i = 0; i < productionRequestDetailInMaterials.Count; i++)
                 {
-                    if (dgvMaterial.Rows[i].Cells[0] is DataGridViewComboBoxCell)
+                    if (dgvMaterial.Rows[i].Cells[ProductAttrCell] is DataGridViewComboBoxCell)
                     {
-                        DataGridViewComboBoxCell pkgBoxCell = (DataGridViewComboBoxCell)dgvMaterial.Rows[i].Cells[0];
+                        DataGridViewComboBoxCell pkgBoxCell = (DataGridViewComboBoxCell)dgvMaterial.Rows[i].Cells[ProductAttrCell];
                         try
                         {
                             pkgBoxCell.Value = productAttrService.GetProductAttribute(productionRequestDetailInMaterials[i].ProductId,
                                 productionRequestDetailInMaterials[i].AttributeId).Id;
+                        }
+                        catch { }
+                    }
+                    // Unit
+                    if (dgvMaterial.Rows[i].Cells[UnitCell] is DataGridViewComboBoxCell)
+                    {
+                        DataGridViewComboBoxCell pkgBoxCell = (DataGridViewComboBoxCell)dgvMaterial.Rows[i].Cells[UnitCell];
+                        try
+                        {
+                            pkgBoxCell.Value = productionRequestDetailInMaterials[i].UnitId;
                         }
                         catch { }
                     }
@@ -749,6 +801,42 @@ namespace BaoHien.UI
         private void dgvProduct_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
         {
             
-        }        
+        }
+
+        private void calculateNumberUnit(DataGridView dgv, int rowIndex, int colIndex)
+        {
+            if (dgv.Rows[rowIndex].Cells[UnitCell].Value != null &&
+                dgv.Rows[rowIndex].Cells[NumberUnitCell].Value != null &&
+                (colIndex == UnitCell || colIndex == NumberUnitCell))
+            {
+                ProductLog pl = productLogService.GetNewestProductUnitLog(
+                    productionRequestDetailInMaterials[rowIndex].ProductId,
+                    productionRequestDetailInMaterials[rowIndex].AttributeId,
+                    (int)dgv.Rows[rowIndex].Cells[UnitCell].Value);
+                if (pl.Id == 0)
+                {
+                    MessageBox.Show("Sản phẩm với đơn vị tính này hiện chưa có trong kho.");
+                    dgv.Rows[rowIndex].Cells[NumberUnitCell].Value = 0;
+                }
+                else
+                {
+                    if (pl.AfterNumber <= 0)
+                    {
+                        MessageBox.Show("Số lượng sản phẩm trong kho đã hết.");
+                        dgv.Rows[rowIndex].Cells[NumberUnitCell].Value = 0;
+                    }
+                    else if (pl.AfterNumber < (int)dgv.Rows[rowIndex].Cells[NumberUnitCell].Value)
+                    {
+                        MessageBox.Show("Số lượng sản phẩm trong kho còn lại là : " + pl.AfterNumber);
+                        dgv.Rows[rowIndex].Cells[NumberUnitCell].Value = pl.AfterNumber;
+                    }
+                    else
+                    {
+                        productionRequestDetailInMaterials[rowIndex].UnitId = (int)dgv.Rows[rowIndex].Cells[UnitCell].Value;
+                        productionRequestDetailInMaterials[rowIndex].NumberUnit = (int)dgv.Rows[rowIndex].Cells[NumberUnitCell].Value;
+                    }
+                }
+            }
+        }
     }
 }

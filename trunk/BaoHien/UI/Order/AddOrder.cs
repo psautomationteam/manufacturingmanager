@@ -30,6 +30,7 @@ using Microsoft.Win32;
 using System.Diagnostics;
 using BaoHien.Services.ProductLogs;
 using BaoHien.Services.Employees;
+using BaoHien.Services.MeasurementUnits;
 
 namespace BaoHien.UI
 {
@@ -37,12 +38,17 @@ namespace BaoHien.UI
     {
         bool isUpdating = false;
         Order order;
+        ProductLogService productLogService;
+        MeasurementUnitService unitService;
+        BindingList<MeasurementUnit> units;
         BindingList<Customer> customers;
         BindingList<OrderDetail> orderDetails;
         BindingList<ProductAttributeModel> productAttrs;
         BindingList<ProductionRequestDetailModel> originalProductions;
         double totalWithTax = 0.0, totalCommission = 0.0;
-        ProductLogService productLogService;
+
+        // Cell position
+        const int ProductAttrCell = 0, NumberUnitCell = 1, UnitCell = 2, PriceCell = 3, CommissionCell = 4, TotalCell = 5, NoteCell = 6;
 
         public AddOrder()
         {
@@ -236,11 +242,12 @@ namespace BaoHien.UI
                                 totalCommission += od.Commission;
 
                                 //Save in Production Log
-                                ProductLog pl = productLogService.GetNewestProductLog(od.ProductId, od.AttributeId);
+                                ProductLog pl = productLogService.GetNewestProductUnitLog(od.ProductId, od.AttributeId, od.UnitId);
                                 ProductLog plg = new ProductLog
                                 {
                                     AttributeId = od.AttributeId,
                                     ProductId = od.ProductId,
+                                    UnitId = od.UnitId,
                                     RecordCode = order.OrderCode,
                                     BeforeNumber = pl.AfterNumber,
                                     Amount = od.NumberUnit,
@@ -334,6 +341,7 @@ namespace BaoHien.UI
             }
             ProductAttributeService productAttrService = new ProductAttributeService();
             productAttrs = new BindingList<ProductAttributeModel>(productAttrService.GetProductAndAttribute());
+            units = new BindingList<MeasurementUnit>(unitService.GetMeasurementUnits());
             if (order != null)
             {
                 if (customers != null)
@@ -365,12 +373,22 @@ namespace BaoHien.UI
                 ProductAttributeService productAttrService = new ProductAttributeService();
                 for (int i = 0; i < orderDetails.Count; i++)
                 {
-                    if (dgwOrderDetails.Rows[i].Cells[0] is DataGridViewComboBoxCell)
+                    if (dgwOrderDetails.Rows[i].Cells[ProductAttrCell] is DataGridViewComboBoxCell)
                     {
-                        DataGridViewComboBoxCell pkgBoxCell = (DataGridViewComboBoxCell)dgwOrderDetails.Rows[i].Cells[0];
+                        DataGridViewComboBoxCell pkgBoxCell = (DataGridViewComboBoxCell)dgwOrderDetails.Rows[i].Cells[ProductAttrCell];
                         try
                         {
                             pkgBoxCell.Value = productAttrService.GetProductAttribute(orderDetails[i].ProductId, orderDetails[i].AttributeId).Id;
+                        }
+                        catch { }
+                    }
+                    // Unit
+                    if (dgwOrderDetails.Rows[i].Cells[UnitCell] is DataGridViewComboBoxCell)
+                    {
+                        DataGridViewComboBoxCell pkgBoxCell = (DataGridViewComboBoxCell)dgwOrderDetails.Rows[i].Cells[UnitCell];
+                        try
+                        {
+                            pkgBoxCell.Value = orderDetails[i].UnitId;
                         }
                         catch { }
                     }
@@ -393,12 +411,12 @@ namespace BaoHien.UI
                     OrderDetailService orderDetailService = new OrderDetailService();
                     orderDetails = new BindingList<OrderDetail>(orderDetailService.SelectOrderDetailByWhere(o => o.OrderId == order.Id));
                 }
-            }
-            
+            }            
         }
 
         private void AddOrder_Load(object sender, EventArgs e)
         {
+            unitService = new MeasurementUnitService();
             productLogService = new ProductLogService();
             loadSomeData();
             SetupColumns();
@@ -409,12 +427,10 @@ namespace BaoHien.UI
         private void SetupColumns()
         {
             dgwOrderDetails.AutoGenerateColumns = false;
-
             if (orderDetails == null)
             {
                 orderDetails = new BindingList<OrderDetail>();
             }
-
             var query = from orderDetail in orderDetails
                         select new ProductionRequestDetailModel
                         {
@@ -452,6 +468,15 @@ namespace BaoHien.UI
             //numberUnitColumn.ValueType = typeof(int);
             dgwOrderDetails.Columns.Add(numberUnitColumn);
 
+            DataGridViewComboBoxColumn unitColumn = new DataGridViewComboBoxColumn();
+            unitColumn.Width = 140;
+            productColumn.AutoComplete = false;
+            unitColumn.HeaderText = "Đơn vị tính";
+            unitColumn.DataSource = units;
+            unitColumn.DisplayMember = "Name";
+            unitColumn.ValueMember = "Id";
+            dgwOrderDetails.Columns.Add(unitColumn);
+
             DataGridViewTextBoxColumn priceColumn = new DataGridViewTextBoxColumn();
             priceColumn.Width = 100;
             priceColumn.DataPropertyName = "Price";
@@ -464,7 +489,7 @@ namespace BaoHien.UI
             commissionColumn.Width = 100;
             commissionColumn.DataPropertyName = "Commision";
             commissionColumn.HeaderText = "Hoa hồng";
-            commissionColumn.ValueType = typeof(int);
+            //commissionColumn.ValueType = typeof(int);
             dgwOrderDetails.Columns.Add(commissionColumn);
 
             DataGridViewTextBoxColumn totalColumn = new DataGridViewTextBoxColumn();
@@ -506,7 +531,7 @@ namespace BaoHien.UI
             {
                 switch (e.ColumnIndex)
                 {
-                    case 0:
+                    case ProductAttrCell:
                         {
                             ProductAttributeService productAttrService = new ProductAttributeService();
                             ProductAttribute pa = productAttrService.GetProductAttribute((int)dgv.CurrentCell.Value);
@@ -516,44 +541,62 @@ namespace BaoHien.UI
                                 orderDetails[e.RowIndex].AttributeId = pa.AttributeId;
                             }
                         } break;
-                    case 1:
-                        {
-                            ProductLog pl = productLogService.GetNewestProductLog(
-                                orderDetails[e.RowIndex].ProductId,
-                                orderDetails[e.RowIndex].AttributeId);
-                            if (pl.AfterNumber <= 0)
-                            {
-                                MessageBox.Show("Số lượng vật liệu trong kho đã hết.");
-                                dgv.CurrentCell.Value = 0;
-                            }
-                            else if (pl.AfterNumber < (int)dgv.Rows[e.RowIndex].Cells[1].Value)
-                            {
-                                MessageBox.Show("Số lượng vật liệu trong kho còn lại là : " + pl.AfterNumber);
-                                dgv.CurrentCell.Value = 0;
-                            }
-                            else
-                            {
-                                orderDetails[e.RowIndex].NumberUnit = (int)dgv.CurrentCell.Value;
-                            }
-                        } break;
-                    case 2:
+                    case PriceCell:
                         {
                             orderDetails[e.RowIndex].Price = (double)dgv.CurrentCell.Value;
                         } break;
-                    case 3:
+                    case CommissionCell:
                         {
                             orderDetails[e.RowIndex].Commission = double.Parse(dgv.CurrentCell.Value.ToString());//(double)dgv.CurrentCell.Value;
                         } break;
-                    case 4:
-                        break;
-                    case 5:
+                    case NoteCell:
                         {
                             orderDetails[e.RowIndex].Note = (string)dgv.CurrentCell.Value;
                         } break;
+                    default:
+                        break;
                 }
             }
+            calculateNumberUnit(dgv, e.RowIndex, e.ColumnIndex);
             calculateTotal();
-            orderDetails[e.RowIndex].Cost = (int)dgwOrderDetails.Rows[e.RowIndex].Cells[1].Value * (double)dgwOrderDetails.Rows[e.RowIndex].Cells[2].Value;
+            orderDetails[e.RowIndex].Cost = (int)dgwOrderDetails.Rows[e.RowIndex].Cells[NumberUnitCell].Value
+                * (double)dgwOrderDetails.Rows[e.RowIndex].Cells[PriceCell].Value;
+        }
+
+        private void calculateNumberUnit(DataGridView dgv, int rowIndex, int colIndex)
+        {
+            if (dgv.Rows[rowIndex].Cells[UnitCell].Value != null &&
+                dgv.Rows[rowIndex].Cells[NumberUnitCell].Value != null &&
+                (colIndex == UnitCell || colIndex == NumberUnitCell))
+            {
+                ProductLog pl = productLogService.GetNewestProductUnitLog(
+                    orderDetails[rowIndex].ProductId,
+                    orderDetails[rowIndex].AttributeId,
+                    (int)dgv.Rows[rowIndex].Cells[UnitCell].Value);
+                if (pl.Id == 0)
+                {
+                    MessageBox.Show("Sản phẩm với đơn vị tính này hiện chưa có trong kho.");
+                    dgv.Rows[rowIndex].Cells[NumberUnitCell].Value = 0;
+                }
+                else
+                {
+                    if (pl.AfterNumber <= 0)
+                    {
+                        MessageBox.Show("Số lượng sản phẩm trong kho đã hết.");
+                        dgv.Rows[rowIndex].Cells[NumberUnitCell].Value = 0;
+                    }
+                    else if (pl.AfterNumber < (int)dgv.Rows[rowIndex].Cells[NumberUnitCell].Value)
+                    {
+                        MessageBox.Show("Số lượng sản phẩm trong kho còn lại là : " + pl.AfterNumber);
+                        dgv.Rows[rowIndex].Cells[NumberUnitCell].Value = pl.AfterNumber;
+                    }
+                    else
+                    {
+                        orderDetails[rowIndex].UnitId = (int)dgv.Rows[rowIndex].Cells[UnitCell].Value;
+                        orderDetails[rowIndex].NumberUnit = (int)dgv.Rows[rowIndex].Cells[NumberUnitCell].Value;
+                    }
+                }
+            }
         }
 
         private void calculateTotal()
@@ -564,17 +607,19 @@ namespace BaoHien.UI
 
             for (int i = 0; i < orderDetails.Count; i++)
             {
-                if (orderDetails[i].ProductId != 0 && orderDetails[i].AttributeId != 0)
+                if (orderDetails[i].ProductId != 0 && orderDetails[i].AttributeId != 0 && orderDetails[i].UnitId != 0)
                 {
-                    dgwOrderDetails.Rows[i].Cells[4].Value = (int)dgwOrderDetails.Rows[i].Cells[1].Value * (double)dgwOrderDetails.Rows[i].Cells[2].Value;
+                    // Calculate total at Column 1 w 3 = 5
+                    dgwOrderDetails.Rows[i].Cells[TotalCell].Value = (int)dgwOrderDetails.Rows[i].Cells[NumberUnitCell].Value
+                        * (double)dgwOrderDetails.Rows[i].Cells[PriceCell].Value;
                     hasValue = true;
-                    totalNoTax += (double)dgwOrderDetails.Rows[i].Cells[4].Value;
+                    totalNoTax += (double)dgwOrderDetails.Rows[i].Cells[TotalCell].Value;
                 }
             }
             if (hasValue)
             {
                 double vat = 0.0;
-                double discount = 0;
+                double discount = 0.0;
                 string tVAT = string.IsNullOrEmpty(txtVAT.WorkingText) ? txtVAT.Text : txtVAT.WorkingText;
                 string tDiscount = string.IsNullOrEmpty(txtDiscount.WorkingText) ? txtDiscount.Text : txtDiscount.WorkingText;
                 double.TryParse(tVAT, out vat);
@@ -597,7 +642,7 @@ namespace BaoHien.UI
         {
             switch (dgwOrderDetails.CurrentCell.ColumnIndex)
             {
-                case 0:
+                case ProductAttrCell:
                     {
                         var source = new AutoCompleteStringCollection();
                         String[] stringArray = Array.ConvertAll<ProductAttributeModel, String>(productAttrs.ToArray(), delegate(ProductAttributeModel row) { return (String)row.ProductAttribute; });
@@ -615,31 +660,48 @@ namespace BaoHien.UI
                         }
                         //this.validator1.SetType(prodCode, Itboy.Components.ValidationType.Required);
                     } break;
-                case 1:
+                case NumberUnitCell:
                     {
                         TextBox numberOfUnit = e.Control as TextBox;
                         this.validator1.SetRegularExpression(numberOfUnit, BHConstant.REGULAR_EXPRESSION_FOR_NUMBER);
                         this.validator1.SetType(numberOfUnit, Itboy.Components.ValidationType.RegularExpression);
                     } break;
-                case 2:
+                case UnitCell:
+                    {
+                        var source = new AutoCompleteStringCollection();
+                        String[] stringArray = Array.ConvertAll<MeasurementUnit, String>(units.ToArray(), delegate(MeasurementUnit row) { return (String)row.Name; });
+                        source.AddRange(stringArray);
+
+                        ComboBox prodCode = e.Control as ComboBox;
+                        if (prodCode != null)
+                        {
+                            prodCode.DropDownStyle = ComboBoxStyle.DropDown;
+                            prodCode.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+                            prodCode.AutoCompleteCustomSource = source;
+                            prodCode.AutoCompleteSource = AutoCompleteSource.CustomSource;
+                            prodCode.MaxDropDownItems = 5;
+                        }
+                        //this.validator1.SetType(prodCode, Itboy.Components.ValidationType.Required);
+                    } break;
+                case PriceCell:
                     {
                         TextBox price = e.Control as TextBox;
                         this.validator1.SetRegularExpression(price, BHConstant.REGULAR_EXPRESSION_FOR_CURRENCY);
                         this.validator1.SetType(price, Itboy.Components.ValidationType.RegularExpression);
                     } break;
-                case 3:
+                case CommissionCell:
                     {
                         TextBox commision = e.Control as TextBox;
                         this.validator1.SetRegularExpression(commision, BHConstant.REGULAR_EXPRESSION_FOR_CURRENCY);
                         this.validator1.SetType(commision, Itboy.Components.ValidationType.RegularExpression);
                     } break;
-                case 4:
+                case TotalCell:
                     {
                         TextBox total = e.Control as TextBox;
                         this.validator1.SetRegularExpression(total, BHConstant.REGULAR_EXPRESSION_FOR_CURRENCY);
                         this.validator1.SetType(total, Itboy.Components.ValidationType.RegularExpression);
                     } break;
-                case 5:
+                case NoteCell:
                     {
                         if (e.Control is TextBox)
                         {
@@ -688,27 +750,36 @@ namespace BaoHien.UI
             PdfWriter.GetInstance(doc, new FileStream(BHConstant.SAVE_IN_DIRECTORY + @"\XKho.pdf", FileMode.Create));
             doc.Open();
 
+            doc.Add(FormatConfig.ParaRightBeforeHeader("Mã số phiếu : " + getOrderCode()));
             doc.Add(FormatConfig.ParaHeader("PHIẾU XUẤT KHO"));
-            doc.Add(FormatConfig.ParaRightBelowHeader("Mã số phiếu : " + getOrderCode()));
-            doc.Add(FormatConfig.ParaRightBelowHeader("Ngày xuất : " + DateTime.Now.ToString(BHConstant.DATE_FORMAT)));
 
             doc.Add(FormatConfig.ParaCommonInfo("Tên khách hàng : ", getCustomerName()));
             doc.Add(FormatConfig.ParaCommonInfo("Địa chỉ : ", getCustomerAddress()));
             doc.Add(FormatConfig.ParaCommonInfo("Điện thoại : ", getCustomerPhone()));
+            doc.Add(FormatConfig.ParaCommonInfo("Lý do xuất kho : ", String.Concat(Enumerable.Repeat("...", 18))));
+            doc.Add(FormatConfig.ParaCommonInfo("Xuất tại kho : ", String.Concat(Enumerable.Repeat("...", 19))));
 
-            PDF.pdf.PdfPTable table = FormatConfig.Table(4, new float[] { 1f, 4f, 1f, 4f });
+            PDF.pdf.PdfPTable table = FormatConfig.Table(6, new float[] { 0.5f, 3.5f, 1.5f, 1f, 1f, 2.5f });
             table.AddCell(FormatConfig.TableCellHeader("STT"));
-            table.AddCell(FormatConfig.TableCellHeader("Tên hàng"));
+            table.AddCell(FormatConfig.TableCellHeader("Tên sản phẩm"));
+            table.AddCell(FormatConfig.TableCellHeader("Mã sản phẩm"));
+            table.AddCell(FormatConfig.TableCellHeader("Đơn vị"));
             table.AddCell(FormatConfig.TableCellHeader("Số lượng"));
             table.AddCell(FormatConfig.TableCellHeader("Ghi chú"));
 
             for (int i = 0; i < orderDetails.Count; i++)
             {
-                if (orderDetails[i].ProductId != 0 && orderDetails[i].AttributeId != 0)
+                if (orderDetails[i].ProductId != 0 && orderDetails[i].AttributeId != 0 && orderDetails[i].UnitId != 0)
                 {
                     table.AddCell(FormatConfig.TableCellBody((i + 1).ToString(), PdfPCell.ALIGN_CENTER));
                     table.AddCell(FormatConfig.TableCellBody(
                                         getProductName(orderDetails[i].ProductId, orderDetails[i].AttributeId),
+                                        PdfPCell.ALIGN_LEFT));
+                    table.AddCell(FormatConfig.TableCellBody(
+                                        getProductCode(orderDetails[i].ProductId),
+                                        PdfPCell.ALIGN_LEFT));
+                    table.AddCell(FormatConfig.TableCellBody(
+                                        getUnitName(orderDetails[i].UnitId),
                                         PdfPCell.ALIGN_LEFT));
                     table.AddCell(FormatConfig.TableCellBody(
                                         orderDetails[i].NumberUnit.ToString(),
@@ -723,6 +794,8 @@ namespace BaoHien.UI
 
             doc.Add(FormatConfig.ParaCommonInfo("Ghi chú : ", String.Concat(Enumerable.Repeat("...", 96))));
 
+            DateTime date = DateTime.Now;
+            doc.Add(FormatConfig.ParaRightBeforeHeader(string.Format("Ngày {0} tháng {1} năm {2}", date.Day, date.Month, date.Year)));
             PDF.pdf.PdfPTable table2 = FormatConfig.Table(3, new float[] { 3.5f, 4f, 2.5f });
             table2.AddCell(FormatConfig.TableCellHeaderCommon("Thủ trưởng đơn vị", PdfPCell.NO_BORDER));
             table2.AddCell(FormatConfig.TableCellHeaderCommon("Kế toán", PdfPCell.NO_BORDER));
@@ -739,17 +812,21 @@ namespace BaoHien.UI
             PdfWriter.GetInstance(doc, new FileStream(BHConstant.SAVE_IN_DIRECTORY + @"\BHang.pdf", FileMode.Create));
             doc.Open();
 
-            doc.Add(FormatConfig.ParaHeader("PHIẾU BÁN HÀNG"));
-            doc.Add(FormatConfig.ParaRightBelowHeader("Mã số phiếu : " + getOrderCode()));
-            doc.Add(FormatConfig.ParaRightBelowHeader("Ngày xuất : " + DateTime.Now.ToString(BHConstant.DATE_FORMAT)));
+            doc.Add(FormatConfig.ParaRightBeforeHeader("Mã số phiếu : " + getOrderCode()));
+            doc.Add(FormatConfig.ParaHeader("PHIẾU XUẤT KHO"));
+            doc.Add(FormatConfig.ParaRightBelowHeader("(SẼ BỔ SUNG HÓA ĐƠN TÀI CHÍNH VÀ THU THÊM THUẾ GTGT 10% SAU)"));
 
             doc.Add(FormatConfig.ParaCommonInfo("Tên khách hàng : ", getCustomerName()));
             doc.Add(FormatConfig.ParaCommonInfo("Địa chỉ : ", getCustomerAddress()));
             doc.Add(FormatConfig.ParaCommonInfo("Điện thoại : ", getCustomerPhone()));
+            doc.Add(FormatConfig.ParaCommonInfo("Lý do xuất kho : ", String.Concat(Enumerable.Repeat("...", 18))));
+            doc.Add(FormatConfig.ParaCommonInfo("Xuất tại kho : ", String.Concat(Enumerable.Repeat("...", 19))));
 
-            PDF.pdf.PdfPTable table = FormatConfig.Table(5, new float[] { 1f, 4f, 1f, 2f, 2f });
+            PDF.pdf.PdfPTable table = FormatConfig.Table(7, new float[] { 0.5f, 3f, 1.5f, 1f, 1f, 1.5f, 1.5f });
             table.AddCell(FormatConfig.TableCellHeader("STT"));
-            table.AddCell(FormatConfig.TableCellHeader("Tên hàng"));
+            table.AddCell(FormatConfig.TableCellHeader("Tên sản phẩm"));
+            table.AddCell(FormatConfig.TableCellHeader("Mã sản phẩm"));
+            table.AddCell(FormatConfig.TableCellHeader("Đơn vị"));
             table.AddCell(FormatConfig.TableCellHeader("Số lượng"));
             table.AddCell(FormatConfig.TableCellHeader("Giá (VND)"));
             table.AddCell(FormatConfig.TableCellHeader("Thành tiền (VND)"));
@@ -761,6 +838,12 @@ namespace BaoHien.UI
                     table.AddCell(FormatConfig.TableCellBody((i + 1).ToString(), PdfPCell.ALIGN_CENTER));
                     table.AddCell(FormatConfig.TableCellBody(
                                         getProductName(orderDetails[i].ProductId, orderDetails[i].AttributeId),
+                                        PdfPCell.ALIGN_LEFT));
+                    table.AddCell(FormatConfig.TableCellBody(
+                                        getProductCode(orderDetails[i].ProductId),
+                                        PdfPCell.ALIGN_LEFT));
+                    table.AddCell(FormatConfig.TableCellBody(
+                                        getUnitName(orderDetails[i].UnitId),
                                         PdfPCell.ALIGN_LEFT));
                     table.AddCell(FormatConfig.TableCellBody(
                                         orderDetails[i].NumberUnit.ToString(),
@@ -791,8 +874,11 @@ namespace BaoHien.UI
 
             doc.Add(table);
 
+            doc.Add(FormatConfig.ParaCommonInfo("Cộng thành tiền (viết bằng chữ) : ", Global.convertCurrencyToText(totalWithTax.ToString())));
             doc.Add(FormatConfig.ParaCommonInfo("Ghi chú : ", String.Concat(Enumerable.Repeat("...", 96))));
 
+            DateTime date = DateTime.Now;
+            doc.Add(FormatConfig.ParaRightBeforeHeader(string.Format("Ngày {0} tháng {1} năm {2}", date.Day, date.Month, date.Year)));
             PDF.pdf.PdfPTable table2 = FormatConfig.Table(3, new float[] { 3.5f, 4f, 2.5f });
             table2.AddCell(FormatConfig.TableCellHeaderCommon("Thủ trưởng đơn vị", PdfPCell.NO_BORDER));
             table2.AddCell(FormatConfig.TableCellHeaderCommon("Kế toán", PdfPCell.NO_BORDER));
@@ -859,9 +945,28 @@ namespace BaoHien.UI
         private string getProductName(int productID, int attrID)
         { 
             string result = string.Empty;
-            ProductAttributeModel pad = productAttrs.Where(p => p.ProductId == productID && p.AttributeId == attrID).SingleOrDefault();
+            ProductAttributeModel pad = productAttrs.Where(p => p.ProductId == productID && p.AttributeId == attrID).FirstOrDefault();
             if (pad != null)
                 result = pad.ProductAttribute;
+            return result;
+        }
+
+        private string getProductCode(int productID)
+        {
+            string result = string.Empty;
+            ProductService productService = new ProductService();
+            Product p = productService.GetProduct(productID);
+            if (p != null)
+                result = p.ProductCode;
+            return result;
+        }
+
+        private string getUnitName(int unitID)
+        {
+            string result = string.Empty;
+            MeasurementUnit u = units.Where(un => un.Id == unitID).FirstOrDefault();
+            if (u != null)
+                result = u.Name;
             return result;
         }
 
@@ -904,8 +1009,6 @@ namespace BaoHien.UI
             {
                 MessageBox.Show("Không thể kết nối máy in!");
             }
-            //RawPrinterHelper.SendFileToPrinter(pd.PrinterSettings.PrinterName, AppDomain.CurrentDomain.BaseDirectory + @"\Temp\XKho.pdf");
-            //RawPrinterHelper.SendFileToPrinter(pd.PrinterSettings.PrinterName, AppDomain.CurrentDomain.BaseDirectory + @"\Temp\BHang.pdf");
             this.Cursor = Cursors.Default;
         }
     }
