@@ -36,16 +36,24 @@ namespace BaoHien.UI
             if (colColor == 3)
             {
                 SetupColumnOneCustomer();
+                ArrearReportModel last = arrearReportModel.OrderByDescending(a => a.ID).FirstOrDefault();
+                if (last != null)
+                {
+                    lbTotal.Text = last.AfterDebit;
+                }
             }
             else
             {
                 SetupColumnAllCustomers();
+                double total = arrearReportModel.Sum(a => a.AfterDebitNumber);
+                lbTotal.Text = Global.formatVNDCurrencyText(total.ToString());
             }
             setColorRow(colColor);
         }
 
         void LoadReport()
         {
+            lbTotal.Text = "(VND) 0";
             if (cbmCustomers.SelectedValue != null)
             {
                 int customerId = (int)cbmCustomers.SelectedValue;

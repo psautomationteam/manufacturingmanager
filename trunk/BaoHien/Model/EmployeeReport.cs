@@ -7,6 +7,13 @@ namespace BaoHien.Model
 {
     class EmployeeReport
     {
+        int id;
+        public int ID
+        {
+            get { return id; }
+            set { id = value; }
+        }
+
         int index;
         public int Index
         {
@@ -43,8 +50,15 @@ namespace BaoHien.Model
             set { beforeNumber = value; }
         }
 
-        string afterNumber;
-        public string AfterNumber
+        string afterNumberText;
+        public string AfterNumberText
+        {
+            get { return afterNumberText; }
+            set { afterNumberText = value; }
+        }
+
+        double afterNumber;
+        public double AfterNumber
         {
             get { return afterNumber; }
             set { afterNumber = value; }

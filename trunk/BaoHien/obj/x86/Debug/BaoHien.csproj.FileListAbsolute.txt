@@ -193,3 +193,4 @@ D:\Pikait\Work\BaoHien\BaoHien\obj\x86\Debug\GenerateResource.read.1.tlog
 D:\Pikait\Work\BaoHien\BaoHien\obj\x86\Debug\GenerateResource.write.1.tlog
 D:\Pikait\Work\BaoHien\BaoHien\obj\x86\Debug\BaoHien.exe
 D:\Pikait\Work\BaoHien\BaoHien\obj\x86\Debug\BaoHien.pdb
+D:\Pikait\Work\BaoHien\BaoHien\obj\x86\Debug\BaoHien.UI.PrintPreviewCustom.PrintPreview.resources

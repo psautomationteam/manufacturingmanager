@@ -678,8 +678,8 @@ namespace BaoHien.UI
                                     };
                                     result = productLogService.AddProductLog(plg);
                                 }
-
                             }
+
                             foreach (ProductionRequestDetail prd in productionRequestDetailInMaterials)
                             {
                                 if (prd.ProductId > 0 && prd.AttributeId > 0 && prd.UnitId > 0)
@@ -807,7 +807,7 @@ namespace BaoHien.UI
         {
             if (dgv.Rows[rowIndex].Cells[UnitCell].Value != null &&
                 dgv.Rows[rowIndex].Cells[NumberUnitCell].Value != null &&
-                (colIndex == UnitCell || colIndex == NumberUnitCell))
+                (colIndex == UnitCell || colIndex == NumberUnitCell || colIndex == ProductAttrCell))
             {
                 ProductLog pl = productLogService.GetNewestProductUnitLog(
                     productionRequestDetailInMaterials[rowIndex].ProductId,
@@ -817,6 +817,7 @@ namespace BaoHien.UI
                 {
                     MessageBox.Show("Sản phẩm với đơn vị tính này hiện chưa có trong kho.");
                     dgv.Rows[rowIndex].Cells[NumberUnitCell].Value = 0;
+                    productionRequestDetailInMaterials[rowIndex].NumberUnit = 0;
                 }
                 else
                 {
@@ -824,11 +825,13 @@ namespace BaoHien.UI
                     {
                         MessageBox.Show("Số lượng sản phẩm trong kho đã hết.");
                         dgv.Rows[rowIndex].Cells[NumberUnitCell].Value = 0;
+                        productionRequestDetailInMaterials[rowIndex].NumberUnit = 0;
                     }
                     else if (pl.AfterNumber < (int)dgv.Rows[rowIndex].Cells[NumberUnitCell].Value)
                     {
                         MessageBox.Show("Số lượng sản phẩm trong kho còn lại là : " + pl.AfterNumber);
                         dgv.Rows[rowIndex].Cells[NumberUnitCell].Value = pl.AfterNumber;
+                        productionRequestDetailInMaterials[rowIndex].NumberUnit = (int)pl.AfterNumber;
                     }
                     else
                     {

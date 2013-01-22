@@ -176,6 +176,12 @@
       <DependentUpon>CoolPrintPreviewDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\PrintPreviewCustom\PageImageList.cs" />
+    <Compile Include="UI\PrintPreviewCustom\PrintPreview.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\PrintPreviewCustom\PrintPreview.Designer.cs">
+      <DependentUpon>PrintPreview.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\ProductionRequest\AddProductionRequest.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -341,6 +347,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\PrintPreviewCustom\CoolPrintPreviewDialog.resx">
       <DependentUpon>CoolPrintPreviewDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\PrintPreviewCustom\PrintPreview.resx">
+      <DependentUpon>PrintPreview.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\ProductionRequest\AddProductionRequest.resx">
       <DependentUpon>AddProductionRequest.cs</DependentUpon>

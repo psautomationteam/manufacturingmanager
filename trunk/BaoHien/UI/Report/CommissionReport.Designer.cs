@@ -37,6 +37,8 @@
             this.dtpFrom = new System.Windows.Forms.DateTimePicker();
             this.label1 = new System.Windows.Forms.Label();
             this.dgwEmployeeCommissionList = new System.Windows.Forms.DataGridView();
+            this.lbTotal = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgwEmployeeCommissionList)).BeginInit();
             this.SuspendLayout();
@@ -122,16 +124,39 @@
             // dgwEmployeeCommissionList
             // 
             this.dgwEmployeeCommissionList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgwEmployeeCommissionList.Location = new System.Drawing.Point(17, 101);
+            this.dgwEmployeeCommissionList.Location = new System.Drawing.Point(17, 120);
             this.dgwEmployeeCommissionList.Name = "dgwEmployeeCommissionList";
-            this.dgwEmployeeCommissionList.Size = new System.Drawing.Size(1053, 517);
+            this.dgwEmployeeCommissionList.Size = new System.Drawing.Size(1053, 498);
             this.dgwEmployeeCommissionList.TabIndex = 24;
             this.dgwEmployeeCommissionList.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgwEmployeeCommissionList_CellDoubleClick);
+            // 
+            // lbTotal
+            // 
+            this.lbTotal.AutoSize = true;
+            this.lbTotal.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbTotal.ForeColor = System.Drawing.Color.Blue;
+            this.lbTotal.Location = new System.Drawing.Point(88, 94);
+            this.lbTotal.Name = "lbTotal";
+            this.lbTotal.Size = new System.Drawing.Size(52, 13);
+            this.lbTotal.TabIndex = 26;
+            this.lbTotal.Text = "(VND) 0";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(14, 94);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(53, 13);
+            this.label3.TabIndex = 25;
+            this.label3.Text = "Tổng nợ :";
             // 
             // CommissionReport
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.lbTotal);
+            this.Controls.Add(this.label3);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.dgwEmployeeCommissionList);
             this.Name = "CommissionReport";
@@ -140,6 +165,7 @@
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgwEmployeeCommissionList)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -154,5 +180,7 @@
         private System.Windows.Forms.DateTimePicker dtpFrom;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.DataGridView dgwEmployeeCommissionList;
+        private System.Windows.Forms.Label lbTotal;
+        private System.Windows.Forms.Label label3;
     }
 }

@@ -58,6 +58,7 @@ namespace BaoHien.UI
 
         void LoadReport()
         {
+            lbTotal.Text = "(VND) 0";
             if (cbmEmployees.SelectedValue != null)
             {
                 int employeeId = (int)cbmEmployees.SelectedValue;
@@ -66,12 +67,19 @@ namespace BaoHien.UI
                     employeeLogs = employeeLogService.GetReportsOfEmployees(dtpFrom.Value, dtpTo.Value.AddDays(1));
                     dgwEmployeeCommissionList.DataSource = employeeLogs;
                     SetupDataGrid(employeeLogs);
+                    double total = employeeLogs.Sum(a => a.AfterNumber);
+                    lbTotal.Text = Global.formatVNDCurrencyText(total.ToString());
                 }
                 else
                 {
                     employeeLogs = employeeLogService.GetReportsOfEmployee(employeeId, dtpFrom.Value, dtpTo.Value.AddDays(1));
                     dgwEmployeeCommissionList.DataSource = employeeLogs;
                     SetupDataGridDetail(employeeLogs);
+                    EmployeeReport last = employeeLogs.OrderByDescending(a => a.ID).FirstOrDefault();
+                    if (last != null)
+                    {
+                        lbTotal.Text = last.AfterNumberText;
+                    }
                 }
             }
         }
@@ -119,7 +127,7 @@ namespace BaoHien.UI
             dgwEmployeeCommissionList.Columns.Add(dateColumn);
 
             DataGridViewTextBoxColumn amountColumn = new DataGridViewTextBoxColumn();
-            amountColumn.DataPropertyName = "AfterNumber";
+            amountColumn.DataPropertyName = "AfterNumberText";
             amountColumn.Width = 150;
             amountColumn.HeaderText = "Số tiền";
             //amountColumn.Frozen = true;

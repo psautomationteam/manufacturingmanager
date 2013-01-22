@@ -5,6 +5,8 @@ using System.Windows.Forms;
 using BaoHien.UI;
 using BaoHien.Properties;
 using DAL.Helper;
+using BaoHien.UI.PrintPreviewCustom;
+
 namespace Com.Baohien
 {
     static class Program
@@ -25,6 +27,7 @@ namespace Com.Baohien
             }
             else
             {
+                //Application.Run(new PrintPreview(""));
                 Application.Run(new Login());//To do: will replace by login form
             }
             

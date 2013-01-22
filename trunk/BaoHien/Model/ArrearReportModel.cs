@@ -7,6 +7,13 @@ namespace BaoHien.Model
 {
     public class ArrearReportModel
     {
+        int id;
+        public int ID
+        {
+            get { return id; }
+            set { id = value; }
+        }
+
         int index;
         public int Index
         {
@@ -40,6 +47,13 @@ namespace BaoHien.Model
         {
             get { return afterDebit; }
             set { afterDebit = value; }
+        }
+
+        double afterDebitNumber;
+        public double AfterDebitNumber
+        {
+            get { return afterDebitNumber; }
+            set { afterDebitNumber = value; }
         }
 
         string customerName;
