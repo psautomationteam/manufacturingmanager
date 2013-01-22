@@ -15,7 +15,6 @@ namespace BaoHien.UI.PrintPreviewCustom
         public PrintPreview(string filePath)
         {
             InitializeComponent();
-
             ShowFile(filePath);
         }
 
@@ -24,7 +23,7 @@ namespace BaoHien.UI.PrintPreviewCustom
             //reader.setShowScrollbars(true);
             //reader.setShowToolbar(false);
             //reader.setView("FitH");
-            wbReader.Navigate(BHConstant.SAVE_IN_DIRECTORY + @"\XKho.pdf");
+            wbReader.Navigate(BHConstant.SAVE_IN_DIRECTORY + @"\BHang.pdf");
         }
     }
 }
