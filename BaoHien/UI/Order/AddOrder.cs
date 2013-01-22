@@ -31,6 +31,7 @@ using System.Diagnostics;
 using BaoHien.Services.ProductLogs;
 using BaoHien.Services.Employees;
 using BaoHien.Services.MeasurementUnits;
+using BaoHien.UI.PrintPreviewCustom;
 
 namespace BaoHien.UI
 {
@@ -60,8 +61,8 @@ namespace BaoHien.UI
             calculateTotal();
             if (validator1.Validate())
             {
-                DialogResult dialogResult = MessageBox.Show("Bạn sẽ không thể chỉnh sửa sau khi lưu!Bạn muốn lưu?", "Xác nhận", MessageBoxButtons.YesNo);
-                if (dialogResult == System.Windows.Forms.DialogResult.Yes)
+                DialogResult dialogResult = Preview();//MessageBox.Show("Bạn sẽ không thể chỉnh sửa sau khi lưu!Bạn muốn lưu?", "Xác nhận", MessageBoxButtons.YesNo);
+                if (dialogResult == DialogResult.OK)
                 {
                     double discount = 0;
                     Double.TryParse(txtDiscount.WorkingText, out discount);
@@ -818,11 +819,16 @@ namespace BaoHien.UI
             doc.Close();
         }
 
-        private void printOrder()
+        private void printOrder(bool preview)
         {
             Global.checkDirSaveFile();
             var doc = new PDF.Document();
-            PdfWriter.GetInstance(doc, new FileStream(BHConstant.SAVE_IN_DIRECTORY + @"\BHang.pdf", FileMode.Create));
+            PdfWriter docWriter = PdfWriter.GetInstance(doc, new FileStream(BHConstant.SAVE_IN_DIRECTORY + @"\BHang.pdf", FileMode.Create));
+            if (preview)
+            {
+                PdfWriterEvents writerEvent = new PdfWriterEvents("Preview");
+                docWriter.PageEvent = writerEvent;
+            }
             doc.Open();
 
             doc.Add(FormatConfig.ParaRightBeforeHeader("Mã số phiếu : " + getOrderCode()));
@@ -846,7 +852,7 @@ namespace BaoHien.UI
 
             for (int i = 0; i < orderDetails.Count; i++)
             {
-                if (orderDetails[i].ProductId != 0 && orderDetails[i].AttributeId != 0)
+                if (orderDetails[i].ProductId != 0 && orderDetails[i].AttributeId != 0 && orderDetails[i].UnitId != 0)
                 {
                     table.AddCell(FormatConfig.TableCellBody((i + 1).ToString(), PdfPCell.ALIGN_CENTER));
                     table.AddCell(FormatConfig.TableCellBody(
@@ -1002,7 +1008,7 @@ namespace BaoHien.UI
 
         private void Print(string printerName)
         {
-            printOrder();
+            printOrder(false);
             printForStock();
             // Print the file to the printer.
             var adobe = Registry.LocalMachine.OpenSubKey("Software").OpenSubKey("Microsoft").OpenSubKey("Windows").OpenSubKey("CurrentVersion").OpenSubKey("App Paths").OpenSubKey("AcroRd32.exe");
@@ -1032,6 +1038,14 @@ namespace BaoHien.UI
                 MessageBox.Show("Không thể kết nối máy in!");
             }
             this.Cursor = Cursors.Default;
+        }
+
+        private DialogResult Preview()
+        {
+            printOrder(true);
+            PrintPreview p = new PrintPreview(BHConstant.SAVE_IN_DIRECTORY + @"\BHang.pdf");
+            DialogResult r = p.ShowDialog(this);
+            return r;
         }
     }
 }

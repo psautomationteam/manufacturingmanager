@@ -27,7 +27,6 @@ namespace Com.Baohien
             }
             else
             {
-                //Application.Run(new PrintPreview(""));
                 Application.Run(new Login());//To do: will replace by login form
             }
             

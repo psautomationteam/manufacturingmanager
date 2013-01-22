@@ -51,6 +51,7 @@
     </Compile>
     <Compile Include="Constant.cs" />
     <Compile Include="Helper\BaoHienRepository.cs" />
+    <Compile Include="Helper\ConnectionString.cs" />
     <Compile Include="Helper\ObjectHelper.cs" />
     <Compile Include="Helper\SettingManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -22,8 +22,11 @@ namespace DAL.Helper
 
         public static void ResetDBDataContext()
         {
-            context.Connection.Close();
-            context = null;
+            if (context != null)
+            {
+                context.Connection.Close();
+                context = null;
+            }
             context = GetBaoHienDBDataContext();
         }
 
@@ -40,8 +43,7 @@ namespace DAL.Helper
         {
             if (context == null)
             {
-                context = new BaoHienDBDataContext(SettingManager.BuildStringConnection());
-                
+                context = new BaoHienDBDataContext(SettingManager.BuildStringConnection());                
             }
             if (context != null)
             {

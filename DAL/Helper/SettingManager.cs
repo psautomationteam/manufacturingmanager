@@ -34,14 +34,14 @@ namespace DAL.Helper
         {            
             SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
 
-            builder.NetworkLibrary = DAL.Properties.Settings.Default.NetworkLibrary;
-            builder.DataSource = DAL.Properties.Settings.Default.DBServerName + "," + DAL.Properties.Settings.Default.Port;
+            builder.NetworkLibrary = ConnectionString.NetworkLibrary;
+            builder.DataSource = ConnectionString.DBServerName + "," + ConnectionString.Port;
             builder.IntegratedSecurity = true;
-            builder.InitialCatalog = DAL.Properties.Settings.Default.DatabaseName;
-            if (DAL.Properties.Settings.Default.DatabaseUserID != "" && DAL.Properties.Settings.Default.DatabasePwd != "")
+            builder.InitialCatalog = ConnectionString.DatabaseName;
+            if (!string.IsNullOrEmpty(ConnectionString.DatabaseUserID) && !string.IsNullOrEmpty(ConnectionString.DatabasePwd))
             {
-                builder.UserID = DAL.Properties.Settings.Default.DatabaseUserID;
-                builder.Password = DAL.Properties.Settings.Default.DatabasePwd;
+                builder.UserID = ConnectionString.DatabaseUserID;
+                builder.Password = ConnectionString.DatabasePwd;
             }
             builder.Pooling = false;
             
@@ -77,29 +77,28 @@ namespace DAL.Helper
         {
             if (DBServerName != null)
             {
-                DAL.Properties.Settings.Default.DBServerName = DBServerName;
+                ConnectionString.DBServerName = DBServerName;
             }
             if (Port != null)
             {
-                DAL.Properties.Settings.Default.Port = Port;
+                ConnectionString.Port = Port;
             }
             if (NetworkLibrary != null)
             {
-                DAL.Properties.Settings.Default.NetworkLibrary = NetworkLibrary;
+                ConnectionString.NetworkLibrary = NetworkLibrary;
             }
             if (DatabaseName != null)
             {
-                DAL.Properties.Settings.Default.DatabaseName = DatabaseName;
+                ConnectionString.DatabaseName = DatabaseName;
             }
             if (DatabaseUserID != null)
             {
-                DAL.Properties.Settings.Default.DatabaseUserID = DatabaseUserID;
+                ConnectionString.DatabaseUserID = DatabaseUserID;
             }
             if (DatabasePwd != null)
             {
-                DAL.Properties.Settings.Default.DatabasePwd = DatabasePwd;
+                ConnectionString.DatabasePwd = DatabasePwd;
             }
-            DAL.Properties.Settings.Default.Save();
         }
     }
 }
