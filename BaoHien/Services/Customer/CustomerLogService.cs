@@ -105,10 +105,12 @@ namespace BaoHien.Services.Customers
             {
                 reports.Add(new ArrearReportModel
                 {
+                    ID = log.Id,
                     CustomerName = log.Customer.CustomerName,
                     Date = log.CreatedDate.ToString(BHConstant.DATETIME_FORMAT),
                     Amount = Global.formatVNDCurrencyText((log.AfterDebit - log.BeforeDebit).ToString()),
                     AfterDebit = Global.formatVNDCurrencyText(log.AfterDebit.ToString()),
+                    AfterDebitNumber = log.AfterDebit,
                     RecordCode = log.RecordCode,
                     Index = ++index
                 });

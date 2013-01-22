@@ -6,6 +6,7 @@ using BaoHien.Services.Base;
 using DAL;
 using DAL.Helper;
 using BaoHien.Model;
+using BaoHien.Common;
 
 namespace BaoHien.Services.Employees
 {
@@ -113,11 +114,13 @@ namespace BaoHien.Services.Employees
             {
                 reports.Add(new EmployeeReport
                 {
+                    ID = log.Id,
                     EmployeeName = log.Employee.FullName,
                     RecordCode = log.RecordCode,
                     BeforeNumber = log.BeforeNumber.ToString(),
-                    Amount = (log.AfterNumber - log.BeforeNumber).ToString(),
-                    AfterNumber = log.AfterNumber.ToString(),
+                    Amount = Global.formatVNDCurrencyText((log.AfterNumber - log.BeforeNumber).ToString()),
+                    AfterNumberText = Global.formatVNDCurrencyText(log.AfterNumber.ToString()),
+                    AfterNumber = log.AfterNumber,
                     CreatedDate = log.CreatedDate,
                     Index = ++index
                 });

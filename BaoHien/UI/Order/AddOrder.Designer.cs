@@ -31,6 +31,10 @@ namespace BaoHien.UI
         {
             this.components = new System.ComponentModel.Container();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.txtReason = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.txtWare = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
             this.txtDiscount = new JRINCCustomControls.currencyTextBox(this.components);
             this.txtVAT = new JRINCCustomControls.currencyTextBox(this.components);
             this.txtNote = new System.Windows.Forms.TextBox();
@@ -61,6 +65,10 @@ namespace BaoHien.UI
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.txtReason);
+            this.groupBox1.Controls.Add(this.label6);
+            this.groupBox1.Controls.Add(this.txtWare);
+            this.groupBox1.Controls.Add(this.label5);
             this.groupBox1.Controls.Add(this.txtDiscount);
             this.groupBox1.Controls.Add(this.txtVAT);
             this.groupBox1.Controls.Add(this.txtNote);
@@ -75,20 +83,52 @@ namespace BaoHien.UI
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(716, 197);
+            this.groupBox1.Size = new System.Drawing.Size(798, 242);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Thông tin phiếu bán hàng";
+            // 
+            // txtReason
+            // 
+            this.txtReason.Location = new System.Drawing.Point(111, 116);
+            this.txtReason.Name = "txtReason";
+            this.txtReason.Size = new System.Drawing.Size(655, 20);
+            this.txtReason.TabIndex = 6;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(20, 119);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(80, 13);
+            this.label6.TabIndex = 18;
+            this.label6.Text = "Lý do xuất kho:";
+            // 
+            // txtWare
+            // 
+            this.txtWare.Location = new System.Drawing.Point(529, 79);
+            this.txtWare.Name = "txtWare";
+            this.txtWare.Size = new System.Drawing.Size(237, 20);
+            this.txtWare.TabIndex = 5;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(419, 82);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(56, 13);
+            this.label5.TabIndex = 16;
+            this.label5.Text = "Kho hàng:";
             // 
             // txtDiscount
             // 
             this.txtDiscount.DecimalPlaces = 0;
             this.txtDiscount.DecimalsSeparator = ',';
-            this.txtDiscount.Location = new System.Drawing.Point(481, 48);
+            this.txtDiscount.Location = new System.Drawing.Point(529, 48);
             this.txtDiscount.Name = "txtDiscount";
             this.txtDiscount.PreFix = "(VND) ";
-            this.txtDiscount.Size = new System.Drawing.Size(221, 20);
-            this.txtDiscount.TabIndex = 14;
+            this.txtDiscount.Size = new System.Drawing.Size(237, 20);
+            this.txtDiscount.TabIndex = 3;
             this.txtDiscount.ThousandsSeparator = '.';
             this.txtDiscount.Leave += new System.EventHandler(this.txtDiscount_Leave);
             // 
@@ -96,26 +136,26 @@ namespace BaoHien.UI
             // 
             this.txtVAT.DecimalPlaces = 0;
             this.txtVAT.DecimalsSeparator = ',';
-            this.txtVAT.Location = new System.Drawing.Point(94, 48);
+            this.txtVAT.Location = new System.Drawing.Point(111, 48);
             this.txtVAT.Name = "txtVAT";
             this.txtVAT.PreFix = "(VND) ";
-            this.txtVAT.Size = new System.Drawing.Size(186, 20);
-            this.txtVAT.TabIndex = 13;
+            this.txtVAT.Size = new System.Drawing.Size(197, 20);
+            this.txtVAT.TabIndex = 2;
             this.txtVAT.ThousandsSeparator = '.';
             this.txtVAT.Leave += new System.EventHandler(this.txtVAT_Leave);
             // 
             // txtNote
             // 
-            this.txtNote.Location = new System.Drawing.Point(94, 110);
+            this.txtNote.Location = new System.Drawing.Point(111, 155);
             this.txtNote.Multiline = true;
             this.txtNote.Name = "txtNote";
-            this.txtNote.Size = new System.Drawing.Size(608, 81);
-            this.txtNote.TabIndex = 5;
+            this.txtNote.Size = new System.Drawing.Size(655, 81);
+            this.txtNote.TabIndex = 7;
             // 
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(28, 110);
+            this.label8.Location = new System.Drawing.Point(20, 155);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(47, 13);
             this.label8.TabIndex = 12;
@@ -124,15 +164,15 @@ namespace BaoHien.UI
             // txtCreatedDate
             // 
             this.txtCreatedDate.Enabled = false;
-            this.txtCreatedDate.Location = new System.Drawing.Point(94, 79);
+            this.txtCreatedDate.Location = new System.Drawing.Point(111, 79);
             this.txtCreatedDate.Name = "txtCreatedDate";
-            this.txtCreatedDate.Size = new System.Drawing.Size(186, 20);
+            this.txtCreatedDate.Size = new System.Drawing.Size(197, 20);
             this.txtCreatedDate.TabIndex = 4;
             // 
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(23, 82);
+            this.label7.Location = new System.Drawing.Point(20, 82);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(52, 13);
             this.label7.TabIndex = 10;
@@ -141,7 +181,7 @@ namespace BaoHien.UI
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(403, 51);
+            this.label4.Location = new System.Drawing.Point(419, 51);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(52, 13);
             this.label4.TabIndex = 6;
@@ -150,7 +190,7 @@ namespace BaoHien.UI
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(47, 51);
+            this.label3.Location = new System.Drawing.Point(23, 51);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(31, 13);
             this.label3.TabIndex = 4;
@@ -159,16 +199,16 @@ namespace BaoHien.UI
             // cbxCustomer
             // 
             this.cbxCustomer.FormattingEnabled = true;
-            this.cbxCustomer.Location = new System.Drawing.Point(481, 20);
+            this.cbxCustomer.Location = new System.Drawing.Point(529, 20);
             this.cbxCustomer.Name = "cbxCustomer";
-            this.cbxCustomer.Size = new System.Drawing.Size(221, 21);
+            this.cbxCustomer.Size = new System.Drawing.Size(237, 21);
             this.cbxCustomer.TabIndex = 1;
             this.validator1.SetType(this.cbxCustomer, Itboy.Components.ValidationType.Required);
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(374, 20);
+            this.label2.Location = new System.Drawing.Point(419, 23);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(81, 13);
             this.label2.TabIndex = 2;
@@ -177,15 +217,15 @@ namespace BaoHien.UI
             // txtOrderCode
             // 
             this.txtOrderCode.Enabled = false;
-            this.txtOrderCode.Location = new System.Drawing.Point(94, 20);
+            this.txtOrderCode.Location = new System.Drawing.Point(111, 20);
             this.txtOrderCode.Name = "txtOrderCode";
-            this.txtOrderCode.Size = new System.Drawing.Size(186, 20);
+            this.txtOrderCode.Size = new System.Drawing.Size(197, 20);
             this.txtOrderCode.TabIndex = 0;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(23, 25);
+            this.label1.Location = new System.Drawing.Point(20, 23);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(55, 13);
             this.label1.TabIndex = 0;
@@ -194,9 +234,9 @@ namespace BaoHien.UI
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.dgwOrderDetails);
-            this.groupBox2.Location = new System.Drawing.Point(13, 216);
+            this.groupBox2.Location = new System.Drawing.Point(13, 260);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(715, 276);
+            this.groupBox2.Size = new System.Drawing.Size(797, 276);
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Chi tiết phiếu bán hàng";
@@ -206,8 +246,8 @@ namespace BaoHien.UI
             this.dgwOrderDetails.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgwOrderDetails.Location = new System.Drawing.Point(7, 20);
             this.dgwOrderDetails.Name = "dgwOrderDetails";
-            this.dgwOrderDetails.Size = new System.Drawing.Size(693, 250);
-            this.dgwOrderDetails.TabIndex = 0;
+            this.dgwOrderDetails.Size = new System.Drawing.Size(784, 250);
+            this.dgwOrderDetails.TabIndex = 8;
             this.dgwOrderDetails.keyPressHook += new System.Windows.Forms.KeyEventHandler(this.dgwOrderDetails_KeyUp);
             this.dgwOrderDetails.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgwOrderDetails_CellEndEdit);
             this.dgwOrderDetails.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgwOrderDetails_CellEnter);
@@ -220,7 +260,7 @@ namespace BaoHien.UI
             this.label9.AutoSize = true;
             this.label9.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label9.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
-            this.label9.Location = new System.Drawing.Point(0, 497);
+            this.label9.Location = new System.Drawing.Point(17, 540);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(380, 14);
             this.label9.TabIndex = 2;
@@ -230,7 +270,7 @@ namespace BaoHien.UI
             // 
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.Location = new System.Drawing.Point(400, 497);
+            this.label10.Location = new System.Drawing.Point(447, 540);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(210, 14);
             this.label10.TabIndex = 3;
@@ -240,7 +280,7 @@ namespace BaoHien.UI
             // 
             this.label11.AutoSize = true;
             this.label11.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label11.Location = new System.Drawing.Point(400, 519);
+            this.label11.Location = new System.Drawing.Point(447, 562);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(201, 14);
             this.label11.TabIndex = 4;
@@ -251,7 +291,7 @@ namespace BaoHien.UI
             this.lblSubTotal.AutoSize = true;
             this.lblSubTotal.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblSubTotal.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
-            this.lblSubTotal.Location = new System.Drawing.Point(616, 496);
+            this.lblSubTotal.Location = new System.Drawing.Point(663, 539);
             this.lblSubTotal.Name = "lblSubTotal";
             this.lblSubTotal.Size = new System.Drawing.Size(14, 15);
             this.lblSubTotal.TabIndex = 5;
@@ -262,7 +302,7 @@ namespace BaoHien.UI
             this.lblGrantTotal.AutoSize = true;
             this.lblGrantTotal.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblGrantTotal.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
-            this.lblGrantTotal.Location = new System.Drawing.Point(616, 518);
+            this.lblGrantTotal.Location = new System.Drawing.Point(663, 561);
             this.lblGrantTotal.Name = "lblGrantTotal";
             this.lblGrantTotal.Size = new System.Drawing.Size(14, 15);
             this.lblGrantTotal.TabIndex = 6;
@@ -271,30 +311,30 @@ namespace BaoHien.UI
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(476, 538);
+            this.btnCancel.Location = new System.Drawing.Point(548, 581);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
-            this.btnCancel.TabIndex = 5;
+            this.btnCancel.TabIndex = 9;
             this.btnCancel.Text = "Hủy";
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(657, 538);
+            this.btnSave.Location = new System.Drawing.Point(729, 581);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
-            this.btnSave.TabIndex = 2;
+            this.btnSave.TabIndex = 11;
             this.btnSave.Text = "Lưu";
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
             // btnPrintOrder
             // 
-            this.btnPrintOrder.Location = new System.Drawing.Point(557, 538);
+            this.btnPrintOrder.Location = new System.Drawing.Point(629, 581);
             this.btnPrintOrder.Name = "btnPrintOrder";
             this.btnPrintOrder.Size = new System.Drawing.Size(94, 23);
-            this.btnPrintOrder.TabIndex = 4;
+            this.btnPrintOrder.TabIndex = 10;
             this.btnPrintOrder.Text = "Xuất phiếu";
             this.btnPrintOrder.UseVisualStyleBackColor = true;
             this.btnPrintOrder.Click += new System.EventHandler(this.btnPrintOrder_Click);
@@ -309,7 +349,7 @@ namespace BaoHien.UI
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(740, 573);
+            this.ClientSize = new System.Drawing.Size(822, 616);
             this.Controls.Add(this.btnPrintOrder);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.btnCancel);
@@ -359,5 +399,9 @@ namespace BaoHien.UI
         private Itboy.Components.Validator validator1;
         private JRINCCustomControls.currencyTextBox txtDiscount;
         private JRINCCustomControls.currencyTextBox txtVAT;
+        private System.Windows.Forms.TextBox txtReason;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.TextBox txtWare;
+        private System.Windows.Forms.Label label5;
     }
 }

@@ -37,6 +37,8 @@
             this.dtpFrom = new System.Windows.Forms.DateTimePicker();
             this.label1 = new System.Windows.Forms.Label();
             this.dgwStockEntranceList = new System.Windows.Forms.DataGridView();
+            this.label3 = new System.Windows.Forms.Label();
+            this.lbTotal = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgwStockEntranceList)).BeginInit();
             this.SuspendLayout();
@@ -122,16 +124,39 @@
             // dgwStockEntranceList
             // 
             this.dgwStockEntranceList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgwStockEntranceList.Location = new System.Drawing.Point(19, 103);
+            this.dgwStockEntranceList.Location = new System.Drawing.Point(19, 123);
             this.dgwStockEntranceList.Name = "dgwStockEntranceList";
-            this.dgwStockEntranceList.Size = new System.Drawing.Size(1053, 518);
+            this.dgwStockEntranceList.Size = new System.Drawing.Size(1053, 498);
             this.dgwStockEntranceList.TabIndex = 21;
             this.dgwStockEntranceList.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgwStockEntranceList_CellDoubleClick);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(16, 94);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(53, 13);
+            this.label3.TabIndex = 22;
+            this.label3.Text = "Tổng nợ :";
+            // 
+            // lbTotal
+            // 
+            this.lbTotal.AutoSize = true;
+            this.lbTotal.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbTotal.ForeColor = System.Drawing.Color.Blue;
+            this.lbTotal.Location = new System.Drawing.Point(88, 94);
+            this.lbTotal.Name = "lbTotal";
+            this.lbTotal.Size = new System.Drawing.Size(52, 13);
+            this.lbTotal.TabIndex = 23;
+            this.lbTotal.Text = "(VND) 0";
             // 
             // ArrearReport
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.lbTotal);
+            this.Controls.Add(this.label3);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.dgwStockEntranceList);
             this.Name = "ArrearReport";
@@ -140,6 +165,7 @@
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgwStockEntranceList)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -154,5 +180,7 @@
         private System.Windows.Forms.DataGridView dgwStockEntranceList;
         private System.Windows.Forms.DateTimePicker dtpTo;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label lbTotal;
     }
 }

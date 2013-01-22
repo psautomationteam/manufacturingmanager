@@ -227,6 +227,8 @@ namespace BaoHien.UI
                             OrderCode = txtOrderCode.Text,
                             CreatedDate = createdDate,
                             CreateBy = userId,
+                            Reason = txtReason.Text,
+                            WareHouse = txtWare.Text,
                             Total = totalWithTax
                         };
                         OrderService orderService = new OrderService();
@@ -356,8 +358,8 @@ namespace BaoHien.UI
 
                 txtVAT.Text = Global.formatVNDCurrencyText(txtVAT.Text);
                 txtDiscount.Text = Global.formatVNDCurrencyText(txtDiscount.Text);
-                lblGrantTotal.Text = Global.formatVNDCurrencyText(order.Total.ToString());
-                //lblSubTotal.Text = Global.formatVNDCurrencyText((order.Total - order
+                txtWare.Text = order.WareHouse;
+                txtReason.Text = order.Reason;
             }
             else
             {
@@ -487,7 +489,7 @@ namespace BaoHien.UI
 
             DataGridViewTextBoxColumn commissionColumn = new DataGridViewTextBoxColumn();
             commissionColumn.Width = 100;
-            commissionColumn.DataPropertyName = "Commision";
+            commissionColumn.DataPropertyName = "Commission";
             commissionColumn.HeaderText = "Hoa hồng";
             //commissionColumn.ValueType = typeof(int);
             dgwOrderDetails.Columns.Add(commissionColumn);
@@ -503,7 +505,7 @@ namespace BaoHien.UI
 
             DataGridViewTextBoxColumn noteColumn = new DataGridViewTextBoxColumn();
             noteColumn.DataPropertyName = "Note";
-            noteColumn.Width = 100;
+            noteColumn.Width = 150;
             noteColumn.HeaderText = "Ghi chú";
             //numberUnitColumn.Frozen = true;
             noteColumn.ValueType = typeof(string);
@@ -567,7 +569,7 @@ namespace BaoHien.UI
         {
             if (dgv.Rows[rowIndex].Cells[UnitCell].Value != null &&
                 dgv.Rows[rowIndex].Cells[NumberUnitCell].Value != null &&
-                (colIndex == UnitCell || colIndex == NumberUnitCell))
+                (colIndex == UnitCell || colIndex == NumberUnitCell || colIndex == ProductAttrCell))
             {
                 ProductLog pl = productLogService.GetNewestProductUnitLog(
                     orderDetails[rowIndex].ProductId,
@@ -577,6 +579,7 @@ namespace BaoHien.UI
                 {
                     MessageBox.Show("Sản phẩm với đơn vị tính này hiện chưa có trong kho.");
                     dgv.Rows[rowIndex].Cells[NumberUnitCell].Value = 0;
+                    orderDetails[rowIndex].NumberUnit = 0;
                 }
                 else
                 {
@@ -584,11 +587,13 @@ namespace BaoHien.UI
                     {
                         MessageBox.Show("Số lượng sản phẩm trong kho đã hết.");
                         dgv.Rows[rowIndex].Cells[NumberUnitCell].Value = 0;
+                        orderDetails[rowIndex].NumberUnit = 0;
                     }
                     else if (pl.AfterNumber < (int)dgv.Rows[rowIndex].Cells[NumberUnitCell].Value)
                     {
                         MessageBox.Show("Số lượng sản phẩm trong kho còn lại là : " + pl.AfterNumber);
                         dgv.Rows[rowIndex].Cells[NumberUnitCell].Value = pl.AfterNumber;
+                        orderDetails[rowIndex].NumberUnit = (int)pl.AfterNumber;
                     }
                     else
                     {
@@ -620,13 +625,15 @@ namespace BaoHien.UI
             {
                 double vat = 0.0;
                 double discount = 0.0;
-                string tVAT = string.IsNullOrEmpty(txtVAT.WorkingText) ? txtVAT.Text : txtVAT.WorkingText;
-                string tDiscount = string.IsNullOrEmpty(txtDiscount.WorkingText) ? txtDiscount.Text : txtDiscount.WorkingText;
+                string tVAT = (order != null && order.VAT != null) ? order.VAT.ToString() : 
+                    string.IsNullOrEmpty(txtVAT.WorkingText) ? txtVAT.Text : txtVAT.WorkingText;
+                string tDiscount = (order != null && order.Discount != null) ? order.Discount.ToString() : 
+                    string.IsNullOrEmpty(txtDiscount.WorkingText) ? txtDiscount.Text : txtDiscount.WorkingText;
                 double.TryParse(tVAT, out vat);
                 double.TryParse(tDiscount, out discount);
                 totalWithTax = totalNoTax + vat - discount;
-                lblSubTotal.Text = Global.formatCurrencyText(totalNoTax.ToString(), "(VND) ", '.', ',');
-                lblGrantTotal.Text = Global.formatCurrencyText(totalWithTax.ToString(), "(VND) ", '.', ',');
+                lblSubTotal.Text = Global.formatVNDCurrencyText(totalNoTax.ToString());
+                lblGrantTotal.Text = Global.formatVNDCurrencyText(totalWithTax.ToString());
             }
         }
 
@@ -756,8 +763,8 @@ namespace BaoHien.UI
             doc.Add(FormatConfig.ParaCommonInfo("Tên khách hàng : ", getCustomerName()));
             doc.Add(FormatConfig.ParaCommonInfo("Địa chỉ : ", getCustomerAddress()));
             doc.Add(FormatConfig.ParaCommonInfo("Điện thoại : ", getCustomerPhone()));
-            doc.Add(FormatConfig.ParaCommonInfo("Lý do xuất kho : ", String.Concat(Enumerable.Repeat("...", 18))));
-            doc.Add(FormatConfig.ParaCommonInfo("Xuất tại kho : ", String.Concat(Enumerable.Repeat("...", 19))));
+            doc.Add(FormatConfig.ParaCommonInfo("Lý do xuất kho : ", txtReason.Text));
+            doc.Add(FormatConfig.ParaCommonInfo("Xuất tại kho : ", txtWare.Text));
 
             PDF.pdf.PdfPTable table = FormatConfig.Table(6, new float[] { 0.5f, 3.5f, 1.5f, 1f, 1f, 2.5f });
             table.AddCell(FormatConfig.TableCellHeader("STT"));
@@ -792,14 +799,20 @@ namespace BaoHien.UI
 
             doc.Add(table);
 
-            doc.Add(FormatConfig.ParaCommonInfo("Ghi chú : ", String.Concat(Enumerable.Repeat("...", 96))));
+            doc.Add(FormatConfig.ParaCommonInfo("Ghi chú : ", string.IsNullOrEmpty(txtNote.Text) ?
+                String.Concat(Enumerable.Repeat("...", 96)) :  txtNote.Text));
 
             DateTime date = DateTime.Now;
             doc.Add(FormatConfig.ParaRightBeforeHeader(string.Format("Ngày {0} tháng {1} năm {2}", date.Day, date.Month, date.Year)));
-            PDF.pdf.PdfPTable table2 = FormatConfig.Table(3, new float[] { 3.5f, 4f, 2.5f });
-            table2.AddCell(FormatConfig.TableCellHeaderCommon("Thủ trưởng đơn vị", PdfPCell.NO_BORDER));
-            table2.AddCell(FormatConfig.TableCellHeaderCommon("Kế toán", PdfPCell.NO_BORDER));
-            table2.AddCell(FormatConfig.TableCellHeaderCommon("Thủ kho", PdfPCell.NO_BORDER));
+            PDF.pdf.PdfPTable table2 = FormatConfig.Table(4, new float[] { 2.5f, 2f, 2f, 3.5f });
+            table2.AddCell(FormatConfig.TableCellHeaderCommon("NGƯỜI LẬP PHIẾU", PdfPCell.NO_BORDER));
+            table2.AddCell(FormatConfig.TableCellHeaderCommon("NGƯỜI NHẬN", PdfPCell.NO_BORDER));
+            table2.AddCell(FormatConfig.TableCellHeaderCommon("NGƯỜI GIAO", PdfPCell.NO_BORDER));
+            table2.AddCell(FormatConfig.TableCellHeaderCommon("THỦ TRƯỞNG ĐƠN VỊ", PdfPCell.NO_BORDER));
+            table2.AddCell(FormatConfig.TableCellBodyCustom("(Ký, họ tên)", PdfPCell.ALIGN_CENTER, FontConfig.SmallItalicFont));
+            table2.AddCell(FormatConfig.TableCellBodyCustom("(Ký, họ tên)", PdfPCell.ALIGN_CENTER, FontConfig.SmallItalicFont));
+            table2.AddCell(FormatConfig.TableCellBodyCustom("(Ký, họ tên)", PdfPCell.ALIGN_CENTER, FontConfig.SmallItalicFont));
+            table2.AddCell(FormatConfig.TableCellBodyCustom("(Ký, họ tên, đóng dấu)", PdfPCell.ALIGN_CENTER, FontConfig.ItalicFont));
             doc.Add(table2);
 
             doc.Close();
@@ -819,8 +832,8 @@ namespace BaoHien.UI
             doc.Add(FormatConfig.ParaCommonInfo("Tên khách hàng : ", getCustomerName()));
             doc.Add(FormatConfig.ParaCommonInfo("Địa chỉ : ", getCustomerAddress()));
             doc.Add(FormatConfig.ParaCommonInfo("Điện thoại : ", getCustomerPhone()));
-            doc.Add(FormatConfig.ParaCommonInfo("Lý do xuất kho : ", String.Concat(Enumerable.Repeat("...", 18))));
-            doc.Add(FormatConfig.ParaCommonInfo("Xuất tại kho : ", String.Concat(Enumerable.Repeat("...", 19))));
+            doc.Add(FormatConfig.ParaCommonInfo("Lý do xuất kho : ", txtReason.Text));
+            doc.Add(FormatConfig.ParaCommonInfo("Xuất tại kho : ", txtWare.Text));
 
             PDF.pdf.PdfPTable table = FormatConfig.Table(7, new float[] { 0.5f, 3f, 1.5f, 1f, 1f, 1.5f, 1.5f });
             table.AddCell(FormatConfig.TableCellHeader("STT"));
@@ -857,17 +870,17 @@ namespace BaoHien.UI
                 }
             }
 
-            table.AddCell(FormatConfig.TableCellBoldBody("VAT", PdfPCell.ALIGN_RIGHT, 4));
+            table.AddCell(FormatConfig.TableCellBoldBody("VAT", PdfPCell.ALIGN_RIGHT, 6));
             table.AddCell(FormatConfig.TableCellBody(
                 Global.convertToCurrency(txtVAT.WorkingText),
                 PdfPCell.ALIGN_RIGHT));
 
-            table.AddCell(FormatConfig.TableCellBoldBody("Khấu chi", PdfPCell.ALIGN_RIGHT, 4));
+            table.AddCell(FormatConfig.TableCellBoldBody("Khấu chi", PdfPCell.ALIGN_RIGHT, 6));
             table.AddCell(FormatConfig.TableCellBody(
                 Global.convertToCurrency(txtDiscount.WorkingText),
                 PdfPCell.ALIGN_RIGHT));
 
-            table.AddCell(FormatConfig.TableCellBoldBody("Tổng", PdfPCell.ALIGN_RIGHT, 4));
+            table.AddCell(FormatConfig.TableCellBoldBody("Tổng", PdfPCell.ALIGN_RIGHT, 6));
             table.AddCell(FormatConfig.TableCellBody(
                 Global.convertToCurrency(totalWithTax.ToString()),
                 PdfPCell.ALIGN_RIGHT));
@@ -875,14 +888,21 @@ namespace BaoHien.UI
             doc.Add(table);
 
             doc.Add(FormatConfig.ParaCommonInfo("Cộng thành tiền (viết bằng chữ) : ", Global.convertCurrencyToText(totalWithTax.ToString())));
-            doc.Add(FormatConfig.ParaCommonInfo("Ghi chú : ", String.Concat(Enumerable.Repeat("...", 96))));
+
+            doc.Add(FormatConfig.ParaCommonInfo("Ghi chú : ", string.IsNullOrEmpty(txtNote.Text) ?
+                String.Concat(Enumerable.Repeat("...", 96)) : txtNote.Text));
 
             DateTime date = DateTime.Now;
             doc.Add(FormatConfig.ParaRightBeforeHeader(string.Format("Ngày {0} tháng {1} năm {2}", date.Day, date.Month, date.Year)));
-            PDF.pdf.PdfPTable table2 = FormatConfig.Table(3, new float[] { 3.5f, 4f, 2.5f });
-            table2.AddCell(FormatConfig.TableCellHeaderCommon("Thủ trưởng đơn vị", PdfPCell.NO_BORDER));
-            table2.AddCell(FormatConfig.TableCellHeaderCommon("Kế toán", PdfPCell.NO_BORDER));
-            table2.AddCell(FormatConfig.TableCellHeaderCommon("Khách hàng", PdfPCell.NO_BORDER));
+            PDF.pdf.PdfPTable table2 = FormatConfig.Table(4, new float[] { 2.5f, 2f, 2f, 3.5f });
+            table2.AddCell(FormatConfig.TableCellHeaderCommon("NGƯỜI LẬP PHIẾU", PdfPCell.NO_BORDER));
+            table2.AddCell(FormatConfig.TableCellHeaderCommon("NGƯỜI NHẬN", PdfPCell.NO_BORDER));
+            table2.AddCell(FormatConfig.TableCellHeaderCommon("NGƯỜI GIAO", PdfPCell.NO_BORDER));
+            table2.AddCell(FormatConfig.TableCellHeaderCommon("THỦ TRƯỞNG ĐƠN VỊ", PdfPCell.NO_BORDER));
+            table2.AddCell(FormatConfig.TableCellBodyCustom("(Ký, họ tên)", PdfPCell.ALIGN_CENTER, FontConfig.SmallItalicFont));
+            table2.AddCell(FormatConfig.TableCellBodyCustom("(Ký, họ tên)", PdfPCell.ALIGN_CENTER, FontConfig.SmallItalicFont));
+            table2.AddCell(FormatConfig.TableCellBodyCustom("(Ký, họ tên)", PdfPCell.ALIGN_CENTER, FontConfig.SmallItalicFont));
+            table2.AddCell(FormatConfig.TableCellBodyCustom("(Ký, họ tên, đóng dấu)", PdfPCell.ALIGN_CENTER, FontConfig.ItalicFont));
             doc.Add(table2);
 
             doc.Close();
@@ -903,6 +923,8 @@ namespace BaoHien.UI
             cbxCustomer.Enabled = false;
             btnSave.Enabled = false;
             dgwOrderDetails.ReadOnly = true;
+            txtWare.Enabled = false;
+            txtReason.Enabled = false;
         }
         
         private void txtDiscount_Leave(object sender, EventArgs e)

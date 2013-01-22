@@ -62,7 +62,7 @@ namespace BaoHien.Common
 
         public static PdfPCell TableCellHeaderCommon(string content, int bolder)
         {
-            PdfPCell cell = new PdfPCell(new Phrase(new Chunk(content, FontConfig.BoldItalicFont)));
+            PdfPCell cell = new PdfPCell(new Phrase(new Chunk(content, FontConfig.BoldFont)));
             cell.Border = bolder;
             cell.HorizontalAlignment = 1;
             return cell;
@@ -72,6 +72,14 @@ namespace BaoHien.Common
         {
             PdfPCell cell = new PdfPCell(new Phrase(new Chunk(content, FontConfig.NormalFont)));
             cell.HorizontalAlignment = format;
+            return cell;
+        }
+
+        public static PdfPCell TableCellBodyCustom(string content, int format, Font font)
+        {
+            PdfPCell cell = new PdfPCell(new Phrase(new Chunk(content, font)));
+            cell.HorizontalAlignment = format;
+            cell.Border = PdfPCell.NO_BORDER;
             return cell;
         }
 
