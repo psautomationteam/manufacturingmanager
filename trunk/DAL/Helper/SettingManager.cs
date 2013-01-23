@@ -10,42 +10,31 @@ namespace DAL.Helper
 {
     public class SettingManager
     {
-        //public static string INSTANCE = "\\sqlexpress";
-        public static string INSTANCE = "";
-
-        public void UpdateSetting(string keyName, string keyValue)
+        public static void CheckRegistry()
         {
-            XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.Load(AppDomain.CurrentDomain.SetupInformation.ConfigurationFile);
-            foreach (XmlElement xmlElement in xmlDoc.DocumentElement)
-            {
-                if (xmlElement.Name == "appSettings")
-                {
-                    foreach (XmlNode xmlNode in xmlElement.ChildNodes)
-                    {
-                        if (xmlNode.Name == keyName)
-                            xmlNode.Value = keyValue;
-                    }
-                }
-            }
+            //RemoveRegistry();
+            ModifyRegistry reg = new ModifyRegistry();
+            if(string.IsNullOrEmpty(reg.Read("DBServerName")))
+                UpdateRegistry(Constant.INIT_IP, Constant.INIT_PORT, Constant.INIT_NETWORK_LIBRARY,
+                    Constant.INIT_DATABASE_NAME, Constant.INIT_USER_ID, Constant.INIT_PW);
         }
 
         public static string BuildStringConnection()
-        {            
+        {
+            ModifyRegistry reg = new ModifyRegistry();
             SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
 
-            builder.NetworkLibrary = ConnectionString.NetworkLibrary;
-            builder.DataSource = ConnectionString.DBServerName + "," + ConnectionString.Port;
+            builder.NetworkLibrary = reg.Read("NetworkLibrary");
+            builder.DataSource = reg.Read("DBServerName") + "," + reg.Read("Port");
             builder.IntegratedSecurity = true;
-            builder.InitialCatalog = ConnectionString.DatabaseName;
-            if (!string.IsNullOrEmpty(ConnectionString.DatabaseUserID) && !string.IsNullOrEmpty(ConnectionString.DatabasePwd))
+            builder.InitialCatalog = reg.Read("DatabaseName");
+            if (!string.IsNullOrEmpty(reg.Read("DatabaseUserID")) && 
+                !string.IsNullOrEmpty(reg.Read("DatabasePwd")))
             {
-                builder.UserID = ConnectionString.DatabaseUserID;
-                builder.Password = ConnectionString.DatabasePwd;
+                builder.UserID = reg.Read("DatabaseUserID");
+                builder.Password = reg.Read("DatabasePwd");
             }
             builder.Pooling = false;
-            
-            //builder.
             Console.WriteLine(builder.ConnectionString);
             return builder.ConnectionString;
         }
@@ -53,7 +42,6 @@ namespace DAL.Helper
         public static string BuildStringConnectionForTest(string DBServerName, string Port, string NetworkLibrary,
             string DatabaseName, string DatabaseUserID, string DatabasePwd)
         {
-
             SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
 
             builder.NetworkLibrary = NetworkLibrary;
@@ -66,39 +54,44 @@ namespace DAL.Helper
                 builder.Password = DatabasePwd;
             }
             builder.Pooling = false;
-
-            //builder.
             Console.WriteLine(builder.ConnectionString);
             return builder.ConnectionString;
         }
 
-        public static void UpdateSetting(string DBServerName, string Port, string NetworkLibrary,
+        public static void UpdateRegistry(string DBServerName, string Port, string NetworkLibrary,
             string DatabaseName, string DatabaseUserID, string DatabasePwd)
         {
+            ModifyRegistry reg = new ModifyRegistry();
             if (DBServerName != null)
             {
-                ConnectionString.DBServerName = DBServerName;
+                reg.Write("DBServerName", DBServerName);
             }
-            if (Port != null)
+            if (DBServerName != null)
             {
-                ConnectionString.Port = Port;
+                reg.Write("Port", Port);
             }
-            if (NetworkLibrary != null)
+            if (DBServerName != null)
             {
-                ConnectionString.NetworkLibrary = NetworkLibrary;
+                reg.Write("NetworkLibrary", NetworkLibrary);
             }
-            if (DatabaseName != null)
+            if (DBServerName != null)
             {
-                ConnectionString.DatabaseName = DatabaseName;
+                reg.Write("DatabaseName", DatabaseName);
             }
-            if (DatabaseUserID != null)
+            if (DBServerName != null)
             {
-                ConnectionString.DatabaseUserID = DatabaseUserID;
+                reg.Write("DatabaseUserID", DatabaseUserID);
             }
-            if (DatabasePwd != null)
+            if (DBServerName != null)
             {
-                ConnectionString.DatabasePwd = DatabasePwd;
+                reg.Write("DatabasePwd", DatabasePwd);
             }
+        }
+
+        private static void RemoveRegistry()
+        {
+            ModifyRegistry reg = new ModifyRegistry();
+            reg.DeleteSubKeyTree();
         }
     }
 }

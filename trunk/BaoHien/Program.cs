@@ -19,10 +19,9 @@ namespace Com.Baohien
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            
+            SettingManager.CheckRegistry();
             if (!BaoHienRepository.testCurrentDBConnection())
-            {
-                
+            {                
                 Application.Run(new DBConfiguration());
             }
             else
