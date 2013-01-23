@@ -38,40 +38,28 @@ namespace BaoHien.UI
                 txtUsername.Text, txtPass.Text))
             {
 
-                SettingManager.UpdateSetting(txtIP.Text, txtPort.Text, txtNet.Text, txtDataName.Text,
+                SettingManager.UpdateRegistry(txtIP.Text, txtPort.Text, txtNet.Text, txtDataName.Text,
                     txtUsername.Text, txtPass.Text);
                 BaoHienRepository.ResetDBDataContext();
                 MessageBox.Show("Cơ sở dữ liệu đã được chuyển");
                 this.Hide();
-                if (Global.CurrentUser == null)
+                SystemUser user = Global.CurrentUser;
+                if (user != null)
                 {
-                    MessageBox.Show("Cơ sở dữ liệu đã được chuyển");
-                    SettingManager.UpdateSetting(txtIP.Text, txtPort.Text, txtNet.Text, txtDataName.Text,
-                        txtUsername.Text, txtPass.Text);
-                    
-                    //Application.Run(new Login());
+                    SystemUserService systemUserService = new SystemUserService();
+                    user = systemUserService.GetSystemUsers().Single(u => (u.username == Global.CurrentUser.username) && (u.password == Global.CurrentUser.password));
+                }
+                if (user == null)
+                {
                     Login frmLogin = new Login();
                     frmLogin.ShowDialog();
                 }
                 else
                 {
-                    SystemUserService systemUserService = new SystemUserService();
-                    SystemUser user = systemUserService.GetSystemUsers().Single(u => (u.username == Global.CurrentUser.username) && (u.password == Global.CurrentUser.password));
-                    if (user == null)
-                    {
-                        MessageBox.Show("Cần đăng nhập lại!");                        
-                        //Application.Run(new Login());
-                        Login frmLogin = new Login();
-                        frmLogin.ShowDialog();                        
-                    }
-                    else
-                    {
-                        Global.CurrentUser = user;                        
-                    }
+                    Global.CurrentUser = user;
                 }
 
-                this.Close();
-               
+                this.Close();               
             }
             else
             {
