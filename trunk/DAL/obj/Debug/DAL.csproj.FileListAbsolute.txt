@@ -22,3 +22,9 @@ D:\Pikait\Work\BaoHien\DAL\bin\Debug\DAL.pdb
 D:\Pikait\Work\BaoHien\DAL\obj\Debug\ResolveAssemblyReference.cache
 D:\Pikait\Work\BaoHien\DAL\obj\Debug\DAL.dll
 D:\Pikait\Work\BaoHien\DAL\obj\Debug\DAL.pdb
+D:\Work\BaoHien\DAL\bin\Debug\DAL.dll.config
+D:\Work\BaoHien\DAL\bin\Debug\DAL.dll
+D:\Work\BaoHien\DAL\bin\Debug\DAL.pdb
+D:\Work\BaoHien\DAL\obj\Debug\ResolveAssemblyReference.cache
+D:\Work\BaoHien\DAL\obj\Debug\DAL.dll
+D:\Work\BaoHien\DAL\obj\Debug\DAL.pdb
