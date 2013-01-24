@@ -14,11 +14,11 @@ namespace DAL.Helper
         public const byte DEACTIVE_PROPERTY_VALUE = 2;
 
         // FOR DB CONFIG
-        public const string INIT_IP = "192.168.29.100";
+        public const string INIT_IP = "127.0.0.1";
         public const string INIT_PORT = "1433";
         public const string INIT_NETWORK_LIBRARY = "DBMSSOCN";
         public const string INIT_DATABASE_NAME = "BaoHienCompany";
-        public const string INIT_USER_ID = "";
-        public const string INIT_PW = "";
+        public const string INIT_USER_ID = "sa";
+        public const string INIT_PW = "123456";
     }
 }
