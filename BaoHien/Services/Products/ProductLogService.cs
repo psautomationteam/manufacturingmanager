@@ -163,7 +163,8 @@ namespace BaoHien.Services.ProductLogs
             using (BaoHienDBDataContext context = new BaoHienDBDataContext(SettingManager.BuildStringConnection()))
             {
                 List<ProductLog> logs = context.ProductLogs.Where(p => p.ProductId == productId && p.AttributeId == attrId &&
-                    p.UnitId == unitId && p.CreatedDate >= from && p.CreatedDate <= to).ToList();
+                    p.UnitId == unitId && p.CreatedDate >= from && p.CreatedDate <= to)
+                    .OrderByDescending(p => p.CreatedDate).ToList();
                 ConvertLogToReportDetail(logs, ref result);
             }
             return result;
@@ -175,7 +176,7 @@ namespace BaoHien.Services.ProductLogs
             using (BaoHienDBDataContext context = new BaoHienDBDataContext(SettingManager.BuildStringConnection()))
             {
                 List<ProductLog> logs = context.ProductLogs.Where(p => p.ProductId == productId && p.AttributeId == attrId &&
-                    p.CreatedDate >= from && p.CreatedDate <= to)
+                    p.CreatedDate >= from && p.CreatedDate <= to).OrderByDescending(p => p.CreatedDate)
                     .GroupBy(p => p.UnitId).Select(p => p.First()).ToList();
                 ConvertLogToReport(logs, ref result);
             }
