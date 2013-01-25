@@ -35,7 +35,6 @@
             this.label3 = new System.Windows.Forms.Label();
             this.txtIP = new System.Windows.Forms.TextBox();
             this.txtUsername = new System.Windows.Forms.TextBox();
-            this.txtPass = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.txtPort = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
@@ -43,6 +42,7 @@
             this.txtNet = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
+            this.txtPass = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // btnSave
@@ -50,7 +50,7 @@
             this.btnSave.Location = new System.Drawing.Point(251, 183);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
-            this.btnSave.TabIndex = 4;
+            this.btnSave.TabIndex = 8;
             this.btnSave.Text = "Lưu";
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
@@ -61,7 +61,7 @@
             this.btnCancel.Location = new System.Drawing.Point(168, 183);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
-            this.btnCancel.TabIndex = 5;
+            this.btnCancel.TabIndex = 7;
             this.btnCancel.Text = "Hủy";
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
@@ -105,21 +105,14 @@
             this.txtUsername.Location = new System.Drawing.Point(122, 120);
             this.txtUsername.Name = "txtUsername";
             this.txtUsername.Size = new System.Drawing.Size(204, 20);
-            this.txtUsername.TabIndex = 1;
-            // 
-            // txtPass
-            // 
-            this.txtPass.Location = new System.Drawing.Point(122, 146);
-            this.txtPass.Name = "txtPass";
-            this.txtPass.Size = new System.Drawing.Size(204, 20);
-            this.txtPass.TabIndex = 2;
+            this.txtUsername.TabIndex = 4;
             // 
             // button1
             // 
             this.button1.Location = new System.Drawing.Point(83, 183);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 3;
+            this.button1.TabIndex = 6;
             this.button1.Text = "Kiểm tra";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
@@ -129,7 +122,7 @@
             this.txtPort.Location = new System.Drawing.Point(122, 42);
             this.txtPort.Name = "txtPort";
             this.txtPort.Size = new System.Drawing.Size(204, 20);
-            this.txtPort.TabIndex = 8;
+            this.txtPort.TabIndex = 1;
             // 
             // label5
             // 
@@ -145,14 +138,14 @@
             this.txtDataName.Location = new System.Drawing.Point(122, 94);
             this.txtDataName.Name = "txtDataName";
             this.txtDataName.Size = new System.Drawing.Size(204, 20);
-            this.txtDataName.TabIndex = 11;
+            this.txtDataName.TabIndex = 3;
             // 
             // txtNet
             // 
             this.txtNet.Location = new System.Drawing.Point(122, 68);
             this.txtNet.Name = "txtNet";
             this.txtNet.Size = new System.Drawing.Size(204, 20);
-            this.txtNet.TabIndex = 10;
+            this.txtNet.TabIndex = 2;
             // 
             // label4
             // 
@@ -171,6 +164,14 @@
             this.label6.Size = new System.Drawing.Size(84, 13);
             this.label6.TabIndex = 12;
             this.label6.Text = "Network Library:";
+            // 
+            // txtPass
+            // 
+            this.txtPass.Location = new System.Drawing.Point(122, 146);
+            this.txtPass.Name = "txtPass";
+            this.txtPass.PasswordChar = '*';
+            this.txtPass.Size = new System.Drawing.Size(204, 20);
+            this.txtPass.TabIndex = 5;
             // 
             // DBConfiguration
             // 
@@ -211,7 +212,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox txtIP;
         private System.Windows.Forms.TextBox txtUsername;
-        private System.Windows.Forms.TextBox txtPass;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.TextBox txtPort;
         private System.Windows.Forms.Label label5;
@@ -219,5 +219,6 @@
         private System.Windows.Forms.TextBox txtNet;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.TextBox txtPass;
     }
 }

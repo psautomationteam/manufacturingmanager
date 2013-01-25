@@ -59,7 +59,7 @@ namespace BaoHien.UI
         private bool saveData()
         {
             calculateTotal();
-            if (validator1.Validate())
+            if (validator1.Validate() && ValidateData())
             {
                 DialogResult dialogResult = Preview();//MessageBox.Show("Bạn sẽ không thể chỉnh sửa sau khi lưu!Bạn muốn lưu?", "Xác nhận", MessageBoxButtons.YesNo);
                 if (dialogResult == DialogResult.OK)
@@ -580,6 +580,8 @@ namespace BaoHien.UI
                 {
                     MessageBox.Show("Sản phẩm với đơn vị tính này hiện chưa có trong kho.");
                     dgv.Rows[rowIndex].Cells[NumberUnitCell].Value = 0;
+
+                    orderDetails[rowIndex].UnitId = (int)dgv.Rows[rowIndex].Cells[UnitCell].Value;
                     orderDetails[rowIndex].NumberUnit = 0;
                 }
                 else
@@ -588,12 +590,16 @@ namespace BaoHien.UI
                     {
                         MessageBox.Show("Số lượng sản phẩm trong kho đã hết.");
                         dgv.Rows[rowIndex].Cells[NumberUnitCell].Value = 0;
+
+                        orderDetails[rowIndex].UnitId = (int)dgv.Rows[rowIndex].Cells[UnitCell].Value;
                         orderDetails[rowIndex].NumberUnit = 0;
                     }
                     else if (pl.AfterNumber < (int)dgv.Rows[rowIndex].Cells[NumberUnitCell].Value)
                     {
                         MessageBox.Show("Số lượng sản phẩm trong kho còn lại là : " + pl.AfterNumber);
                         dgv.Rows[rowIndex].Cells[NumberUnitCell].Value = pl.AfterNumber;
+
+                        orderDetails[rowIndex].UnitId = (int)dgv.Rows[rowIndex].Cells[UnitCell].Value;
                         orderDetails[rowIndex].NumberUnit = (int)pl.AfterNumber;
                     }
                     else
@@ -1046,6 +1052,35 @@ namespace BaoHien.UI
             PrintPreview p = new PrintPreview(BHConstant.SAVE_IN_DIRECTORY + @"\BHang.pdf");
             DialogResult r = p.ShowDialog(this);
             return r;
+        }
+
+        private bool ValidateData()
+        {
+            bool result = true;
+            string message = "";
+            List<string> errors = new List<string>();
+            for (int i = 0; i < orderDetails.Count; i++)
+            {
+                if ((orderDetails[i].ProductId != 0 && orderDetails[i].AttributeId != 0 &&
+                    orderDetails[i].UnitId != 0 && orderDetails[i].NumberUnit > 0) ||
+                    (orderDetails[i].ProductId == 0 && orderDetails[i].AttributeId == 0 &&
+                    orderDetails[i].UnitId == 0))
+                    continue;
+                result = false;
+                message += "- Dòng " + (i + 1) + " thiếu :";
+                if (orderDetails[i].ProductId == 0)
+                    errors.Add(" Sản phẩm");
+                if (orderDetails[i].NumberUnit <= 0)
+                    errors.Add(" Số lượng");
+                if (orderDetails[i].UnitId == 0)
+                    errors.Add(" Đơn vị tính");
+                message += string.Join(",", errors);
+                errors.Clear();
+                message += "\n";
+            }
+            if (!result)
+                MessageBox.Show(message, "Lỗi hóa đơn", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            return result;
         }
     }
 }

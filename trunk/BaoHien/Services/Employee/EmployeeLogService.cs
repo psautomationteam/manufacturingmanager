@@ -65,7 +65,8 @@ namespace BaoHien.Services.Employees
             using (BaoHienDBDataContext context = new BaoHienDBDataContext(SettingManager.BuildStringConnection()))
             {
                 result = context.EmployeeLogs
-                    .Where(c => c.EmployeeId == employeeId && c.CreatedDate >= from && c.CreatedDate <= to).ToList();
+                    .Where(c => c.EmployeeId == employeeId && c.CreatedDate >= from && c.CreatedDate <= to)
+                    .OrderByDescending(c => c.CreatedDate).ToList();
             }
             return result;
         }
@@ -88,7 +89,8 @@ namespace BaoHien.Services.Employees
             using (BaoHienDBDataContext context = new BaoHienDBDataContext(SettingManager.BuildStringConnection()))
             {
                 List<EmployeeLog> logs = context.EmployeeLogs
-                    .Where(c => c.EmployeeId == employeeId && c.CreatedDate >= from && c.CreatedDate <= to).ToList();
+                    .Where(c => c.EmployeeId == employeeId && c.CreatedDate >= from && c.CreatedDate <= to)
+                    .OrderByDescending(c => c.CreatedDate).ToList();
                 ConvertEmployeeLogsToReports(logs, ref result);
             }
             return result;
