@@ -7,6 +7,7 @@ using DAL;
 using BaoHien.Properties;
 using System.Globalization;
 using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace BaoHien.Common
 {
@@ -199,7 +200,12 @@ namespace BaoHien.Common
             if (len == 1)
                 if (number[0] == '0' || number[0] == '5') return cs[(int)number[0] - 48];
 
-            return doc;
+            return doc + " đồng";
+        }
+
+        public static bool isAdmin()
+        {
+            return (CurrentUser.Type == BHConstant.USER_TYPE_ID1) ? true : false;
         }
     }
 }

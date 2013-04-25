@@ -7,6 +7,7 @@ using DAL;
 using DAL.Helper;
 using BaoHien.Model;
 using BaoHien.Common;
+using System.Linq.Expressions;
 
 namespace BaoHien.Services.Employees
 {
@@ -127,6 +128,11 @@ namespace BaoHien.Services.Employees
                     Index = ++index
                 });
             }
+        }
+
+        public List<EmployeeLog> SelectEmployeeLogByWhere(Expression<Func<EmployeeLog, bool>> func)
+        {
+            return SelectItemByWhere<EmployeeLog>(func);
         }
     }
 }

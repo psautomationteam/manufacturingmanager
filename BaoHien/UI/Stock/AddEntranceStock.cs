@@ -289,7 +289,7 @@ namespace BaoHien.UI
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            if (this.validator1.Validate())
+            if (this.validator1.Validate() && ValidateData())
             {
                 DateTime createdDate = DateTime.Now;
                 if (!DateTime.TryParse(txtDate.Text, out createdDate))
@@ -504,5 +504,51 @@ namespace BaoHien.UI
             }
             
         }
+
+        private void btnCreateSP_Click(object sender, EventArgs e)
+        {
+            AddProduct frmProduct = new AddProduct();
+            if (frmProduct.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                ProductAttributeService productAttrService = new ProductAttributeService();
+                products = new BindingList<ProductAttributeModel>(productAttrService.GetProductAndAttribute());
+                ((DataGridViewComboBoxColumn)dgvStockEntranceDetails.Columns[0]).DataSource = products;
+            }
+        }
+        
+        private bool ValidateData()
+        {
+            bool result = true;
+            string message = "";
+            List<string> errors = new List<string>();
+            if (entranceStockDetails.Count <= 0)
+            {
+                result = false;
+                message = "- Không có dữ liệu sản phẩm";
+            }
+            for (int i = 0; i < entranceStockDetails.Count; i++)
+            {
+                if ((entranceStockDetails[i].ProductId != 0 && entranceStockDetails[i].AttributeId != 0 &&
+                    entranceStockDetails[i].UnitId != 0 && entranceStockDetails[i].NumberUnit > 0) ||
+                    (entranceStockDetails[i].ProductId == 0 && entranceStockDetails[i].AttributeId == 0 &&
+                    entranceStockDetails[i].UnitId == 0))
+                    continue;
+                result = false;
+                message += "- Dòng " + (i + 1) + " thiếu :";
+                if (entranceStockDetails[i].ProductId == 0)
+                    errors.Add(" Sản phẩm");
+                if (entranceStockDetails[i].NumberUnit <= 0)
+                    errors.Add(" Số lượng");
+                if (entranceStockDetails[i].UnitId == 0)
+                    errors.Add(" Đơn vị tính");
+                message += string.Join(",", errors);
+                errors.Clear();
+                message += "\n";
+            }
+            if (!result)
+                MessageBox.Show(message, "Lỗi nhập kho", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            return result;
+        }
+
     }
 }

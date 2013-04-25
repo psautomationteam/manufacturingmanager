@@ -48,7 +48,7 @@ namespace BaoHien.UI
                 }
                 else
                 {
-                    lblErrorMessage.Text = "(*) Tên đăng nhập không đúng hoặc mật mã sai. Vui long thử lại.";
+                    lblErrorMessage.Text = "(*) Tên đăng nhập không đúng hoặc mật mã sai. Vui lòng thử lại.";
                     txtPassword.Text = "";
                 }
             }

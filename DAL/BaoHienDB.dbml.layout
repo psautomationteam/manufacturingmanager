@@ -20,22 +20,10 @@
         <elementListCompartment Id="2bb6ca01-8bb2-46f7-b6fb-2f18354c348b" absoluteBounds="9.515, 19.21, 1.9700000000000002, 1.5954996744791665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="acc23112-4235-4c48-8aec-27023ee1646f" absoluteBounds="3.75, 19.375, 2, 3.6939111328125023">
-      <DataClassMoniker Name="/BaoHienDBDataContext/Customer" />
-      <nestedChildShapes>
-        <elementListCompartment Id="8c972def-b427-41c3-bf43-895842420a89" absoluteBounds="3.765, 19.835, 1.9700000000000002, 3.1339111328125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
-      </nestedChildShapes>
-    </classShape>
     <classShape Id="c7da0249-8638-4876-94c6-a2b18a7b5646" absoluteBounds="6.5, 22.125, 2, 2.1554996744791666">
       <DataClassMoniker Name="/BaoHienDBDataContext/CustomerLog" />
       <nestedChildShapes>
         <elementListCompartment Id="bbfb71ba-1591-474e-ae98-c600981547d6" absoluteBounds="6.515, 22.585, 1.9700000000000002, 1.5954996744791665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
-      </nestedChildShapes>
-    </classShape>
-    <classShape Id="56d48486-f8e7-49c6-b9a5-d8f821f73fd9" absoluteBounds="1, 19.75, 2, 2.9247054036458309">
-      <DataClassMoniker Name="/BaoHienDBDataContext/Employee" />
-      <nestedChildShapes>
-        <elementListCompartment Id="2d73ca00-d011-45bc-9362-055f6abbc0af" absoluteBounds="1.0150000000000001, 20.21, 1.9700000000000002, 2.364705403645833" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
     <classShape Id="57da95e2-a31e-4f93-97f2-54aaf17b6d7c" absoluteBounds="3.75, 13.625, 2, 2.1554996744791666">
@@ -116,42 +104,14 @@
         <elementListCompartment Id="cda5d2ac-0772-4653-8de5-42eb9e124709" absoluteBounds="0.765, 8.21, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <associationConnector edgePoints="[(5.75 : 17.46875); (8.63541666666667 : 17.46875 : JumpStart); (8.80208333333333 : 17.46875 : JumpEnd); (10.5 : 17.46875); (10.5 : 18.75)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+    <associationConnector edgePoints="[(5.75 : 17.46875); (10.5 : 17.46875); (10.5 : 18.75)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/BaoHienDBDataContext/SystemUser/SystemUser_Bill" />
       <nodes>
         <classShapeMoniker Id="42e6f95f-0d1f-4c19-8799-b075f8be7452" />
         <classShapeMoniker Id="916dbf4d-e707-4527-b801-bdb222edf03a" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(5.75 : 21.8710034179688); (10.5 : 21.8710034179688); (10.5 : 20.9054996744792)]" fixedFrom="Algorithm" fixedTo="Algorithm">
-      <AssociationMoniker Name="/BaoHienDBDataContext/Customer/Customer_Bill" />
-      <nodes>
-        <classShapeMoniker Id="acc23112-4235-4c48-8aec-27023ee1646f" />
-        <classShapeMoniker Id="916dbf4d-e707-4527-b801-bdb222edf03a" />
-      </nodes>
-    </associationConnector>
-    <associationConnector edgePoints="[(5.75 : 22.5969555664063); (6.5 : 22.5969555664063)]" fixedFrom="NotFixed" fixedTo="NotFixed">
-      <AssociationMoniker Name="/BaoHienDBDataContext/Customer/Customer_CustomerLog" />
-      <nodes>
-        <classShapeMoniker Id="acc23112-4235-4c48-8aec-27023ee1646f" />
-        <classShapeMoniker Id="c7da0249-8638-4876-94c6-a2b18a7b5646" />
-      </nodes>
-    </associationConnector>
-    <associationConnector edgePoints="[(3 : 21.2123527018229); (3.75 : 21.2123527018229)]" fixedFrom="NotFixed" fixedTo="NotFixed">
-      <AssociationMoniker Name="/BaoHienDBDataContext/Employee/Employee_Customer" />
-      <nodes>
-        <classShapeMoniker Id="56d48486-f8e7-49c6-b9a5-d8f821f73fd9" />
-        <classShapeMoniker Id="acc23112-4235-4c48-8aec-27023ee1646f" />
-      </nodes>
-    </associationConnector>
-    <associationConnector edgePoints="[(2 : 19.75); (2 : 14.7027498372396); (3.04166666666667 : 14.7027498372396 : JumpStart); (3.20833333333333 : 14.7027498372396 : JumpEnd); (3.41666666666667 : 14.7027498372396 : JumpStart); (3.58333333333333 : 14.7027498372396 : JumpEnd); (3.75 : 14.7027498372396)]" fixedFrom="NotFixed" fixedTo="NotFixed">
-      <AssociationMoniker Name="/BaoHienDBDataContext/Employee/Employee_EmployeeLog" />
-      <nodes>
-        <classShapeMoniker Id="56d48486-f8e7-49c6-b9a5-d8f821f73fd9" />
-        <classShapeMoniker Id="57da95e2-a31e-4f93-97f2-54aaf17b6d7c" />
-      </nodes>
-    </associationConnector>
-    <associationConnector edgePoints="[(3.78473250736178 : 16.625); (3.40973250736178 : 16.25); (3.125 : 16.25); (3.125 : 6.9631982421875); (3.5 : 6.5881982421875)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+    <associationConnector edgePoints="[(4.75 : 16.625); (4.75 : 16.0304996744792); (3.45833333333333 : 16.0304996744792 : JumpStart); (3.29166666666667 : 16.0304996744792 : JumpEnd); (3.25 : 16.0304996744792); (3.25 : 5.60659912109375); (3.5 : 5.60659912109375)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/BaoHienDBDataContext/SystemUser/SystemUser_EntranceStock" />
       <nodes>
         <classShapeMoniker Id="42e6f95f-0d1f-4c19-8799-b075f8be7452" />
@@ -165,14 +125,14 @@
         <classShapeMoniker Id="990758fe-f09f-43ef-beb1-0b7cf4a842b3" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(5.5 : 5.60659912109375); (5.79166666666667 : 5.60659912109375 : JumpStart); (5.95833333333333 : 5.60659912109375 : JumpEnd); (6.25 : 5.60659912109375)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+    <associationConnector edgePoints="[(5.5 : 5.60659912109375); (6.25 : 5.60659912109375)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/BaoHienDBDataContext/EntranceStock/EntranceStock_EntranceStockDetail" />
       <nodes>
         <classShapeMoniker Id="5dcfe8c3-f764-49b2-82f3-12220be2dc41" />
         <classShapeMoniker Id="990758fe-f09f-43ef-beb1-0b7cf4a842b3" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(8.5 : 14.3070712944211); (8.65982443490112 : 14.14724685952 : JumpStart); (8.77767556509888 : 14.0293957293222 : JumpEnd); (9.03125 : 13.7758212944211); (9.03125 : 7.03049967447917); (8.98958333333333 : 7.03049967447917 : JumpStart); (8.63541666666667 : 7.03049967447917 : JumpEnd); (8.625 : 7.03049967447917); (8.46517556509888 : 6.87067523957805 : JumpStart); (8.34732443490112 : 6.75282410938029 : JumpEnd); (8.25 : 6.65549967447917)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+    <associationConnector edgePoints="[(8.5 : 14.3070712944211); (9.03125 : 13.7758212944211); (9.03125 : 7.03049967447917); (8.625 : 7.03049967447917); (8.25 : 6.65549967447917)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/BaoHienDBDataContext/MeasurementUnit/MeasurementUnit_EntranceStockDetail" />
       <nodes>
         <classShapeMoniker Id="6a8f9b7f-8cb9-4811-9ef4-14a9d0eede44" />
@@ -186,7 +146,7 @@
         <classShapeMoniker Id="6d1a1477-da61-433e-9878-18c2c9bcdb4e" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(8.47449961313101 : 14.25); (8.65982443490112 : 14.0646751782299 : JumpStart); (8.77767556509888 : 13.9468240480321 : JumpEnd); (8.875 : 13.849499613131); (8.875 : 4.61620198567708); (9.25 : 4.61620198567708)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+    <associationConnector edgePoints="[(8.47449961313101 : 14.25); (8.875 : 13.849499613131); (8.875 : 4.61620198567708); (9.25 : 4.61620198567708)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/BaoHienDBDataContext/MeasurementUnit/MeasurementUnit_OrderDetail" />
       <nodes>
         <classShapeMoniker Id="6a8f9b7f-8cb9-4811-9ef4-14a9d0eede44" />
@@ -200,7 +160,7 @@
         <classShapeMoniker Id="990758fe-f09f-43ef-beb1-0b7cf4a842b3" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(5.5 : 7.53384515384615); (5.65884515384615 : 7.375); (5.91666666666667 : 7.375 : JumpStart); (6.08333333333333 : 7.375 : JumpEnd); (8.32291666666667 : 7.375 : JumpStart); (8.48958333333333 : 7.375 : JumpEnd); (8.63541666666667 : 7.375 : JumpStart); (9.11458333333333 : 7.375 : JumpEnd); (9.125 : 7.375); (9.125 : 6.10740397135417); (9.25 : 5.98240397135417)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+    <associationConnector edgePoints="[(5.5 : 7.53384515384615); (5.65884515384615 : 7.375); (9.125 : 7.375); (9.125 : 6.10740397135417); (9.25 : 5.98240397135417)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/BaoHienDBDataContext/Product/Product_OrderDetail" />
       <nodes>
         <classShapeMoniker Id="e1518e66-c17d-4ca2-b134-2ff9defb5c54" />
@@ -221,7 +181,7 @@
         <classShapeMoniker Id="d6bff788-3bb1-4055-9854-20c7a62c703b" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(3.75 : 16.6567132023738); (3.5 : 16.4067132023738); (3.5 : 12.5881982421875)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+    <associationConnector edgePoints="[(4.218748 : 16.625); (4.218748 : 16.2804996744792); (3.375 : 16.2804996744792); (3.375 : 11.6065991210937); (3.5 : 11.6065991210937)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/BaoHienDBDataContext/SystemUser/SystemUser_ProductionRequest" />
       <nodes>
         <classShapeMoniker Id="42e6f95f-0d1f-4c19-8799-b075f8be7452" />
@@ -249,35 +209,35 @@
         <classShapeMoniker Id="121a89c4-883f-4218-bd1e-b91ebacd0117" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(5.5 : 11.1025762766927); (5.79166666666667 : 11.1025762766927 : JumpStart); (5.95833333333333 : 11.1025762766927 : JumpEnd); (6.25 : 11.1025762766927)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+    <associationConnector edgePoints="[(5.5 : 11.1025762766927); (6.25 : 11.1025762766927)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/BaoHienDBDataContext/ProductionRequest/ProductionRequest_ProductionRequestDetail" />
       <nodes>
         <classShapeMoniker Id="7eb0e9c1-6156-4475-80bc-3ec5178e69eb" />
         <classShapeMoniker Id="121a89c4-883f-4218-bd1e-b91ebacd0117" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(8.40625 : 3.57859537760417); (8.40625 : 9.6194482421875); (8.63541666666667 : 9.6194482421875 : JumpStart); (9.11458333333333 : 9.6194482421875 : JumpEnd); (9.25 : 9.6194482421875)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+    <associationConnector edgePoints="[(8.40625 : 3.57859537760417); (8.40625 : 9.6194482421875); (8.94791666666667 : 9.6194482421875 : JumpStart); (9.11458333333333 : 9.6194482421875 : JumpEnd); (9.25 : 9.6194482421875)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/BaoHienDBDataContext/BaseAttribute/BaseAttribute_ProductLog" />
       <nodes>
         <classShapeMoniker Id="ebd32566-1df6-46f1-b50e-7c44ade62436" />
         <classShapeMoniker Id="57af6779-3f8c-44ce-a243-8ebc2b82d852" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(8.359375 : 14.25); (8.359375 : 7.5625); (8.63541666666667 : 7.5625 : JumpStart); (9.11458333333333 : 7.5625 : JumpEnd); (9.25 : 7.5625)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+    <associationConnector edgePoints="[(8.359375 : 14.25); (8.359375 : 7.5625); (8.79166666666667 : 7.5625 : JumpStart); (9.11458333333333 : 7.5625 : JumpEnd); (9.25 : 7.5625)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/BaoHienDBDataContext/MeasurementUnit/MeasurementUnit_ProductLog" />
       <nodes>
         <classShapeMoniker Id="6a8f9b7f-8cb9-4811-9ef4-14a9d0eede44" />
         <classShapeMoniker Id="57af6779-3f8c-44ce-a243-8ebc2b82d852" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(5.5 : 9.40912109375); (5.91666666666667 : 9.40912109375 : JumpStart); (6.08333333333333 : 9.40912109375 : JumpEnd); (8.27604166666667 : 9.40912109375 : JumpStart); (8.48958333333333 : 9.40912109375 : JumpEnd); (8.63541666666667 : 9.40912109375 : JumpStart); (9.11458333333333 : 9.40912109375 : JumpEnd); (9.25 : 9.40912109375)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+    <associationConnector edgePoints="[(5.5 : 9.40912109375); (9.25 : 9.40912109375)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/BaoHienDBDataContext/Product/Product_ProductLog" />
       <nodes>
         <classShapeMoniker Id="e1518e66-c17d-4ca2-b134-2ff9defb5c54" />
         <classShapeMoniker Id="57af6779-3f8c-44ce-a243-8ebc2b82d852" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(2.75 : 8.63544840494792); (3.5 : 8.63544840494792)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+    <associationConnector edgePoints="[(2.75 : 8.63544840494792); (3.16666666666667 : 8.63544840494792 : JumpStart); (3.33333333333333 : 8.63544840494792 : JumpEnd); (3.5 : 8.63544840494792)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/BaoHienDBDataContext/ProductType/ProductType_Product" />
       <nodes>
         <classShapeMoniker Id="39253812-bd69-486e-97bc-f13c5eb9b859" />
@@ -290,25 +250,65 @@
         <elementListCompartment Id="38009bc3-99d5-4fdd-a145-2519485e1808" absoluteBounds="7.015, 18.96, 1.9700000000000002, 2.5570068359375" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <associationConnector edgePoints="[(8.71875 : 18.5); (8.71875 : 4.03929768880208); (8.82291666666667 : 4.03929768880208 : JumpStart); (8.98958333333333 : 4.03929768880208 : JumpEnd); (9.25 : 4.03929768880208)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(8.71875 : 18.5); (8.71875 : 4.03929768880208); (9.25 : 4.03929768880208)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/BaoHienDBDataContext/Order/Order_OrderDetail" />
       <nodes>
         <classShapeMoniker Id="9db2757c-a958-4f7a-b743-034f9bf1e408" />
         <classShapeMoniker Id="6d1a1477-da61-433e-9878-18c2c9bcdb4e" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(5.75 : 20.4960034179688); (7 : 20.4960034179688)]" fixedFrom="Algorithm" fixedTo="Algorithm">
-      <AssociationMoniker Name="/BaoHienDBDataContext/Customer/Customer_Order" />
-      <nodes>
-        <classShapeMoniker Id="acc23112-4235-4c48-8aec-27023ee1646f" />
-        <classShapeMoniker Id="9db2757c-a958-4f7a-b743-034f9bf1e408" />
-      </nodes>
-    </associationConnector>
-    <associationConnector edgePoints="[(5.75 : 17.984375); (7.8281225 : 17.984375); (7.8281225 : 18.5)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(5.75 : 17.984375); (7.8281225 : 17.984375); (7.8281225 : 18.5)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/BaoHienDBDataContext/SystemUser/SystemUser_Order" />
       <nodes>
         <classShapeMoniker Id="42e6f95f-0d1f-4c19-8799-b075f8be7452" />
         <classShapeMoniker Id="9db2757c-a958-4f7a-b743-034f9bf1e408" />
+      </nodes>
+    </associationConnector>
+    <classShape Id="f1596fb6-1bee-4d13-8fad-e93ab6c245fb" absoluteBounds="1, 14.25, 2, 2.9247054036458309">
+      <DataClassMoniker Name="/BaoHienDBDataContext/Employee" />
+      <nestedChildShapes>
+        <elementListCompartment Id="b340ae7d-06a5-4570-80a6-014a91aee062" absoluteBounds="1.0150000000000001, 14.71, 1.9700000000000002, 2.364705403645833" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(3 : 15.0152498372396); (3.16666666666667 : 15.0152498372396 : JumpStart); (3.45833333333333 : 15.0152498372396 : JumpEnd); (3.75 : 15.0152498372396)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/BaoHienDBDataContext/Employee/Employee_EmployeeLog" />
+      <nodes>
+        <classShapeMoniker Id="f1596fb6-1bee-4d13-8fad-e93ab6c245fb" />
+        <classShapeMoniker Id="57da95e2-a31e-4f93-97f2-54aaf17b6d7c" />
+      </nodes>
+    </associationConnector>
+    <classShape Id="a4c39467-2fff-40ce-8388-268dc4702908" absoluteBounds="3.375, 19.25, 2, 3.6939111328124996">
+      <DataClassMoniker Name="/BaoHienDBDataContext/Customer" />
+      <nestedChildShapes>
+        <elementListCompartment Id="f3bf82d3-b048-46c8-95ec-593b29861e21" absoluteBounds="3.3899999999999997, 19.71, 1.9700000000000002, 3.1339111328125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(5.375 : 21.8710034179688); (10.5 : 21.8710034179688); (10.5 : 20.9054996744792)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/BaoHienDBDataContext/Customer/Customer_Bill" />
+      <nodes>
+        <classShapeMoniker Id="a4c39467-2fff-40ce-8388-268dc4702908" />
+        <classShapeMoniker Id="916dbf4d-e707-4527-b801-bdb222edf03a" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(5.375 : 22.5344555664063); (6.5 : 22.5344555664063)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/BaoHienDBDataContext/Customer/Customer_CustomerLog" />
+      <nodes>
+        <classShapeMoniker Id="a4c39467-2fff-40ce-8388-268dc4702908" />
+        <classShapeMoniker Id="c7da0249-8638-4876-94c6-a2b18a7b5646" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(5.375 : 20.4335034179688); (7 : 20.4335034179688)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/BaoHienDBDataContext/Customer/Customer_Order" />
+      <nodes>
+        <classShapeMoniker Id="a4c39467-2fff-40ce-8388-268dc4702908" />
+        <classShapeMoniker Id="9db2757c-a958-4f7a-b743-034f9bf1e408" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(2 : 17.1747054036458); (2 : 21.0969555664063); (3.375 : 21.0969555664063)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/BaoHienDBDataContext/Employee/Employee_Customer" />
+      <nodes>
+        <classShapeMoniker Id="f1596fb6-1bee-4d13-8fad-e93ab6c245fb" />
+        <classShapeMoniker Id="a4c39467-2fff-40ce-8388-268dc4702908" />
       </nodes>
     </associationConnector>
   </nestedChildShapes>

@@ -854,6 +854,11 @@ namespace BaoHien.UI
             bool isFirst = true;
             string message = "";
             List<string> errors = new List<string>();
+            if (productionRequestDetailInMaterials.Count <= 0)
+            {
+                result = false;
+                message += "- Không có dữ liệu sản phẩm bên phần nguyên liệu";
+            }
             for (int i = 0; i < productionRequestDetailInMaterials.Count; i++)
             {
                 if ((productionRequestDetailInMaterials[i].ProductId != 0 && productionRequestDetailInMaterials[i].AttributeId != 0 &&
@@ -879,6 +884,11 @@ namespace BaoHien.UI
                 message += "\n";
             }
             isFirst = true;
+            if (productionRequestDetailInProductions.Count <= 0)
+            {
+                result = false;
+                message += "\n- Không có dữ liệu sản phẩm bên phần thành phẩm";
+            }
             for (int i = 0; i < productionRequestDetailInProductions.Count; i++)
             {
                 if ((productionRequestDetailInProductions[i].ProductId != 0 && productionRequestDetailInProductions[i].AttributeId != 0 &&
@@ -906,6 +916,12 @@ namespace BaoHien.UI
             if (!result)
                 MessageBox.Show(message, "Lỗi phiếu sản xuất", MessageBoxButtons.OK, MessageBoxIcon.Error);
             return result;
+        }
+
+        private void btnCreateNK_Click(object sender, EventArgs e)
+        {
+            AddEntranceStock frmStock = new AddEntranceStock();
+            frmStock.ShowDialog();
         }
     }
 }

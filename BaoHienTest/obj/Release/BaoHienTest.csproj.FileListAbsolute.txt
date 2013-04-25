@@ -1,0 +1,14 @@
+D:\Workspace - VS\Bao Hien Project\Source\BaoHienTest\bin\Release\BaoHienTest.dll
+D:\Workspace - VS\Bao Hien Project\Source\BaoHienTest\bin\Release\BaoHienTest.pdb
+D:\Workspace - VS\Bao Hien Project\Source\BaoHienTest\bin\Release\BaoHien.exe
+D:\Workspace - VS\Bao Hien Project\Source\BaoHienTest\bin\Release\DAL.dll
+D:\Workspace - VS\Bao Hien Project\Source\BaoHienTest\bin\Release\itextsharp.dll
+D:\Workspace - VS\Bao Hien Project\Source\BaoHienTest\bin\Release\Validator.dll
+D:\Workspace - VS\Bao Hien Project\Source\BaoHienTest\bin\Release\JRINCCustomControls.dll
+D:\Workspace - VS\Bao Hien Project\Source\BaoHienTest\bin\Release\BaoHien.pdb
+D:\Workspace - VS\Bao Hien Project\Source\BaoHienTest\bin\Release\DAL.pdb
+D:\Workspace - VS\Bao Hien Project\Source\BaoHienTest\bin\Release\Validator.pdb
+D:\Workspace - VS\Bao Hien Project\Source\BaoHienTest\bin\Release\JRINCCustomControls.pdb
+D:\Workspace - VS\Bao Hien Project\Source\BaoHienTest\obj\Release\ResolveAssemblyReference.cache
+D:\Workspace - VS\Bao Hien Project\Source\BaoHienTest\obj\Release\BaoHienTest.dll
+D:\Workspace - VS\Bao Hien Project\Source\BaoHienTest\obj\Release\BaoHienTest.pdb

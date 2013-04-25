@@ -38,7 +38,7 @@ namespace JRINCCustomControls
         public string WorkingText
         {
             get { return _workingText; }
-            private set { _workingText = value; }
+            set { _workingText = value; }
         }
 
         /// <summary>

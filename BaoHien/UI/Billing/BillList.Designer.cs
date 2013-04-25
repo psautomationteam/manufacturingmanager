@@ -71,7 +71,7 @@
             // cmbCustomer
             // 
             this.cmbCustomer.FormattingEnabled = true;
-            this.cmbCustomer.Location = new System.Drawing.Point(734, 47);
+            this.cmbCustomer.Location = new System.Drawing.Point(725, 49);
             this.cmbCustomer.Name = "cmbCustomer";
             this.cmbCustomer.Size = new System.Drawing.Size(187, 21);
             this.cmbCustomer.TabIndex = 4;
@@ -87,7 +87,7 @@
             // 
             // btnSearch
             // 
-            this.btnSearch.Location = new System.Drawing.Point(965, 23);
+            this.btnSearch.Location = new System.Drawing.Point(965, 21);
             this.btnSearch.Name = "btnSearch";
             this.btnSearch.Size = new System.Drawing.Size(75, 49);
             this.btnSearch.TabIndex = 5;

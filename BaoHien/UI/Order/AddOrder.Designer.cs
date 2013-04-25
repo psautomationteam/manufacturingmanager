@@ -31,6 +31,7 @@ namespace BaoHien.UI
         {
             this.components = new System.ComponentModel.Container();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnCreateKH = new System.Windows.Forms.Button();
             this.txtReason = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.txtWare = new System.Windows.Forms.TextBox();
@@ -55,9 +56,11 @@ namespace BaoHien.UI
             this.lblSubTotal = new System.Windows.Forms.Label();
             this.lblGrantTotal = new System.Windows.Forms.Label();
             this.btnCancel = new System.Windows.Forms.Button();
-            this.btnSave = new System.Windows.Forms.Button();
-            this.btnPrintOrder = new System.Windows.Forms.Button();
+            this.btnPrintS = new System.Windows.Forms.Button();
             this.validator1 = new Itboy.Components.Validator(this.components);
+            this.btnCreateNK = new System.Windows.Forms.Button();
+            this.btnCreateSX = new System.Windows.Forms.Button();
+            this.btnPrint = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgwOrderDetails)).BeginInit();
@@ -65,6 +68,7 @@ namespace BaoHien.UI
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.btnCreateKH);
             this.groupBox1.Controls.Add(this.txtReason);
             this.groupBox1.Controls.Add(this.label6);
             this.groupBox1.Controls.Add(this.txtWare);
@@ -87,6 +91,16 @@ namespace BaoHien.UI
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Thông tin phiếu bán hàng";
+            // 
+            // btnCreateKH
+            // 
+            this.btnCreateKH.Location = new System.Drawing.Point(742, 20);
+            this.btnCreateKH.Name = "btnCreateKH";
+            this.btnCreateKH.Size = new System.Drawing.Size(24, 22);
+            this.btnCreateKH.TabIndex = 19;
+            this.btnCreateKH.Text = "+";
+            this.btnCreateKH.UseVisualStyleBackColor = true;
+            this.btnCreateKH.Click += new System.EventHandler(this.btnCreateKH_Click);
             // 
             // txtReason
             // 
@@ -130,6 +144,7 @@ namespace BaoHien.UI
             this.txtDiscount.Size = new System.Drawing.Size(237, 20);
             this.txtDiscount.TabIndex = 3;
             this.txtDiscount.ThousandsSeparator = '.';
+            this.txtDiscount.WorkingText = null;
             this.txtDiscount.Leave += new System.EventHandler(this.txtDiscount_Leave);
             // 
             // txtVAT
@@ -142,6 +157,7 @@ namespace BaoHien.UI
             this.txtVAT.Size = new System.Drawing.Size(197, 20);
             this.txtVAT.TabIndex = 2;
             this.txtVAT.ThousandsSeparator = '.';
+            this.txtVAT.WorkingText = null;
             this.txtVAT.Leave += new System.EventHandler(this.txtVAT_Leave);
             // 
             // txtNote
@@ -201,7 +217,7 @@ namespace BaoHien.UI
             this.cbxCustomer.FormattingEnabled = true;
             this.cbxCustomer.Location = new System.Drawing.Point(529, 20);
             this.cbxCustomer.Name = "cbxCustomer";
-            this.cbxCustomer.Size = new System.Drawing.Size(237, 21);
+            this.cbxCustomer.Size = new System.Drawing.Size(208, 21);
             this.cbxCustomer.TabIndex = 1;
             this.validator1.SetType(this.cbxCustomer, Itboy.Components.ValidationType.Required);
             // 
@@ -248,12 +264,9 @@ namespace BaoHien.UI
             this.dgwOrderDetails.Name = "dgwOrderDetails";
             this.dgwOrderDetails.Size = new System.Drawing.Size(784, 250);
             this.dgwOrderDetails.TabIndex = 8;
-            this.dgwOrderDetails.keyPressHook += new System.Windows.Forms.KeyEventHandler(this.dgwOrderDetails_KeyUp);
             this.dgwOrderDetails.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgwOrderDetails_CellEndEdit);
-            this.dgwOrderDetails.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgwOrderDetails_CellEnter);
             this.dgwOrderDetails.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dgwOrderDetails_DataError);
             this.dgwOrderDetails.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.dgwOrderDetails_EditingControlShowing);
-            this.dgwOrderDetails.KeyUp += new System.Windows.Forms.KeyEventHandler(this.dgwOrderDetails_KeyUp);
             // 
             // label9
             // 
@@ -311,7 +324,7 @@ namespace BaoHien.UI
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(548, 581);
+            this.btnCancel.Location = new System.Drawing.Point(602, 581);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 9;
@@ -319,39 +332,60 @@ namespace BaoHien.UI
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
-            // btnSave
+            // btnPrintS
             // 
-            this.btnSave.Location = new System.Drawing.Point(729, 581);
-            this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(75, 23);
-            this.btnSave.TabIndex = 11;
-            this.btnSave.Text = "Lưu";
-            this.btnSave.UseVisualStyleBackColor = true;
-            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
-            // 
-            // btnPrintOrder
-            // 
-            this.btnPrintOrder.Location = new System.Drawing.Point(629, 581);
-            this.btnPrintOrder.Name = "btnPrintOrder";
-            this.btnPrintOrder.Size = new System.Drawing.Size(94, 23);
-            this.btnPrintOrder.TabIndex = 10;
-            this.btnPrintOrder.Text = "Xuất phiếu";
-            this.btnPrintOrder.UseVisualStyleBackColor = true;
-            this.btnPrintOrder.Click += new System.EventHandler(this.btnPrintOrder_Click);
+            this.btnPrintS.Location = new System.Drawing.Point(683, 581);
+            this.btnPrintS.Name = "btnPrintS";
+            this.btnPrintS.Size = new System.Drawing.Size(121, 23);
+            this.btnPrintS.TabIndex = 10;
+            this.btnPrintS.Text = "Lưu && Xuất phiếu";
+            this.btnPrintS.UseVisualStyleBackColor = true;
+            this.btnPrintS.Click += new System.EventHandler(this.btnPrintS_Click);
             // 
             // validator1
             // 
             this.validator1.Form = this;
             // 
+            // btnCreateNK
+            // 
+            this.btnCreateNK.Location = new System.Drawing.Point(20, 580);
+            this.btnCreateNK.Name = "btnCreateNK";
+            this.btnCreateNK.Size = new System.Drawing.Size(116, 23);
+            this.btnCreateNK.TabIndex = 12;
+            this.btnCreateNK.Text = "Tạo phiếu nhập kho";
+            this.btnCreateNK.UseVisualStyleBackColor = true;
+            this.btnCreateNK.Click += new System.EventHandler(this.btnCreateNK_Click);
+            // 
+            // btnCreateSX
+            // 
+            this.btnCreateSX.Location = new System.Drawing.Point(142, 580);
+            this.btnCreateSX.Name = "btnCreateSX";
+            this.btnCreateSX.Size = new System.Drawing.Size(116, 23);
+            this.btnCreateSX.TabIndex = 13;
+            this.btnCreateSX.Text = "Tạo phiếu sản xuất";
+            this.btnCreateSX.UseVisualStyleBackColor = true;
+            this.btnCreateSX.Click += new System.EventHandler(this.btnCreateSX_Click);
+            // 
+            // btnPrint
+            // 
+            this.btnPrint.Location = new System.Drawing.Point(264, 581);
+            this.btnPrint.Name = "btnPrint";
+            this.btnPrint.Size = new System.Drawing.Size(90, 23);
+            this.btnPrint.TabIndex = 14;
+            this.btnPrint.Text = "Xuất phiếu";
+            this.btnPrint.UseVisualStyleBackColor = true;
+            this.btnPrint.Click += new System.EventHandler(this.btnPrint_Click);
+            // 
             // AddOrder
             // 
-            this.AcceptButton = this.btnSave;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(822, 616);
-            this.Controls.Add(this.btnPrintOrder);
-            this.Controls.Add(this.btnSave);
+            this.Controls.Add(this.btnPrint);
+            this.Controls.Add(this.btnCreateSX);
+            this.Controls.Add(this.btnCreateNK);
+            this.Controls.Add(this.btnPrintS);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.lblGrantTotal);
             this.Controls.Add(this.lblSubTotal);
@@ -364,6 +398,7 @@ namespace BaoHien.UI
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Lập phiếu bán hàng";
             this.Load += new System.EventHandler(this.AddOrder_Load);
+            this.Shown += new System.EventHandler(this.AddOrder_Shown);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
@@ -394,8 +429,7 @@ namespace BaoHien.UI
         private System.Windows.Forms.Label lblSubTotal;
         private System.Windows.Forms.Label lblGrantTotal;
         private System.Windows.Forms.Button btnCancel;
-        private System.Windows.Forms.Button btnSave;
-        private System.Windows.Forms.Button btnPrintOrder;
+        private System.Windows.Forms.Button btnPrintS;
         private Itboy.Components.Validator validator1;
         private JRINCCustomControls.currencyTextBox txtDiscount;
         private JRINCCustomControls.currencyTextBox txtVAT;
@@ -403,5 +437,9 @@ namespace BaoHien.UI
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox txtWare;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Button btnCreateSX;
+        private System.Windows.Forms.Button btnCreateNK;
+        private System.Windows.Forms.Button btnCreateKH;
+        private System.Windows.Forms.Button btnPrint;
     }
 }

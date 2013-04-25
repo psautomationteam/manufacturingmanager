@@ -18,10 +18,12 @@ namespace BaoHien.UI
     {
         Customer customer;
         List<Employee> salers;
+
         public AddCustomer()
         {
             InitializeComponent();
         }
+
         public void loadDataForEditCustomer(int customerId)
         {
             this.Text = "Chỉnh sửa thông tin khách hàng";
@@ -64,7 +66,11 @@ namespace BaoHien.UI
                     customer.Fax = txtFax.Text;
                     customer.Phone = txtPhoneNumber.Text;
                     customer.CustomerName = txtName.Text;
-                    customer.SalerId = cmbSaler.SelectedValue != null ? (int?)cmbSaler.SelectedValue : null;
+                    if (cmbSaler.SelectedValue != null)
+                    {
+                        Employee emp = salers.Single(x => x.Id == (int)cmbSaler.SelectedValue);
+                        customer.Employee = emp;
+                    }
                     CustomerService customerService = new CustomerService();
                     bool result = customerService.UpdateCustomer(customer);
                     if (result)
@@ -118,6 +124,7 @@ namespace BaoHien.UI
             }
             
         }
+
         private void loadSomeData()
         {
             

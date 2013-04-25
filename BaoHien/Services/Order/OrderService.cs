@@ -17,38 +17,47 @@ namespace BaoHien.Services.Orders
 
             return order;
         }
+
         public List<Order> GetOrders()
         {
             List<Order> orders = OnGetItems<Order>();
 
             return orders;
         }
+
         public bool AddOrder(Order order)
         {
             return OnAddItem<Order>(order);
         }
+
         public bool DeleteOrder(System.Int32 id)
         {
             return OnDeleteItem<Order>(id.ToString());
         }
+
         public bool UpdateOrder(Order order)
         {
             return OnUpdateItem<Order>(order, order.Id.ToString());
         }
+
         public List<Order> SelectOrderByWhere(Expression<Func<Order, bool>> func)
         {
 
             return SelectItemByWhere<Order>(func);
         }
+
         public List<Order> SearchingOrder(OrderSearchCriteria productionRequestSearchCriteria)
         {
             List<Order> orders = OnGetItems<Order>();
-
             if (productionRequestSearchCriteria != null)
             {
                 if (productionRequestSearchCriteria.CreatedBy.HasValue)
                 {
                     orders = orders.Where(pr => pr.CreateBy == productionRequestSearchCriteria.CreatedBy.Value).ToList();
+                }
+                if (productionRequestSearchCriteria.Customer.HasValue)
+                {
+                    orders = orders.Where(pr => pr.CustId == productionRequestSearchCriteria.Customer.Value).ToList();
                 }
                 if (productionRequestSearchCriteria.Code != "")
                 {
@@ -62,34 +71,6 @@ namespace BaoHien.Services.Orders
                             .ToList();
                 }
             }
-            else
-            {
-                return orders;
-            }
-            /*
-            IQueryable<ProductionRequest> query = null;
-            BaoHienDBDataContext context = BaoHienRepository.GetBaoHienDBDataContext();
-            if (context != null)
-            {
-                query = from p in context.Products
-                        join pt in context.ProductTypes on p.ProductType equals pt.Id
-                        where (p.Status == null) && (productSearchCriteria.ProductTypeId == null || pt.Id == productSearchCriteria.ProductTypeId)
-                        select p;
-            }
-            if (productSearchCriteria.ProductCode != null)
-            {
-                query = query.Where(p => p.ProductCode.Contains(productSearchCriteria.ProductCode));
-            }
-            if (productSearchCriteria.ProductName != null)
-            {
-                query = query.Where(p => p.ProductName.Contains(productSearchCriteria.ProductName));
-            }
-            if (productSearchCriteria.PurchaseStatus != null)
-            {
-
-            }
-            if (query != null)
-                return query.ToList();*/
             return orders;
         }
     }

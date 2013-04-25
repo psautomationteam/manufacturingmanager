@@ -48,8 +48,7 @@ namespace BaoHien.Services.Products
         }
 
         public List<Product> SearchingProduct(ProductSearchCriteria productSearchCriteria)
-        {
-            
+        {            
             IQueryable<Product> query = null;
             BaoHienDBDataContext context = BaoHienRepository.GetBaoHienDBDataContext();
             if (context != null)
@@ -66,10 +65,6 @@ namespace BaoHien.Services.Products
             if (productSearchCriteria.ProductName != null)
             {
                 query = query.Where(p => p.ProductName.Contains(productSearchCriteria.ProductName));
-            }
-            if (productSearchCriteria.PurchaseStatus != null)
-            {
-                
             }
             if (query != null)
                 return query.ToList();

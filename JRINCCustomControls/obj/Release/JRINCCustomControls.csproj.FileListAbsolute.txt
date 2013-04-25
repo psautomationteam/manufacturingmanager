@@ -1,0 +1,5 @@
+D:\Workspace - VS\Bao Hien Project\Source\JRINCCustomControls\bin\Release\JRINCCustomControls.dll
+D:\Workspace - VS\Bao Hien Project\Source\JRINCCustomControls\bin\Release\JRINCCustomControls.pdb
+D:\Workspace - VS\Bao Hien Project\Source\JRINCCustomControls\obj\Release\ResolveAssemblyReference.cache
+D:\Workspace - VS\Bao Hien Project\Source\JRINCCustomControls\obj\Release\JRINCCustomControls.dll
+D:\Workspace - VS\Bao Hien Project\Source\JRINCCustomControls\obj\Release\JRINCCustomControls.pdb

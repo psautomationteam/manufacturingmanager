@@ -17,29 +17,32 @@ namespace BaoHien.Services.OrderDetails
 
             return orderDetail;
         }
+
         public List<OrderDetail> GetOrderDetails()
         {
             List<OrderDetail> orderDetails = OnGetItems<OrderDetail>();
 
             return orderDetails;
         }
+
         public bool AddOrderDetail(OrderDetail orderDetail)
         {
             return OnAddItem<OrderDetail>(orderDetail);
         }
+
         public bool DeleteOrderDetail(System.Int32 id)
         {
             return OnDeleteItem<OrderDetail>(id.ToString());
         }
+
         public bool UpdateOrderDetail(OrderDetail orderDetail)
         {
             return OnUpdateItem<OrderDetail>(orderDetail, orderDetail.Id.ToString());
         }
+
         public List<OrderDetail> SelectOrderDetailByWhere(Expression<Func<OrderDetail, bool>> func)
         {
-
             return SelectItemByWhere<OrderDetail>(func);
-        }
-        
+        }        
     }
 }

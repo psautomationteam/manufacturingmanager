@@ -198,80 +198,14 @@ namespace BaoHien.UI
                 DataGridViewCell cell = ((DataGridView)sender).CurrentCell;
                 if (cell.ColumnIndex == ((DataGridView)sender).ColumnCount - 1)
                 {
-                    DialogResult result = MessageBox.Show("Bạn muốn xóa đơn hàng này?",
-                    "Xoá đơn hàng",
-                     MessageBoxButtons.YesNo,
-                    MessageBoxIcon.Question);
-                    if (result == DialogResult.Yes)
+                    if (Global.isAdmin())
                     {
-                        DataGridViewRow currentRow = dgwOrderList.Rows[e.RowIndex];
-
-                        OrderService orderService = new OrderService();
-                        //Product mu = (Product)dgv.DataBoundItem;
-                        int id = ObjectHelper.GetValueFromAnonymousType<int>(currentRow.DataBoundItem, "Id");
-                        Order order = orderService.GetOrder(id);
-                        CustomerLogService cls = new CustomerLogService();
-                        CustomerLog newest = cls.GetNewestCustomerLog(order.CustId);
-                        double beforeDebit = 0.0;
-                        if (newest != null)
-                        {
-                            beforeDebit = newest.AfterDebit;
-                        }
-                        CustomerLog cl = new CustomerLog
-                        {
-                            CustomerId = order.CustId,
-                            RecordCode = order.OrderCode,
-                            BeforeDebit = beforeDebit,
-                            Amount = order.Total,
-                            AfterDebit = beforeDebit - order.Total,
-                            CreatedDate = DateTime.Now
-                        };
-                        bool kq = cls.AddCustomerLog(cl);
-
-                        double totalCommission = 0.0;
-                        ProductLogService productLogService = new ProductLogService();
-                        foreach (OrderDetail od in order.OrderDetails)
-                        {
-                            totalCommission += od.Commission;
-                            ProductLog pl = productLogService.GetNewestProductUnitLog(od.ProductId, od.AttributeId, od.UnitId);
-                            ProductLog plg = new ProductLog
-                            {
-                                AttributeId = od.AttributeId,
-                                ProductId = od.ProductId,
-                                UnitId = od.UnitId,
-                                RecordCode = order.OrderCode,
-                                BeforeNumber = pl.AfterNumber,
-                                Amount = od.NumberUnit,
-                                AfterNumber = pl.AfterNumber + od.NumberUnit,
-                                CreatedDate = DateTime.Now
-                            };
-                            bool ret = productLogService.AddProductLog(plg);
-                        }
-
-                        int salerId = (int)order.Customer.SalerId;
-                        if (salerId > 0)
-                        {
-                            EmployeeLogService els = new EmployeeLogService();
-                            EmployeeLog el = els.GetNewestEmployeeLog(order.CreateBy);
-                            EmployeeLog newel = new EmployeeLog
-                            {
-                                EmployeeId = salerId,
-                                RecordCode = order.OrderCode,
-                                BeforeNumber = el.AfterNumber,
-                                Amount = totalCommission,
-                                AfterNumber = el.AfterNumber - totalCommission,
-                                CreatedDate = DateTime.Now
-                            };
-                            kq = els.AddEmployeeLog(newel);
-                        }
-
-                        if (!orderService.DeleteOrder(id) && kq)
-                        {
-                            MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
-                        }
-                        loadOrderList();
+                        DeleteOrder(e);
                     }
-
+                    else
+                    {
+                        MessageBox.Show("Vui lòng đăng nhập quyền Admin để xóa được phiếu bán hàng!", "Lỗi phân quyền", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
 
             }
@@ -291,7 +225,91 @@ namespace BaoHien.UI
         
         private void btnSearch_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Chức năng chưa hoàn thiện !");
-        }        
+            OrderSearchCriteria search = new OrderSearchCriteria
+            {
+                Code = string.IsNullOrEmpty(txtCode.Text) ? txtCode.Text : "",
+                CreatedBy = cbmUsers.SelectedValue != null ? (int?)cbmUsers.SelectedValue : (int?)null,
+                Customer = cbmCustomers.SelectedValue != null ? (int?)cbmCustomers.SelectedValue : (int?)null,
+                From = dtpFrom.Value != null ? dtpFrom.Value : (DateTime?)null,
+                To = dtpTo.Value != null ? dtpTo.Value : (DateTime?)null,
+            };
+            OrderService service = new OrderService();
+            List<Order> orders = service.SearchingOrder(search);
+            setUpDataGrid(orders);
+        }
+
+        private void DeleteOrder(DataGridViewCellEventArgs e)
+        {
+            DialogResult result = MessageBox.Show("Bạn muốn xóa đơn hàng này?", "Xoá đơn hàng", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (result == DialogResult.Yes)
+            {
+                DataGridViewRow currentRow = dgwOrderList.Rows[e.RowIndex];
+
+                OrderService orderService = new OrderService();
+                //Product mu = (Product)dgv.DataBoundItem;
+                int id = ObjectHelper.GetValueFromAnonymousType<int>(currentRow.DataBoundItem, "Id");
+                Order order = orderService.GetOrder(id);
+                CustomerLogService cls = new CustomerLogService();
+                CustomerLog newest = cls.GetNewestCustomerLog(order.CustId);
+                double beforeDebit = 0.0;
+                if (newest != null)
+                {
+                    beforeDebit = newest.AfterDebit;
+                }
+                CustomerLog cl = new CustomerLog
+                {
+                    CustomerId = order.CustId,
+                    RecordCode = order.OrderCode,
+                    BeforeDebit = beforeDebit,
+                    Amount = order.Total,
+                    AfterDebit = beforeDebit - order.Total,
+                    CreatedDate = DateTime.Now
+                };
+                bool kq = cls.AddCustomerLog(cl);
+
+                double totalCommission = 0.0;
+                ProductLogService productLogService = new ProductLogService();
+                foreach (OrderDetail od in order.OrderDetails)
+                {
+                    totalCommission += od.Commission;
+                    ProductLog pl = productLogService.GetNewestProductUnitLog(od.ProductId, od.AttributeId, od.UnitId);
+                    ProductLog plg = new ProductLog
+                    {
+                        AttributeId = od.AttributeId,
+                        ProductId = od.ProductId,
+                        UnitId = od.UnitId,
+                        RecordCode = order.OrderCode,
+                        BeforeNumber = pl.AfterNumber,
+                        Amount = od.NumberUnit,
+                        AfterNumber = pl.AfterNumber + od.NumberUnit,
+                        CreatedDate = DateTime.Now
+                    };
+                    bool ret = productLogService.AddProductLog(plg);
+                }
+
+                int salerId = (int)order.Customer.SalerId;
+                if (salerId > 0)
+                {
+                    EmployeeLogService els = new EmployeeLogService();
+                    EmployeeLog el = els.GetNewestEmployeeLog(order.CreateBy);
+                    EmployeeLog newel = new EmployeeLog
+                    {
+                        EmployeeId = salerId,
+                        RecordCode = order.OrderCode,
+                        BeforeNumber = el.AfterNumber,
+                        Amount = totalCommission,
+                        AfterNumber = el.AfterNumber - totalCommission,
+                        CreatedDate = DateTime.Now
+                    };
+                    kq = els.AddEmployeeLog(newel);
+                }
+
+                if (!orderService.DeleteOrder(id) && kq)
+                {
+                    MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                }
+                loadOrderList();
+            }
+        }
     }
 }

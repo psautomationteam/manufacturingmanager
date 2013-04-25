@@ -14,11 +14,11 @@ namespace BaoHien.Common
         public const string COMPANY_FAX = "08.38600093";
 
         public const string DATABASE_NAME = "BaoHienCompany";
-        public const string USER_TYPE_NAME1 = "Kế Toán";
-        public const string USER_TYPE_NAME2 = "Quản Trị";
+        public const string USER_TYPE_NAME1 = "Quản Trị";
+        public const string USER_TYPE_NAME2 = "Kế Toán";
         public const string USER_TYPE_NAME3 = "Người Bán Hàng";
 
-        public const short USER_TYPE_ID1 = 1;
+        public const short USER_TYPE_ID1 = 1;   // Admin
         public const short USER_TYPE_ID2 = 2;
         public const short USER_TYPE_ID3 = 3;
 
@@ -53,5 +53,8 @@ namespace BaoHien.Common
         public const string INIT_DATABASE_NAME = "BaoHienCompany";
         public const string INIT_USER_ID = "";
         public const string INIT_PW = "";
+
+        public const string CONTENT_FONT_PATH = @"C:\Windows\Fonts\CALIBRI.TTF";
+        public const string HEADER_FONT_PATH = @"C:\Windows\Fonts\CAMBRIAB.TTF";
     }
 }

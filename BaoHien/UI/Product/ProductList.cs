@@ -41,12 +41,7 @@ namespace BaoHien.UI
             if (cbProductTypes.SelectedValue != null && (int)cbProductTypes.SelectedValue > 0)
             {
                 productSearchCriteria.ProductTypeId = (int?)cbProductTypes.SelectedValue;
-            }
-            if (cbPurchaseStatus.SelectedValue != null && (int)cbPurchaseStatus.SelectedValue > 0)
-            {
-                productSearchCriteria.PurchaseStatus = (int?)cbPurchaseStatus.SelectedValue;
-            }
-            
+            }            
             ProductService productService = new ProductService();
             List<Product> products = productService.SearchingProduct(productSearchCriteria);
             if (products != null)
@@ -84,6 +79,8 @@ namespace BaoHien.UI
             setUpDataGrid(products);
             ProductTypeService productTypeService = new ProductTypeService();
             List<ProductType> productTypes = productTypeService.GetProductTypes();
+            productTypes.Add(new ProductType() { Id = 0 });
+            productTypes = productTypes.OrderBy(x => x.Id).ToList();
             if (productTypes != null)
             {
                 cbProductTypes.DataSource = productTypes;
@@ -134,6 +131,7 @@ namespace BaoHien.UI
             indexColumn.ValueType = typeof(string);
             indexColumn.Frozen = true;
             dgvProductList.Columns.Add(indexColumn);
+
             DataGridViewTextBoxColumn productNameColumn = new DataGridViewTextBoxColumn();
             productNameColumn.Width = 150;
             productNameColumn.DataPropertyName = "ProductName";

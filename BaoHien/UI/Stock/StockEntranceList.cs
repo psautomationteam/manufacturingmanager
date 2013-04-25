@@ -28,7 +28,6 @@ namespace BaoHien.UI
 
         private void loadSomeData()
         {
-           
             if (systemUsers == null)
             {
                 SystemUserService systemUserService = new SystemUserService();
@@ -36,13 +35,9 @@ namespace BaoHien.UI
             }
             if (systemUsers != null)
             {
-
-
                 cbmUsers.DataSource = systemUsers;
-
                 cbmUsers.DisplayMember = "FullName";
                 cbmUsers.ValueMember = "Id";
-
             }
             
         }
@@ -65,7 +60,6 @@ namespace BaoHien.UI
                                 Index = ++index
                             };
                 dgwStockEntranceList.DataSource = query.ToList();
-
             }
         }
 
@@ -124,7 +118,6 @@ namespace BaoHien.UI
             EntranceStockService entranceStockService = new EntranceStockService();
             List<EntranceStock> entranceStocks = entranceStockService.GetEntranceStocks();
             setUpDataGrid(entranceStocks);
-
         }
 
         private void StockEntranceList_Load(object sender, EventArgs e)

@@ -16,6 +16,7 @@ namespace BaoHien.UI
     public partial class AddSystemUser : BaseForm
     {
         SystemUser systemUser;
+
         public AddSystemUser()
         {
             InitializeComponent();
@@ -32,7 +33,6 @@ namespace BaoHien.UI
                     if (o.Contains(BHConstant.USER_TYPE_NAME1))
                     {
                         userType = BHConstant.USER_TYPE_ID1;
-
                     }
                     else if (o.Contains(BHConstant.USER_TYPE_NAME2))
                     {
@@ -94,6 +94,7 @@ namespace BaoHien.UI
         {
 
         }
+
         public void loadDataForEditSystemUser(int systemUserId)
         {
             this.Text = "Chỉnh sửa người dùng này";
