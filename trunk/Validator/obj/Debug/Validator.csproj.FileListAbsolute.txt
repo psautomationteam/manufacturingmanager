@@ -46,3 +46,11 @@ D:\Pikait\Work\BaoHien\Validator\obj\Debug\GenerateResource.read.1.tlog
 D:\Pikait\Work\BaoHien\Validator\obj\Debug\GenerateResource.write.1.tlog
 D:\Pikait\Work\BaoHien\Validator\obj\Debug\Validator.dll
 D:\Pikait\Work\BaoHien\Validator\obj\Debug\Validator.pdb
+D:\Workspace - VS\Bao Hien Project\Source\Validator\bin\Debug\Validator.dll
+D:\Workspace - VS\Bao Hien Project\Source\Validator\bin\Debug\Validator.pdb
+D:\Workspace - VS\Bao Hien Project\Source\Validator\obj\Debug\ResolveAssemblyReference.cache
+D:\Workspace - VS\Bao Hien Project\Source\Validator\obj\Debug\Itboy.Properties.Resources.resources
+D:\Workspace - VS\Bao Hien Project\Source\Validator\obj\Debug\GenerateResource.read.1.tlog
+D:\Workspace - VS\Bao Hien Project\Source\Validator\obj\Debug\GenerateResource.write.1.tlog
+D:\Workspace - VS\Bao Hien Project\Source\Validator\obj\Debug\Validator.dll
+D:\Workspace - VS\Bao Hien Project\Source\Validator\obj\Debug\Validator.pdb

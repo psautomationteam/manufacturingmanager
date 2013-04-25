@@ -178,9 +178,9 @@
             this.label6.AutoSize = true;
             this.label6.Location = new System.Drawing.Point(22, 115);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(121, 13);
+            this.label6.Size = new System.Drawing.Size(126, 13);
             this.label6.TabIndex = 13;
-            this.label6.Text = "Tổng số phiếu sản xuất:";
+            this.label6.Text = "Tổng số phiếu nhập kho:";
             // 
             // StockEntranceList
             // 

@@ -1,0 +1,2 @@
+D:\Workspace - VS\Bao Hien Project\Source\BaoHien\bin\Release\BaoHien.exe.config
+D:\Workspace - VS\Bao Hien Project\Source\BaoHien\obj\x86\Release\BaoHien.csproj.ResolveComReference.cache

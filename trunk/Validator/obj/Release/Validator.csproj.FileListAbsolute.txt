@@ -1,0 +1,8 @@
+D:\Workspace - VS\Bao Hien Project\Source\Validator\bin\Release\Validator.dll
+D:\Workspace - VS\Bao Hien Project\Source\Validator\bin\Release\Validator.pdb
+D:\Workspace - VS\Bao Hien Project\Source\Validator\obj\Release\ResolveAssemblyReference.cache
+D:\Workspace - VS\Bao Hien Project\Source\Validator\obj\Release\Itboy.Properties.Resources.resources
+D:\Workspace - VS\Bao Hien Project\Source\Validator\obj\Release\GenerateResource.read.1.tlog
+D:\Workspace - VS\Bao Hien Project\Source\Validator\obj\Release\GenerateResource.write.1.tlog
+D:\Workspace - VS\Bao Hien Project\Source\Validator\obj\Release\Validator.dll
+D:\Workspace - VS\Bao Hien Project\Source\Validator\obj\Release\Validator.pdb

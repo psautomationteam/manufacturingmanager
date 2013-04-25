@@ -33,10 +33,6 @@
             this.label7 = new System.Windows.Forms.Label();
             this.txtPhone = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
-            this.comboBox2 = new System.Windows.Forms.ComboBox();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
             this.btnSearch = new System.Windows.Forms.Button();
             this.txtName = new System.Windows.Forms.TextBox();
             this.txtCode = new System.Windows.Forms.TextBox();
@@ -56,10 +52,6 @@
             this.grpSearch.Controls.Add(this.label7);
             this.grpSearch.Controls.Add(this.txtPhone);
             this.grpSearch.Controls.Add(this.label6);
-            this.grpSearch.Controls.Add(this.comboBox2);
-            this.grpSearch.Controls.Add(this.comboBox1);
-            this.grpSearch.Controls.Add(this.label4);
-            this.grpSearch.Controls.Add(this.label5);
             this.grpSearch.Controls.Add(this.btnSearch);
             this.grpSearch.Controls.Add(this.txtName);
             this.grpSearch.Controls.Add(this.txtCode);
@@ -67,7 +59,7 @@
             this.grpSearch.Controls.Add(this.label1);
             this.grpSearch.Location = new System.Drawing.Point(32, 21);
             this.grpSearch.Name = "grpSearch";
-            this.grpSearch.Size = new System.Drawing.Size(1023, 110);
+            this.grpSearch.Size = new System.Drawing.Size(1023, 95);
             this.grpSearch.TabIndex = 12;
             this.grpSearch.TabStop = false;
             this.grpSearch.Text = "Tìm Kiếm";
@@ -75,7 +67,7 @@
             // cmbSaler
             // 
             this.cmbSaler.FormattingEnabled = true;
-            this.cmbSaler.Location = new System.Drawing.Point(448, 55);
+            this.cmbSaler.Location = new System.Drawing.Point(448, 59);
             this.cmbSaler.Name = "cmbSaler";
             this.cmbSaler.Size = new System.Drawing.Size(184, 21);
             this.cmbSaler.TabIndex = 3;
@@ -91,69 +83,33 @@
             // 
             // txtPhone
             // 
-            this.txtPhone.Location = new System.Drawing.Point(742, 28);
+            this.txtPhone.Location = new System.Drawing.Point(448, 28);
             this.txtPhone.Name = "txtPhone";
-            this.txtPhone.Size = new System.Drawing.Size(170, 20);
+            this.txtPhone.Size = new System.Drawing.Size(184, 20);
             this.txtPhone.TabIndex = 5;
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(663, 31);
+            this.label6.Location = new System.Drawing.Point(355, 31);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(73, 13);
             this.label6.TabIndex = 9;
             this.label6.Text = "Số điện thoại:";
             // 
-            // comboBox2
-            // 
-            this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Items.AddRange(new object[] {
-            "Còn giao dịch",
-            "Hết giao dịch"});
-            this.comboBox2.Location = new System.Drawing.Point(742, 55);
-            this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(170, 21);
-            this.comboBox2.TabIndex = 4;
-            // 
-            // comboBox1
-            // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(147, 57);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(169, 21);
-            this.comboBox1.TabIndex = 2;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(663, 62);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(62, 13);
-            this.label4.TabIndex = 6;
-            this.label4.Text = "Trạng Thái:";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(42, 62);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(90, 13);
-            this.label5.TabIndex = 5;
-            this.label5.Text = "Loại khách hàng:";
-            // 
             // btnSearch
             // 
             this.btnSearch.Location = new System.Drawing.Point(938, 28);
             this.btnSearch.Name = "btnSearch";
-            this.btnSearch.Size = new System.Drawing.Size(75, 47);
+            this.btnSearch.Size = new System.Drawing.Size(75, 52);
             this.btnSearch.TabIndex = 6;
             this.btnSearch.Text = "Tìm";
             this.btnSearch.UseVisualStyleBackColor = true;
+            this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
             // 
             // txtName
             // 
-            this.txtName.Location = new System.Drawing.Point(448, 28);
+            this.txtName.Location = new System.Drawing.Point(146, 60);
             this.txtName.Name = "txtName";
             this.txtName.Size = new System.Drawing.Size(184, 20);
             this.txtName.TabIndex = 1;
@@ -162,13 +118,13 @@
             // 
             this.txtCode.Location = new System.Drawing.Point(146, 28);
             this.txtCode.Name = "txtCode";
-            this.txtCode.Size = new System.Drawing.Size(170, 20);
+            this.txtCode.Size = new System.Drawing.Size(184, 20);
             this.txtCode.TabIndex = 0;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(352, 31);
+            this.label2.Location = new System.Drawing.Point(42, 63);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(89, 13);
             this.label2.TabIndex = 2;
@@ -246,10 +202,6 @@
         #endregion
 
         private System.Windows.Forms.GroupBox grpSearch;
-        private System.Windows.Forms.ComboBox comboBox2;
-        private System.Windows.Forms.ComboBox comboBox1;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Button btnSearch;
         private System.Windows.Forms.TextBox txtName;
         private System.Windows.Forms.TextBox txtCode;

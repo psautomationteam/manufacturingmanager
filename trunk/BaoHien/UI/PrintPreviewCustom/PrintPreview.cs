@@ -20,10 +20,7 @@ namespace BaoHien.UI.PrintPreviewCustom
 
         private void ShowFile(string filePath)
         {
-            //reader.setShowScrollbars(true);
-            //reader.setShowToolbar(false);
-            //reader.setView("FitH");
-            wbReader.Navigate(BHConstant.SAVE_IN_DIRECTORY + @"\BHang.pdf");
+            wbReader.Navigate(filePath);
         }
     }
 }

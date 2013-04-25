@@ -1,0 +1,6 @@
+D:\Workspace - VS\Bao Hien Project\Source\DAL\bin\Release\DAL.dll.config
+D:\Workspace - VS\Bao Hien Project\Source\DAL\bin\Release\DAL.dll
+D:\Workspace - VS\Bao Hien Project\Source\DAL\bin\Release\DAL.pdb
+D:\Workspace - VS\Bao Hien Project\Source\DAL\obj\Release\ResolveAssemblyReference.cache
+D:\Workspace - VS\Bao Hien Project\Source\DAL\obj\Release\DAL.dll
+D:\Workspace - VS\Bao Hien Project\Source\DAL\obj\Release\DAL.pdb

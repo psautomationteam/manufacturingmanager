@@ -43,6 +43,18 @@ namespace BaoHien.Common
             return pr;
         }
 
+        public static Paragraph ParaCommonInfoAllBold(string field, string value)
+        {
+            Paragraph pr = new Paragraph();
+            Phrase phr = new Phrase();
+            Chunk chk1 = new Chunk(field, FontConfig.BoldFont);
+            Chunk chk2 = new Chunk(value, FontConfig.BoldFont);
+            phr.Add(chk1);
+            phr.Add(chk2);
+            pr.Add(phr);
+            return pr;
+        }
+
         public static PdfPTable Table(int column, float[] ratio)
         {
             PdfPTable table = new PdfPTable(column);

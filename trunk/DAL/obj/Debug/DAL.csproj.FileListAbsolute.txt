@@ -28,3 +28,9 @@ D:\Work\BaoHien\DAL\bin\Debug\DAL.pdb
 D:\Work\BaoHien\DAL\obj\Debug\ResolveAssemblyReference.cache
 D:\Work\BaoHien\DAL\obj\Debug\DAL.dll
 D:\Work\BaoHien\DAL\obj\Debug\DAL.pdb
+D:\Workspace - VS\Bao Hien Project\Source\DAL\bin\Debug\DAL.dll.config
+D:\Workspace - VS\Bao Hien Project\Source\DAL\bin\Debug\DAL.dll
+D:\Workspace - VS\Bao Hien Project\Source\DAL\bin\Debug\DAL.pdb
+D:\Workspace - VS\Bao Hien Project\Source\DAL\obj\Debug\ResolveAssemblyReference.cache
+D:\Workspace - VS\Bao Hien Project\Source\DAL\obj\Debug\DAL.dll
+D:\Workspace - VS\Bao Hien Project\Source\DAL\obj\Debug\DAL.pdb

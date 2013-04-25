@@ -32,8 +32,12 @@ namespace BaoHien.UI
             dgvUserList.AutoGenerateColumns = false;
             loadSystemUserList();
             SetupColumns();
-            
+            if (!Global.isAdmin())
+            {
+                btnAdd.Visible = btnDelete.Visible = false;
+            }
         }
+
         public void loadSystemUserList()
         {
            
@@ -46,6 +50,7 @@ namespace BaoHien.UI
             }
             
         }
+
         private string getNameForTypeUser(short userTypeId)
         {
             switch (userTypeId)
@@ -59,6 +64,7 @@ namespace BaoHien.UI
             }
             return "";
         }
+
         private void setUpDataGrid(List<SystemUser> systemUsers)
         {
             if (systemUsers != null)
@@ -79,6 +85,7 @@ namespace BaoHien.UI
                 
             }
         }
+
         private void SetupColumns()
         {
             dgvUserList.AutoGenerateColumns = false;
@@ -98,8 +105,6 @@ namespace BaoHien.UI
             //productNameColumn.Frozen = true;
             dgvUserList.Columns.Add(productNameColumn);
 
-
-
             DataGridViewTextBoxColumn typeCodeColumn = new DataGridViewTextBoxColumn();
             typeCodeColumn.DataPropertyName = "FullName";
             typeCodeColumn.Width = 150;
@@ -116,23 +121,21 @@ namespace BaoHien.UI
             descriptionColumn.ValueType = typeof(string);
             dgvUserList.Columns.Add(descriptionColumn);
 
-            DataGridViewCheckBoxColumn deleteButton = new DataGridViewCheckBoxColumn();
-            deleteButton.DataPropertyName = "Status";
-            deleteButton.Width = 100;
-            deleteButton.HeaderText = "Kích hoạt/Bỏ";
-            deleteButton.FalseValue = false;
-            deleteButton.TrueValue = true;
-            deleteButton.ValueType = typeof(bool);
-            //deleteButton.
-            dgvUserList.Columns.Add(deleteButton);
+            //DataGridViewCheckBoxColumn deleteButton = new DataGridViewCheckBoxColumn();
+            //deleteButton.DataPropertyName = "Status";
+            //deleteButton.Width = 100;
+            //deleteButton.HeaderText = "Kích hoạt/Bỏ";
+            //deleteButton.FalseValue = false;
+            //deleteButton.TrueValue = true;
+            //deleteButton.ValueType = typeof(bool);
+            //dgvUserList.Columns.Add(deleteButton);
         }
+
         private void btnDelete_Click(object sender, EventArgs e)
         {
             DataGridViewSelectedRowCollection selectedRows = dgvUserList.SelectedRows;
-
             foreach (DataGridViewRow dgv in selectedRows)
             {
-
                 SystemUserService systemUserService = new SystemUserService();
                 int id = ObjectHelper.GetValueFromAnonymousType<int>(dgv.DataBoundItem, "Id");
                 if (!systemUserService.DeleteSystemUser(id))
@@ -140,53 +143,63 @@ namespace BaoHien.UI
                     MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
                     break;
                 }
-
             }
             loadSystemUserList();
         }
 
         private void dgvUserList_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (sender is DataGridView)
-            {
-                DataGridViewCell cell = ((DataGridView)sender).CurrentCell;
-                if (cell.ColumnIndex == ((DataGridView)sender).ColumnCount - 1)
-                {
-                    DataGridViewCheckBoxCell checkBoxcell = (DataGridViewCheckBoxCell)cell;
-                    DataGridViewRow currentRow = dgvUserList.Rows[e.RowIndex];
+            //if (sender is DataGridView)
+            //{
+            //    DataGridViewCell cell = ((DataGridView)sender).CurrentCell;
+            //    if (cell.ColumnIndex == ((DataGridView)sender).ColumnCount - 1)
+            //    {
+            //        DataGridViewCheckBoxCell checkBoxcell = (DataGridViewCheckBoxCell)cell;
+            //        DataGridViewRow currentRow = dgvUserList.Rows[e.RowIndex];
 
-                    SystemUserService systemUserService = new SystemUserService();
-                    int id = ObjectHelper.GetValueFromAnonymousType<int>(currentRow.DataBoundItem, "Id");
-                    SystemUser user = systemUserService.GetSystemUser(id);
-                    if (checkBoxcell.Value != null && checkBoxcell.Value.ToString().Equals(bool.TrueString))
-                    {
-                        user.Status = Constant.ACTIVE_PROPERTY_VALUE;
-                    }
-                    else
-                    {
-                        user.Status = Constant.DEACTIVE_PROPERTY_VALUE;
-                    }
-                    bool result = systemUserService.UpdateSystemUser(user);
-                    if (!result)
-                    {
-                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+            //        SystemUserService systemUserService = new SystemUserService();
+            //        int id = ObjectHelper.GetValueFromAnonymousType<int>(currentRow.DataBoundItem, "Id");
+            //        SystemUser user = systemUserService.GetSystemUser(id);
+            //        if (checkBoxcell.Value != null && checkBoxcell.Value.ToString().Equals(bool.TrueString))
+            //        {
+            //            user.Status = Constant.ACTIVE_PROPERTY_VALUE;
+            //        }
+            //        else
+            //        {
+            //            user.Status = Constant.DEACTIVE_PROPERTY_VALUE;
+            //        }
+            //        bool result = systemUserService.UpdateSystemUser(user);
+            //        if (!result)
+            //        {
+            //            MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+            //        }
+            //        else
+            //        {
+            //            MessageBox.Show("Thực hiện thành công!");
+            //            loadSystemUserList();
+            //        }
+            //    }
 
-                    }
-                }
-
-            }
+            //}
         }
 
         private void dgvUserList_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            AddSystemUser frmAddSystemUser = new AddSystemUser();
-            DataGridViewRow currentRow = dgvUserList.Rows[e.RowIndex];
+            if (Global.isAdmin())
+            {
+                AddSystemUser frmAddSystemUser = new AddSystemUser();
+                DataGridViewRow currentRow = dgvUserList.Rows[e.RowIndex];
 
-            int id = ObjectHelper.GetValueFromAnonymousType<int>(currentRow.DataBoundItem, "Id");
-            frmAddSystemUser.loadDataForEditSystemUser(id);
+                int id = ObjectHelper.GetValueFromAnonymousType<int>(currentRow.DataBoundItem, "Id");
+                frmAddSystemUser.loadDataForEditSystemUser(id);
 
-            frmAddSystemUser.CallFromUserControll = this;
-            frmAddSystemUser.ShowDialog();
+                frmAddSystemUser.CallFromUserControll = this;
+                frmAddSystemUser.ShowDialog();
+            }
+            else
+            {
+                MessageBox.Show("Tài khoản quản trị mới xem được thông tin người dùng!");
+            }
         }
     }
 }

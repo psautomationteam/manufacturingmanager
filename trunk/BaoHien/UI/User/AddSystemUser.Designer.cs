@@ -129,8 +129,8 @@
             // 
             this.cbUserType.FormattingEnabled = true;
             this.cbUserType.Items.AddRange(new object[] {
-            "Kế Toán",
             "Quản Trị",
+            "Kế Toán",
             "Người Bán Hàng"});
             this.cbUserType.Location = new System.Drawing.Point(152, 151);
             this.cbUserType.Name = "cbUserType";

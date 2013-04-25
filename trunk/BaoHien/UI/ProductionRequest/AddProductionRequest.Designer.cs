@@ -45,6 +45,7 @@
             this.btnSave = new System.Windows.Forms.Button();
             this.btnDelete = new System.Windows.Forms.Button();
             this.validator1 = new Itboy.Components.Validator(this.components);
+            this.btnCreateNK = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvMaterial)).BeginInit();
@@ -203,6 +204,16 @@
             // 
             this.validator1.Form = this;
             // 
+            // btnCreateNK
+            // 
+            this.btnCreateNK.Location = new System.Drawing.Point(12, 423);
+            this.btnCreateNK.Name = "btnCreateNK";
+            this.btnCreateNK.Size = new System.Drawing.Size(116, 23);
+            this.btnCreateNK.TabIndex = 14;
+            this.btnCreateNK.Text = "Tạo phiếu nhập kho";
+            this.btnCreateNK.UseVisualStyleBackColor = true;
+            this.btnCreateNK.Click += new System.EventHandler(this.btnCreateNK_Click);
+            // 
             // AddProductionRequest
             // 
             this.AcceptButton = this.btnSave;
@@ -210,6 +221,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnDelete;
             this.ClientSize = new System.Drawing.Size(949, 458);
+            this.Controls.Add(this.btnCreateNK);
             this.Controls.Add(this.btnDelete);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.groupBox3);
@@ -247,5 +259,6 @@
         private System.Windows.Forms.Button btnDelete;
         private System.Windows.Forms.DataGridView dgvProduct;
         private Itboy.Components.Validator validator1;
+        private System.Windows.Forms.Button btnCreateNK;
     }
 }

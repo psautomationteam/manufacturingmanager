@@ -43,6 +43,7 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.btnDelete = new System.Windows.Forms.Button();
             this.validator1 = new Itboy.Components.Validator(this.components);
+            this.btnCreateSP = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvStockEntranceDetails)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -176,6 +177,16 @@
             // 
             this.validator1.Form = this;
             // 
+            // btnCreateSP
+            // 
+            this.btnCreateSP.Location = new System.Drawing.Point(16, 414);
+            this.btnCreateSP.Name = "btnCreateSP";
+            this.btnCreateSP.Size = new System.Drawing.Size(116, 23);
+            this.btnCreateSP.TabIndex = 15;
+            this.btnCreateSP.Text = "Tạo sản phẩm";
+            this.btnCreateSP.UseVisualStyleBackColor = true;
+            this.btnCreateSP.Click += new System.EventHandler(this.btnCreateSP_Click);
+            // 
             // AddEntranceStock
             // 
             this.AcceptButton = this.btnSave;
@@ -183,6 +194,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnDelete;
             this.ClientSize = new System.Drawing.Size(751, 445);
+            this.Controls.Add(this.btnCreateSP);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.groupBox2);
@@ -215,5 +227,6 @@
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Button btnDelete;
         private Itboy.Components.Validator validator1;
+        private System.Windows.Forms.Button btnCreateSP;
     }
 }

@@ -46,7 +46,6 @@ namespace BaoHien.UI
 
         public void loadProductionRequestList()
         {
-
             ProductionRequestService productionRequestService = new ProductionRequestService();
             productionRequests = productionRequestService.GetProductionRequests();
             if (productionRequests != null)

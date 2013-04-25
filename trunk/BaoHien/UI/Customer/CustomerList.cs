@@ -11,6 +11,8 @@ using DAL;
 using BaoHien.Common;
 using BaoHien.Services.Customers;
 using DAL.Helper;
+using BaoHien.Services.Employees;
+using BaoHien.Model;
 
 namespace BaoHien.UI
 {
@@ -26,22 +28,24 @@ namespace BaoHien.UI
             SetupColumns();
             loadCustomerList();
         }
+
         public void loadCustomerList()
         {
-            
-            SystemUserService systemUserService = new SystemUserService();
-            List<SystemUser> systemUsers = systemUserService.SelectSystemUserByWhere(su => su.Type == BHConstant.USER_TYPE_ID3);
-            if (systemUsers != null)
+            EmployeeService service = new EmployeeService();
+            List<Employee> salers = service.GetEmployees();
+            salers.Add(new Employee() { Id = 0 });
+            salers = salers.OrderBy(x => x.Id).ToList();
+            if (salers != null)
             {
-                cmbSaler.DataSource = systemUsers;
+                cmbSaler.DataSource = salers;
                 cmbSaler.DisplayMember = "FullName";
                 cmbSaler.ValueMember = "Id";
-
             }
             CustomerService customerService = new CustomerService();
             List<Customer> customers = customerService.GetCustomers();
             setUpDataGrid(customers);
         }
+
         private void setUpDataGrid(List<Customer> customers)
         {
             if (customers != null)
@@ -73,6 +77,7 @@ namespace BaoHien.UI
                 lblTotalResult.Text = customers.Count.ToString();
             }
         }
+
         private void SetupColumns()
         {
             dgvProductList.AutoGenerateColumns = false;
@@ -215,6 +220,20 @@ namespace BaoHien.UI
                 }
 
             }
+        }
+
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
+            CustomerSearchCriteria search = new CustomerSearchCriteria
+            {
+                Code = string.IsNullOrEmpty(txtCode.Text) ? txtCode.Text : "",
+                Phone = string.IsNullOrEmpty(txtPhone.Text) ? txtPhone.Text : "",
+                Name = string.IsNullOrEmpty(txtName.Text) ? txtName.Text : "",
+                Saler = (cmbSaler.SelectedValue != null && (int)cmbSaler.SelectedValue > 0) ? (int?)cmbSaler.SelectedValue : (int?)null
+            };
+            CustomerService service = new CustomerService();
+            List<Customer> customers = service.SearchingCustomer(search);
+            setUpDataGrid(customers);
         }
     }
 }

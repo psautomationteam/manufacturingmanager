@@ -16,3 +16,9 @@ D:\Pikait\Work\BaoHien\JRINCCustomControls\bin\Debug\JRINCCustomControls.pdb
 D:\Pikait\Work\BaoHien\JRINCCustomControls\obj\Debug\ResolveAssemblyReference.cache
 D:\Pikait\Work\BaoHien\JRINCCustomControls\obj\Debug\JRINCCustomControls.dll
 D:\Pikait\Work\BaoHien\JRINCCustomControls\obj\Debug\JRINCCustomControls.pdb
+D:\Workspace - VS\Bao Hien Project\Source\JRINCCustomControls\bin\Debug\JRINCCustomControls.XML
+D:\Workspace - VS\Bao Hien Project\Source\JRINCCustomControls\bin\Debug\JRINCCustomControls.dll
+D:\Workspace - VS\Bao Hien Project\Source\JRINCCustomControls\bin\Debug\JRINCCustomControls.pdb
+D:\Workspace - VS\Bao Hien Project\Source\JRINCCustomControls\obj\Debug\ResolveAssemblyReference.cache
+D:\Workspace - VS\Bao Hien Project\Source\JRINCCustomControls\obj\Debug\JRINCCustomControls.dll
+D:\Workspace - VS\Bao Hien Project\Source\JRINCCustomControls\obj\Debug\JRINCCustomControls.pdb
