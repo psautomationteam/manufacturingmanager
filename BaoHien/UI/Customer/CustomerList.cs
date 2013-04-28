@@ -226,10 +226,11 @@ namespace BaoHien.UI
         {
             CustomerSearchCriteria search = new CustomerSearchCriteria
             {
-                Code = string.IsNullOrEmpty(txtCode.Text) ? txtCode.Text : "",
-                Phone = string.IsNullOrEmpty(txtPhone.Text) ? txtPhone.Text : "",
-                Name = string.IsNullOrEmpty(txtName.Text) ? txtName.Text : "",
-                Saler = (cmbSaler.SelectedValue != null && (int)cmbSaler.SelectedValue > 0) ? (int?)cmbSaler.SelectedValue : (int?)null
+                Code = string.IsNullOrEmpty(txtCode.Text) ? "" : txtCode.Text ,
+                Phone = string.IsNullOrEmpty(txtPhone.Text) ? "" : txtPhone.Text,
+                Name = string.IsNullOrEmpty(txtName.Text) ? "" : txtName.Text,
+                Saler = (cmbSaler.SelectedValue != null && (int)cmbSaler.SelectedValue > 0) ? (int?)cmbSaler.SelectedValue : (int?)null,
+                FavorProduct = string.IsNullOrEmpty(txtFavoriteProduct.Text) ? "" : txtFavoriteProduct.Text
             };
             CustomerService service = new CustomerService();
             List<Customer> customers = service.SearchingCustomer(search);

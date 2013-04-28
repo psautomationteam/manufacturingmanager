@@ -28,6 +28,13 @@ namespace BaoHien.Model
             set { name = value; }
         }
 
+        string favorProduct;
+        public string FavorProduct
+        {
+            get { return favorProduct; }
+            set { favorProduct = value; }
+        }
+
         int? saler;
         public int? Saler
         {
