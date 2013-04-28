@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using BaoHien.UI.Base;
 using DAL;
@@ -14,16 +11,10 @@ using BaoHien.Common;
 using BaoHien.Services.Products;
 using DAL.Helper;
 using BaoHien.Services.OrderDetails;
-using BaoHien.Services.BaseAttributes;
 using BaoHien.Services.ProductAttributes;
 using BaoHien.Model;
-using System.Drawing.Imaging;
 using System.Drawing.Printing;
 using System.IO;
-using CoolPrintPreview;
-using System.Reflection;
-using BaoHien.Services.ProductInStocks;
-using System.Globalization;
 using PDF = iTextSharp.text;
 using iTextSharp.text.pdf;
 using Microsoft.Win32;
@@ -49,6 +40,8 @@ namespace BaoHien.UI
         BindingList<ProductionRequestDetailModel> originalProductions;
         double totalWithTax = 0.0, totalCommission = 0.0;
 
+        int XKNumber = 0, BHNumber = 0;
+
         // Cell position
         const int ProductAttrCell = 0, NumberUnitCell = 1, UnitCell = 2, PriceCell = 3, CommissionCell = 4, TotalCell = 5, NoteCell = 6;
 
@@ -70,6 +63,8 @@ namespace BaoHien.UI
                 DialogResult dialogResult = Preview();
                 if (dialogResult == DialogResult.OK)
                 {
+                    XKNumber = PrintPreview.XKNumber;
+                    BHNumber = PrintPreview.BHNumber;
                     double discount = 0;
                     Double.TryParse(txtDiscount.WorkingText, out discount);
                     DateTime createdDate = DateTime.Now;
@@ -363,13 +358,12 @@ namespace BaoHien.UI
             }
             if (customers != null)
             {
+                cbxCustomer.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+                cbxCustomer.AutoCompleteSource = AutoCompleteSource.ListItems;
+
                 cbxCustomer.DataSource = customers;
-                cbxCustomer.DisplayMember = "CustomerName";
+                cbxCustomer.DisplayMember = "CustCode";
                 cbxCustomer.ValueMember = "Id";
-                if (customers.Count == 0)
-                {
-                    cbxCustomer.Enabled = false;
-                }
             }
             ProductAttributeService productAttrService = new ProductAttributeService();
             productAttrs = new BindingList<ProductAttributeModel>(productAttrService.GetProductAndAttribute());
@@ -484,13 +478,13 @@ namespace BaoHien.UI
                 {
                     this.Text = "Xem thông tin phiếu bán hàng";
                     btnPrintS.Enabled = false;
-                    btnPrint.Visible = false;
+                    //btnPrint.Visible = false;
                 }
             }
             else
             {
                 this.Text = "Tạo phiếu bán hàng";
-                btnPrint.Visible = false;
+               // btnPrint.Visible = false;
             }
         }
 
@@ -605,6 +599,10 @@ namespace BaoHien.UI
                         {
                             orderDetails[e.RowIndex].Commission = double.Parse(dgv.CurrentCell.Value.ToString());
                             dgv.CurrentCell.ToolTipText = Global.formatVNDCurrencyText(orderDetails[e.RowIndex].Commission.ToString());
+                        } break;
+                    case TotalCell:
+                        {
+                            dgv.CurrentCell.ToolTipText = Global.formatVNDCurrencyText(orderDetails[e.RowIndex].Cost.ToString());
                         } break;
                     case NoteCell:
                         {
@@ -1048,8 +1046,10 @@ namespace BaoHien.UI
 
         private void Print(string printerName)
         {
-            printOrder(false);
-            printForStock();
+            if(BHNumber > 0)
+                printOrder(false);
+            if(XKNumber > 0)
+                printForStock();
             // Print the file to the printer.
             try
             {
@@ -1058,29 +1058,32 @@ namespace BaoHien.UI
                 string file1 = BHConstant.SAVE_IN_DIRECTORY + @"\BHang" + false.ToString() + ".pdf";
                 string file2 = BHConstant.SAVE_IN_DIRECTORY + @"\XKho.pdf";
 
-                Process pdf_print1 = new Process();
-                pdf_print1.StartInfo.FileName = foxit;
-                pdf_print1.StartInfo.Arguments = string.Format(@"-t ""{0}"" ""{1}""", file1, printerName);
-                pdf_print1.StartInfo.CreateNoWindow = true;
-                pdf_print1.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                pdf_print1.Start();
-                pdf_print1.WaitForExit(10000);
-                if (!pdf_print1.HasExited)
+                for(int i = 0; i > BHNumber; i++)
                 {
-                    pdf_print1.Kill();
-                    pdf_print1.Dispose();
-                    MessageBox.Show("Không thể in phiếu bán hàng!");
+                    Process pdf_print1 = new Process();
+                    pdf_print1.StartInfo.FileName = foxit;
+                    pdf_print1.StartInfo.Arguments = string.Format(@"-t ""{0}"" ""{1}""", file1, printerName);
+                    pdf_print1.StartInfo.CreateNoWindow = true;
+                    pdf_print1.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                    pdf_print1.Start();
+                    pdf_print1.WaitForExit(20000);
+                    if (!pdf_print1.HasExited)
+                    {
+                        pdf_print1.Kill();
+                        pdf_print1.Dispose();
+                        MessageBox.Show("Không thể in phiếu bán hàng!");
+                    }
                 }
-                else
-                {
 
+                for (int i = 0; i > XKNumber; i++)
+                {
                     Process pdf_print2 = new Process();
                     pdf_print2.StartInfo.FileName = foxit;
                     pdf_print2.StartInfo.Arguments = string.Format(@"-t ""{0}"" ""{1}""", file2, printerName);
                     pdf_print2.StartInfo.CreateNoWindow = true;
                     pdf_print2.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
                     pdf_print2.Start();
-                    pdf_print2.WaitForExit(10000);
+                    pdf_print2.WaitForExit(20000);
                     if (!pdf_print2.HasExited)
                     {
                         pdf_print2.Kill();
@@ -1099,8 +1102,8 @@ namespace BaoHien.UI
         private DialogResult Preview()
         {
             printOrder(true);
-            PrintPreview p = new PrintPreview(BHConstant.SAVE_IN_DIRECTORY + @"\BHang" + true.ToString() + ".pdf");
-            DialogResult r = p.ShowDialog(this);
+            PrintPreview printPreview = new PrintPreview(BHConstant.SAVE_IN_DIRECTORY + @"\BHang" + true.ToString() + ".pdf");
+            DialogResult r = printPreview.ShowDialog(this);
             return r;
         }
 
@@ -1192,5 +1195,47 @@ namespace BaoHien.UI
         {
             txtNote.Focus();
         }
+
+        private void cbxCustomer_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbxCustomer.SelectedValue != null)
+            {
+                Customer cm = null;
+                if (cbxCustomer.SelectedValue is Customer)
+                    cm = (Customer)cbxCustomer.SelectedValue;
+                else
+                    cm = customers.Where(x => x.Id == (int)cbxCustomer.SelectedValue).FirstOrDefault();
+                if (cm != null)
+                {
+                    lbCustomerName.Text = cm.CustomerName;
+                }
+            }
+        }
+
+        private void dgwOrderDetails_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (e.Value != null && orderDetails.Count > 0)
+            {
+                DataGridViewCell cell = dgwOrderDetails.Rows[e.RowIndex].Cells[e.ColumnIndex];
+                switch (e.ColumnIndex)
+                {
+                    case PriceCell:
+                        {
+                            cell.ToolTipText = Global.formatVNDCurrencyText(orderDetails[e.RowIndex].Price.ToString());
+                        } break;
+                    case CommissionCell:
+                        {
+                            cell.ToolTipText = Global.formatVNDCurrencyText(orderDetails[e.RowIndex].Commission.ToString());
+                        } break;
+                    case TotalCell:
+                        {
+                            cell.ToolTipText = Global.formatVNDCurrencyText(orderDetails[e.RowIndex].Cost.ToString());
+                        } break;
+                    default:
+                        break;
+                }
+            }
+        }
+
     }
 }

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="BaoHienCompany" Class="BaoHienDBDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="AppSettings" ConnectionString="Data Source=PIKAIT-PC\SQLEXPRESS;Initial Catalog=BaoHienCompany;Integrated Security=True" SettingsObjectName="DAL.Properties.Settings" SettingsPropertyName="BaoHienCompanyConnectionString1" Provider="System.Data.SqlClient" />
+  <Connection Mode="AppSettings" ConnectionString="Data Source=KHANGUYEN-PC\SQLEXPRESS;Initial Catalog=BaoHienCompany;Integrated Security=True" SettingsObjectName="DAL.Properties.Settings" SettingsPropertyName="BaoHienCompanyConnectionString2" Provider="System.Data.SqlClient" />
   <Table Name="dbo.BaseAttribute" Member="BaseAttributes">
     <Type Name="BaseAttribute">
       <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -261,7 +261,7 @@
     <Type Name="Customer">
       <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="CustomerName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
-      <Column Name="CustCode" Type="System.String" DbType="VarChar(25) NOT NULL" CanBeNull="false" />
+      <Column Name="CustCode" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
       <Column Name="Address" Type="System.String" DbType="NVarChar(250) NOT NULL" CanBeNull="false" />
       <Column Name="Phone" Type="System.String" DbType="VarChar(25) NOT NULL" CanBeNull="false" />
       <Column Name="BankAcc" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
@@ -274,6 +274,7 @@
       <Column Name="Description" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
       <Column Name="Status" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
       <Column Name="SalerId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="FavoriteProduct" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
       <Association Name="Customer_Bill" Member="Bills" ThisKey="Id" OtherKey="CustId" Type="Bill" />
       <Association Name="Customer_CustomerLog" Member="CustomerLogs" ThisKey="Id" OtherKey="CustomerId" Type="CustomerLog" />
       <Association Name="Customer_Order" Member="Orders" ThisKey="Id" OtherKey="CustId" Type="Order" />

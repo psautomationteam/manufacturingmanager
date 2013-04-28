@@ -13,15 +13,13 @@ namespace BaoHien.Services.Customers
         public Customer GetCustomer(System.Int32 id)
         {
             Customer customer = OnGetItem<Customer>(id.ToString());
-
             return customer;
         }
 
         public List<Customer> GetCustomers()
         {
             List<Customer> customers = OnGetItems<Customer>();
-
-            return customers;
+            return customers.OrderBy(x => x.CustomerName).ToList();
         }
 
         public bool AddCustomer(Customer customer)
@@ -60,8 +58,12 @@ namespace BaoHien.Services.Customers
                 {
                     customers = customers.Where(pr => pr.CustomerName.Contains(search.Name)).ToList();
                 }
+                if (search.FavorProduct != "")
+                {
+                    customers = customers.Where(pr => pr.FavoriteProduct.Contains(search.FavorProduct)).ToList();
+                }
             }
-            return customers;
+            return customers.OrderBy(x => x.CustomerName).ToList();
         }
     }
 }

@@ -30,6 +30,8 @@
         {
             this.components = new System.ComponentModel.Container();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.txtFavoriteProduct = new System.Windows.Forms.TextBox();
+            this.label15 = new System.Windows.Forms.Label();
             this.txtDescription = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
             this.txtEmail = new System.Windows.Forms.TextBox();
@@ -60,7 +62,6 @@
             this.label14 = new System.Windows.Forms.Label();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnAdd = new System.Windows.Forms.Button();
-            this.lblErrorMessage = new System.Windows.Forms.Label();
             this.validator1 = new Itboy.Components.Validator(this.components);
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -68,6 +69,8 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.txtFavoriteProduct);
+            this.groupBox1.Controls.Add(this.label15);
             this.groupBox1.Controls.Add(this.txtDescription);
             this.groupBox1.Controls.Add(this.label10);
             this.groupBox1.Controls.Add(this.txtEmail);
@@ -90,23 +93,39 @@
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Location = new System.Drawing.Point(2, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(721, 229);
+            this.groupBox1.Size = new System.Drawing.Size(721, 273);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Thông tin công ty";
             // 
+            // txtFavoriteProduct
+            // 
+            this.txtFavoriteProduct.Location = new System.Drawing.Point(107, 229);
+            this.txtFavoriteProduct.Name = "txtFavoriteProduct";
+            this.txtFavoriteProduct.Size = new System.Drawing.Size(591, 20);
+            this.txtFavoriteProduct.TabIndex = 19;
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(10, 232);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(85, 13);
+            this.label15.TabIndex = 20;
+            this.label15.Text = "Dòng sản phẩm:";
+            // 
             // txtDescription
             // 
-            this.txtDescription.Location = new System.Drawing.Point(108, 167);
+            this.txtDescription.Location = new System.Drawing.Point(108, 157);
             this.txtDescription.Multiline = true;
             this.txtDescription.Name = "txtDescription";
-            this.txtDescription.Size = new System.Drawing.Size(428, 56);
+            this.txtDescription.Size = new System.Drawing.Size(590, 66);
             this.txtDescription.TabIndex = 9;
             // 
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(58, 167);
+            this.label10.Location = new System.Drawing.Point(58, 157);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(40, 13);
             this.label10.TabIndex = 18;
@@ -214,9 +233,9 @@
             // 
             // txtAddress
             // 
-            this.txtAddress.Location = new System.Drawing.Point(108, 49);
+            this.txtAddress.Location = new System.Drawing.Point(107, 50);
             this.txtAddress.Name = "txtAddress";
-            this.txtAddress.Size = new System.Drawing.Size(573, 20);
+            this.txtAddress.Size = new System.Drawing.Size(591, 20);
             this.txtAddress.TabIndex = 2;
             this.validator1.SetType(this.txtAddress, Itboy.Components.ValidationType.Required);
             // 
@@ -272,7 +291,7 @@
             this.groupBox2.Controls.Add(this.label12);
             this.groupBox2.Controls.Add(this.txtContactPersonName);
             this.groupBox2.Controls.Add(this.label11);
-            this.groupBox2.Location = new System.Drawing.Point(2, 248);
+            this.groupBox2.Location = new System.Drawing.Point(2, 291);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(721, 100);
             this.groupBox2.TabIndex = 1;
@@ -297,7 +316,7 @@
             // 
             // txtContactPersonPhone
             // 
-            this.txtContactPersonPhone.Location = new System.Drawing.Point(444, 27);
+            this.txtContactPersonPhone.Location = new System.Drawing.Point(444, 24);
             this.txtContactPersonPhone.Name = "txtContactPersonPhone";
             this.txtContactPersonPhone.Size = new System.Drawing.Size(254, 20);
             this.txtContactPersonPhone.TabIndex = 1;
@@ -305,7 +324,7 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(357, 34);
+            this.label12.Location = new System.Drawing.Point(356, 27);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(73, 13);
             this.label12.TabIndex = 2;
@@ -332,7 +351,7 @@
             this.label14.AutoSize = true;
             this.label14.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label14.ForeColor = System.Drawing.Color.Blue;
-            this.label14.Location = new System.Drawing.Point(12, 383);
+            this.label14.Location = new System.Drawing.Point(12, 404);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(210, 14);
             this.label14.TabIndex = 17;
@@ -341,7 +360,7 @@
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(528, 370);
+            this.btnCancel.Location = new System.Drawing.Point(544, 399);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 3;
@@ -351,21 +370,13 @@
             // btnAdd
             // 
             this.btnAdd.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnAdd.Location = new System.Drawing.Point(625, 370);
+            this.btnAdd.Location = new System.Drawing.Point(625, 399);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(75, 23);
             this.btnAdd.TabIndex = 2;
             this.btnAdd.Text = "Thêm";
             this.btnAdd.UseVisualStyleBackColor = true;
             this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
-            // 
-            // lblErrorMessage
-            // 
-            this.lblErrorMessage.AutoSize = true;
-            this.lblErrorMessage.Location = new System.Drawing.Point(13, 355);
-            this.lblErrorMessage.Name = "lblErrorMessage";
-            this.lblErrorMessage.Size = new System.Drawing.Size(0, 13);
-            this.lblErrorMessage.TabIndex = 20;
             // 
             // validator1
             // 
@@ -377,8 +388,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(729, 405);
-            this.Controls.Add(this.lblErrorMessage);
+            this.ClientSize = new System.Drawing.Size(729, 429);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnAdd);
             this.Controls.Add(this.label14);
@@ -387,6 +397,7 @@
             this.Name = "AddCustomer";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Thêm khách hàng";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.AddCustomer_FormClosing);
             this.Load += new System.EventHandler(this.AddCustomer_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
@@ -430,7 +441,8 @@
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnAdd;
-        private System.Windows.Forms.Label lblErrorMessage;
         private Itboy.Components.Validator validator1;
+        private System.Windows.Forms.TextBox txtFavoriteProduct;
+        private System.Windows.Forms.Label label15;
     }
 }
