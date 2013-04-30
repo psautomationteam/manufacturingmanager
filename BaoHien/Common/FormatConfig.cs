@@ -107,10 +107,16 @@ namespace BaoHien.Common
     class PdfWriterEvents : IPdfPageEvent
     {
         string watermarkText = string.Empty;
+        Image watermarkImage;
 
         public PdfWriterEvents(string watermark)
         {
             watermarkText = watermark;
+        }
+
+        public PdfWriterEvents(Image watermark)
+        {
+            watermarkImage = watermark;
         }
 
         public void OnOpenDocument(PdfWriter writer, Document document) { }
@@ -130,6 +136,8 @@ namespace BaoHien.Common
                 under.SetFontAndSize(baseFont, fontSize);
                 under.ShowTextAligned(PdfContentByte.ALIGN_CENTER, watermarkText, xPosition, yPosition, angle);
                 under.EndText();
+                if (watermarkImage != null)
+                    under.AddImage(watermarkImage);
             }
             catch (Exception ex)
             {
@@ -147,4 +155,17 @@ namespace BaoHien.Common
 
     }
 
+    public class WaterMarkEvent : PdfPageEventHelper
+    {
+        private Image waterMark;
+        public WaterMarkEvent(Image img)
+        {
+            waterMark = img;
+        }
+        public void OnStartPage(PdfWriter writer, Document doc)
+        {
+            PdfContentByte content = writer.DirectContentUnder;
+            content.AddImage(waterMark);
+        }
+    }
 }

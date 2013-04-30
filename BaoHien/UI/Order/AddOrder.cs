@@ -23,6 +23,8 @@ using BaoHien.Services.ProductLogs;
 using BaoHien.Services.Employees;
 using BaoHien.Services.MeasurementUnits;
 using BaoHien.UI.PrintPreviewCustom;
+using BaoHien.Services.Seeds;
+using iTextSharp.text;
 
 namespace BaoHien.UI
 {
@@ -387,8 +389,10 @@ namespace BaoHien.UI
             }
             else
             {
-                txtOrderCode.Text = RandomGeneration.GeneratingCode(BHConstant.PREFIX_FOR_ORDER);
                 txtCreatedDate.Text = DateTime.Now.ToShortDateString();
+
+                SeedService ss = new SeedService();
+                txtOrderCode.Text = ss.AddSeedID(BHConstant.PREFIX_FOR_ORDER); //RandomGeneration.GeneratingCode(BHConstant.PREFIX_FOR_ORDER);
             }
         }
 
@@ -797,7 +801,14 @@ namespace BaoHien.UI
         {
             Global.checkDirSaveFile();
             var doc = new PDF.Document();
-            PdfWriter.GetInstance(doc, new FileStream(BHConstant.SAVE_IN_DIRECTORY + @"\XKho.pdf", FileMode.Create));
+            PdfWriter docWriter = PdfWriter.GetInstance(doc, new FileStream(BHConstant.SAVE_IN_DIRECTORY + @"\XKho.pdf", FileMode.Create));
+            PdfWriterEvents writerEvent;
+
+            Image watermarkImage = Image.GetInstance(AppDomain.CurrentDomain.BaseDirectory + @"logo.png");
+            watermarkImage.SetAbsolutePosition(doc.PageSize.Width / 2 - 70, 550);
+            writerEvent = new PdfWriterEvents(watermarkImage);
+            docWriter.PageEvent = writerEvent;
+
             doc.Open();
 
             doc.Add(FormatConfig.ParaRightBeforeHeader("Mã số phiếu : " + getOrderCode()));
@@ -865,11 +876,18 @@ namespace BaoHien.UI
             Global.checkDirSaveFile();
             var doc = new PDF.Document();
             PdfWriter docWriter = PdfWriter.GetInstance(doc, new FileStream(BHConstant.SAVE_IN_DIRECTORY + @"\BHang" + preview.ToString() + ".pdf", FileMode.Create));
+            PdfWriterEvents writerEvent;
             if (preview)
             {
-                PdfWriterEvents writerEvent = new PdfWriterEvents("Preview");
+                writerEvent = new PdfWriterEvents("Preview");
                 docWriter.PageEvent = writerEvent;
             }
+
+            Image watermarkImage = Image.GetInstance(AppDomain.CurrentDomain.BaseDirectory + @"logo.png");
+            watermarkImage.SetAbsolutePosition(doc.PageSize.Width / 2 - 70, 550);
+            writerEvent = new PdfWriterEvents(watermarkImage);
+            docWriter.PageEvent = writerEvent;
+
             doc.Open();
 
             doc.Add(FormatConfig.ParaRightBeforeHeader("Mã số phiếu : " + getOrderCode()));

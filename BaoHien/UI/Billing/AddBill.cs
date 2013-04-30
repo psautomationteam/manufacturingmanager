@@ -12,6 +12,7 @@ using BaoHien.Services.Bills;
 using BaoHien.Services.Customers;
 using BaoHien.Services.SystemUsers;
 using BaoHien.UI.Base;
+using BaoHien.Services.Seeds;
 
 namespace BaoHien.UI
 {
@@ -57,7 +58,9 @@ namespace BaoHien.UI
             else
             {
                 txtCreatedDate.Text = DateTime.Now.ToShortDateString();
-                txtOrderCode.Text = RandomGeneration.GeneratingCode(BHConstant.PREFIX_FOR_BILLING);
+
+                SeedService ss = new SeedService();
+                txtOrderCode.Text = ss.AddSeedID(BHConstant.PREFIX_FOR_BILLING); //RandomGeneration.GeneratingCode(BHConstant.PREFIX_FOR_BILLING);
             }
             txtCreatedDate.Enabled = false;
         }

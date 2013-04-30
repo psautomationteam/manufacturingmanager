@@ -281,6 +281,15 @@
       <Association Name="Employee_Customer" Member="Employee" ThisKey="SalerId" OtherKey="Id" Type="Employee" IsForeignKey="true" />
     </Type>
   </Table>
+  <Table Name="dbo.SeedID" Member="SeedIDs">
+    <Type Name="SeedID">
+      <Column Name="ID" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Prefix" Type="System.String" DbType="VarChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Value" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Result" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
   <Function Name="dbo.GenerateRandomString" Method="GenerateRandomString">
     <Parameter Name="Length" Parameter="length" Type="System.Int32" DbType="Int" />
     <ElementType Name="GenerateRandomStringResult">

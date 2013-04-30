@@ -207,5 +207,31 @@ namespace BaoHien.Common
         {
             return (CurrentUser.Type == BHConstant.USER_TYPE_ID1) ? true : false;
         }
+
+        public static string GetSeedID(string prefix)
+        {
+            string result = "";
+            using (BaoHienDBDataContext context = DAL.Helper.BaoHienRepository.GetBaoHienDBDataContext())
+            {
+                SeedID seed = context.SeedIDs.Where(x => x.Prefix == prefix && x.CreateDate.Date == DateTime.Now.Date).FirstOrDefault();
+                SeedID newseed = new SeedID
+                {
+                    CreateDate = DateTime.Now,
+                    Prefix = prefix
+                };
+                int max_id = 1;
+                if (seed != null)
+                {
+                    max_id = Convert.ToInt32(seed.Value) + 1;
+                }
+                newseed.Value = max_id.ToString();
+                newseed.Result = newseed.Prefix + newseed.CreateDate.Date.ToString("ddMMyy") + 
+                    String.Concat(Enumerable.Repeat("0", BHConstant.MAX_ID - max_id.ToString().Length)) + max_id.ToString();
+                result = newseed.Result;
+                context.SeedIDs.InsertOnSubmit(newseed);
+                context.SubmitChanges();
+            }
+            return result;
+        }
     }
 }
