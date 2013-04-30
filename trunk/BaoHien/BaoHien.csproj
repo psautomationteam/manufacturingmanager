@@ -128,6 +128,7 @@
     <Compile Include="Services\Customer\CustomerLogService.cs" />
     <Compile Include="Services\Employee\EmployeeLogService.cs" />
     <Compile Include="Services\Products\ProductLogService.cs" />
+    <Compile Include="Services\Seed\SeedService.cs" />
     <Compile Include="UI\Configuration\DBConfiguration.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -469,9 +470,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Services\User\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\DAL\DAL.csproj">
       <Project>{E20ACD5C-C921-45BB-BC44-D227D734C34A}</Project>

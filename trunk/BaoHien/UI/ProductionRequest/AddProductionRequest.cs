@@ -19,6 +19,7 @@ using BaoHien.Services.BaseAttributes;
 using BaoHien.Model;
 using BaoHien.Services.ProductInStocks;
 using BaoHien.Services.ProductLogs;
+using BaoHien.Services.Seeds;
 
 namespace BaoHien.UI
 {
@@ -182,7 +183,9 @@ namespace BaoHien.UI
                 txtDate.Enabled = false;
                 txtUser.Text = (Global.CurrentUser != null) ? Global.CurrentUser.FullName : "";
                 txtUser.Enabled = false;
-                txtCode.Text = RandomGeneration.GeneratingCode(BHConstant.PREFIX_FOR_PRODUCTION);
+
+                SeedService ss = new SeedService();
+                txtCode.Text = ss.AddSeedID(BHConstant.PREFIX_FOR_PRODUCTION); //RandomGeneration.GeneratingCode(BHConstant.PREFIX_FOR_PRODUCTION);
             }
             ProductAttributeService productAttrService = new ProductAttributeService();
             productForProducts = new BindingList<ProductAttributeModel>(productAttrService.GetProductAndAttribute());

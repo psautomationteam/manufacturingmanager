@@ -18,6 +18,7 @@ using BaoHien.UI.Base;
 using DAL.Helper;
 using BaoHien.Services.ProductLogs;
 using BaoHien.Services.MeasurementUnits;
+using BaoHien.Services.Seeds;
 
 namespace BaoHien.UI
 {
@@ -72,8 +73,10 @@ namespace BaoHien.UI
                     txtUser.Text = Global.CurrentUser.FullName;
                 }                
                 txtUser.Enabled = false;
-                txtCode.Text = RandomGeneration.GeneratingCode(BHConstant.PREFIX_FOR_ENTRANCE);
                 txtDate.Text = DateTime.Now.ToShortDateString();
+
+                SeedService ss = new SeedService();
+                txtCode.Text = ss.AddSeedID(BHConstant.PREFIX_FOR_ENTRANCE); //RandomGeneration.GeneratingCode(BHConstant.PREFIX_FOR_ENTRANCE);
             }
             txtDate.Enabled = false;
             txtUser.Enabled = false;
