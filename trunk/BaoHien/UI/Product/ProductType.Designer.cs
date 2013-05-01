@@ -113,6 +113,7 @@
             this.dgvProductTypeList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvProductTypeList.Location = new System.Drawing.Point(12, 136);
             this.dgvProductTypeList.Name = "dgvProductTypeList";
+            this.dgvProductTypeList.ReadOnly = true;
             this.dgvProductTypeList.Size = new System.Drawing.Size(1052, 484);
             this.dgvProductTypeList.TabIndex = 2;
             this.dgvProductTypeList.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvProductTypeList_CellClick);

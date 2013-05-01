@@ -46,37 +46,23 @@ namespace BaoHien.UI
 
         private void loadSomeData()
         {
-            if (customers == null)
-            {
-                CustomerService customerService = new CustomerService();
-                customers = customerService.GetCustomers();
-            }
-            if (customers != null)
-            {
+            CustomerService customerService = new CustomerService();
+            customers = customerService.GetCustomers();
+            customers.Add(new Customer() { Id = 0, CustomerName = "Tất cả" });
+            customers = customers.OrderBy(x => x.Id).ToList();
 
+            cbmCustomers.DataSource = customers;
+            cbmCustomers.DisplayMember = "CustomerName";
+            cbmCustomers.ValueMember = "Id";
 
-                cbmCustomers.DataSource = customers;
+            SystemUserService systemUserService = new SystemUserService();
+            systemUsers = systemUserService.GetSystemUsers();
+            systemUsers.Add(new SystemUser() { Id = 0, FullName = "Tất cả" });
+            systemUsers = systemUsers.OrderBy(x => x.Id).ToList();
 
-                cbmCustomers.DisplayMember = "CustomerName";
-                cbmCustomers.ValueMember = "Id";
-
-            }
-            if (systemUsers == null)
-            {
-                SystemUserService systemUserService = new SystemUserService();
-                systemUsers = systemUserService.GetSystemUsers();
-            }
-            if (systemUsers != null)
-            {
-
-
-                cbmUsers.DataSource = systemUsers;
-
-                cbmUsers.DisplayMember = "FullName";
-                cbmUsers.ValueMember = "Id";
-
-            }
-            
+            cbmUsers.DataSource = systemUsers;
+            cbmUsers.DisplayMember = "FullName";
+            cbmUsers.ValueMember = "Id";
         }
 
         private void setUpDataGrid(List<Order> orders)
@@ -86,22 +72,24 @@ namespace BaoHien.UI
             {
                 int index = 0;
                 var query = from order in orders
-
                             select new
                             {
                                 Id = order.Id,
                                 OrderCode = order.OrderCode,
                                 Note = order.Note,
-                                Total = order.Total,
-                                VAT = order.VAT,
-                                CustomerName = order.Customer != null? order.Customer.CustomerName: "",
-                                Discount = order.Discount,
-                                CreatedDate = order.CreatedDate.ToShortDateString(),
+                                Total = Global.formatVNDCurrencyText(order.Total.ToString()),
+                                TotalInCurrency = order.Total,
+                                VAT = Global.formatVNDCurrencyText(order.VAT.ToString()),
+                                CustomerName = order.Customer != null ? order.Customer.CustomerName : "",
+                                CustomerCode = order.Customer != null ? order.Customer.CustCode : "",
+                                Discount = Global.formatVNDCurrencyText(order.Discount.ToString()),
+                                CreatedDate = order.CreatedDate.ToString(BHConstant.DATE_FORMAT),
                                 CreateBy = order.SystemUser.FullName,
                                 Index = ++index
                             };
                 dgwOrderList.DataSource = query.ToList();
                 lblTotalResult.Text = orders.Count.ToString();
+                lbTotal.Text = Global.formatVNDCurrencyText(query.Select(x => x.TotalInCurrency).Sum().ToString());
             }
         }
 
@@ -113,31 +101,40 @@ namespace BaoHien.UI
             indexColumn.DataPropertyName = "Index";
             indexColumn.HeaderText = "STT";
             indexColumn.ValueType = typeof(string);
-            indexColumn.Frozen = true;
             dgwOrderList.Columns.Add(indexColumn);
+
+            DataGridViewTextBoxColumn createdDateColumn = new DataGridViewTextBoxColumn();
+            createdDateColumn.DataPropertyName = "CreatedDate";
+            createdDateColumn.Width = 100;
+            createdDateColumn.HeaderText = "Ngày tạo";
+            createdDateColumn.ValueType = typeof(string);
+            dgwOrderList.Columns.Add(createdDateColumn);
+
             DataGridViewTextBoxColumn orderCodeColumn = new DataGridViewTextBoxColumn();
             orderCodeColumn.Width = 100;
             orderCodeColumn.DataPropertyName = "OrderCode";
             orderCodeColumn.HeaderText = "Mã đặt hàng";
             orderCodeColumn.ValueType = typeof(string);
-            orderCodeColumn.Frozen = true;
             dgwOrderList.Columns.Add(orderCodeColumn);
-
-
 
             DataGridViewTextBoxColumn customerNameColumn = new DataGridViewTextBoxColumn();
             customerNameColumn.DataPropertyName = "CustomerName";
             customerNameColumn.Width = 200;
             customerNameColumn.HeaderText = "Khách hàng";
-            customerNameColumn.Frozen = true;
             customerNameColumn.ValueType = typeof(string);
             dgwOrderList.Columns.Add(customerNameColumn);
+
+            DataGridViewTextBoxColumn customerCodeColumn = new DataGridViewTextBoxColumn();
+            customerCodeColumn.DataPropertyName = "CustomerCode";
+            customerCodeColumn.Width = 150;
+            customerCodeColumn.HeaderText = "Mã khách hàng";
+            customerCodeColumn.ValueType = typeof(string);
+            dgwOrderList.Columns.Add(customerCodeColumn);
 
             DataGridViewTextBoxColumn noteColumn = new DataGridViewTextBoxColumn();
             noteColumn.DataPropertyName = "Note";
             noteColumn.Width = 200;
             noteColumn.HeaderText = "Chú ý";
-            noteColumn.Frozen = true;
             noteColumn.ValueType = typeof(string);
             dgwOrderList.Columns.Add(noteColumn);
 
@@ -145,40 +142,27 @@ namespace BaoHien.UI
             VATColumn.DataPropertyName = "VAT";
             VATColumn.Width = 100;
             VATColumn.HeaderText = "VAT";
-            VATColumn.Frozen = true;
             VATColumn.ValueType = typeof(string);
             dgwOrderList.Columns.Add(VATColumn);
 
             DataGridViewTextBoxColumn discountColumn = new DataGridViewTextBoxColumn();
             discountColumn.DataPropertyName = "Discount";
-            discountColumn.Width = 50;
+            discountColumn.Width = 100;
             discountColumn.HeaderText = "Giảm";
-            discountColumn.Frozen = true;
             discountColumn.ValueType = typeof(string);
             dgwOrderList.Columns.Add(discountColumn);
-
 
             DataGridViewTextBoxColumn createByColumn  = new DataGridViewTextBoxColumn();
             createByColumn.DataPropertyName = "CreateBy";
             createByColumn.Width = 100;
             createByColumn.HeaderText = "Người tạo";
-            createByColumn.Frozen = true;
             createByColumn.ValueType = typeof(string);
             dgwOrderList.Columns.Add(createByColumn);
 
-            DataGridViewTextBoxColumn createdDateColumn = new DataGridViewTextBoxColumn();
-            createdDateColumn.DataPropertyName = "CreatedDate";
-            createdDateColumn.Width = 100;
-            createdDateColumn.HeaderText = "Ngày tạo";
-            createdDateColumn.Frozen = true;
-            createdDateColumn.ValueType = typeof(string);
-            dgwOrderList.Columns.Add(createdDateColumn);
-
             DataGridViewTextBoxColumn totalColumn = new DataGridViewTextBoxColumn();
             totalColumn.DataPropertyName = "Total";
-            totalColumn.Width = 50;
+            totalColumn.Width = 100;
             totalColumn.HeaderText = "Tổng";
-            totalColumn.Frozen = true;
             totalColumn.ValueType = typeof(string);
             dgwOrderList.Columns.Add(totalColumn);
                         
@@ -186,7 +170,6 @@ namespace BaoHien.UI
             deleteButton.Image = Properties.Resources.erase;
             deleteButton.Width = 40;
             deleteButton.HeaderText = "Xóa";
-            deleteButton.ReadOnly = true;
             deleteButton.ImageLayout = DataGridViewImageCellLayout.Normal;
             dgwOrderList.Columns.Add(deleteButton);
         }
@@ -228,10 +211,10 @@ namespace BaoHien.UI
             OrderSearchCriteria search = new OrderSearchCriteria
             {
                 Code = string.IsNullOrEmpty(txtCode.Text) ? txtCode.Text : "",
-                CreatedBy = cbmUsers.SelectedValue != null ? (int?)cbmUsers.SelectedValue : (int?)null,
-                Customer = cbmCustomers.SelectedValue != null ? (int?)cbmCustomers.SelectedValue : (int?)null,
+                CreatedBy = (cbmUsers.SelectedValue != null && cbmUsers.SelectedIndex != 0) ? (int?)cbmUsers.SelectedValue : (int?)null,
+                Customer = (cbmCustomers.SelectedValue != null && cbmCustomers.SelectedIndex != 0) ? (int?)cbmCustomers.SelectedValue : (int?)null,
                 From = dtpFrom.Value != null ? dtpFrom.Value : (DateTime?)null,
-                To = dtpTo.Value != null ? dtpTo.Value : (DateTime?)null,
+                To = dtpTo.Value != null ? dtpTo.Value.AddDays(1).Date : (DateTime?)null,
             };
             OrderService service = new OrderService();
             List<Order> orders = service.SearchingOrder(search);

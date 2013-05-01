@@ -30,27 +30,6 @@ namespace BaoHien.UI
             dtpTo.CustomFormat = BHConstant.DATE_FORMAT;
         }
         
-        private void setUpDataGrid(List<ArrearReportModel> arrearReportModel, int colColor)
-        {
-            dgwStockEntranceList.DataSource = arrearReportModel;
-            if (colColor == 3)
-            {
-                SetupColumnOneCustomer();
-                ArrearReportModel last = arrearReportModel.OrderByDescending(a => a.ID).FirstOrDefault();
-                if (last != null)
-                {
-                    lbTotal.Text = last.AfterDebit;
-                }
-            }
-            else
-            {
-                SetupColumnAllCustomers();
-                double total = arrearReportModel.Sum(a => a.AfterDebitNumber);
-                lbTotal.Text = Global.formatVNDCurrencyText(total.ToString());
-            }
-            setColorRow(colColor);
-        }
-
         void LoadReport()
         {
             lbTotal.Text = "(VND) 0";
@@ -59,15 +38,23 @@ namespace BaoHien.UI
                 int customerId = (int)cbmCustomers.SelectedValue;
                 if (customerId != 0)
                 {
+                    double total = 0.0;
                     CustomerLogService customerLogService = new CustomerLogService();
-                    List<ArrearReportModel> arrearReportModels = customerLogService.GetReportsOfCustomer(customerId, dtpFrom.Value, dtpTo.Value.AddDays(1));
-                    setUpDataGrid(arrearReportModels, 3);
+                    List<CustomerReport> arrearReportModels = customerLogService.GetReportsOfCustomer(customerId, dtpFrom.Value, 
+                        dtpTo.Value.AddDays(1).Date, ref total);
+                    dgwStockEntranceList.DataSource = arrearReportModels;
+                    SetupColumnOneCustomer();
+                    lbTotal.Text = Global.formatVNDCurrencyText(total.ToString());
                 }
                 else
                 {
+                    double total = 0.0;
                     CustomerLogService customerLogService = new CustomerLogService();
-                    List<ArrearReportModel> arrearReportModels = customerLogService.GetReportsOfCustomers(dtpFrom.Value, dtpTo.Value.AddDays(1));
-                    setUpDataGrid(arrearReportModels, 4);
+                    List<CustomersReport> arrearReportModels = customerLogService.GetReportsOfCustomers(dtpFrom.Value, dtpTo.Value.AddDays(1).Date, ref total);
+                    dgwStockEntranceList.DataSource = arrearReportModels;
+                    SetupColumnAllCustomers();
+                    setColorRow(4);
+                    lbTotal.Text = Global.formatVNDCurrencyText(total.ToString());
                 }
             }
             else
@@ -98,82 +85,103 @@ namespace BaoHien.UI
         {
             dgwStockEntranceList.Columns.Clear();
             dgwStockEntranceList.AutoGenerateColumns = false;
+
             DataGridViewTextBoxColumn indexColumn = new DataGridViewTextBoxColumn();
             indexColumn.Width = 30;
             indexColumn.DataPropertyName = "Index";
             indexColumn.HeaderText = "STT";
             indexColumn.ValueType = typeof(string);
-            //indexColumn.Frozen = true;
             dgwStockEntranceList.Columns.Add(indexColumn);
-
-            DataGridViewTextBoxColumn recordCodeColumn = new DataGridViewTextBoxColumn();
-            recordCodeColumn.Width = 150;
-            recordCodeColumn.DataPropertyName = "RecordCode";
-            recordCodeColumn.HeaderText = "Mã phiếu";
-            recordCodeColumn.ValueType = typeof(string);
-            //recordCodeColumn.Frozen = true;
-            dgwStockEntranceList.Columns.Add(recordCodeColumn);
 
             DataGridViewTextBoxColumn dateColumn = new DataGridViewTextBoxColumn();
             dateColumn.DefaultCellStyle.Format = BHConstant.DATETIME_FORMAT;
-            dateColumn.Width = 150;
+            dateColumn.Width = 100;
             dateColumn.DataPropertyName = "Date";
             dateColumn.HeaderText = "Ngày";
             dateColumn.ValueType = typeof(string);
-            //dateColumn.Frozen = true;
             dgwStockEntranceList.Columns.Add(dateColumn);
             
-            DataGridViewTextBoxColumn amountColumn = new DataGridViewTextBoxColumn();
-            amountColumn.DataPropertyName = "Amount";
-            amountColumn.Width = 150;
-            amountColumn.HeaderText = "Số tiền";
-            //amountColumn.Frozen = true;
-            amountColumn.ValueType = typeof(string);
-            dgwStockEntranceList.Columns.Add(amountColumn);
+            DataGridViewTextBoxColumn productNameColumn = new DataGridViewTextBoxColumn();
+            productNameColumn.Width = 150;
+            productNameColumn.DataPropertyName = "ProductName";
+            productNameColumn.HeaderText = "Mặt hàng";
+            productNameColumn.ValueType = typeof(string);
+            dgwStockEntranceList.Columns.Add(productNameColumn);
+
+            DataGridViewTextBoxColumn AttrNameColumn = new DataGridViewTextBoxColumn();
+            AttrNameColumn.Width = 100;
+            AttrNameColumn.DataPropertyName = "AttrName";
+            AttrNameColumn.HeaderText = "Quy cách";
+            AttrNameColumn.ValueType = typeof(string);
+            dgwStockEntranceList.Columns.Add(AttrNameColumn);
+
+            DataGridViewTextBoxColumn numberColumn = new DataGridViewTextBoxColumn();
+            numberColumn.Width = 80;
+            numberColumn.DataPropertyName = "Number";
+            numberColumn.HeaderText = "Số lượng";
+            numberColumn.ValueType = typeof(string);
+            dgwStockEntranceList.Columns.Add(numberColumn);
+
+            DataGridViewTextBoxColumn UnitColumn = new DataGridViewTextBoxColumn();
+            UnitColumn.Width = 100;
+            UnitColumn.DataPropertyName = "Unit";
+            UnitColumn.HeaderText = "ĐVT";
+            UnitColumn.ValueType = typeof(string);
+            dgwStockEntranceList.Columns.Add(UnitColumn);
+
+            DataGridViewTextBoxColumn costColumn = new DataGridViewTextBoxColumn();
+            costColumn.Width = 100;
+            costColumn.DataPropertyName = "Cost";
+            costColumn.HeaderText = "Đơn giá";
+            costColumn.ValueType = typeof(string);
+            dgwStockEntranceList.Columns.Add(costColumn);
         }
 
         private void SetupColumnAllCustomers()
         {
             dgwStockEntranceList.Columns.Clear();
             dgwStockEntranceList.AutoGenerateColumns = false;
+
             DataGridViewTextBoxColumn indexColumn = new DataGridViewTextBoxColumn();
             indexColumn.Width = 30;
             indexColumn.DataPropertyName = "Index";
             indexColumn.HeaderText = "STT";
             indexColumn.ValueType = typeof(string);
-            //indexColumn.Frozen = true;
             dgwStockEntranceList.Columns.Add(indexColumn);
+
+            DataGridViewTextBoxColumn dateColumn = new DataGridViewTextBoxColumn();
+            dateColumn.DefaultCellStyle.Format = BHConstant.DATETIME_FORMAT;
+            dateColumn.Width = 100;
+            dateColumn.DataPropertyName = "Date";
+            dateColumn.HeaderText = "Ngày";
+            dateColumn.ValueType = typeof(string);
+            dgwStockEntranceList.Columns.Add(dateColumn);
 
             DataGridViewTextBoxColumn customerNameColumn = new DataGridViewTextBoxColumn();
             customerNameColumn.Width = 150;
             customerNameColumn.DataPropertyName = "CustomerName";
             customerNameColumn.HeaderText = "Tên khách hàng";
             customerNameColumn.ValueType = typeof(string);
-            //customerNameColumn.Frozen = true;
             dgwStockEntranceList.Columns.Add(customerNameColumn);
 
+            DataGridViewTextBoxColumn customerCodeColumn = new DataGridViewTextBoxColumn();
+            customerCodeColumn.Width = 150;
+            customerCodeColumn.DataPropertyName = "CustomerCode";
+            customerCodeColumn.HeaderText = "Mã khách hàng";
+            customerCodeColumn.ValueType = typeof(string);
+            dgwStockEntranceList.Columns.Add(customerCodeColumn);
+
             DataGridViewTextBoxColumn recordCodeColumn = new DataGridViewTextBoxColumn();
-            recordCodeColumn.Width = 150;
+            recordCodeColumn.Width = 100;
             recordCodeColumn.DataPropertyName = "RecordCode";
-            recordCodeColumn.HeaderText = "Mã phiếu (giao dịch cuối)";
+            recordCodeColumn.HeaderText = "Mã phiếu";
             recordCodeColumn.ValueType = typeof(string);
-            //recordCodeColumn.Frozen = true;
             dgwStockEntranceList.Columns.Add(recordCodeColumn);
 
-            DataGridViewTextBoxColumn dateColumn = new DataGridViewTextBoxColumn();
-            dateColumn.DefaultCellStyle.Format = BHConstant.DATETIME_FORMAT;
-            dateColumn.Width = 150;
-            dateColumn.DataPropertyName = "Date";
-            dateColumn.HeaderText = "Ngày";
-            dateColumn.ValueType = typeof(string);
-            //dateColumn.Frozen = true;
-            dgwStockEntranceList.Columns.Add(dateColumn);
-
             DataGridViewTextBoxColumn amountColumn = new DataGridViewTextBoxColumn();
-            amountColumn.DataPropertyName = "AfterDebit";
+            amountColumn.DataPropertyName = "Amount";
             amountColumn.Width = 150;
             amountColumn.HeaderText = "Số tiền";
-            //amountColumn.Frozen = true;
             amountColumn.ValueType = typeof(string);
             dgwStockEntranceList.Columns.Add(amountColumn);
         }
@@ -183,34 +191,14 @@ namespace BaoHien.UI
             dgwStockEntranceList.AutoGenerateColumns = false;
             LoadReport();
         }
-
-        private void cbmCustomers_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            ComboBox cb = sender as ComboBox;
-            if (cb.SelectedIndex == 0)
-            {
-                dtpFrom.Enabled = false;
-                dtpTo.Enabled = false;
-            }
-            else
-            {
-                dtpFrom.Enabled = true;
-                dtpTo.Enabled = true;
-            }
-        }
-
+        
         private void setColorRow(int followValueColumn)
         {
             foreach (DataGridViewRow row in dgwStockEntranceList.Rows)
             {
-                row.DefaultCellStyle.ForeColor = Color.White;
-                if (row.Cells[followValueColumn].Value.ToString().Contains("-"))
+                if (row.Cells[followValueColumn].Value.ToString().Contains("BH"))
                 {
-                    row.DefaultCellStyle.BackColor = Color.Blue;
-                }
-                else
-                {
-                    row.DefaultCellStyle.BackColor = Color.Red;
+                    row.DefaultCellStyle.BackColor = Color.LightGreen;
                 }
             }
         }

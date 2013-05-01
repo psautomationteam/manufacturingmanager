@@ -47,6 +47,7 @@ namespace BaoHien.UI
                 txtEmail.Text = customer.Email;
                 txtFax.Text = customer.Fax;
                 txtPhoneNumber.Text = customer.Phone;
+                txtFavoriteProduct.Text = customer.FavoriteProduct;
             }
         }
 
@@ -165,7 +166,11 @@ namespace BaoHien.UI
             bool result = true;
             if (!string.IsNullOrEmpty(txtName.Text) && !string.IsNullOrEmpty(txtCode.Text))
             {
-                Customer cm = customers.Where(x => x.CustCode == txtCode.Text || x.CustomerName == txtName.Text).FirstOrDefault();
+                Customer cm = null;
+                if (customer == null)
+                    cm = customers.Where(x => x.CustCode == txtCode.Text || x.CustomerName == txtName.Text).FirstOrDefault();
+                else
+                    cm = customers.Where(x => (x.CustCode == txtCode.Text || x.CustomerName == txtName.Text) && x.Id != customer.Id).FirstOrDefault();
                 if (cm != null)
                 {
                     DialogResult dl = MessageBox.Show("Trùng tên hoặc Mã khách hàng. Bạn có muốn tiếp tục?", "Cảnh báo!", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);

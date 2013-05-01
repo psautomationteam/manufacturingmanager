@@ -44,7 +44,7 @@ namespace BaoHien.UI
         void LoadReport()
         {
             DateTime dtFrom = dtpFrom.Value;
-            DateTime dtTo = dtpTo.Value.AddDays(1);
+            DateTime dtTo = dtpTo.Value.AddDays(1).Date;
             int productTypeId = cbmProductTypes.SelectedValue == null ? 0 : (int)cbmProductTypes.SelectedValue;
             int productId = cbmProducts.SelectedValue == null ? 0 : (int)cbmProducts.SelectedValue;
             int attrId = cbmAttrs.SelectedValue == null ? 0 : (int)cbmAttrs.SelectedValue;
@@ -112,20 +112,27 @@ namespace BaoHien.UI
             dgwStockEntranceList.DataSource = productReports;
             dgwStockEntranceList.Columns.Clear();
             dgwStockEntranceList.AutoGenerateColumns = false;
+
             DataGridViewTextBoxColumn indexColumn = new DataGridViewTextBoxColumn();
             indexColumn.Width = 30;
             indexColumn.DataPropertyName = "Index";
             indexColumn.HeaderText = "STT";
             indexColumn.ValueType = typeof(string);
-            //indexColumn.Frozen = true;
             dgwStockEntranceList.Columns.Add(indexColumn);
+
+            DataGridViewTextBoxColumn createdDateColumn = new DataGridViewTextBoxColumn();
+            createdDateColumn.DefaultCellStyle.Format = BHConstant.DATETIME_FORMAT;
+            createdDateColumn.DataPropertyName = "CreatedDate";
+            createdDateColumn.Width = 150;
+            createdDateColumn.HeaderText = "Tồn tính đến ngày";
+            createdDateColumn.ValueType = typeof(string);
+            dgwStockEntranceList.Columns.Add(createdDateColumn);
 
             DataGridViewTextBoxColumn productCodeColumn = new DataGridViewTextBoxColumn();
             productCodeColumn.Width = 150;
             productCodeColumn.DataPropertyName = "ProductCode";
             productCodeColumn.HeaderText = "Mã sản phẩm";
             productCodeColumn.ValueType = typeof(string);
-            //productCodeColumn.Frozen = true;
             dgwStockEntranceList.Columns.Add(productCodeColumn);
 
             DataGridViewTextBoxColumn productNameColumn = new DataGridViewTextBoxColumn();
@@ -133,24 +140,13 @@ namespace BaoHien.UI
             productNameColumn.DataPropertyName = "ProductName";
             productNameColumn.HeaderText = "Tên sản phẩm";
             productNameColumn.ValueType = typeof(string);
-            //productNameColumn.Frozen = true;
             dgwStockEntranceList.Columns.Add(productNameColumn);
-
-            DataGridViewTextBoxColumn createdDateColumn = new DataGridViewTextBoxColumn();
-            createdDateColumn.DefaultCellStyle.Format = BHConstant.DATETIME_FORMAT;
-            createdDateColumn.DataPropertyName = "CreatedDate";
-            createdDateColumn.Width = 150;
-            createdDateColumn.HeaderText = "Tồn tính đến ngày";
-            //createdDateColumn.Frozen = true;
-            createdDateColumn.ValueType = typeof(string);
-            dgwStockEntranceList.Columns.Add(createdDateColumn);
 
             DataGridViewTextBoxColumn quantityColumn = new DataGridViewTextBoxColumn();
             quantityColumn.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
             quantityColumn.DataPropertyName = "Quantity";
             quantityColumn.Width = 100;
             quantityColumn.HeaderText = "Số lượng tồn";
-            //quantityColumn.Frozen = true;
             quantityColumn.ValueType = typeof(string);
             dgwStockEntranceList.Columns.Add(quantityColumn);
 
@@ -158,7 +154,6 @@ namespace BaoHien.UI
             unitColumn.DataPropertyName = "UnitName";
             unitColumn.Width = 100;
             unitColumn.HeaderText = "Đơn vị tính";
-            //attributeNameColumn.Frozen = true;
             unitColumn.ValueType = typeof(string);
             dgwStockEntranceList.Columns.Add(unitColumn);         
         }
@@ -168,12 +163,12 @@ namespace BaoHien.UI
             dgwStockEntranceList.DataSource = productReports;
             dgwStockEntranceList.Columns.Clear();
             dgwStockEntranceList.AutoGenerateColumns = false;
+
             DataGridViewTextBoxColumn indexColumn = new DataGridViewTextBoxColumn();
             indexColumn.Width = 30;
             indexColumn.DataPropertyName = "Index";
             indexColumn.HeaderText = "STT";
             indexColumn.ValueType = typeof(string);
-            //indexColumn.Frozen = true;
             dgwStockEntranceList.Columns.Add(indexColumn);
 
             DataGridViewTextBoxColumn createdDateColumn = new DataGridViewTextBoxColumn();
@@ -181,7 +176,6 @@ namespace BaoHien.UI
             createdDateColumn.DataPropertyName = "CreatedDate";
             createdDateColumn.Width = 150;
             createdDateColumn.HeaderText = "Ngày";
-            //createdDateColumn.Frozen = true;
             createdDateColumn.ValueType = typeof(string);
             dgwStockEntranceList.Columns.Add(createdDateColumn);
 
@@ -190,7 +184,6 @@ namespace BaoHien.UI
             recordCodeColumn.DataPropertyName = "RecordCode";
             recordCodeColumn.HeaderText = "Mã phiếu";
             recordCodeColumn.ValueType = typeof(string);
-            //recordCodeColumn.Frozen = true;
             dgwStockEntranceList.Columns.Add(recordCodeColumn);
 
             DataGridViewTextBoxColumn beforeNumberColumn = new DataGridViewTextBoxColumn();
@@ -199,7 +192,6 @@ namespace BaoHien.UI
             beforeNumberColumn.DataPropertyName = "BeforeNumber";
             beforeNumberColumn.HeaderText = "Số lượng đầu";
             beforeNumberColumn.ValueType = typeof(string);
-            //beforeNumberColumn.Frozen = true;
             dgwStockEntranceList.Columns.Add(beforeNumberColumn);
 
             DataGridViewTextBoxColumn amountColumn = new DataGridViewTextBoxColumn();
@@ -207,7 +199,6 @@ namespace BaoHien.UI
             amountColumn.DataPropertyName = "Amount";
             amountColumn.Width = 120;
             amountColumn.HeaderText = "Số lượng cập nhật";
-            //amountColumn.Frozen = true;
             amountColumn.ValueType = typeof(string);
             dgwStockEntranceList.Columns.Add(amountColumn);
 
@@ -216,10 +207,8 @@ namespace BaoHien.UI
             afterNumberColumn.DataPropertyName = "AfterNumber";
             afterNumberColumn.Width = 120;
             afterNumberColumn.HeaderText = "Số lượng cuối";
-            //afterNumberColumn.Frozen = true;
             afterNumberColumn.ValueType = typeof(string);
-            dgwStockEntranceList.Columns.Add(afterNumberColumn);
-            
+            dgwStockEntranceList.Columns.Add(afterNumberColumn);            
         }
 
         private void btnSearch_Click(object sender, EventArgs e)

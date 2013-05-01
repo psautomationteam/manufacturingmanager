@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             this.grpSearch = new System.Windows.Forms.GroupBox();
+            this.txtFavoriteProduct = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
             this.cmbSaler = new System.Windows.Forms.ComboBox();
             this.label7 = new System.Windows.Forms.Label();
             this.txtPhone = new System.Windows.Forms.TextBox();
@@ -42,8 +44,6 @@
             this.btnAdd = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.lblTotalResult = new System.Windows.Forms.Label();
-            this.txtFavoriteProduct = new System.Windows.Forms.TextBox();
-            this.label4 = new System.Windows.Forms.Label();
             this.grpSearch.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvProductList)).BeginInit();
             this.SuspendLayout();
@@ -67,6 +67,22 @@
             this.grpSearch.TabIndex = 12;
             this.grpSearch.TabStop = false;
             this.grpSearch.Text = "Tìm Kiếm";
+            // 
+            // txtFavoriteProduct
+            // 
+            this.txtFavoriteProduct.Location = new System.Drawing.Point(748, 25);
+            this.txtFavoriteProduct.Name = "txtFavoriteProduct";
+            this.txtFavoriteProduct.Size = new System.Drawing.Size(184, 20);
+            this.txtFavoriteProduct.TabIndex = 12;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(646, 28);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(85, 13);
+            this.label4.TabIndex = 13;
+            this.label4.Text = "Dòng sản phẩm:";
             // 
             // cmbSaler
             // 
@@ -148,6 +164,7 @@
             this.dgvProductList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvProductList.Location = new System.Drawing.Point(32, 150);
             this.dgvProductList.Name = "dgvProductList";
+            this.dgvProductList.ReadOnly = true;
             this.dgvProductList.Size = new System.Drawing.Size(1023, 467);
             this.dgvProductList.TabIndex = 14;
             this.dgvProductList.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvProductList_CellClick);
@@ -182,22 +199,6 @@
             this.lblTotalResult.Size = new System.Drawing.Size(16, 16);
             this.lblTotalResult.TabIndex = 17;
             this.lblTotalResult.Text = "0";
-            // 
-            // txtFavoriteProduct
-            // 
-            this.txtFavoriteProduct.Location = new System.Drawing.Point(748, 25);
-            this.txtFavoriteProduct.Name = "txtFavoriteProduct";
-            this.txtFavoriteProduct.Size = new System.Drawing.Size(184, 20);
-            this.txtFavoriteProduct.TabIndex = 12;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(646, 28);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(85, 13);
-            this.label4.TabIndex = 13;
-            this.label4.Text = "Dòng sản phẩm:";
             // 
             // CustomerList
             // 

@@ -28,18 +28,14 @@ namespace BaoHien.UI
 
         private void loadSomeData()
         {
-            if (systemUsers == null)
-            {
-                SystemUserService systemUserService = new SystemUserService();
-                systemUsers = systemUserService.GetSystemUsers();
-            }
-            if (systemUsers != null)
-            {
-                cbmUsers.DataSource = systemUsers;
-                cbmUsers.DisplayMember = "FullName";
-                cbmUsers.ValueMember = "Id";
-            }
-            
+            SystemUserService systemUserService = new SystemUserService();
+            systemUsers = systemUserService.GetSystemUsers();
+            systemUsers.Add(new SystemUser() { Id = 0, FullName = "Tất cả" });
+            systemUsers = systemUsers.OrderBy(x => x.Id).ToList();
+
+            cbmUsers.DataSource = systemUsers;
+            cbmUsers.DisplayMember = "FullName";
+            cbmUsers.ValueMember = "Id";
         }
 
         private void setUpDataGrid(List<EntranceStock> entranceStocks)
@@ -49,17 +45,17 @@ namespace BaoHien.UI
             {
                 int index = 0;
                 var query = from entranceStock in entranceStocks
-
                             select new
                             {
                                 Id = entranceStock.Id,
                                 Note = entranceStock.Note,
                                 EntranceCode = entranceStock.EntranceCode,
-                                EntrancedDate = entranceStock.EntrancedDate.ToLongDateString(),
+                                EntrancedDate = entranceStock.EntrancedDate.ToString(BHConstant.DATE_FORMAT),
                                 EntrancedBy = entranceStock.SystemUser.FullName,
                                 Index = ++index
                             };
                 dgwStockEntranceList.DataSource = query.ToList();
+                productionRequestInTotal.Text = query.Count().ToString();
             }
         }
 
@@ -73,6 +69,13 @@ namespace BaoHien.UI
             indexColumn.ValueType = typeof(string);
             dgwStockEntranceList.Columns.Add(indexColumn);
 
+            DataGridViewTextBoxColumn entrancedDateColumn = new DataGridViewTextBoxColumn();
+            entrancedDateColumn.DataPropertyName = "EntrancedDate";
+            entrancedDateColumn.Width = 100;
+            entrancedDateColumn.HeaderText = "Ngày tạo";
+            entrancedDateColumn.ValueType = typeof(string);
+            dgwStockEntranceList.Columns.Add(entrancedDateColumn);
+
             DataGridViewTextBoxColumn entranceCodeColumn = new DataGridViewTextBoxColumn();
             entranceCodeColumn.Width = 100;
             entranceCodeColumn.DataPropertyName = "EntranceCode";
@@ -80,15 +83,6 @@ namespace BaoHien.UI
             entranceCodeColumn.ValueType = typeof(string);
             dgwStockEntranceList.Columns.Add(entranceCodeColumn);
 
-
-
-            DataGridViewTextBoxColumn entrancedDateColumn = new DataGridViewTextBoxColumn();
-            entrancedDateColumn.DataPropertyName = "EntrancedDate";
-            entrancedDateColumn.Width = 200;
-            entrancedDateColumn.HeaderText = "Ngày tạo";
-            
-            entrancedDateColumn.ValueType = typeof(string);
-            dgwStockEntranceList.Columns.Add(entrancedDateColumn);
             DataGridViewTextBoxColumn entrancedByColumn = new DataGridViewTextBoxColumn();
             entrancedByColumn.Width = 200;
             entrancedByColumn.DataPropertyName = "EntrancedBy";
@@ -196,9 +190,9 @@ namespace BaoHien.UI
             EntranceStockSearchCriteria entranceStockSearchCriteria = new EntranceStockSearchCriteria
             {
                 Code = txtCode.Text != null ? txtCode.Text : "",
-                CreatedBy = cbmUsers.SelectedValue != null ? (int?)cbmUsers.SelectedValue : (int?)null,
+                CreatedBy = (cbmUsers.SelectedValue != null && cbmUsers.SelectedIndex != 0) ? (int?)cbmUsers.SelectedValue : (int?)null,
                 From = dtpFrom.Value != null ? dtpFrom.Value : (DateTime?)null,
-                To = dtpTo.Value != null ? dtpTo.Value : (DateTime?)null,
+                To = dtpTo.Value != null ? dtpTo.Value.AddDays(1).Date : (DateTime?)null,
             };
             EntranceStockService entranceStockService = new EntranceStockService();
             List<EntranceStock> entranceStocks = entranceStockService.SearchingEntranceStock(entranceStockSearchCriteria);

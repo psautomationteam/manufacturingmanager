@@ -39,6 +39,11 @@ namespace BaoHien.UI
 
         private void setUpSomeData()
         {
+            SystemUserService systemUserService = new SystemUserService();
+            users = systemUserService.GetSystemUsers();
+            users.Add(new SystemUser() { Id = 0, FullName = "Tất cả" });
+            users = users.OrderBy(x => x.Id).ToList();
+
             cbmUsers.DataSource = users;
             cbmUsers.DisplayMember = "FullName";
             cbmUsers.ValueMember = "Id";
@@ -54,10 +59,7 @@ namespace BaoHien.UI
             }
             
             dgwRequestList.AutoGenerateColumns = false;
-            setUpDataGrid(productionRequests);
-            SystemUserService systemUserService = new SystemUserService();
-            users = systemUserService.GetSystemUsers();
-           
+            setUpDataGrid(productionRequests);           
         }
 
         private void setUpDataGrid(List<ProductionRequest> productionRequests)
@@ -66,67 +68,55 @@ namespace BaoHien.UI
             {
                 int index = 0;
                 var query = from productionRequest in productionRequests
-
                             select new 
                             {
                                 ReqCode = productionRequest.ReqCode,
                                 RequestedBy = productionRequest.SystemUser.FullName,
                                 Note = productionRequest.Note,
                                 Id = productionRequest.Id,
-                                CreatedBy = productionRequest.RequestedDate.ToShortDateString(),
+                                CreatedBy = productionRequest.RequestedDate.ToString(BHConstant.DATE_FORMAT),
                                 Status = productionRequest.Status != null?productionRequest.Status.Value: (byte)0,
                                 Index = ++index
                             };
                 dgwRequestList.DataSource = query.ToList();
-                dgwRequestList.AllowUserToAddRows = false;
-                dgwRequestList.ReadOnly = true;
+                productionRequestInTotal.Text = query.Count().ToString();
             }
         }
 
         private void SetupColumns()
         {
-
             DataGridViewTextBoxColumn checkboxColumn = new DataGridViewTextBoxColumn();
             checkboxColumn.Width = 30;
             checkboxColumn.DataPropertyName = "Index";
             checkboxColumn.HeaderText = "STT";
             checkboxColumn.ValueType = typeof(string);
-            //checkboxColumn.Frozen = true;
             dgwRequestList.Columns.Add(checkboxColumn);
+
+            DataGridViewTextBoxColumn statusColumn = new DataGridViewTextBoxColumn();
+            statusColumn.DataPropertyName = "CreatedBy";
+            statusColumn.Width = 120;
+            statusColumn.HeaderText = "Ngày tạo";
+            statusColumn.ValueType = typeof(string);
+            dgwRequestList.Columns.Add(statusColumn);
 
             DataGridViewTextBoxColumn reqCodeColumn = new DataGridViewTextBoxColumn();
             reqCodeColumn.Width = 150;
             reqCodeColumn.DataPropertyName = "ReqCode";
             reqCodeColumn.HeaderText = "Mã yêu cầu";
             reqCodeColumn.ValueType = typeof(string);
-            //attributeNameColumn.Frozen = true;
             dgwRequestList.Columns.Add(reqCodeColumn);
-
-
 
             DataGridViewTextBoxColumn requestedByColumn = new DataGridViewTextBoxColumn();
             requestedByColumn.DataPropertyName = "RequestedBy";
             requestedByColumn.Width = 200;
             requestedByColumn.HeaderText = "Yêu cầu bởi";
-            //attributeCodeColumn.Frozen = true;
             requestedByColumn.ValueType = typeof(string);
             dgwRequestList.Columns.Add(requestedByColumn);
-
-            
-
-            DataGridViewTextBoxColumn statusColumn = new DataGridViewTextBoxColumn();
-            statusColumn.DataPropertyName = "CreatedBy";
-            statusColumn.Width = 120;
-            statusColumn.HeaderText = "Ngày tạo";
-            //attributeCodeColumn.Frozen = true;
-            statusColumn.ValueType = typeof(string);
-            dgwRequestList.Columns.Add(statusColumn);
 
             DataGridViewTextBoxColumn noteColumn = new DataGridViewTextBoxColumn();
             noteColumn.DataPropertyName = "Note";
             noteColumn.Width = 400;
             noteColumn.HeaderText = "Ghi chú";
-            //attributeCodeColumn.Frozen = true;
             noteColumn.ValueType = typeof(string);
             dgwRequestList.Columns.Add(noteColumn);
 
@@ -134,10 +124,8 @@ namespace BaoHien.UI
             deleteButton.Image = Properties.Resources.erase;
             deleteButton.Width = 40;
             deleteButton.HeaderText = "Xóa";
-            //deleteButton.ReadOnly = true;
             deleteButton.ImageLayout = DataGridViewImageCellLayout.Normal;
             dgwRequestList.Columns.Add(deleteButton);
-
         }
 
         private void dgwRequestList_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
@@ -223,9 +211,9 @@ namespace BaoHien.UI
             ProductionRequestSearchCriteria productionRequestSearchCriteria = new ProductionRequestSearchCriteria
             {
                 CodeRequest = txtCode.Text != null ? txtCode.Text : "",
-                RequestedBy = cbmUsers.SelectedValue != null ? (int?)cbmUsers.SelectedValue : (int?)null,
-                From = dtpFrom.Value != null?dtpFrom.Value:(DateTime?)null,
-                To = dtpTo.Value != null ? dtpTo.Value : (DateTime?)null,
+                RequestedBy = (cbmUsers.SelectedValue != null && cbmUsers.SelectedIndex != 0) ? (int?)cbmUsers.SelectedValue : (int?)null,
+                From = dtpFrom.Value != null ? dtpFrom.Value : (DateTime?)null,
+                To = dtpTo.Value != null ? dtpTo.Value.AddDays(1).Date : (DateTime?)null,
             };
             ProductionRequestService productionRequestService = new ProductionRequestService();
             productionRequests = productionRequestService.SearchingProductionRequest(productionRequestSearchCriteria);

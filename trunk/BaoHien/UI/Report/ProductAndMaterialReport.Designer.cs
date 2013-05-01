@@ -190,6 +190,7 @@
             this.dgwStockEntranceList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgwStockEntranceList.Location = new System.Drawing.Point(19, 165);
             this.dgwStockEntranceList.Name = "dgwStockEntranceList";
+            this.dgwStockEntranceList.ReadOnly = true;
             this.dgwStockEntranceList.Size = new System.Drawing.Size(1053, 456);
             this.dgwStockEntranceList.TabIndex = 21;
             this.dgwStockEntranceList.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgwStockEntranceList_CellDoubleClick);

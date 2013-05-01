@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.cmbCustomer = new System.Windows.Forms.ComboBox();
+            this.cbmCustomers = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
             this.btnSearch = new System.Windows.Forms.Button();
             this.cbmUsers = new System.Windows.Forms.ComboBox();
@@ -44,13 +44,14 @@
             this.dgwBillingList = new System.Windows.Forms.DataGridView();
             this.label8 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
+            this.lblTotal = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgwBillingList)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.cmbCustomer);
+            this.groupBox1.Controls.Add(this.cbmCustomers);
             this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.btnSearch);
             this.groupBox1.Controls.Add(this.cbmUsers);
@@ -68,13 +69,13 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Tìm kiếm phiếu thanh toán";
             // 
-            // cmbCustomer
+            // cbmCustomers
             // 
-            this.cmbCustomer.FormattingEnabled = true;
-            this.cmbCustomer.Location = new System.Drawing.Point(725, 49);
-            this.cmbCustomer.Name = "cmbCustomer";
-            this.cmbCustomer.Size = new System.Drawing.Size(187, 21);
-            this.cmbCustomer.TabIndex = 4;
+            this.cbmCustomers.FormattingEnabled = true;
+            this.cbmCustomers.Location = new System.Drawing.Point(725, 49);
+            this.cbmCustomers.Name = "cbmCustomers";
+            this.cbmCustomers.Size = new System.Drawing.Size(187, 21);
+            this.cbmCustomers.TabIndex = 4;
             // 
             // label4
             // 
@@ -178,6 +179,7 @@
             this.dgwBillingList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgwBillingList.Location = new System.Drawing.Point(18, 149);
             this.dgwBillingList.Name = "dgwBillingList";
+            this.dgwBillingList.ReadOnly = true;
             this.dgwBillingList.Size = new System.Drawing.Size(1053, 466);
             this.dgwBillingList.TabIndex = 0;
             this.dgwBillingList.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgwBillingList_CellClick);
@@ -187,12 +189,11 @@
             // 
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.Location = new System.Drawing.Point(579, 116);
+            this.label8.Location = new System.Drawing.Point(669, 116);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(479, 14);
+            this.label8.Size = new System.Drawing.Size(56, 14);
             this.label8.TabIndex = 20;
-            this.label8.Text = "Chú ý: mặc định, danh sách bên dưới bao gồm các phiếu được lập trong tháng đến ng" +
-                "ày hiện tại";
+            this.label8.Text = "Tổng tiền:";
             // 
             // label6
             // 
@@ -203,10 +204,22 @@
             this.label6.TabIndex = 18;
             this.label6.Text = "Tổng số phiếu thanh toán:";
             // 
+            // lblTotal
+            // 
+            this.lblTotal.AutoSize = true;
+            this.lblTotal.Font = new System.Drawing.Font("Arial", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTotal.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
+            this.lblTotal.Location = new System.Drawing.Point(740, 114);
+            this.lblTotal.Name = "lblTotal";
+            this.lblTotal.Size = new System.Drawing.Size(16, 16);
+            this.lblTotal.TabIndex = 21;
+            this.lblTotal.Text = "0";
+            // 
             // BillList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.lblTotal);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.productionRequestInTotal);
             this.Controls.Add(this.dgwBillingList);
@@ -226,7 +239,7 @@
         #endregion
 
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.ComboBox cmbCustomer;
+        private System.Windows.Forms.ComboBox cbmCustomers;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button btnSearch;
         private System.Windows.Forms.ComboBox cbmUsers;
@@ -241,5 +254,6 @@
         private System.Windows.Forms.DataGridView dgwBillingList;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label lblTotal;
     }
 }

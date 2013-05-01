@@ -63,7 +63,7 @@ namespace BaoHien.UI
             {
                 txtCode.Text = entranceStock.EntranceCode;
                 txtNote.Text = entranceStock.Note;
-                txtDate.Text = entranceStock.EntrancedDate.ToShortDateString();
+                txtDate.Text = entranceStock.EntrancedDate.ToString(BHConstant.DATE_FORMAT);
                 txtUser.Text = entranceStock.SystemUser.FullName;
             }
             else
@@ -73,7 +73,7 @@ namespace BaoHien.UI
                     txtUser.Text = Global.CurrentUser.FullName;
                 }                
                 txtUser.Enabled = false;
-                txtDate.Text = DateTime.Now.ToShortDateString();
+                txtDate.Text = DateTime.Now.ToString(BHConstant.DATE_FORMAT);
 
                 SeedService ss = new SeedService();
                 txtCode.Text = ss.AddSeedID(BHConstant.PREFIX_FOR_ENTRANCE); //RandomGeneration.GeneratingCode(BHConstant.PREFIX_FOR_ENTRANCE);

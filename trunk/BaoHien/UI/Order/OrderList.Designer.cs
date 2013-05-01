@@ -29,11 +29,6 @@
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.btnSearch = new System.Windows.Forms.Button();
-            this.label6 = new System.Windows.Forms.Label();
-            this.lblTotalResult = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
-            this.dgwOrderList = new System.Windows.Forms.DataGridView();
             this.cbmCustomers = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
             this.cbmUsers = new System.Windows.Forms.ComboBox();
@@ -44,6 +39,12 @@
             this.label2 = new System.Windows.Forms.Label();
             this.dtpFrom = new System.Windows.Forms.DateTimePicker();
             this.label1 = new System.Windows.Forms.Label();
+            this.btnSearch = new System.Windows.Forms.Button();
+            this.label6 = new System.Windows.Forms.Label();
+            this.lblTotalResult = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.dgwOrderList = new System.Windows.Forms.DataGridView();
+            this.lbTotal = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgwOrderList)).BeginInit();
             this.SuspendLayout();
@@ -67,57 +68,6 @@
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Tìm kiếm phiếu bán hàng";
-            // 
-            // btnSearch
-            // 
-            this.btnSearch.Location = new System.Drawing.Point(962, 21);
-            this.btnSearch.Name = "btnSearch";
-            this.btnSearch.Size = new System.Drawing.Size(75, 49);
-            this.btnSearch.TabIndex = 1;
-            this.btnSearch.Text = "Tìm kiếm";
-            this.btnSearch.UseVisualStyleBackColor = true;
-            this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(14, 105);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(126, 13);
-            this.label6.TabIndex = 1;
-            this.label6.Text = "Tổng số phiếu bán hàng:";
-            // 
-            // lblTotalResult
-            // 
-            this.lblTotalResult.AutoSize = true;
-            this.lblTotalResult.Font = new System.Drawing.Font("Arial", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTotalResult.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
-            this.lblTotalResult.Location = new System.Drawing.Point(147, 104);
-            this.lblTotalResult.Name = "lblTotalResult";
-            this.lblTotalResult.Size = new System.Drawing.Size(16, 16);
-            this.lblTotalResult.TabIndex = 2;
-            this.lblTotalResult.Text = "0";
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.Location = new System.Drawing.Point(575, 105);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(479, 14);
-            this.label8.TabIndex = 3;
-            this.label8.Text = "Chú ý: mặc định, danh sách bên dưới bao gồm các phiếu được lập trong tháng đến ng" +
-                "ày hiện tại";
-            // 
-            // dgwOrderList
-            // 
-            this.dgwOrderList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgwOrderList.Location = new System.Drawing.Point(17, 139);
-            this.dgwOrderList.Name = "dgwOrderList";
-            this.dgwOrderList.Size = new System.Drawing.Size(1046, 478);
-            this.dgwOrderList.TabIndex = 4;
-            this.dgwOrderList.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgwOrderList_CellClick);
-            this.dgwOrderList.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgwOrderList_CellDoubleClick);
             // 
             // cbmCustomers
             // 
@@ -203,10 +153,73 @@
             this.label1.TabIndex = 12;
             this.label1.Text = "Từ ngày:";
             // 
+            // btnSearch
+            // 
+            this.btnSearch.Location = new System.Drawing.Point(962, 21);
+            this.btnSearch.Name = "btnSearch";
+            this.btnSearch.Size = new System.Drawing.Size(75, 49);
+            this.btnSearch.TabIndex = 1;
+            this.btnSearch.Text = "Tìm kiếm";
+            this.btnSearch.UseVisualStyleBackColor = true;
+            this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(14, 105);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(126, 13);
+            this.label6.TabIndex = 1;
+            this.label6.Text = "Tổng số phiếu bán hàng:";
+            // 
+            // lblTotalResult
+            // 
+            this.lblTotalResult.AutoSize = true;
+            this.lblTotalResult.Font = new System.Drawing.Font("Arial", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTotalResult.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
+            this.lblTotalResult.Location = new System.Drawing.Point(147, 104);
+            this.lblTotalResult.Name = "lblTotalResult";
+            this.lblTotalResult.Size = new System.Drawing.Size(16, 16);
+            this.lblTotalResult.TabIndex = 2;
+            this.lblTotalResult.Text = "0";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label8.Location = new System.Drawing.Point(668, 106);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(56, 14);
+            this.label8.TabIndex = 3;
+            this.label8.Text = "Tổng tiền:";
+            // 
+            // dgwOrderList
+            // 
+            this.dgwOrderList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgwOrderList.Location = new System.Drawing.Point(17, 139);
+            this.dgwOrderList.Name = "dgwOrderList";
+            this.dgwOrderList.ReadOnly = true;
+            this.dgwOrderList.Size = new System.Drawing.Size(1046, 478);
+            this.dgwOrderList.TabIndex = 4;
+            this.dgwOrderList.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgwOrderList_CellClick);
+            this.dgwOrderList.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgwOrderList_CellDoubleClick);
+            // 
+            // lbTotal
+            // 
+            this.lbTotal.AutoSize = true;
+            this.lbTotal.Font = new System.Drawing.Font("Arial", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbTotal.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
+            this.lbTotal.Location = new System.Drawing.Point(736, 105);
+            this.lbTotal.Name = "lbTotal";
+            this.lbTotal.Size = new System.Drawing.Size(16, 16);
+            this.lbTotal.TabIndex = 5;
+            this.lbTotal.Text = "0";
+            // 
             // OrderList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.lbTotal);
             this.Controls.Add(this.dgwOrderList);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.lblTotalResult);
@@ -241,5 +254,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.DateTimePicker dtpFrom;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label lbTotal;
     }
 }

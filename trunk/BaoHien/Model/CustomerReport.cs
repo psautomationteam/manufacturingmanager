@@ -5,7 +5,7 @@ using System.Text;
 
 namespace BaoHien.Model
 {
-    public class EmployeeReport
+    public class CustomerReport
     {
         string index;
         public string Index
@@ -27,14 +27,7 @@ namespace BaoHien.Model
             get { return date; }
             set { date = value; }
         }
-
-        string customerName;
-        public string CustomerName
-        {
-            get { return customerName; }
-            set { customerName = value; }
-        }
-
+        
         string productName;
         public string ProductName
         {

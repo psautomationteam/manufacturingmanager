@@ -48,7 +48,7 @@ namespace BaoHien.UI
             {
                 txtAmount.Text = Global.formatVNDCurrencyText(bill.Amount.ToString());
                 txtAmount.Enabled = false;
-                txtCreatedDate.Text = bill.CreatedDate.ToShortDateString();
+                txtCreatedDate.Text = bill.CreatedDate.ToString(BHConstant.DATE_FORMAT);
                 txtNote.Text = bill.Note;
                 txtOrderCode.Text = bill.BillCode;
                 cbxCustomer.SelectedValue = bill.CustId;
@@ -57,7 +57,7 @@ namespace BaoHien.UI
             }
             else
             {
-                txtCreatedDate.Text = DateTime.Now.ToShortDateString();
+                txtCreatedDate.Text = DateTime.Now.ToString(BHConstant.DATE_FORMAT);
 
                 SeedService ss = new SeedService();
                 txtOrderCode.Text = ss.AddSeedID(BHConstant.PREFIX_FOR_BILLING); //RandomGeneration.GeneratingCode(BHConstant.PREFIX_FOR_BILLING);

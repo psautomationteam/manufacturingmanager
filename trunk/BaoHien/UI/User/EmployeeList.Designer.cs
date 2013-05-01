@@ -38,6 +38,7 @@
             this.dgvEmployeeList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvEmployeeList.Location = new System.Drawing.Point(33, 71);
             this.dgvEmployeeList.Name = "dgvEmployeeList";
+            this.dgvEmployeeList.ReadOnly = true;
             this.dgvEmployeeList.Size = new System.Drawing.Size(1016, 544);
             this.dgvEmployeeList.TabIndex = 20;
             this.dgvEmployeeList.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvEmployeeList_CellClick);

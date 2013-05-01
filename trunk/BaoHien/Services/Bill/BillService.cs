@@ -19,9 +19,6 @@ namespace BaoHien.Services.Bills
         public List<Bill> GetBills()
         {
             List<Bill> bills = OnGetItems<Bill>();
-            DateTime d = DateTime.Now;
-            DateTime startDate = new DateTime(d.Year,d.Month,1);
-            bills = bills.Where(b => b.CreatedDate.CompareTo(startDate) >= 0).ToList();
             return bills;
         }
         public bool AddBill(Bill bill)
@@ -39,7 +36,6 @@ namespace BaoHien.Services.Bills
         public List<Bill> SearchingBill(BillSearchCriteria billSearchCriteria)
         {
             List<Bill> bills = OnGetItems<Bill>();
-
             if (billSearchCriteria != null)
             {
                 if (billSearchCriteria.CreatedBy.HasValue)
@@ -61,10 +57,6 @@ namespace BaoHien.Services.Bills
                             && pr.CreatedDate.CompareTo(billSearchCriteria.To.Value) <= 0)
                             .ToList();
                 }
-            }
-            else
-            {
-                return bills;
             }
 
             return bills;

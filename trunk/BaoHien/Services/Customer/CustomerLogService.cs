@@ -74,45 +74,80 @@ namespace BaoHien.Services.Customers
             return result;
         }
 
-        public List<ArrearReportModel> GetReportsOfCustomer(int customerId, DateTime from, DateTime to)
+        public List<CustomerReport> GetReportsOfCustomer(int customerId, DateTime from, DateTime to, ref double total)
         {
-            List<ArrearReportModel> result = new List<ArrearReportModel>();
+            List<CustomerReport> result = new List<CustomerReport>();
             using (BaoHienDBDataContext context = new BaoHienDBDataContext(SettingManager.BuildStringConnection()))
             {
                 List<CustomerLog> logs = context.CustomerLogs
                     .Where(c => c.CustomerId == customerId && c.CreatedDate >= from && c.CreatedDate <= to)
                     .OrderByDescending(c => c.CreatedDate).ToList();
-                ConvertLogToReport(logs, ref result);
+                List<Order> orders = context.Orders.Where(x => logs.Select(y => y.RecordCode).Contains(x.OrderCode)).ToList();
+                List<OrderDetail> details = context.OrderDetails.Where(x => orders.Select(y => y.Id).Contains(x.OrderId)).ToList();
+                int curr_month = from.Month, curr_year = from.Year, month = curr_month, year = curr_year, index = 0;
+                result.Add(new CustomerReport
+                    {
+                        Date = "Tháng " + curr_month.ToString() + "/" + curr_year.ToString()
+                    });
+                foreach (Order item in orders)
+                {
+                    month = item.CreatedDate.Month;
+                    year = item.CreatedDate.Year;
+                    if (month != curr_month || year != curr_year)
+                    {
+                        curr_month = month;
+                        curr_year = year;
+                        result.Add(new CustomerReport
+                            {
+                                Date = "Tháng " + curr_month.ToString() + "/" + curr_year.ToString()
+                            });
+                    }
+                    List<OrderDetail> details_of_order = details.Where(x => x.OrderId == item.Id).ToList();
+                    for (int i = 0; i < details_of_order.Count; i++)
+                    {
+                        result.Add(new CustomerReport
+                        {
+                            Index = (++index).ToString(),
+                            Date = i == 0 ? item.CreatedDate.ToString(BHConstant.DATE_FORMAT) : "",
+                            ProductName = details_of_order[i].Product.ProductName,
+                            AttrName = details_of_order[i].BaseAttribute.AttributeName,
+                            Number = details_of_order[i].NumberUnit.ToString(),
+                            Unit = details_of_order[i].MeasurementUnit.Name,
+                            Cost = Global.formatCurrencyTextWithoutMask(details_of_order[i].Cost.ToString()),
+                            Commission = Global.formatCurrencyTextWithoutMask(details_of_order[i].Commission.ToString()),
+                            RecordCode = item.OrderCode,
+                        });
+                        total += (item.OrderCode.Contains(BHConstant.PREFIX_FOR_ORDER) ? 1 : -1) * details_of_order[i].Cost;
+                    }
+                }
             }
             return result;
         }
 
-        public List<ArrearReportModel> GetReportsOfCustomers(DateTime from, DateTime to)
+        public List<CustomersReport> GetReportsOfCustomers(DateTime from, DateTime to, ref double total)
         {
-            List<ArrearReportModel> result = new List<ArrearReportModel>();
+            List<CustomersReport> result = new List<CustomersReport>();
             using (BaoHienDBDataContext context = new BaoHienDBDataContext(SettingManager.BuildStringConnection()))
             {
                 List<CustomerLog> logs = context.CustomerLogs.Where(c => c.CreatedDate >= from && c.CreatedDate <= to)
-                    .OrderByDescending(c => c.CreatedDate)
-                    .GroupBy(c => c.CustomerId).Select(c => c.First()).ToList();
+                    .OrderBy(c => c.CreatedDate).ToList();
+                total = logs.Sum(x => x.AfterDebit - x.BeforeDebit);
                 ConvertLogToReport(logs, ref result);
             }
             return result;
         }
 
-        private void ConvertLogToReport(List<CustomerLog> logs, ref List<ArrearReportModel> reports)
+        private void ConvertLogToReport(List<CustomerLog> logs, ref List<CustomersReport> reports)
         {
             int index = 0;
             foreach (CustomerLog log in logs)
             {
-                reports.Add(new ArrearReportModel
+                reports.Add(new CustomersReport
                 {
-                    ID = log.Id,
                     CustomerName = log.Customer.CustomerName,
-                    Date = log.CreatedDate.ToString(BHConstant.DATETIME_FORMAT),
-                    Amount = Global.formatVNDCurrencyText((log.AfterDebit - log.BeforeDebit).ToString()),
-                    AfterDebit = Global.formatVNDCurrencyText(log.AfterDebit.ToString()),
-                    AfterDebitNumber = log.AfterDebit,
+                    CustomerCode = log.Customer.CustCode,
+                    Date = log.CreatedDate.ToString(BHConstant.DATE_FORMAT),
+                    Amount = Global.formatCurrencyTextWithoutMask(log.Amount.ToString()),
                     RecordCode = log.RecordCode,
                     Index = ++index
                 });

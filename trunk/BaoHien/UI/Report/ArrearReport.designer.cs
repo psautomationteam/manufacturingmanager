@@ -93,7 +93,6 @@
             this.cbmCustomers.Name = "cbmCustomers";
             this.cbmCustomers.Size = new System.Drawing.Size(208, 21);
             this.cbmCustomers.TabIndex = 1;
-            this.cbmCustomers.SelectedIndexChanged += new System.EventHandler(this.cbmCustomers_SelectedIndexChanged);
             // 
             // label5
             // 
@@ -126,6 +125,7 @@
             this.dgwStockEntranceList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgwStockEntranceList.Location = new System.Drawing.Point(19, 123);
             this.dgwStockEntranceList.Name = "dgwStockEntranceList";
+            this.dgwStockEntranceList.ReadOnly = true;
             this.dgwStockEntranceList.Size = new System.Drawing.Size(1053, 498);
             this.dgwStockEntranceList.TabIndex = 21;
             this.dgwStockEntranceList.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgwStockEntranceList_CellDoubleClick);

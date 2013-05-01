@@ -79,7 +79,7 @@ namespace BaoHien.UI
             setUpDataGrid(products);
             ProductTypeService productTypeService = new ProductTypeService();
             List<ProductType> productTypes = productTypeService.GetProductTypes();
-            productTypes.Add(new ProductType() { Id = 0 });
+            productTypes.Add(new ProductType() { Id = 0, ProductName = "Tất cả" });
             productTypes = productTypes.OrderBy(x => x.Id).ToList();
             if (productTypes != null)
             {
