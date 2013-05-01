@@ -70,10 +70,6 @@ namespace BaoHien.UI
                     double discount = 0;
                     Double.TryParse(txtDiscount.WorkingText, out discount);
                     DateTime createdDate = DateTime.Now;
-                    if (!DateTime.TryParse(txtCreatedDate.Text, out createdDate))
-                    {
-                        createdDate = DateTime.Now;
-                    };
 
                     double vat = 0;
                     Double.TryParse(txtVAT.WorkingText, out vat);
@@ -132,7 +128,7 @@ namespace BaoHien.UI
                                             BeforeNumber = pl.AfterNumber,
                                             Amount = Math.Abs(amount),
                                             AfterNumber = pl.AfterNumber + amount,
-                                            CreatedDate = DateTime.Now
+                                            CreatedDate = createdDate
                                         };
                                         ret = productLogService.AddProductLog(plg);
                                         if (!ret)
@@ -158,7 +154,7 @@ namespace BaoHien.UI
                                         BeforeNumber = pl.AfterNumber,
                                         Amount = od.NumberUnit,
                                         AfterNumber = pl.AfterNumber - od.NumberUnit,
-                                        CreatedDate = DateTime.Now
+                                        CreatedDate = createdDate
                                     };
                                     ret = productLogService.AddProductLog(plg);
                                     if (!ret)
@@ -193,7 +189,7 @@ namespace BaoHien.UI
                                 BeforeDebit = beforeDebit,
                                 Amount = tax,
                                 AfterDebit = beforeDebit + tax,
-                                CreatedDate = DateTime.Now
+                                CreatedDate = createdDate
                             };
                             result = cls.AddCustomerLog(cl);
                         }
@@ -214,7 +210,7 @@ namespace BaoHien.UI
                                     BeforeNumber = el.AfterNumber,
                                     Amount = commission,
                                     AfterNumber = el.AfterNumber + commission,
-                                    CreatedDate = DateTime.Now
+                                    CreatedDate = createdDate
                                 };
                                 result = els.AddEmployeeLog(newel);
                             }
@@ -279,7 +275,7 @@ namespace BaoHien.UI
                                     BeforeNumber = pl.AfterNumber,
                                     Amount = od.NumberUnit,
                                     AfterNumber = pl.AfterNumber - od.NumberUnit,
-                                    CreatedDate = DateTime.Now
+                                    CreatedDate = createdDate
                                 };
                                 ret = productLogService.AddProductLog(plg);
                                 if (!ret)
@@ -308,7 +304,7 @@ namespace BaoHien.UI
                             BeforeDebit = beforeDebit,
                             Amount = totalWithTax,
                             AfterDebit = beforeDebit + totalWithTax,
-                            CreatedDate = DateTime.Now
+                            CreatedDate = createdDate
                         };
                         result = cls.AddCustomerLog(cl);
 
@@ -324,7 +320,7 @@ namespace BaoHien.UI
                                 BeforeNumber = el.AfterNumber,
                                 Amount = totalCommission,
                                 AfterNumber = el.AfterNumber + totalCommission,
-                                CreatedDate = DateTime.Now
+                                CreatedDate = createdDate
                             };
                             result = els.AddEmployeeLog(newel);
                         }
@@ -380,7 +376,7 @@ namespace BaoHien.UI
                 txtNote.Text = order.Note;
                 txtVAT.WorkingText = order.VAT.HasValue ? order.VAT.Value.ToString() : "";
                 txtOrderCode.Text = order.OrderCode;
-                txtCreatedDate.Text = order.CreatedDate.ToShortDateString();
+                txtCreatedDate.Text = order.CreatedDate.ToString(BHConstant.DATE_FORMAT);
 
                 txtVAT.Text = Global.formatVNDCurrencyText(txtVAT.WorkingText);
                 txtDiscount.Text = Global.formatVNDCurrencyText(txtDiscount.WorkingText);
@@ -389,7 +385,7 @@ namespace BaoHien.UI
             }
             else
             {
-                txtCreatedDate.Text = DateTime.Now.ToShortDateString();
+                txtCreatedDate.Text = DateTime.Now.ToString(BHConstant.DATE_FORMAT);
 
                 SeedService ss = new SeedService();
                 txtOrderCode.Text = ss.AddSeedID(BHConstant.PREFIX_FOR_ORDER); //RandomGeneration.GeneratingCode(BHConstant.PREFIX_FOR_ORDER);

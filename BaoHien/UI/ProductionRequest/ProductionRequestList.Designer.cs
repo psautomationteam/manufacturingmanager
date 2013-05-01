@@ -39,7 +39,6 @@
             this.dtpFrom = new System.Windows.Forms.DateTimePicker();
             this.label1 = new System.Windows.Forms.Label();
             this.dgwRequestList = new System.Windows.Forms.DataGridView();
-            this.label8 = new System.Windows.Forms.Label();
             this.productionRequestInTotal = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
@@ -146,21 +145,11 @@
             this.dgwRequestList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgwRequestList.Location = new System.Drawing.Point(15, 137);
             this.dgwRequestList.Name = "dgwRequestList";
+            this.dgwRequestList.ReadOnly = true;
             this.dgwRequestList.Size = new System.Drawing.Size(1053, 475);
             this.dgwRequestList.TabIndex = 11;
             this.dgwRequestList.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgwRequestList_CellClick);
             this.dgwRequestList.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgwRequestList_CellDoubleClick);
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.Location = new System.Drawing.Point(573, 104);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(479, 14);
-            this.label8.TabIndex = 10;
-            this.label8.Text = "Chú ý: mặc định, danh sách bên dưới bao gồm các phiếu được lập trong tháng đến ng" +
-                "ày hiện tại";
             // 
             // productionRequestInTotal
             // 
@@ -188,7 +177,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.dgwRequestList);
-            this.Controls.Add(this.label8);
             this.Controls.Add(this.productionRequestInTotal);
             this.Controls.Add(this.label6);
             this.Name = "ProductionRequestList";
@@ -215,7 +203,6 @@
         private System.Windows.Forms.DateTimePicker dtpFrom;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.DataGridView dgwRequestList;
-        private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label productionRequestInTotal;
         private System.Windows.Forms.Label label6;
     }

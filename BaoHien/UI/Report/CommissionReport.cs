@@ -18,7 +18,7 @@ namespace BaoHien.UI
     public partial class CommissionReport : UserControl
     {
         List<Employee> employees;
-        List<EmployeeReport> employeeLogs;
+        List<EmployeesReport> employeeLogs;
         EmployeeLogService employeeLogService;
 
         public CommissionReport()
@@ -64,7 +64,7 @@ namespace BaoHien.UI
                 int employeeId = (int)cbmEmployees.SelectedValue;
                 if (employeeId == 0)
                 {
-                    employeeLogs = employeeLogService.GetReportsOfEmployees(dtpFrom.Value, dtpTo.Value.AddDays(1));
+                    employeeLogs = employeeLogService.GetReportsOfEmployees(dtpFrom.Value, dtpTo.Value.AddDays(1).Date);
                     dgwEmployeeCommissionList.DataSource = employeeLogs;
                     SetupDataGrid(employeeLogs);
                     double total = employeeLogs.Sum(a => a.AfterNumber);
@@ -72,14 +72,12 @@ namespace BaoHien.UI
                 }
                 else
                 {
-                    employeeLogs = employeeLogService.GetReportsOfEmployee(employeeId, dtpFrom.Value, dtpTo.Value.AddDays(1));
-                    dgwEmployeeCommissionList.DataSource = employeeLogs;
-                    SetupDataGridDetail(employeeLogs);
-                    EmployeeReport last = employeeLogs.OrderByDescending(a => a.ID).FirstOrDefault();
-                    if (last != null)
-                    {
-                        lbTotal.Text = last.AfterNumberText;
-                    }
+                    double total = 0.0;
+                    List<EmployeeReport> employee_reports = employeeLogService.GetReportsOfEmployee(employeeId, dtpFrom.Value, 
+                        dtpTo.Value.AddDays(1).Date, ref total);
+                    dgwEmployeeCommissionList.DataSource = employee_reports;
+                    SetupDataGridDetail(employee_reports);
+                    lbTotal.Text = Global.formatVNDCurrencyText(total.ToString());
                 }
             }
         }
@@ -89,33 +87,17 @@ namespace BaoHien.UI
 
         }
 
-        void SetupDataGrid(List<EmployeeReport> logs)
+        void SetupDataGrid(List<EmployeesReport> logs)
         {
             dgwEmployeeCommissionList.Columns.Clear();
             dgwEmployeeCommissionList.AutoGenerateColumns = false;
+
             DataGridViewTextBoxColumn indexColumn = new DataGridViewTextBoxColumn();
             indexColumn.Width = 30;
             indexColumn.DataPropertyName = "Index";
             indexColumn.HeaderText = "STT";
             indexColumn.ValueType = typeof(string);
-            //indexColumn.Frozen = true;
             dgwEmployeeCommissionList.Columns.Add(indexColumn);
-
-            DataGridViewTextBoxColumn employeeNameColumn = new DataGridViewTextBoxColumn();
-            employeeNameColumn.Width = 150;
-            employeeNameColumn.DataPropertyName = "EmployeeName";
-            employeeNameColumn.HeaderText = "Nhân viên";
-            employeeNameColumn.ValueType = typeof(string);
-            //customerNameColumn.Frozen = true;
-            dgwEmployeeCommissionList.Columns.Add(employeeNameColumn);
-
-            DataGridViewTextBoxColumn recordCodeColumn = new DataGridViewTextBoxColumn();
-            recordCodeColumn.Width = 150;
-            recordCodeColumn.DataPropertyName = "RecordCode";
-            recordCodeColumn.HeaderText = "Mã phiếu (giao dịch cuối)";
-            recordCodeColumn.ValueType = typeof(string);
-            //recordCodeColumn.Frozen = true;
-            dgwEmployeeCommissionList.Columns.Add(recordCodeColumn);
 
             DataGridViewTextBoxColumn dateColumn = new DataGridViewTextBoxColumn();
             dateColumn.DefaultCellStyle.Format = BHConstant.DATETIME_FORMAT;
@@ -123,14 +105,26 @@ namespace BaoHien.UI
             dateColumn.DataPropertyName = "CreatedDate";
             dateColumn.HeaderText = "Ngày";
             dateColumn.ValueType = typeof(string);
-            //dateColumn.Frozen = true;
             dgwEmployeeCommissionList.Columns.Add(dateColumn);
+
+            DataGridViewTextBoxColumn employeeNameColumn = new DataGridViewTextBoxColumn();
+            employeeNameColumn.Width = 150;
+            employeeNameColumn.DataPropertyName = "EmployeeName";
+            employeeNameColumn.HeaderText = "Nhân viên";
+            employeeNameColumn.ValueType = typeof(string);
+            dgwEmployeeCommissionList.Columns.Add(employeeNameColumn);
+
+            DataGridViewTextBoxColumn recordCodeColumn = new DataGridViewTextBoxColumn();
+            recordCodeColumn.Width = 150;
+            recordCodeColumn.DataPropertyName = "RecordCode";
+            recordCodeColumn.HeaderText = "Mã phiếu (giao dịch cuối)";
+            recordCodeColumn.ValueType = typeof(string);
+            dgwEmployeeCommissionList.Columns.Add(recordCodeColumn);
 
             DataGridViewTextBoxColumn amountColumn = new DataGridViewTextBoxColumn();
             amountColumn.DataPropertyName = "AfterNumberText";
             amountColumn.Width = 150;
             amountColumn.HeaderText = "Số tiền";
-            //amountColumn.Frozen = true;
             amountColumn.ValueType = typeof(string);
             dgwEmployeeCommissionList.Columns.Add(amountColumn);
         }
@@ -139,38 +133,70 @@ namespace BaoHien.UI
         {
             dgwEmployeeCommissionList.Columns.Clear();
             dgwEmployeeCommissionList.AutoGenerateColumns = false;
+
             DataGridViewTextBoxColumn indexColumn = new DataGridViewTextBoxColumn();
             indexColumn.Width = 30;
             indexColumn.DataPropertyName = "Index";
             indexColumn.HeaderText = "STT";
             indexColumn.ValueType = typeof(string);
-            //indexColumn.Frozen = true;
             dgwEmployeeCommissionList.Columns.Add(indexColumn);
-            
-            DataGridViewTextBoxColumn recordCodeColumn = new DataGridViewTextBoxColumn();
-            recordCodeColumn.Width = 150;
-            recordCodeColumn.DataPropertyName = "RecordCode";
-            recordCodeColumn.HeaderText = "Mã phiếu";
-            recordCodeColumn.ValueType = typeof(string);
-            //recordCodeColumn.Frozen = true;
-            dgwEmployeeCommissionList.Columns.Add(recordCodeColumn);
 
             DataGridViewTextBoxColumn dateColumn = new DataGridViewTextBoxColumn();
             dateColumn.DefaultCellStyle.Format = BHConstant.DATETIME_FORMAT;
-            dateColumn.Width = 150;
-            dateColumn.DataPropertyName = "CreatedDate";
+            dateColumn.Width = 100;
+            dateColumn.DataPropertyName = "Date";
             dateColumn.HeaderText = "Ngày";
             dateColumn.ValueType = typeof(string);
-            //dateColumn.Frozen = true;
             dgwEmployeeCommissionList.Columns.Add(dateColumn);
 
-            DataGridViewTextBoxColumn amountColumn = new DataGridViewTextBoxColumn();
-            amountColumn.DataPropertyName = "Amount";
-            amountColumn.Width = 150;
-            amountColumn.HeaderText = "Số tiền";
-            //amountColumn.Frozen = true;
-            amountColumn.ValueType = typeof(string);
-            dgwEmployeeCommissionList.Columns.Add(amountColumn);
+            DataGridViewTextBoxColumn customerNameColumn = new DataGridViewTextBoxColumn();
+            customerNameColumn.Width = 150;
+            customerNameColumn.DataPropertyName = "CustomerName";
+            customerNameColumn.HeaderText = "Khách hàng";
+            customerNameColumn.ValueType = typeof(string);
+            dgwEmployeeCommissionList.Columns.Add(customerNameColumn);
+
+            DataGridViewTextBoxColumn productNameColumn = new DataGridViewTextBoxColumn();
+            productNameColumn.Width = 150;
+            productNameColumn.DataPropertyName = "ProductName";
+            productNameColumn.HeaderText = "Mặt hàng";
+            productNameColumn.ValueType = typeof(string);
+            dgwEmployeeCommissionList.Columns.Add(productNameColumn);
+
+            DataGridViewTextBoxColumn AttrNameColumn = new DataGridViewTextBoxColumn();
+            AttrNameColumn.Width = 100;
+            AttrNameColumn.DataPropertyName = "AttrName";
+            AttrNameColumn.HeaderText = "Quy cách";
+            AttrNameColumn.ValueType = typeof(string);
+            dgwEmployeeCommissionList.Columns.Add(AttrNameColumn);
+
+            DataGridViewTextBoxColumn numberColumn = new DataGridViewTextBoxColumn();
+            numberColumn.Width = 60;
+            numberColumn.DataPropertyName = "Number";
+            numberColumn.HeaderText = "Số lượng";
+            numberColumn.ValueType = typeof(string);
+            dgwEmployeeCommissionList.Columns.Add(numberColumn);
+
+            DataGridViewTextBoxColumn UnitColumn = new DataGridViewTextBoxColumn();
+            UnitColumn.Width = 100;
+            UnitColumn.DataPropertyName = "Unit";
+            UnitColumn.HeaderText = "ĐVT";
+            UnitColumn.ValueType = typeof(string);
+            dgwEmployeeCommissionList.Columns.Add(UnitColumn);
+
+            DataGridViewTextBoxColumn costColumn = new DataGridViewTextBoxColumn();
+            costColumn.Width = 100;
+            costColumn.DataPropertyName = "Cost";
+            costColumn.HeaderText = "Đơn giá";
+            costColumn.ValueType = typeof(string);
+            dgwEmployeeCommissionList.Columns.Add(costColumn);
+
+            DataGridViewTextBoxColumn commissionColumn = new DataGridViewTextBoxColumn();
+            commissionColumn.DataPropertyName = "Commission";
+            commissionColumn.Width = 100;
+            commissionColumn.HeaderText = "Hoa hồng";
+            commissionColumn.ValueType = typeof(string);
+            dgwEmployeeCommissionList.Columns.Add(commissionColumn);
         }
 
         private void dgwEmployeeCommissionList_CellDoubleClick(object sender, DataGridViewCellEventArgs e)

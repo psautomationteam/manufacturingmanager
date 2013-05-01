@@ -170,7 +170,7 @@ namespace BaoHien.UI
         {
             if (productionRequest != null)
             {
-                txtDate.Text = productionRequest.RequestedDate.ToShortDateString();
+                txtDate.Text = productionRequest.RequestedDate.ToString(BHConstant.DATE_FORMAT);
                 txtDate.Enabled = false;
                 txtUser.Text = productionRequest.SystemUser.FullName;
                 txtUser.Enabled = false;
@@ -179,7 +179,7 @@ namespace BaoHien.UI
             }
             else
             {
-                txtDate.Text = DateTime.Now.ToShortDateString();
+                txtDate.Text = DateTime.Now.ToString(BHConstant.DATE_FORMAT);
                 txtDate.Enabled = false;
                 txtUser.Text = (Global.CurrentUser != null) ? Global.CurrentUser.FullName : "";
                 txtUser.Enabled = false;

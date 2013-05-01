@@ -94,6 +94,11 @@ namespace BaoHien.Common
             return formatCurrencyText(content, "(VND) ", '.', ',');
         }
 
+        public static string formatCurrencyTextWithoutMask(string content)
+        {
+            return formatCurrencyText(content, "", '.', ',');
+        }
+
         public static string convertCurrencyToText(string number)
         {
             string[] dv = { "", "mươi", "trăm", "nghìn", "triệu", "tỉ" };

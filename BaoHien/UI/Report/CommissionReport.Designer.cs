@@ -126,6 +126,7 @@
             this.dgwEmployeeCommissionList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgwEmployeeCommissionList.Location = new System.Drawing.Point(17, 120);
             this.dgwEmployeeCommissionList.Name = "dgwEmployeeCommissionList";
+            this.dgwEmployeeCommissionList.ReadOnly = true;
             this.dgwEmployeeCommissionList.Size = new System.Drawing.Size(1053, 498);
             this.dgwEmployeeCommissionList.TabIndex = 24;
             this.dgwEmployeeCommissionList.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgwEmployeeCommissionList_CellDoubleClick);

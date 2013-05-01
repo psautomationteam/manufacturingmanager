@@ -53,6 +53,7 @@ namespace BaoHien.UI
         private void menuDBConfig_Click(object sender, EventArgs e)
         {
             DBConfiguration frm = new DBConfiguration();
+            pnlMain.Controls.Clear();
             frm.ShowDialog();
         }
 
@@ -87,8 +88,8 @@ namespace BaoHien.UI
         private void menuChangePass_Click(object sender, EventArgs e)
         {
             ChangePassword frmChangePass = new ChangePassword();
+            pnlMain.Controls.Clear();
             frmChangePass.ShowDialog();
-
         }
 
         private void menuEmployee_Click(object sender, EventArgs e)
@@ -154,37 +155,42 @@ namespace BaoHien.UI
         private void tsbAddProduct_Click(object sender, EventArgs e)
         {
             AddProduct frmAddProduct = new AddProduct();
+            pnlMain.Controls.Clear();
             frmAddProduct.ShowDialog();
-
         }
 
         private void tsbAddCustomer_Click(object sender, EventArgs e)
         {
             AddCustomer frmAddCustomer = new AddCustomer();
+            pnlMain.Controls.Clear();
             frmAddCustomer.ShowDialog();
         }
 
         private void tsbAddOrder_Click(object sender, EventArgs e)
         {
             AddOrder frmAddOrder = new AddOrder();
+            pnlMain.Controls.Clear();
             frmAddOrder.ShowDialog();
         }
 
         private void tsbAddProductionRequest_Click(object sender, EventArgs e)
         {
             AddProductionRequest frmRequest = new AddProductionRequest();
+            pnlMain.Controls.Clear();
             frmRequest.ShowDialog();
         }
 
         private void toolStripButton1_Click(object sender, EventArgs e)
         {
             AddBill frm = new AddBill();
+            pnlMain.Controls.Clear();
             frm.ShowDialog();
         }
 
         private void toolStripButton2_Click(object sender, EventArgs e)
         {
             AddEntranceStock frm = new AddEntranceStock();
+            pnlMain.Controls.Clear();
             frm.ShowDialog();
         }
 

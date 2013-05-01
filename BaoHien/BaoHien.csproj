@@ -112,10 +112,12 @@
     <Compile Include="Common\RandomGeneration.cs" />
     <Compile Include="Common\RawPrinter.cs" />
     <Compile Include="Model\BillSearchCriteria.cs" />
-    <Compile Include="Model\ArrearReportModel.cs" />
+    <Compile Include="Model\CustomersReport.cs" />
+    <Compile Include="Model\CustomerReport.cs" />
+    <Compile Include="Model\EmployeeReport.cs" />
     <Compile Include="Model\OrderSearchCriteria.cs" />
     <Compile Include="Model\CustomerSearchCriteria.cs" />
-    <Compile Include="Model\EmployeeReport.cs" />
+    <Compile Include="Model\EmployeesReport.cs" />
     <Compile Include="Model\ProductReport.cs" />
     <Compile Include="Model\EntranceStockSearchCriteria.cs" />
     <Compile Include="Model\OrderDetailEntity.cs" />

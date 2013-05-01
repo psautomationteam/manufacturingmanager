@@ -32,42 +32,27 @@ namespace BaoHien.UI
             BillService billService = new BillService();
             List<Bill> bills = billService.GetBills();
             setUpDataGrid(bills);
-
         }
 
         private void loadSomeData()
         {
-            if (customers == null)
-            {
-                CustomerService customerService = new CustomerService();
-                customers = customerService.GetCustomers();
-            }
-            if (customers != null)
-            {
+            CustomerService customerService = new CustomerService();
+            customers = customerService.GetCustomers();
+            customers.Add(new Customer() { Id = 0, CustomerName = "Tất cả" });
+            customers = customers.OrderBy(x => x.Id).ToList();
 
+            cbmCustomers.DataSource = customers;
+            cbmCustomers.DisplayMember = "CustomerName";
+            cbmCustomers.ValueMember = "Id";
 
-                cmbCustomer.DataSource = customers;
+            SystemUserService systemUserService = new SystemUserService();
+            systemUsers = systemUserService.GetSystemUsers();
+            systemUsers.Add(new SystemUser() { Id = 0, FullName = "Tất cả" });
+            systemUsers = systemUsers.OrderBy(x => x.Id).ToList();
 
-                cmbCustomer.DisplayMember = "CustomerName";
-                cmbCustomer.ValueMember = "Id";
-
-            }
-            if (systemUsers == null)
-            {
-                SystemUserService systemUserService = new SystemUserService();
-                systemUsers = systemUserService.GetSystemUsers();
-            }
-            if (systemUsers != null)
-            {
-
-
-                cbmUsers.DataSource = systemUsers;
-
-                cbmUsers.DisplayMember = "FullName";
-                cbmUsers.ValueMember = "Id";
-
-            }
-
+            cbmUsers.DataSource = systemUsers;
+            cbmUsers.DisplayMember = "FullName";
+            cbmUsers.ValueMember = "Id";
         }
 
         private void setUpDataGrid(List<Bill> bills)
@@ -77,22 +62,22 @@ namespace BaoHien.UI
             {
                 int index = 0;
                 var query = from bill in bills
-
                             select new
                             {
                                 Id = bill.Id,
                                 BillCode = bill.BillCode,
                                 CustomerName = bill.Customer.CustomerName,
-                                Total = bill.Amount,
+                                CustomerCode = bill.Customer.CustCode,
+                                Total = Global.formatVNDCurrencyText(bill.Amount.ToString()),
+                                TotalInCurrency = bill.Amount,
                                 Note = bill.Note,
                                 CreateBy = bill.SystemUser.FullName,
-
-                                CreatedDate = bill.CreatedDate.ToShortDateString(),
-                                
+                                CreatedDate = bill.CreatedDate.ToString(BHConstant.DATE_FORMAT),
                                 Index = ++index
                             };
                 dgwBillingList.DataSource = query.ToList();
-
+                lblTotal.Text = Global.formatVNDCurrencyText(query.Select(x => x.TotalInCurrency).Sum().ToString());
+                productionRequestInTotal.Text = query.Count().ToString();
             }
         }
 
@@ -104,54 +89,47 @@ namespace BaoHien.UI
             indexColumn.DataPropertyName = "Index";
             indexColumn.HeaderText = "STT";
             indexColumn.ValueType = typeof(string);
-            indexColumn.Frozen = true;
             dgwBillingList.Columns.Add(indexColumn);
-            DataGridViewTextBoxColumn billCodeColumn = new DataGridViewTextBoxColumn();
-            billCodeColumn.Width = 100;
-            billCodeColumn.DataPropertyName = "BillCode";
-            billCodeColumn.HeaderText = "Mã đặt hàng";
-            billCodeColumn.ValueType = typeof(string);
-            billCodeColumn.Frozen = true;
-            dgwBillingList.Columns.Add(billCodeColumn);
-
-
-
-            DataGridViewTextBoxColumn customerNameColumn = new DataGridViewTextBoxColumn();
-            customerNameColumn.DataPropertyName = "CustomerName";
-            customerNameColumn.Width = 200;
-            customerNameColumn.HeaderText = "Khách hàng";
-            customerNameColumn.Frozen = true;
-            customerNameColumn.ValueType = typeof(string);
-            dgwBillingList.Columns.Add(customerNameColumn);
-
-            
-
-            
-
-           
-
-
-            DataGridViewTextBoxColumn createByColumn = new DataGridViewTextBoxColumn();
-            createByColumn.DataPropertyName = "CreateBy";
-            createByColumn.Width = 100;
-            createByColumn.HeaderText = "Người tạo";
-            createByColumn.Frozen = true;
-            createByColumn.ValueType = typeof(string);
-            dgwBillingList.Columns.Add(createByColumn);
 
             DataGridViewTextBoxColumn createdDateColumn = new DataGridViewTextBoxColumn();
             createdDateColumn.DataPropertyName = "CreatedDate";
             createdDateColumn.Width = 100;
             createdDateColumn.HeaderText = "Ngày tạo";
-            createdDateColumn.Frozen = true;
             createdDateColumn.ValueType = typeof(string);
             dgwBillingList.Columns.Add(createdDateColumn);
 
+            DataGridViewTextBoxColumn billCodeColumn = new DataGridViewTextBoxColumn();
+            billCodeColumn.Width = 100;
+            billCodeColumn.DataPropertyName = "BillCode";
+            billCodeColumn.HeaderText = "Mã đặt hàng";
+            billCodeColumn.ValueType = typeof(string);
+            dgwBillingList.Columns.Add(billCodeColumn);
+
+            DataGridViewTextBoxColumn customerNameColumn = new DataGridViewTextBoxColumn();
+            customerNameColumn.DataPropertyName = "CustomerName";
+            customerNameColumn.Width = 200;
+            customerNameColumn.HeaderText = "Khách hàng";
+            customerNameColumn.ValueType = typeof(string);
+            dgwBillingList.Columns.Add(customerNameColumn);
+
+            DataGridViewTextBoxColumn customerCodeColumn = new DataGridViewTextBoxColumn();
+            customerCodeColumn.DataPropertyName = "CustomerCode";
+            customerCodeColumn.Width = 150;
+            customerCodeColumn.HeaderText = "Mã khách hàng";
+            customerCodeColumn.ValueType = typeof(string);
+            dgwBillingList.Columns.Add(customerCodeColumn);
+
+            DataGridViewTextBoxColumn createByColumn = new DataGridViewTextBoxColumn();
+            createByColumn.DataPropertyName = "CreateBy";
+            createByColumn.Width = 100;
+            createByColumn.HeaderText = "Người tạo";
+            createByColumn.ValueType = typeof(string);
+            dgwBillingList.Columns.Add(createByColumn);
+
             DataGridViewTextBoxColumn totalColumn = new DataGridViewTextBoxColumn();
             totalColumn.DataPropertyName = "Total";
-            totalColumn.Width = 50;
+            totalColumn.Width = 100;
             totalColumn.HeaderText = "Tổng";
-            totalColumn.Frozen = true;
             totalColumn.ValueType = typeof(string);
             dgwBillingList.Columns.Add(totalColumn);
 
@@ -159,7 +137,6 @@ namespace BaoHien.UI
             noteColumn.DataPropertyName = "Note";
             noteColumn.Width = 300;
             noteColumn.HeaderText = "Chú ý";
-            noteColumn.Frozen = true;
             noteColumn.ValueType = typeof(string);
             dgwBillingList.Columns.Add(noteColumn);
 
@@ -167,7 +144,6 @@ namespace BaoHien.UI
             deleteButton.Image = Properties.Resources.erase;
             deleteButton.Width = 40;
             deleteButton.HeaderText = "Xóa";
-            deleteButton.ReadOnly = true;
             deleteButton.ImageLayout = DataGridViewImageCellLayout.Normal;
             dgwBillingList.Columns.Add(deleteButton);
         }
@@ -198,10 +174,10 @@ namespace BaoHien.UI
             BillSearchCriteria billSearchCriteria = new BillSearchCriteria
             {
                 Code = txtCode.Text,
-                CreatedBy = cbmUsers.SelectedValue != null && (int)cbmUsers.SelectedValue > 0 ? (int?)cbmUsers.SelectedValue : (int?)null,
-                CustId = cmbCustomer.SelectedValue != null && (int)cmbCustomer.SelectedValue > 0 ? (int?)cmbCustomer.SelectedValue : (int?)null,
+                CreatedBy = (cbmUsers.SelectedValue != null && cbmUsers.SelectedIndex != 0) ? (int?)cbmUsers.SelectedValue : (int?)null,
+                CustId = (cbmCustomers.SelectedValue != null && cbmCustomers.SelectedIndex != 0) ? (int?)cbmCustomers.SelectedValue : (int?)null,
                 From = dtpFrom.Value != null ? dtpFrom.Value : (DateTime?)null,
-                To = dtpTo.Value != null ? dtpTo.Value : (DateTime?)null,
+                To = dtpTo.Value != null ? dtpTo.Value.AddDays(1).Date : (DateTime?)null,
             };
             BillService billService = new BillService();
             List<Bill> bills = billService.SearchingBill(billSearchCriteria);

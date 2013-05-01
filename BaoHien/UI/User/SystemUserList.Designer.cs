@@ -39,6 +39,7 @@
             this.dgvUserList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvUserList.Location = new System.Drawing.Point(47, 71);
             this.dgvUserList.Name = "dgvUserList";
+            this.dgvUserList.ReadOnly = true;
             this.dgvUserList.Size = new System.Drawing.Size(1012, 542);
             this.dgvUserList.TabIndex = 17;
             this.dgvUserList.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvUserList_CellClick);

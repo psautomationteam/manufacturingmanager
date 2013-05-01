@@ -37,8 +37,7 @@ namespace BaoHien.Services.ProductionRequests
         }
         public List<ProductionRequest> SearchingProductionRequest(ProductionRequestSearchCriteria productionRequestSearchCriteria)
         {
-            List<ProductionRequest> productionRequests = OnGetItems<ProductionRequest>();
-           
+            List<ProductionRequest> productionRequests = OnGetItems<ProductionRequest>();           
             if (productionRequestSearchCriteria != null)
             {
                 if (productionRequestSearchCriteria.RequestedBy.HasValue)
@@ -57,34 +56,6 @@ namespace BaoHien.Services.ProductionRequests
                             .ToList();
                 }
             }
-            else
-            {
-                return productionRequests;
-            }
-            /*
-            IQueryable<ProductionRequest> query = null;
-            BaoHienDBDataContext context = BaoHienRepository.GetBaoHienDBDataContext();
-            if (context != null)
-            {
-                query = from p in context.Products
-                        join pt in context.ProductTypes on p.ProductType equals pt.Id
-                        where (p.Status == null) && (productSearchCriteria.ProductTypeId == null || pt.Id == productSearchCriteria.ProductTypeId)
-                        select p;
-            }
-            if (productSearchCriteria.ProductCode != null)
-            {
-                query = query.Where(p => p.ProductCode.Contains(productSearchCriteria.ProductCode));
-            }
-            if (productSearchCriteria.ProductName != null)
-            {
-                query = query.Where(p => p.ProductName.Contains(productSearchCriteria.ProductName));
-            }
-            if (productSearchCriteria.PurchaseStatus != null)
-            {
-
-            }
-            if (query != null)
-                return query.ToList();*/
             return productionRequests;
         }
     }

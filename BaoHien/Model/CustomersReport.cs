@@ -5,15 +5,8 @@ using System.Text;
 
 namespace BaoHien.Model
 {
-    public class ArrearReportModel
+    public class CustomersReport
     {
-        int id;
-        public int ID
-        {
-            get { return id; }
-            set { id = value; }
-        }
-
         int index;
         public int Index
         {
@@ -42,25 +35,18 @@ namespace BaoHien.Model
             set { amount = value; }
         }
 
-        string afterDebit;
-        public string AfterDebit
-        {
-            get { return afterDebit; }
-            set { afterDebit = value; }
-        }
-
-        double afterDebitNumber;
-        public double AfterDebitNumber
-        {
-            get { return afterDebitNumber; }
-            set { afterDebitNumber = value; }
-        }
-
         string customerName;
         public string CustomerName
         {
             get { return customerName; }
             set { customerName = value; }
+        }
+
+        string customerCode;
+        public string CustomerCode
+        {
+            get { return customerCode; }
+            set { customerCode = value; }
         }
     }
 }

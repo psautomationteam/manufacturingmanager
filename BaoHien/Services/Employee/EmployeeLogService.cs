@@ -84,7 +84,7 @@ namespace BaoHien.Services.Employees
             return result;
         }
 
-        public List<EmployeeReport> GetReportsOfEmployee(int employeeId, DateTime from, DateTime to)
+        public List<EmployeeReport> GetReportsOfEmployee(int employeeId, DateTime from, DateTime to, ref double total)
         {
             List<EmployeeReport> result = new List<EmployeeReport>();
             using (BaoHienDBDataContext context = new BaoHienDBDataContext(SettingManager.BuildStringConnection()))
@@ -92,14 +92,52 @@ namespace BaoHien.Services.Employees
                 List<EmployeeLog> logs = context.EmployeeLogs
                     .Where(c => c.EmployeeId == employeeId && c.CreatedDate >= from && c.CreatedDate <= to)
                     .OrderByDescending(c => c.CreatedDate).ToList();
-                ConvertEmployeeLogsToReports(logs, ref result);
+                List<Order> orders = context.Orders.Where(x => logs.Select(y => y.RecordCode).Contains(x.OrderCode)).ToList();
+                List<OrderDetail> details = context.OrderDetails.Where(x => orders.Select(y => y.Id).Contains(x.OrderId)).ToList();
+                int curr_month = from.Month, curr_year = from.Year, month = curr_month, year = curr_year, index = 0;
+                result.Add(new EmployeeReport
+                        {
+                            CustomerName = "Tháng " + curr_month.ToString() + "/" + curr_year.ToString()
+                        });
+                foreach (Order item in orders)
+                {
+                    month = item.CreatedDate.Month;
+                    year = item.CreatedDate.Year;
+                    if (month != curr_month || year != curr_year)
+                    {
+                        curr_month = month;
+                        curr_year = year;
+                        result.Add(new EmployeeReport
+                            {
+                                CustomerName = "Tháng " + curr_month.ToString() + "/" + curr_year.ToString()
+                            });
+                    }
+                    List<OrderDetail> details_of_order = details.Where(x => x.OrderId == item.Id).ToList();
+                    for (int i = 0; i < details_of_order.Count; i++)
+                    {
+                        result.Add(new EmployeeReport
+                            {
+                                Index = (++index).ToString(),
+                                Date = i == 0 ? item.CreatedDate.ToString(BHConstant.DATE_FORMAT) : "",
+                                CustomerName = item.Customer.CustomerName,
+                                ProductName = details_of_order[i].Product.ProductName,
+                                AttrName = details_of_order[i].BaseAttribute.AttributeName,
+                                Number = details_of_order[i].NumberUnit.ToString(),
+                                Unit = details_of_order[i].MeasurementUnit.Name,
+                                Cost = Global.formatCurrencyTextWithoutMask(details_of_order[i].Cost.ToString()),
+                                Commission = Global.formatCurrencyTextWithoutMask(details_of_order[i].Commission.ToString()),
+                                RecordCode = item.OrderCode,
+                            });
+                        total += details_of_order[i].Commission;
+                    }
+                }
             }
             return result;
         }
 
-        public List<EmployeeReport> GetReportsOfEmployees(DateTime from, DateTime to)
+        public List<EmployeesReport> GetReportsOfEmployees(DateTime from, DateTime to)
         {
-            List<EmployeeReport> result = new List<EmployeeReport>();
+            List<EmployeesReport> result = new List<EmployeesReport>();
             using (BaoHienDBDataContext context = new BaoHienDBDataContext(SettingManager.BuildStringConnection()))
             {
                 List<EmployeeLog> logs = context.EmployeeLogs
@@ -110,12 +148,12 @@ namespace BaoHien.Services.Employees
             return result;
         }
 
-        private void ConvertEmployeeLogsToReports(List<EmployeeLog> logs, ref List<EmployeeReport> reports)
+        private void ConvertEmployeeLogsToReports(List<EmployeeLog> logs, ref List<EmployeesReport> reports)
         {
             int index = 0;
             foreach (EmployeeLog log in logs)
             {
-                reports.Add(new EmployeeReport
+                reports.Add(new EmployeesReport
                 {
                     ID = log.Id,
                     EmployeeName = log.Employee.FullName,
@@ -134,5 +172,8 @@ namespace BaoHien.Services.Employees
         {
             return SelectItemByWhere<EmployeeLog>(func);
         }
+
+        
+                
     }
 }

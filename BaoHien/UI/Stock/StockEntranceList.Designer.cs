@@ -38,7 +38,6 @@
             this.label2 = new System.Windows.Forms.Label();
             this.dtpFrom = new System.Windows.Forms.DateTimePicker();
             this.label1 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
             this.productionRequestInTotal = new System.Windows.Forms.Label();
             this.dgwStockEntranceList = new System.Windows.Forms.DataGridView();
             this.label6 = new System.Windows.Forms.Label();
@@ -141,17 +140,6 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Từ ngày:";
             // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.Location = new System.Drawing.Point(560, 116);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(479, 14);
-            this.label8.TabIndex = 15;
-            this.label8.Text = "Chú ý: mặc định, danh sách bên dưới bao gồm các phiếu được lập trong tháng đến ng" +
-                "ày hiện tại";
-            // 
             // productionRequestInTotal
             // 
             this.productionRequestInTotal.AutoSize = true;
@@ -168,6 +156,7 @@
             this.dgwStockEntranceList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgwStockEntranceList.Location = new System.Drawing.Point(25, 149);
             this.dgwStockEntranceList.Name = "dgwStockEntranceList";
+            this.dgwStockEntranceList.ReadOnly = true;
             this.dgwStockEntranceList.Size = new System.Drawing.Size(1041, 464);
             this.dgwStockEntranceList.TabIndex = 16;
             this.dgwStockEntranceList.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgwStockEntranceList_CellClick);
@@ -187,7 +176,6 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.label8);
             this.Controls.Add(this.productionRequestInTotal);
             this.Controls.Add(this.dgwStockEntranceList);
             this.Controls.Add(this.label6);
@@ -214,7 +202,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.DateTimePicker dtpFrom;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label productionRequestInTotal;
         private System.Windows.Forms.DataGridView dgwStockEntranceList;
         private System.Windows.Forms.Label label6;

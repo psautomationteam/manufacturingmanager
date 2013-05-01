@@ -33,14 +33,12 @@ namespace BaoHien.UI
         {
             EmployeeService service = new EmployeeService();
             List<Employee> salers = service.GetEmployees();
-            salers.Add(new Employee() { Id = 0 });
+            salers.Add(new Employee() { Id = 0, FullName = "Tất cả" });
             salers = salers.OrderBy(x => x.Id).ToList();
-            if (salers != null)
-            {
-                cmbSaler.DataSource = salers;
-                cmbSaler.DisplayMember = "FullName";
-                cmbSaler.ValueMember = "Id";
-            }
+            cmbSaler.DataSource = salers;
+            cmbSaler.DisplayMember = "FullName";
+            cmbSaler.ValueMember = "Id";
+
             CustomerService customerService = new CustomerService();
             List<Customer> customers = customerService.GetCustomers();
             setUpDataGrid(customers);
@@ -52,24 +50,15 @@ namespace BaoHien.UI
             {
                 int index = 0;
                 var query = from customer in customers
-
                             select new
                             {
                                 CustomerName = customer.CustomerName,
-                                Address = customer.Address,
-                                BankAcc = customer.BankAcc,
-                                BankName = customer.BankName,
-                                ContactPerson = customer.ContactPerson,
-                                ContactPersonEmail = customer.ContactPersonEmail,
-                                ContactPersonPhone = customer.ContactPersonPhone,
                                 CustCode = customer.CustCode,
-                                Description = customer.Description,
-                                Email = customer.Email,
-                                Employee = (customer.Employee != null)?customer.Employee.FullName: "",
-                                Fax = customer.Fax,
-                                Phone = customer.Phone,
-                                SalerId = customer.SalerId,
-                                Status = customer.Status,
+                                CustomerPhone = customer.Phone,
+                                CustomerPersonName = customer.ContactPerson,
+                                CustomerPersonPhone = customer.ContactPersonPhone,
+                                FavoriteProduct = customer.FavoriteProduct,
+                                Employee = (customer.Employee != null) ? customer.Employee.FullName : "",
                                 Id = customer.Id,
                                 Index = ++index
                             };
@@ -81,71 +70,67 @@ namespace BaoHien.UI
         private void SetupColumns()
         {
             dgvProductList.AutoGenerateColumns = false;
+
             DataGridViewTextBoxColumn indexColumn = new DataGridViewTextBoxColumn();
             indexColumn.Width = 30;
             indexColumn.DataPropertyName = "Index";
             indexColumn.HeaderText = "STT";
             indexColumn.ValueType = typeof(string);
-            indexColumn.Frozen = true;
             dgvProductList.Columns.Add(indexColumn);
 
-            DataGridViewTextBoxColumn productNameColumn = new DataGridViewTextBoxColumn();
-            productNameColumn.Width = 100;
-            productNameColumn.DataPropertyName = "CustomerName";
-            productNameColumn.HeaderText = "Tên khách hàng";
-            productNameColumn.ValueType = typeof(string);
-            productNameColumn.Frozen = true;
-            dgvProductList.Columns.Add(productNameColumn);
+            DataGridViewTextBoxColumn customerNameColumn = new DataGridViewTextBoxColumn();
+            customerNameColumn.Width = 150;
+            customerNameColumn.DataPropertyName = "CustomerName";
+            customerNameColumn.HeaderText = "Tên khách hàng";
+            customerNameColumn.ValueType = typeof(string);
+            dgvProductList.Columns.Add(customerNameColumn);
 
+            DataGridViewTextBoxColumn customerCodeColumn = new DataGridViewTextBoxColumn();
+            customerCodeColumn.Width = 150;
+            customerCodeColumn.DataPropertyName = "CustCode";
+            customerCodeColumn.HeaderText = "Mã khách hàng";
+            customerCodeColumn.ValueType = typeof(string);
+            dgvProductList.Columns.Add(customerCodeColumn);
 
+            DataGridViewTextBoxColumn customerPhoneColumn = new DataGridViewTextBoxColumn();
+            customerPhoneColumn.Width = 100;
+            customerPhoneColumn.DataPropertyName = "CustomerPhone";
+            customerPhoneColumn.HeaderText = "SĐT Cty";
+            customerPhoneColumn.ValueType = typeof(string);
+            dgvProductList.Columns.Add(customerPhoneColumn);
 
-            DataGridViewTextBoxColumn addressColumn = new DataGridViewTextBoxColumn();
-            addressColumn.DataPropertyName = "Address";
-            addressColumn.Width = 100;
-            addressColumn.HeaderText = "Địa chỉ";
-            addressColumn.Frozen = true;
-            addressColumn.ValueType = typeof(string);
-            dgvProductList.Columns.Add(addressColumn);
+            DataGridViewTextBoxColumn customerPersonNameColumn = new DataGridViewTextBoxColumn();
+            customerPersonNameColumn.DataPropertyName = "CustomerPersonName";
+            customerPersonNameColumn.Width = 150;
+            customerPersonNameColumn.HeaderText = "Tên người liên lạc";
+            customerPersonNameColumn.ValueType = typeof(string);
+            dgvProductList.Columns.Add(customerPersonNameColumn);
 
-            DataGridViewTextBoxColumn emailColumn = new DataGridViewTextBoxColumn();
-            emailColumn.DataPropertyName = "Email";
-            emailColumn.Width = 100;
-            emailColumn.HeaderText = "Email";
-            emailColumn.Frozen = true;
-            emailColumn.ValueType = typeof(string);
-
-            dgvProductList.Columns.Add(emailColumn);
-
-            DataGridViewTextBoxColumn faxColumn = new DataGridViewTextBoxColumn();
-            faxColumn.DataPropertyName = "Fax";
-            faxColumn.Width = 100;
-            faxColumn.HeaderText = "Fax";
-            faxColumn.Frozen = true;
-            faxColumn.ValueType = typeof(string);
-
-            dgvProductList.Columns.Add(faxColumn);
+            DataGridViewTextBoxColumn customerPersonPhoneColumn = new DataGridViewTextBoxColumn();
+            customerPersonPhoneColumn.DataPropertyName = "CustomerPersonPhone";
+            customerPersonPhoneColumn.Width = 150;
+            customerPersonPhoneColumn.HeaderText = "SĐT người liên lạc";
+            customerPersonPhoneColumn.ValueType = typeof(string);
+            dgvProductList.Columns.Add(customerPersonPhoneColumn);
+            
+            DataGridViewTextBoxColumn favorProductColumn = new DataGridViewTextBoxColumn();
+            favorProductColumn.DataPropertyName = "FavoriteProduct";
+            favorProductColumn.Width = 150;
+            favorProductColumn.HeaderText = "Dòng sản phẩm";
+            favorProductColumn.ValueType = typeof(string);
+            dgvProductList.Columns.Add(favorProductColumn);
 
             DataGridViewTextBoxColumn employeeColumn = new DataGridViewTextBoxColumn();
             employeeColumn.DataPropertyName = "Employee";
-            employeeColumn.Width = 100;
+            employeeColumn.Width = 150;
             employeeColumn.HeaderText = "Nhân viên phụ trách";
-            employeeColumn.Frozen = true;
             employeeColumn.ValueType = typeof(string);
             dgvProductList.Columns.Add(employeeColumn);
 
-            DataGridViewTextBoxColumn descriptionColumn = new DataGridViewTextBoxColumn();
-            descriptionColumn.DataPropertyName = "Description";
-            descriptionColumn.Width = 150;//dgvProductList.Width - productNameColumn.Width - addressColumn.Width - emailColumn.Width - faxColumn.Width - employeeColumn.Width;
-            descriptionColumn.HeaderText = "Mô tả khách hàng";
-            descriptionColumn.Frozen = true;
-            descriptionColumn.ValueType = typeof(string);
-            dgvProductList.Columns.Add(descriptionColumn);
-            
             DataGridViewImageColumn deleteButton = new DataGridViewImageColumn();
             deleteButton.Image = Properties.Resources.erase;
             deleteButton.Width = 40;
             deleteButton.HeaderText = "Xóa";
-            deleteButton.ReadOnly = true;
             deleteButton.ImageLayout = DataGridViewImageCellLayout.Normal;
             dgvProductList.Columns.Add(deleteButton);           
         }
