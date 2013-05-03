@@ -44,6 +44,7 @@
             this.btnAdd = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.lblTotalResult = new System.Windows.Forms.Label();
+            this.btnPrint = new System.Windows.Forms.Button();
             this.grpSearch.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvProductList)).BeginInit();
             this.SuspendLayout();
@@ -200,10 +201,22 @@
             this.lblTotalResult.TabIndex = 17;
             this.lblTotalResult.Text = "0";
             // 
+            // btnPrint
+            // 
+            this.btnPrint.Location = new System.Drawing.Point(753, 122);
+            this.btnPrint.Name = "btnPrint";
+            this.btnPrint.Size = new System.Drawing.Size(135, 22);
+            this.btnPrint.TabIndex = 18;
+            this.btnPrint.Text = "In danh sách này";
+            this.btnPrint.UseVisualStyleBackColor = true;
+            this.btnPrint.Visible = false;
+            this.btnPrint.Click += new System.EventHandler(this.btnPrint_Click);
+            // 
             // CustomerList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.btnPrint);
             this.Controls.Add(this.grpSearch);
             this.Controls.Add(this.dgvProductList);
             this.Controls.Add(this.btnAdd);
@@ -238,5 +251,6 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox txtFavoriteProduct;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Button btnPrint;
     }
 }
