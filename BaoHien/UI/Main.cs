@@ -148,6 +148,13 @@ namespace BaoHien.UI
             pnlMain.Controls.Add(commisionReport);
         }
 
+        private void menuAbout_Click(object sender, EventArgs e)
+        {
+            About frm = new About();
+            pnlMain.Controls.Clear();
+            frm.ShowDialog();
+        }
+
         #endregion 
 
         #region toolbar action
@@ -206,5 +213,6 @@ namespace BaoHien.UI
             //    dBConfiguration.Show();
             //}
         }
+
     }
 }

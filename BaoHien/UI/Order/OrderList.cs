@@ -79,12 +79,12 @@ namespace BaoHien.UI
                                 Id = order.Id,
                                 OrderCode = order.OrderCode,
                                 Note = order.Note,
-                                Total = Global.formatVNDCurrencyText(order.Total.ToString()),
+                                Total = Global.formatCurrencyTextWithoutMask(order.Total.ToString()),
                                 TotalInCurrency = order.Total,
-                                VAT = Global.formatVNDCurrencyText(order.VAT.ToString()),
+                                VAT = Global.formatCurrencyTextWithoutMask(order.VAT.ToString()),
                                 CustomerName = order.Customer != null ? order.Customer.CustomerName : "",
                                 CustomerCode = order.Customer != null ? order.Customer.CustCode : "",
-                                Discount = Global.formatVNDCurrencyText(order.Discount.ToString()),
+                                Discount = Global.formatCurrencyTextWithoutMask(order.Discount.ToString()),
                                 CreatedDate = order.CreatedDate.ToString(BHConstant.DATE_FORMAT),
                                 CreateBy = order.SystemUser.FullName,
                                 Index = ++index
@@ -105,9 +105,8 @@ namespace BaoHien.UI
             dgwOrderList.Columns.Add(Global.CreateCell("CustomerName", "Khách hàng", 200));
             dgwOrderList.Columns.Add(Global.CreateCell("CustomerCode", "Mã khách hàng", 150));
             dgwOrderList.Columns.Add(Global.CreateCell("Note", "Ghi chú", 200));
-            dgwOrderList.Columns.Add(Global.CreateCell("CreatedDate", "Giảm", 100));
-            dgwOrderList.Columns.Add(Global.CreateCell("VAT", "VAT", 100));
-            dgwOrderList.Columns.Add(Global.CreateCell("Discount", "Người tạo", 150));
+            dgwOrderList.Columns.Add(Global.CreateCellWithAlignment("VAT", "VAT", 100, DataGridViewContentAlignment.MiddleRight));
+            dgwOrderList.Columns.Add(Global.CreateCellWithAlignment("Discount", "Khấu chi", 100, DataGridViewContentAlignment.MiddleRight));
             dgwOrderList.Columns.Add(Global.CreateCellWithAlignment("Total", "Tổng", 100, DataGridViewContentAlignment.MiddleRight));
             dgwOrderList.Columns.Add(Global.CreateCellDeleteAction());
         }

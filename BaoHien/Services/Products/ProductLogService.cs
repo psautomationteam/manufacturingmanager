@@ -177,7 +177,7 @@ namespace BaoHien.Services.ProductLogs
             using (BaoHienDBDataContext context = new BaoHienDBDataContext(SettingManager.BuildStringConnection()))
             {
                 List<ProductLog> logs = context.ProductLogs.Where(x => x.CreatedDate >= from && x.CreatedDate <= to)
-                    .OrderByDescending(pl => pl.CreatedDate).ToList();
+                    .OrderBy(pl => pl.CreatedDate).ToList();
                 if (unitId > 0)
                     logs = logs.Where(x => x.UnitId == unitId).ToList();
                 if (attrId > 0)

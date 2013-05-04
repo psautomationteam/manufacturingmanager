@@ -299,14 +299,15 @@
             // menuGuide
             // 
             this.menuGuide.Name = "menuGuide";
-            this.menuGuide.Size = new System.Drawing.Size(149, 22);
+            this.menuGuide.Size = new System.Drawing.Size(152, 22);
             this.menuGuide.Text = "Hướng Dẫn";
             // 
             // menuAbout
             // 
             this.menuAbout.Name = "menuAbout";
-            this.menuAbout.Size = new System.Drawing.Size(149, 22);
+            this.menuAbout.Size = new System.Drawing.Size(152, 22);
             this.menuAbout.Text = "TT Phần Mềm";
+            this.menuAbout.Click += new System.EventHandler(this.menuAbout_Click);
             // 
             // toolStrip1
             // 

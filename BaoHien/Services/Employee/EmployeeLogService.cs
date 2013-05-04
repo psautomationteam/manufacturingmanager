@@ -135,20 +135,20 @@ namespace BaoHien.Services.Employees
             return result;
         }
 
-        public List<EmployeesReport> GetReportsOfEmployees(DateTime from, DateTime to)
+        public List<EmployeesReport> GetReportsOfEmployees(DateTime from, DateTime to, ref double total)
         {
             List<EmployeesReport> result = new List<EmployeesReport>();
             using (BaoHienDBDataContext context = new BaoHienDBDataContext(SettingManager.BuildStringConnection()))
             {
                 List<EmployeeLog> logs = context.EmployeeLogs
-                    .Where(c => c.CreatedDate >= from && c.CreatedDate <= to).OrderByDescending(el => el.CreatedDate)
-                    .GroupBy(c => c.EmployeeId).Select(el => el.First()).ToList();
-                ConvertEmployeeLogsToReports(logs, ref result);
+                    .Where(c => c.CreatedDate >= from && c.CreatedDate <= to)
+                    .OrderBy(x => x.CreatedDate).ToList();
+                ConvertEmployeeLogsToReports(logs, ref result, ref total);
             }
             return result;
         }
 
-        private void ConvertEmployeeLogsToReports(List<EmployeeLog> logs, ref List<EmployeesReport> reports)
+        private void ConvertEmployeeLogsToReports(List<EmployeeLog> logs, ref List<EmployeesReport> reports, ref double total)
         {
             int index = 0;
             foreach (EmployeeLog log in logs)
@@ -157,11 +157,11 @@ namespace BaoHien.Services.Employees
                 {
                     EmployeeName = log.Employee.FullName,
                     RecordCode = log.RecordCode,
-                    AfterNumberText = Global.formatVNDCurrencyText(log.AfterNumber.ToString()),
-                    AfterNumber = log.AfterNumber,
+                    Amount = Global.formatVNDCurrencyText(log.Amount.ToString()),
                     CreatedDate = log.CreatedDate.ToString(BHConstant.DATE_FORMAT),
                     Index = ++index
                 });
+                total += log.Amount;
             }
         }
 
