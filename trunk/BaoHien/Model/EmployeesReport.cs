@@ -35,18 +35,11 @@ namespace BaoHien.Model
             set { recordCode = value; }
         }
 
-        string afterNumberText;
-        public string AfterNumberText
+        string amount;
+        public string Amount
         {
-            get { return afterNumberText; }
-            set { afterNumberText = value; }
-        }
-
-        double afterNumber;
-        public double AfterNumber
-        {
-            get { return afterNumber; }
-            set { afterNumber = value; }
+            get { return amount; }
+            set { amount = value; }
         }
     }
 }

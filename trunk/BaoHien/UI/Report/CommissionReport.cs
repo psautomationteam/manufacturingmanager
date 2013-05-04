@@ -70,10 +70,10 @@ namespace BaoHien.UI
                 int employeeId = (int)cbmEmployees.SelectedValue;
                 if (employeeId == 0)
                 {
-                    employees_reports = employeeLogService.GetReportsOfEmployees(dtpFrom.Value, dtpTo.Value.AddDays(1).Date);
+                    double total = 0.0;
+                    employees_reports = employeeLogService.GetReportsOfEmployees(dtpFrom.Value, dtpTo.Value.AddDays(1).Date, ref total);
                     dgwEmployeeCommissionList.DataSource = employees_reports;
                     SetupDataGrid();
-                    double total = employees_reports.Sum(a => a.AfterNumber);
                     lbTotal.Text = Global.formatVNDCurrencyText(total.ToString());
                 }
                 else
@@ -104,7 +104,7 @@ namespace BaoHien.UI
             dgwEmployeeCommissionList.Columns.Add(Global.CreateCell("CreatedDate", "Ngày", 100));
             dgwEmployeeCommissionList.Columns.Add(Global.CreateCell("EmployeeName", "Nhân viên", 150));
             dgwEmployeeCommissionList.Columns.Add(Global.CreateCell("RecordCode", "Mã phiếu", 150));
-            dgwEmployeeCommissionList.Columns.Add(Global.CreateCellWithAlignment("AfterNumberText", "Số tiền", 150, DataGridViewContentAlignment.MiddleRight));
+            dgwEmployeeCommissionList.Columns.Add(Global.CreateCellWithAlignment("Amount", "Số tiền", 150, DataGridViewContentAlignment.MiddleRight));
         }
 
         void SetupDataGridDetail()
@@ -205,7 +205,7 @@ namespace BaoHien.UI
                 table.AddCell(FormatConfig.TableCellBody(item.CreatedDate, PdfPCell.ALIGN_LEFT));
                 table.AddCell(FormatConfig.TableCellBody(item.EmployeeName, PdfPCell.ALIGN_LEFT));
                 table.AddCell(FormatConfig.TableCellBody(item.RecordCode, PdfPCell.ALIGN_LEFT));
-                table.AddCell(FormatConfig.TableCellBody(item.AfterNumberText, PdfPCell.ALIGN_RIGHT));
+                table.AddCell(FormatConfig.TableCellBody(item.Amount, PdfPCell.ALIGN_RIGHT));
             }
             return table;
         }

@@ -132,6 +132,12 @@
     <Compile Include="Services\Employee\EmployeeLogService.cs" />
     <Compile Include="Services\Products\ProductLogService.cs" />
     <Compile Include="Services\Seed\SeedService.cs" />
+    <Compile Include="UI\About\About.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\About\About.Designer.cs">
+      <DependentUpon>About.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\Configuration\DBConfiguration.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -363,6 +369,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="UI\About\About.resx">
+      <DependentUpon>About.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\Base\BaseForm.resx">
       <DependentUpon>BaseForm.cs</DependentUpon>
     </EmbeddedResource>

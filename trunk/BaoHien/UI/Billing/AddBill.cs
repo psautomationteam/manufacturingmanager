@@ -40,8 +40,10 @@ namespace BaoHien.UI
             }
             if (customers != null)
             {
+                cbxCustomer.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+                cbxCustomer.AutoCompleteSource = AutoCompleteSource.ListItems;
                 cbxCustomer.DataSource = customers;
-                cbxCustomer.DisplayMember = "CustomerName";
+                cbxCustomer.DisplayMember = "CustCode";
                 cbxCustomer.ValueMember = "Id";
             }
             if (bill != null)
@@ -173,6 +175,22 @@ namespace BaoHien.UI
         {
             BillService billService = new BillService();
             bill = billService.GetBill(billId);            
+        }
+
+        private void cbxCustomer_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbxCustomer.SelectedValue != null)
+            {
+                Customer cm = null;
+                if (cbxCustomer.SelectedValue is Customer)
+                    cm = (Customer)cbxCustomer.SelectedValue;
+                else
+                    cm = customers.Where(x => x.Id == (int)cbxCustomer.SelectedValue).FirstOrDefault();
+                if (cm != null)
+                {
+                    lbCustomerName.Text = cm.CustomerName;
+                }
+            }
         }
     }
 }

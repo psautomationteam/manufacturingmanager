@@ -42,20 +42,22 @@
             this.btnCancel = new System.Windows.Forms.Button();
             this.validator1 = new Itboy.Components.Validator(this.components);
             this.txtAmount = new JRINCCustomControls.currencyTextBox(this.components);
+            this.label4 = new System.Windows.Forms.Label();
+            this.lbCustomerName = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // txtNote
             // 
-            this.txtNote.Location = new System.Drawing.Point(92, 78);
+            this.txtNote.Location = new System.Drawing.Point(92, 102);
             this.txtNote.Multiline = true;
             this.txtNote.Name = "txtNote";
-            this.txtNote.Size = new System.Drawing.Size(479, 81);
+            this.txtNote.Size = new System.Drawing.Size(479, 57);
             this.txtNote.TabIndex = 3;
             // 
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(29, 78);
+            this.label8.Location = new System.Drawing.Point(26, 102);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(47, 13);
             this.label8.TabIndex = 20;
@@ -64,15 +66,15 @@
             // txtCreatedDate
             // 
             this.txtCreatedDate.Enabled = false;
-            this.txtCreatedDate.Location = new System.Drawing.Point(357, 41);
+            this.txtCreatedDate.Location = new System.Drawing.Point(92, 70);
             this.txtCreatedDate.Name = "txtCreatedDate";
-            this.txtCreatedDate.Size = new System.Drawing.Size(159, 20);
+            this.txtCreatedDate.Size = new System.Drawing.Size(151, 20);
             this.txtCreatedDate.TabIndex = 2;
             // 
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(298, 43);
+            this.label7.Location = new System.Drawing.Point(21, 73);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(52, 13);
             this.label7.TabIndex = 18;
@@ -81,11 +83,12 @@
             // cbxCustomer
             // 
             this.cbxCustomer.FormattingEnabled = true;
-            this.cbxCustomer.Location = new System.Drawing.Point(357, 11);
+            this.cbxCustomer.Location = new System.Drawing.Point(370, 11);
             this.cbxCustomer.Name = "cbxCustomer";
-            this.cbxCustomer.Size = new System.Drawing.Size(214, 21);
+            this.cbxCustomer.Size = new System.Drawing.Size(201, 21);
             this.cbxCustomer.TabIndex = 0;
             this.validator1.SetType(this.cbxCustomer, Itboy.Components.ValidationType.Required);
+            this.cbxCustomer.SelectedIndexChanged += new System.EventHandler(this.cbxCustomer_SelectedIndexChanged);
             // 
             // label2
             // 
@@ -157,6 +160,24 @@
             this.txtAmount.Size = new System.Drawing.Size(151, 20);
             this.txtAmount.TabIndex = 23;
             this.txtAmount.ThousandsSeparator = '.';
+            this.txtAmount.WorkingText = null;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(270, 43);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(89, 13);
+            this.label4.TabIndex = 24;
+            this.label4.Text = "Tên khách hàng:";
+            // 
+            // lbCustomerName
+            // 
+            this.lbCustomerName.AutoSize = true;
+            this.lbCustomerName.Location = new System.Drawing.Point(367, 44);
+            this.lbCustomerName.Name = "lbCustomerName";
+            this.lbCustomerName.Size = new System.Drawing.Size(0, 13);
+            this.lbCustomerName.TabIndex = 25;
             // 
             // AddBill
             // 
@@ -164,7 +185,9 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(576, 204);
+            this.ClientSize = new System.Drawing.Size(587, 203);
+            this.Controls.Add(this.lbCustomerName);
+            this.Controls.Add(this.label4);
             this.Controls.Add(this.txtAmount);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.btnCancel);
@@ -201,5 +224,7 @@
         private System.Windows.Forms.Button btnCancel;
         private Itboy.Components.Validator validator1;
         private JRINCCustomControls.currencyTextBox txtAmount;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label lbCustomerName;
     }
 }

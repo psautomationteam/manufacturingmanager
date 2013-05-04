@@ -346,3 +346,4 @@ D:\Workspace - VS\Bao Hien Project\SVN\BaoHien\obj\x86\Debug\GenerateResource.re
 D:\Workspace - VS\Bao Hien Project\SVN\BaoHien\obj\x86\Debug\GenerateResource.write.1.tlog
 D:\Workspace - VS\Bao Hien Project\SVN\BaoHien\obj\x86\Debug\BaoHien.exe
 D:\Workspace - VS\Bao Hien Project\SVN\BaoHien\obj\x86\Debug\BaoHien.pdb
+D:\Workspace - VS\Bao Hien Project\SVN\BaoHien\obj\x86\Debug\BaoHien.UI.About.resources
