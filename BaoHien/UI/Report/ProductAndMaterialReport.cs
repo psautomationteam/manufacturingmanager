@@ -32,7 +32,7 @@ namespace BaoHien.UI
         List<MeasurementUnit> units;
         ProductLogService productLogService;
         int modeReport = 0;
-        string textForPrint = "";
+        string textForPrint = "", textInfo;
 
         public ProductAndMaterialReport()
         {
@@ -56,13 +56,15 @@ namespace BaoHien.UI
             if (productTypeId > 0 && productId > 0 && attrId > 0 && unitId > 0)
             {
                 modeReport = 1;
-                textForPrint = "Sản phẩm: " + ((Product)cbmProducts.SelectedItem).ProductName + ((BaseAttribute)cbmAttrs.SelectedItem).AttributeName
-                    + " - ĐVT: " + ((MeasurementUnit)cbmUnits.SelectedItem).Name;
+                textForPrint = textForPrint = "Từ ngày " + dtpFrom.Value.ToString(BHConstant.DATE_FORMAT) + " đến ngày " + dtpTo.Value.ToString(BHConstant.DATE_FORMAT); 
+                textInfo = ((Product)cbmProducts.SelectedItem).ProductName + ((BaseAttribute)cbmAttrs.SelectedItem).AttributeName
+                        + " - ĐVT: " + ((MeasurementUnit)cbmUnits.SelectedItem).Name;
                 productReports = productLogService.GetReportsOfProductAttributeUnit(productId, attrId, unitId, dtFrom, dtTo);
                 SetupColumnProductDetails(productReports);
             }
             else
             {
+                textForPrint = "Từ ngày " + dtpFrom.Value.ToString(BHConstant.DATE_FORMAT) + " đến ngày " + dtpTo.Value.ToString(BHConstant.DATE_FORMAT); 
                 productsReports = productLogService.GetReportsOfProducts(productTypeId, productId, attrId, unitId, dtFrom, dtTo);
                 SetupColumnProducts(productsReports);
             }
@@ -326,11 +328,12 @@ namespace BaoHien.UI
             doc.Add(FormatConfig.ParaRightBeforeHeader("In ngày : " + DateTime.Now.ToString(BHConstant.DATETIME_FORMAT)));
             doc.Add(FormatConfig.ParaHeader("BÁO CÁO KHO VÀ THÀNH PHẨM"));
 
+            doc.Add(FormatConfig.ParaRightBelowHeader("(" + textForPrint + ")"));
             if (modeReport != 1)
                 doc.Add(ProductsTable());
             else
             {
-                doc.Add(FormatConfig.ParaRightBelowHeader("(" + textForPrint + ")"));
+                doc.Add(FormatConfig.ParaCommonInfo("Sản phẩm : ", textInfo));
                 doc.Add(ProductDetailTable());
             }
             doc.Add(FormatConfig.ParaCommonInfo("Ghi chú : ", String.Concat(Enumerable.Repeat("...", 96))));

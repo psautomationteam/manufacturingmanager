@@ -29,6 +29,7 @@ namespace BaoHien.UI
         List<CustomerReport> customerReports = new List<CustomerReport>();
         List<CustomersReport> customersReports = new List<CustomersReport>();
         string textForPrint = "";
+        Customer customerPrint;
 
         public ArrearReport()
         {
@@ -49,7 +50,8 @@ namespace BaoHien.UI
                 if (customerId != 0)
                 {
                     modeReport = 1;
-                    textForPrint = "Khách hàng: " + ((Customer)cbmCustomers.SelectedItem).CustomerName;
+                    textForPrint = "Từ ngày " + dtpFrom.Value.ToString(BHConstant.DATE_FORMAT) + " đến ngày " + dtpTo.Value.ToString(BHConstant.DATE_FORMAT); 
+                    customerPrint = ((Customer)cbmCustomers.SelectedItem);
                     double total = 0.0;
                     CustomerLogService customerLogService = new CustomerLogService();
                     customerReports = customerLogService.GetReportsOfCustomer(customerId, dtpFrom.Value, 
@@ -61,6 +63,7 @@ namespace BaoHien.UI
                 else
                 {
                     double total = 0.0;
+                    textForPrint = "Từ ngày " + dtpFrom.Value.ToString(BHConstant.DATE_FORMAT) + " đến ngày " + dtpTo.Value.ToString(BHConstant.DATE_FORMAT);
                     CustomerLogService customerLogService = new CustomerLogService();
                     customersReports = customerLogService.GetReportsOfCustomers(dtpFrom.Value, dtpTo.Value.AddDays(1).Date, ref total);
                     dgwStockEntranceList.DataSource = customersReports;
@@ -201,22 +204,34 @@ namespace BaoHien.UI
             PdfWriterEvents writerEvent;
 
             Image watermarkImage = Image.GetInstance(AppDomain.CurrentDomain.BaseDirectory + @"logo.png");
-            watermarkImage.SetAbsolutePosition(doc.PageSize.Width / 2 - 70, 600);
+            watermarkImage.SetAbsolutePosition(doc.PageSize.Width / 2 - 70, 500);
             writerEvent = new PdfWriterEvents(watermarkImage);
             docWriter.PageEvent = writerEvent;
 
             doc.Open();
+            if (modeReport == 1)
+            {
+                doc.Add(FormatConfig.ParaRightBeforeHeaderRight(BHConstant.COMPANY_NAME));
+                doc.Add(FormatConfig.ParaRightBeforeHeaderRight(BHConstant.COMPANY_ADDRESS));
+                doc.Add(FormatConfig.ParaRightBeforeHeaderRight("ĐT: " + BHConstant.COMPANY_PHONE + " Fax: " + BHConstant.COMPANY_FAX));
+            }
 
             doc.Add(FormatConfig.ParaRightBeforeHeader("In ngày : " + DateTime.Now.ToString(BHConstant.DATETIME_FORMAT)));
             doc.Add(FormatConfig.ParaHeader("BÁO CÁO CÔNG NỢ"));
 
+            doc.Add(FormatConfig.ParaRightBelowHeader("(" + textForPrint + ")"));
             if (modeReport != 1)
                 doc.Add(CustomersTable());
             else
             {
-                doc.Add(FormatConfig.ParaRightBelowHeader("(" + textForPrint + ")"));
+                doc.Add(FormatConfig.ParaCommonInfo("Kính gửi : ", customerPrint.CustomerName));
+                doc.Add(FormatConfig.ParaCommonInfo("Địa chỉ : ", customerPrint.Address));
+                doc.Add(FormatConfig.ParaCommonInfo("ĐT : ", customerPrint.Phone + " Fax: " + customerPrint.Fax));
                 doc.Add(CustomerDetailTable());
             }
+            doc.Add(FormatConfig.ParaCommonInfo("Tổng : ", lbTotal.Text));
+            doc.Add(FormatConfig.ParaCommonInfo("", "Quý khách hàng kiểm tra và đối chiếu, nếu có thắc mắc vui lòng liên hệ số điện thoại trên."));
+            doc.Add(FormatConfig.ParaCommonInfo("", "Chân thành cảm ơn sự hợp tác của quí khách."));
             doc.Add(FormatConfig.ParaCommonInfo("Ghi chú : ", String.Concat(Enumerable.Repeat("...", 96))));
 
             doc.Close();
