@@ -89,46 +89,11 @@ namespace BaoHien.UI
         private void SetupColumns()
         {
             dgvUserList.AutoGenerateColumns = false;
-            DataGridViewTextBoxColumn indexColumn = new DataGridViewTextBoxColumn();
-            indexColumn.Width = 30;
-            indexColumn.DataPropertyName = "Index";
-            indexColumn.HeaderText = "STT";
-            indexColumn.ValueType = typeof(string);
-            //indexColumn.Frozen = true;
-            dgvUserList.Columns.Add(indexColumn);
 
-            DataGridViewTextBoxColumn productNameColumn = new DataGridViewTextBoxColumn();
-            productNameColumn.Width = 150;
-            productNameColumn.DataPropertyName = "username";
-            productNameColumn.HeaderText = "Tên đăng nhập";
-            productNameColumn.ValueType = typeof(string);
-            //productNameColumn.Frozen = true;
-            dgvUserList.Columns.Add(productNameColumn);
-
-            DataGridViewTextBoxColumn typeCodeColumn = new DataGridViewTextBoxColumn();
-            typeCodeColumn.DataPropertyName = "FullName";
-            typeCodeColumn.Width = 150;
-            typeCodeColumn.HeaderText = "Tên đầy đủ";
-            //typeCodeColumn.Frozen = true;
-            typeCodeColumn.ValueType = typeof(string);
-            dgvUserList.Columns.Add(typeCodeColumn);
-            
-            DataGridViewTextBoxColumn descriptionColumn = new DataGridViewTextBoxColumn();
-            descriptionColumn.Width = 320;// dgvUserList.Width - productNameColumn.Width - typeCodeColumn.Width;
-            descriptionColumn.DataPropertyName = "Type";
-            descriptionColumn.HeaderText = "Kiểu người dùng";
-            //descriptionColumn.Frozen = true;
-            descriptionColumn.ValueType = typeof(string);
-            dgvUserList.Columns.Add(descriptionColumn);
-
-            //DataGridViewCheckBoxColumn deleteButton = new DataGridViewCheckBoxColumn();
-            //deleteButton.DataPropertyName = "Status";
-            //deleteButton.Width = 100;
-            //deleteButton.HeaderText = "Kích hoạt/Bỏ";
-            //deleteButton.FalseValue = false;
-            //deleteButton.TrueValue = true;
-            //deleteButton.ValueType = typeof(bool);
-            //dgvUserList.Columns.Add(deleteButton);
+            dgvUserList.Columns.Add(Global.CreateCell("Index", "STT", 30));
+            dgvUserList.Columns.Add(Global.CreateCell("username", "Tên đăng nhập", 200));
+            dgvUserList.Columns.Add(Global.CreateCell("FullName", "Tên đầy đủ", 200));
+            dgvUserList.Columns.Add(Global.CreateCell("Type", "Kiểu người dùng", 200));
         }
 
         private void btnDelete_Click(object sender, EventArgs e)

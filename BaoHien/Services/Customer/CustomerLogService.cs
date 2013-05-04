@@ -114,7 +114,6 @@ namespace BaoHien.Services.Customers
                             Number = details_of_order[i].NumberUnit.ToString(),
                             Unit = details_of_order[i].MeasurementUnit.Name,
                             Cost = Global.formatCurrencyTextWithoutMask(details_of_order[i].Cost.ToString()),
-                            Commission = Global.formatCurrencyTextWithoutMask(details_of_order[i].Commission.ToString()),
                             RecordCode = item.OrderCode,
                         });
                         total += (item.OrderCode.Contains(BHConstant.PREFIX_FOR_ORDER) ? 1 : -1) * details_of_order[i].Cost;

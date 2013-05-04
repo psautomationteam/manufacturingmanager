@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using DAL;
 using BaoHien.Services.Employees;
@@ -12,14 +8,23 @@ using BaoHien.Common;
 using BaoHien.Model;
 using DAL.Helper;
 using BaoHien.Services.Orders;
+using System.Drawing.Printing;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
+using System.IO;
+using Microsoft.Win32;
+using System.Diagnostics;
 
 namespace BaoHien.UI
 {
     public partial class CommissionReport : UserControl
     {
         List<Employee> employees;
-        List<EmployeesReport> employeeLogs;
+        List<EmployeesReport> employees_reports = new List<EmployeesReport>();
         EmployeeLogService employeeLogService;
+        List<EmployeeReport> employee_reports = new List<EmployeeReport>();
+        string textForPrint = "";
+        int modeReport = 0;
 
         public CommissionReport()
         {
@@ -58,25 +63,28 @@ namespace BaoHien.UI
 
         void LoadReport()
         {
+            modeReport = 0;
             lbTotal.Text = "(VND) 0";
             if (cbmEmployees.SelectedValue != null)
             {
                 int employeeId = (int)cbmEmployees.SelectedValue;
                 if (employeeId == 0)
                 {
-                    employeeLogs = employeeLogService.GetReportsOfEmployees(dtpFrom.Value, dtpTo.Value.AddDays(1).Date);
-                    dgwEmployeeCommissionList.DataSource = employeeLogs;
-                    SetupDataGrid(employeeLogs);
-                    double total = employeeLogs.Sum(a => a.AfterNumber);
+                    employees_reports = employeeLogService.GetReportsOfEmployees(dtpFrom.Value, dtpTo.Value.AddDays(1).Date);
+                    dgwEmployeeCommissionList.DataSource = employees_reports;
+                    SetupDataGrid();
+                    double total = employees_reports.Sum(a => a.AfterNumber);
                     lbTotal.Text = Global.formatVNDCurrencyText(total.ToString());
                 }
                 else
                 {
+                    modeReport = 1;
+                    textForPrint = "Nhân viên: " + ((Employee)cbmEmployees.SelectedItem).FullName;
                     double total = 0.0;
-                    List<EmployeeReport> employee_reports = employeeLogService.GetReportsOfEmployee(employeeId, dtpFrom.Value, 
+                    employee_reports = employeeLogService.GetReportsOfEmployee(employeeId, dtpFrom.Value, 
                         dtpTo.Value.AddDays(1).Date, ref total);
                     dgwEmployeeCommissionList.DataSource = employee_reports;
-                    SetupDataGridDetail(employee_reports);
+                    SetupDataGridDetail();
                     lbTotal.Text = Global.formatVNDCurrencyText(total.ToString());
                 }
             }
@@ -87,116 +95,32 @@ namespace BaoHien.UI
 
         }
 
-        void SetupDataGrid(List<EmployeesReport> logs)
+        void SetupDataGrid()
         {
             dgwEmployeeCommissionList.Columns.Clear();
             dgwEmployeeCommissionList.AutoGenerateColumns = false;
 
-            DataGridViewTextBoxColumn indexColumn = new DataGridViewTextBoxColumn();
-            indexColumn.Width = 30;
-            indexColumn.DataPropertyName = "Index";
-            indexColumn.HeaderText = "STT";
-            indexColumn.ValueType = typeof(string);
-            dgwEmployeeCommissionList.Columns.Add(indexColumn);
-
-            DataGridViewTextBoxColumn dateColumn = new DataGridViewTextBoxColumn();
-            dateColumn.DefaultCellStyle.Format = BHConstant.DATETIME_FORMAT;
-            dateColumn.Width = 150;
-            dateColumn.DataPropertyName = "CreatedDate";
-            dateColumn.HeaderText = "Ngày";
-            dateColumn.ValueType = typeof(string);
-            dgwEmployeeCommissionList.Columns.Add(dateColumn);
-
-            DataGridViewTextBoxColumn employeeNameColumn = new DataGridViewTextBoxColumn();
-            employeeNameColumn.Width = 150;
-            employeeNameColumn.DataPropertyName = "EmployeeName";
-            employeeNameColumn.HeaderText = "Nhân viên";
-            employeeNameColumn.ValueType = typeof(string);
-            dgwEmployeeCommissionList.Columns.Add(employeeNameColumn);
-
-            DataGridViewTextBoxColumn recordCodeColumn = new DataGridViewTextBoxColumn();
-            recordCodeColumn.Width = 150;
-            recordCodeColumn.DataPropertyName = "RecordCode";
-            recordCodeColumn.HeaderText = "Mã phiếu (giao dịch cuối)";
-            recordCodeColumn.ValueType = typeof(string);
-            dgwEmployeeCommissionList.Columns.Add(recordCodeColumn);
-
-            DataGridViewTextBoxColumn amountColumn = new DataGridViewTextBoxColumn();
-            amountColumn.DataPropertyName = "AfterNumberText";
-            amountColumn.Width = 150;
-            amountColumn.HeaderText = "Số tiền";
-            amountColumn.ValueType = typeof(string);
-            dgwEmployeeCommissionList.Columns.Add(amountColumn);
+            dgwEmployeeCommissionList.Columns.Add(Global.CreateCell("Index", "STT", 30));
+            dgwEmployeeCommissionList.Columns.Add(Global.CreateCell("CreatedDate", "Ngày", 100));
+            dgwEmployeeCommissionList.Columns.Add(Global.CreateCell("EmployeeName", "Nhân viên", 150));
+            dgwEmployeeCommissionList.Columns.Add(Global.CreateCell("RecordCode", "Mã phiếu", 150));
+            dgwEmployeeCommissionList.Columns.Add(Global.CreateCellWithAlignment("AfterNumberText", "Số tiền", 150, DataGridViewContentAlignment.MiddleRight));
         }
 
-        void SetupDataGridDetail(List<EmployeeReport> logs)
+        void SetupDataGridDetail()
         {
             dgwEmployeeCommissionList.Columns.Clear();
             dgwEmployeeCommissionList.AutoGenerateColumns = false;
 
-            DataGridViewTextBoxColumn indexColumn = new DataGridViewTextBoxColumn();
-            indexColumn.Width = 30;
-            indexColumn.DataPropertyName = "Index";
-            indexColumn.HeaderText = "STT";
-            indexColumn.ValueType = typeof(string);
-            dgwEmployeeCommissionList.Columns.Add(indexColumn);
-
-            DataGridViewTextBoxColumn dateColumn = new DataGridViewTextBoxColumn();
-            dateColumn.DefaultCellStyle.Format = BHConstant.DATETIME_FORMAT;
-            dateColumn.Width = 100;
-            dateColumn.DataPropertyName = "Date";
-            dateColumn.HeaderText = "Ngày";
-            dateColumn.ValueType = typeof(string);
-            dgwEmployeeCommissionList.Columns.Add(dateColumn);
-
-            DataGridViewTextBoxColumn customerNameColumn = new DataGridViewTextBoxColumn();
-            customerNameColumn.Width = 150;
-            customerNameColumn.DataPropertyName = "CustomerName";
-            customerNameColumn.HeaderText = "Khách hàng";
-            customerNameColumn.ValueType = typeof(string);
-            dgwEmployeeCommissionList.Columns.Add(customerNameColumn);
-
-            DataGridViewTextBoxColumn productNameColumn = new DataGridViewTextBoxColumn();
-            productNameColumn.Width = 150;
-            productNameColumn.DataPropertyName = "ProductName";
-            productNameColumn.HeaderText = "Mặt hàng";
-            productNameColumn.ValueType = typeof(string);
-            dgwEmployeeCommissionList.Columns.Add(productNameColumn);
-
-            DataGridViewTextBoxColumn AttrNameColumn = new DataGridViewTextBoxColumn();
-            AttrNameColumn.Width = 100;
-            AttrNameColumn.DataPropertyName = "AttrName";
-            AttrNameColumn.HeaderText = "Quy cách";
-            AttrNameColumn.ValueType = typeof(string);
-            dgwEmployeeCommissionList.Columns.Add(AttrNameColumn);
-
-            DataGridViewTextBoxColumn numberColumn = new DataGridViewTextBoxColumn();
-            numberColumn.Width = 60;
-            numberColumn.DataPropertyName = "Number";
-            numberColumn.HeaderText = "Số lượng";
-            numberColumn.ValueType = typeof(string);
-            dgwEmployeeCommissionList.Columns.Add(numberColumn);
-
-            DataGridViewTextBoxColumn UnitColumn = new DataGridViewTextBoxColumn();
-            UnitColumn.Width = 100;
-            UnitColumn.DataPropertyName = "Unit";
-            UnitColumn.HeaderText = "ĐVT";
-            UnitColumn.ValueType = typeof(string);
-            dgwEmployeeCommissionList.Columns.Add(UnitColumn);
-
-            DataGridViewTextBoxColumn costColumn = new DataGridViewTextBoxColumn();
-            costColumn.Width = 100;
-            costColumn.DataPropertyName = "Cost";
-            costColumn.HeaderText = "Đơn giá";
-            costColumn.ValueType = typeof(string);
-            dgwEmployeeCommissionList.Columns.Add(costColumn);
-
-            DataGridViewTextBoxColumn commissionColumn = new DataGridViewTextBoxColumn();
-            commissionColumn.DataPropertyName = "Commission";
-            commissionColumn.Width = 100;
-            commissionColumn.HeaderText = "Hoa hồng";
-            commissionColumn.ValueType = typeof(string);
-            dgwEmployeeCommissionList.Columns.Add(commissionColumn);
+            dgwEmployeeCommissionList.Columns.Add(Global.CreateCell("Index", "STT", 30));
+            dgwEmployeeCommissionList.Columns.Add(Global.CreateCell("Date", "Ngày", 100));
+            dgwEmployeeCommissionList.Columns.Add(Global.CreateCell("CustomerName", "Tên khách hàng", 150));
+            dgwEmployeeCommissionList.Columns.Add(Global.CreateCell("ProductName", "Mặt hàng", 150));
+            dgwEmployeeCommissionList.Columns.Add(Global.CreateCell("AttrName", "Quy cách", 150));
+            dgwEmployeeCommissionList.Columns.Add(Global.CreateCellWithAlignment("Number", "Số lượng", 80, DataGridViewContentAlignment.MiddleRight));
+            dgwEmployeeCommissionList.Columns.Add(Global.CreateCellWithAlignment("Unit", "ĐVT", 100, DataGridViewContentAlignment.MiddleRight));
+            dgwEmployeeCommissionList.Columns.Add(Global.CreateCellWithAlignment("Cost", "Đơn giá", 100, DataGridViewContentAlignment.MiddleRight));
+            dgwEmployeeCommissionList.Columns.Add(Global.CreateCellWithAlignment("Commission", "Hoa hồng", 100, DataGridViewContentAlignment.MiddleRight));
         }
 
         private void dgwEmployeeCommissionList_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
@@ -213,6 +137,144 @@ namespace BaoHien.UI
                 frmAddOrder.CallFromUserControll = this;
                 frmAddOrder.ShowDialog();
             }
+        }
+
+        private void btnPrint_Click(object sender, EventArgs e)
+        {
+            if ((modeReport == 1 && employee_reports.Count > 0)
+                || (modeReport != 1 && employees_reports.Count > 0))
+            {
+                PrintDialog pd = new PrintDialog();
+                pd.PrinterSettings = new PrinterSettings();
+                if (DialogResult.OK == pd.ShowDialog(this))
+                {
+                    this.Cursor = Cursors.AppStarting;
+                    Print(pd.PrinterSettings.PrinterName);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Không có dữ liệu để in ấn!", "Lỗi hệ thống");
+            }
+        }
+
+        private void ExportFile()
+        {
+            Global.checkDirSaveFile();
+            var doc = new Document();
+            PdfWriter docWriter = PdfWriter.GetInstance(doc, new FileStream(BHConstant.SAVE_IN_DIRECTORY + @"\HHong.pdf", FileMode.Create));
+            PdfWriterEvents writerEvent;
+
+            Image watermarkImage = Image.GetInstance(AppDomain.CurrentDomain.BaseDirectory + @"logo.png");
+            watermarkImage.SetAbsolutePosition(doc.PageSize.Width / 2 - 70, 600);
+            writerEvent = new PdfWriterEvents(watermarkImage);
+            docWriter.PageEvent = writerEvent;
+
+            doc.Open();
+
+            doc.Add(FormatConfig.ParaRightBeforeHeader("In ngày : " + DateTime.Now.ToString(BHConstant.DATETIME_FORMAT)));
+            doc.Add(FormatConfig.ParaHeader("BÁO CÁO HOA HỒNG"));
+
+            if (modeReport != 1)
+            {
+                doc.Add(EmployeesTable());
+            }
+            else
+            {
+                doc.Add(FormatConfig.ParaRightBelowHeader("(" + textForPrint + ")"));
+                doc.Add(EmployeeDetailTable());
+            }
+
+            doc.Add(FormatConfig.ParaCommonInfo("Ghi chú : ", String.Concat(Enumerable.Repeat("...", 96))));
+
+            doc.Close();
+        }
+
+        private PdfPTable EmployeesTable()
+        {
+            PdfPTable table = FormatConfig.Table(5, new float[] { 1f, 2f, 2.5f, 2.5f, 2f });
+            table.AddCell(FormatConfig.TableCellHeader("STT"));
+            table.AddCell(FormatConfig.TableCellHeader("Ngày"));
+            table.AddCell(FormatConfig.TableCellHeader("Nhân viên"));
+            table.AddCell(FormatConfig.TableCellHeader("Mã phiếu"));
+            table.AddCell(FormatConfig.TableCellHeader("Số tiền"));
+
+            foreach (EmployeesReport item in employees_reports)
+            {
+                table.AddCell(FormatConfig.TableCellBody(item.Index.ToString(), PdfPCell.ALIGN_CENTER));
+                table.AddCell(FormatConfig.TableCellBody(item.CreatedDate, PdfPCell.ALIGN_LEFT));
+                table.AddCell(FormatConfig.TableCellBody(item.EmployeeName, PdfPCell.ALIGN_LEFT));
+                table.AddCell(FormatConfig.TableCellBody(item.RecordCode, PdfPCell.ALIGN_LEFT));
+                table.AddCell(FormatConfig.TableCellBody(item.AfterNumberText, PdfPCell.ALIGN_RIGHT));
+            }
+            return table;
+        }
+
+        private PdfPTable EmployeeDetailTable()
+        {
+            PdfPTable table = FormatConfig.Table(9, new float[] { 0.5f, 1.3f, 1.5f, 1.3f, 1.4f, 1f, 1f, 1f, 1f });
+            table.AddCell(FormatConfig.TableCellHeader("STT"));
+            table.AddCell(FormatConfig.TableCellHeader("Ngày"));
+            table.AddCell(FormatConfig.TableCellHeader("Tên khách hàng"));
+            table.AddCell(FormatConfig.TableCellHeader("Mặt hàng"));
+            table.AddCell(FormatConfig.TableCellHeader("Quy cách"));
+            table.AddCell(FormatConfig.TableCellHeader("Số lượng"));
+            table.AddCell(FormatConfig.TableCellHeader("ĐVT"));
+            table.AddCell(FormatConfig.TableCellHeader("Tổng giá"));
+            table.AddCell(FormatConfig.TableCellHeader("Hoa hồng"));
+
+            foreach (EmployeeReport item in employee_reports)
+            {
+                if (string.IsNullOrEmpty(item.Index))
+                {
+                    table.AddCell(FormatConfig.TableCellBoldBody(item.CustomerName, PdfPCell.ALIGN_LEFT, 9));
+                }
+                else
+                {
+                    table.AddCell(FormatConfig.TableCellBody(item.Index, PdfPCell.ALIGN_CENTER));
+                    table.AddCell(FormatConfig.TableCellBody(item.Date, PdfPCell.ALIGN_LEFT));
+                    table.AddCell(FormatConfig.TableCellBody(item.CustomerName, PdfPCell.ALIGN_LEFT));
+                    table.AddCell(FormatConfig.TableCellBody(item.ProductName, PdfPCell.ALIGN_LEFT));
+                    table.AddCell(FormatConfig.TableCellBody(item.AttrName, PdfPCell.ALIGN_LEFT));
+                    table.AddCell(FormatConfig.TableCellBody(item.Number, PdfPCell.ALIGN_RIGHT));
+                    table.AddCell(FormatConfig.TableCellBody(item.Unit, PdfPCell.ALIGN_RIGHT));
+                    table.AddCell(FormatConfig.TableCellBody(item.Cost, PdfPCell.ALIGN_RIGHT));
+                    table.AddCell(FormatConfig.TableCellBody(item.Commission, PdfPCell.ALIGN_RIGHT));
+                }
+            }
+
+            return table;
+        }
+
+        private void Print(string printerName)
+        {
+            ExportFile();
+            // Print the file to the printer.
+            try
+            {
+                string foxit = Registry.LocalMachine.OpenSubKey("Software").OpenSubKey("Foxit Software").OpenSubKey("Foxit Reader")
+                    .GetValue("InnoSetupUpdatePath").ToString().Replace("unins000", "Foxit Reader");
+                string file1 = BHConstant.SAVE_IN_DIRECTORY + @"\HHong.pdf";
+
+                Process pdf_print1 = new Process();
+                pdf_print1.StartInfo.FileName = foxit;
+                pdf_print1.StartInfo.Arguments = string.Format(@"-t ""{0}"" ""{1}""", file1, printerName);
+                pdf_print1.StartInfo.CreateNoWindow = true;
+                pdf_print1.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                pdf_print1.Start();
+                pdf_print1.WaitForExit(20000);
+                if (!pdf_print1.HasExited)
+                {
+                    pdf_print1.Kill();
+                    pdf_print1.Dispose();
+                    MessageBox.Show("Không thể in danh sách khách hàng lúc này!");
+                }
+            }
+            catch
+            {
+                MessageBox.Show("Không thể kết nối máy in!");
+            }
+            this.Cursor = Cursors.Default;
         }
     }
 }

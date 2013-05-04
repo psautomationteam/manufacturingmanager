@@ -85,47 +85,12 @@ namespace BaoHien.UI
 
         private void SetupColumns()
         {
-            DataGridViewTextBoxColumn checkboxColumn = new DataGridViewTextBoxColumn();
-            checkboxColumn.Width = 30;
-            checkboxColumn.DataPropertyName = "Index";
-            checkboxColumn.HeaderText = "STT";
-            checkboxColumn.ValueType = typeof(string);
-            dgwRequestList.Columns.Add(checkboxColumn);
-
-            DataGridViewTextBoxColumn statusColumn = new DataGridViewTextBoxColumn();
-            statusColumn.DataPropertyName = "CreatedBy";
-            statusColumn.Width = 120;
-            statusColumn.HeaderText = "Ngày tạo";
-            statusColumn.ValueType = typeof(string);
-            dgwRequestList.Columns.Add(statusColumn);
-
-            DataGridViewTextBoxColumn reqCodeColumn = new DataGridViewTextBoxColumn();
-            reqCodeColumn.Width = 150;
-            reqCodeColumn.DataPropertyName = "ReqCode";
-            reqCodeColumn.HeaderText = "Mã yêu cầu";
-            reqCodeColumn.ValueType = typeof(string);
-            dgwRequestList.Columns.Add(reqCodeColumn);
-
-            DataGridViewTextBoxColumn requestedByColumn = new DataGridViewTextBoxColumn();
-            requestedByColumn.DataPropertyName = "RequestedBy";
-            requestedByColumn.Width = 200;
-            requestedByColumn.HeaderText = "Yêu cầu bởi";
-            requestedByColumn.ValueType = typeof(string);
-            dgwRequestList.Columns.Add(requestedByColumn);
-
-            DataGridViewTextBoxColumn noteColumn = new DataGridViewTextBoxColumn();
-            noteColumn.DataPropertyName = "Note";
-            noteColumn.Width = 400;
-            noteColumn.HeaderText = "Ghi chú";
-            noteColumn.ValueType = typeof(string);
-            dgwRequestList.Columns.Add(noteColumn);
-
-            DataGridViewImageColumn deleteButton = new DataGridViewImageColumn();
-            deleteButton.Image = Properties.Resources.erase;
-            deleteButton.Width = 40;
-            deleteButton.HeaderText = "Xóa";
-            deleteButton.ImageLayout = DataGridViewImageCellLayout.Normal;
-            dgwRequestList.Columns.Add(deleteButton);
+            dgwRequestList.Columns.Add(Global.CreateCell("Index", "STT", 30));
+            dgwRequestList.Columns.Add(Global.CreateCell("CreatedBy", "Ngày tạo", 100));
+            dgwRequestList.Columns.Add(Global.CreateCell("ReqCode", "Mã yêu cầu", 150));
+            dgwRequestList.Columns.Add(Global.CreateCell("RequestedBy", "Yêu cầu bởi", 200));
+            dgwRequestList.Columns.Add(Global.CreateCell("Note", "Ghi chú", 300));
+            dgwRequestList.Columns.Add(Global.CreateCellDeleteAction());
         }
 
         private void dgwRequestList_CellDoubleClick(object sender, DataGridViewCellEventArgs e)

@@ -39,12 +39,17 @@
             this.dgwStockEntranceList = new System.Windows.Forms.DataGridView();
             this.label3 = new System.Windows.Forms.Label();
             this.lbTotal = new System.Windows.Forms.Label();
+            this.btnPrint = new System.Windows.Forms.Button();
+            this.label4 = new System.Windows.Forms.Label();
+            this.lbCustomerName = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgwStockEntranceList)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.lbCustomerName);
+            this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.dtpTo);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.btnSearch);
@@ -62,7 +67,7 @@
             // dtpTo
             // 
             this.dtpTo.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dtpTo.Location = new System.Drawing.Point(345, 24);
+            this.dtpTo.Location = new System.Drawing.Point(304, 25);
             this.dtpTo.Name = "dtpTo";
             this.dtpTo.Size = new System.Drawing.Size(149, 20);
             this.dtpTo.TabIndex = 10;
@@ -70,7 +75,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(262, 28);
+            this.label2.Location = new System.Drawing.Point(239, 28);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(59, 13);
             this.label2.TabIndex = 9;
@@ -78,7 +83,7 @@
             // 
             // btnSearch
             // 
-            this.btnSearch.Location = new System.Drawing.Point(939, 21);
+            this.btnSearch.Location = new System.Drawing.Point(974, 22);
             this.btnSearch.Name = "btnSearch";
             this.btnSearch.Size = new System.Drawing.Size(73, 25);
             this.btnSearch.TabIndex = 2;
@@ -89,15 +94,16 @@
             // cbmCustomers
             // 
             this.cbmCustomers.FormattingEnabled = true;
-            this.cbmCustomers.Location = new System.Drawing.Point(643, 24);
+            this.cbmCustomers.Location = new System.Drawing.Point(546, 25);
             this.cbmCustomers.Name = "cbmCustomers";
-            this.cbmCustomers.Size = new System.Drawing.Size(208, 21);
+            this.cbmCustomers.Size = new System.Drawing.Size(145, 21);
             this.cbmCustomers.TabIndex = 1;
+            this.cbmCustomers.SelectedIndexChanged += new System.EventHandler(this.cbmCustomers_SelectedIndexChanged);
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(546, 28);
+            this.label5.Location = new System.Drawing.Point(472, 28);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(68, 13);
             this.label5.TabIndex = 8;
@@ -151,10 +157,38 @@
             this.lbTotal.TabIndex = 23;
             this.lbTotal.Text = "(VND) 0";
             // 
+            // btnPrint
+            // 
+            this.btnPrint.Location = new System.Drawing.Point(954, 88);
+            this.btnPrint.Name = "btnPrint";
+            this.btnPrint.Size = new System.Drawing.Size(112, 25);
+            this.btnPrint.TabIndex = 24;
+            this.btnPrint.Text = "In danh sách này";
+            this.btnPrint.UseVisualStyleBackColor = true;
+            this.btnPrint.Click += new System.EventHandler(this.btnPrint_Click);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(707, 28);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(89, 13);
+            this.label4.TabIndex = 11;
+            this.label4.Text = "Tên khách hàng:";
+            // 
+            // lbCustomerName
+            // 
+            this.lbCustomerName.AutoSize = true;
+            this.lbCustomerName.Location = new System.Drawing.Point(802, 28);
+            this.lbCustomerName.Name = "lbCustomerName";
+            this.lbCustomerName.Size = new System.Drawing.Size(0, 13);
+            this.lbCustomerName.TabIndex = 12;
+            // 
             // ArrearReport
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.btnPrint);
             this.Controls.Add(this.lbTotal);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.groupBox1);
@@ -182,5 +216,8 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label lbTotal;
+        private System.Windows.Forms.Button btnPrint;
+        private System.Windows.Forms.Label lbCustomerName;
+        private System.Windows.Forms.Label label4;
     }
 }

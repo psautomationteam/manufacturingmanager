@@ -48,11 +48,13 @@ namespace BaoHien.UI
         {
             CustomerService customerService = new CustomerService();
             customers = customerService.GetCustomers();
-            customers.Add(new Customer() { Id = 0, CustomerName = "Tất cả" });
+            customers.Add(new Customer() { Id = 0, CustomerName = "Tất cả", CustCode = "Tất cả" });
             customers = customers.OrderBy(x => x.Id).ToList();
 
+            cbmCustomers.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            cbmCustomers.AutoCompleteSource = AutoCompleteSource.ListItems;
             cbmCustomers.DataSource = customers;
-            cbmCustomers.DisplayMember = "CustomerName";
+            cbmCustomers.DisplayMember = "CustCode";
             cbmCustomers.ValueMember = "Id";
 
             SystemUserService systemUserService = new SystemUserService();
@@ -96,82 +98,18 @@ namespace BaoHien.UI
         private void SetupColumns()
         {
             dgwOrderList.AutoGenerateColumns = false;
-            DataGridViewTextBoxColumn indexColumn = new DataGridViewTextBoxColumn();
-            indexColumn.Width = 30;
-            indexColumn.DataPropertyName = "Index";
-            indexColumn.HeaderText = "STT";
-            indexColumn.ValueType = typeof(string);
-            dgwOrderList.Columns.Add(indexColumn);
 
-            DataGridViewTextBoxColumn createdDateColumn = new DataGridViewTextBoxColumn();
-            createdDateColumn.DataPropertyName = "CreatedDate";
-            createdDateColumn.Width = 100;
-            createdDateColumn.HeaderText = "Ngày tạo";
-            createdDateColumn.ValueType = typeof(string);
-            dgwOrderList.Columns.Add(createdDateColumn);
-
-            DataGridViewTextBoxColumn orderCodeColumn = new DataGridViewTextBoxColumn();
-            orderCodeColumn.Width = 100;
-            orderCodeColumn.DataPropertyName = "OrderCode";
-            orderCodeColumn.HeaderText = "Mã đặt hàng";
-            orderCodeColumn.ValueType = typeof(string);
-            dgwOrderList.Columns.Add(orderCodeColumn);
-
-            DataGridViewTextBoxColumn customerNameColumn = new DataGridViewTextBoxColumn();
-            customerNameColumn.DataPropertyName = "CustomerName";
-            customerNameColumn.Width = 200;
-            customerNameColumn.HeaderText = "Khách hàng";
-            customerNameColumn.ValueType = typeof(string);
-            dgwOrderList.Columns.Add(customerNameColumn);
-
-            DataGridViewTextBoxColumn customerCodeColumn = new DataGridViewTextBoxColumn();
-            customerCodeColumn.DataPropertyName = "CustomerCode";
-            customerCodeColumn.Width = 150;
-            customerCodeColumn.HeaderText = "Mã khách hàng";
-            customerCodeColumn.ValueType = typeof(string);
-            dgwOrderList.Columns.Add(customerCodeColumn);
-
-            DataGridViewTextBoxColumn noteColumn = new DataGridViewTextBoxColumn();
-            noteColumn.DataPropertyName = "Note";
-            noteColumn.Width = 200;
-            noteColumn.HeaderText = "Chú ý";
-            noteColumn.ValueType = typeof(string);
-            dgwOrderList.Columns.Add(noteColumn);
-
-            DataGridViewTextBoxColumn VATColumn = new DataGridViewTextBoxColumn();
-            VATColumn.DataPropertyName = "VAT";
-            VATColumn.Width = 100;
-            VATColumn.HeaderText = "VAT";
-            VATColumn.ValueType = typeof(string);
-            dgwOrderList.Columns.Add(VATColumn);
-
-            DataGridViewTextBoxColumn discountColumn = new DataGridViewTextBoxColumn();
-            discountColumn.DataPropertyName = "Discount";
-            discountColumn.Width = 100;
-            discountColumn.HeaderText = "Giảm";
-            discountColumn.ValueType = typeof(string);
-            dgwOrderList.Columns.Add(discountColumn);
-
-            DataGridViewTextBoxColumn createByColumn  = new DataGridViewTextBoxColumn();
-            createByColumn.DataPropertyName = "CreateBy";
-            createByColumn.Width = 100;
-            createByColumn.HeaderText = "Người tạo";
-            createByColumn.ValueType = typeof(string);
-            dgwOrderList.Columns.Add(createByColumn);
-
-            DataGridViewTextBoxColumn totalColumn = new DataGridViewTextBoxColumn();
-            totalColumn.DataPropertyName = "Total";
-            totalColumn.Width = 100;
-            totalColumn.HeaderText = "Tổng";
-            totalColumn.ValueType = typeof(string);
-            dgwOrderList.Columns.Add(totalColumn);
-                        
-            DataGridViewImageColumn deleteButton = new DataGridViewImageColumn();
-            deleteButton.Image = Properties.Resources.erase;
-            deleteButton.Width = 40;
-            deleteButton.HeaderText = "Xóa";
-            deleteButton.ImageLayout = DataGridViewImageCellLayout.Normal;
-            dgwOrderList.Columns.Add(deleteButton);
+            dgwOrderList.Columns.Add(Global.CreateCell("Index", "STT", 30));
+            dgwOrderList.Columns.Add(Global.CreateCell("CreatedDate", "Ngày", 100));
+            dgwOrderList.Columns.Add(Global.CreateCell("OrderCode", "Mã đặt hàng", 100));
+            dgwOrderList.Columns.Add(Global.CreateCell("CustomerName", "Khách hàng", 200));
+            dgwOrderList.Columns.Add(Global.CreateCell("CustomerCode", "Mã khách hàng", 150));
+            dgwOrderList.Columns.Add(Global.CreateCell("Note", "Ghi chú", 200));
+            dgwOrderList.Columns.Add(Global.CreateCell("CreatedDate", "Giảm", 100));
+            dgwOrderList.Columns.Add(Global.CreateCell("VAT", "VAT", 100));
+            dgwOrderList.Columns.Add(Global.CreateCell("Discount", "Người tạo", 150));
+            dgwOrderList.Columns.Add(Global.CreateCellWithAlignment("Total", "Tổng", 100, DataGridViewContentAlignment.MiddleRight));
+            dgwOrderList.Columns.Add(Global.CreateCellDeleteAction());
         }
 
         private void dgwOrderList_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -292,6 +230,22 @@ namespace BaoHien.UI
                     MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
                 }
                 loadOrderList();
+            }
+        }
+
+        private void cbmCustomers_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbmCustomers.SelectedValue != null)
+            {
+                Customer cm = null;
+                if (cbmCustomers.SelectedValue is Customer)
+                    cm = (Customer)cbmCustomers.SelectedValue;
+                else
+                    cm = customers.Where(x => x.Id == (int)cbmCustomers.SelectedValue).FirstOrDefault();
+                if (cm != null)
+                {
+                    lbCustomerName.Text = cm.CustomerName;
+                }
             }
         }
     }

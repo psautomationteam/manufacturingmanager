@@ -411,7 +411,6 @@ namespace BaoHien.UI
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Lập phiếu bán hàng";
             this.Load += new System.EventHandler(this.AddOrder_Load);
-            this.Shown += new System.EventHandler(this.AddOrder_Shown);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);

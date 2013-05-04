@@ -45,12 +45,16 @@
             this.label8 = new System.Windows.Forms.Label();
             this.dgwOrderList = new System.Windows.Forms.DataGridView();
             this.lbTotal = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
+            this.lbCustomerName = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgwOrderList)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.lbCustomerName);
+            this.groupBox1.Controls.Add(this.label12);
             this.groupBox1.Controls.Add(this.cbmCustomers);
             this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.cbmUsers);
@@ -72,15 +76,16 @@
             // cbmCustomers
             // 
             this.cbmCustomers.FormattingEnabled = true;
-            this.cbmCustomers.Location = new System.Drawing.Point(722, 45);
+            this.cbmCustomers.Location = new System.Drawing.Point(722, 19);
             this.cbmCustomers.Name = "cbmCustomers";
             this.cbmCustomers.Size = new System.Drawing.Size(187, 21);
             this.cbmCustomers.TabIndex = 17;
+            this.cbmCustomers.SelectedIndexChanged += new System.EventHandler(this.cbmCustomers_SelectedIndexChanged);
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(639, 50);
+            this.label4.Location = new System.Drawing.Point(639, 25);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(68, 13);
             this.label4.TabIndex = 20;
@@ -215,6 +220,23 @@
             this.lbTotal.TabIndex = 5;
             this.lbTotal.Text = "0";
             // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(615, 53);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(92, 13);
+            this.label12.TabIndex = 21;
+            this.label12.Text = "Tên khách hàng :";
+            // 
+            // lbCustomerName
+            // 
+            this.lbCustomerName.AutoSize = true;
+            this.lbCustomerName.Location = new System.Drawing.Point(719, 53);
+            this.lbCustomerName.Name = "lbCustomerName";
+            this.lbCustomerName.Size = new System.Drawing.Size(0, 13);
+            this.lbCustomerName.TabIndex = 22;
+            // 
             // OrderList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -255,5 +277,7 @@
         private System.Windows.Forms.DateTimePicker dtpFrom;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label lbTotal;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Label lbCustomerName;
     }
 }

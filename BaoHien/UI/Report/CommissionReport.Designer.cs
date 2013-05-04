@@ -39,6 +39,7 @@
             this.dgwEmployeeCommissionList = new System.Windows.Forms.DataGridView();
             this.lbTotal = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.btnPrint = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgwEmployeeCommissionList)).BeginInit();
             this.SuspendLayout();
@@ -152,10 +153,21 @@
             this.label3.TabIndex = 25;
             this.label3.Text = "Tổng nợ :";
             // 
+            // btnPrint
+            // 
+            this.btnPrint.Location = new System.Drawing.Point(938, 88);
+            this.btnPrint.Name = "btnPrint";
+            this.btnPrint.Size = new System.Drawing.Size(106, 25);
+            this.btnPrint.TabIndex = 27;
+            this.btnPrint.Text = "In danh sách này";
+            this.btnPrint.UseVisualStyleBackColor = true;
+            this.btnPrint.Click += new System.EventHandler(this.btnPrint_Click);
+            // 
             // CommissionReport
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.btnPrint);
             this.Controls.Add(this.lbTotal);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.groupBox1);
@@ -183,5 +195,6 @@
         private System.Windows.Forms.DataGridView dgwEmployeeCommissionList;
         private System.Windows.Forms.Label lbTotal;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Button btnPrint;
     }
 }

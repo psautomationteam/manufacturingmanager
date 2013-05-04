@@ -38,11 +38,13 @@ namespace BaoHien.UI
         {
             CustomerService customerService = new CustomerService();
             customers = customerService.GetCustomers();
-            customers.Add(new Customer() { Id = 0, CustomerName = "Tất cả" });
+            customers.Add(new Customer() { Id = 0, CustomerName = "Tất cả", CustCode = "Tất cả" });
             customers = customers.OrderBy(x => x.Id).ToList();
 
+            cbmCustomers.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            cbmCustomers.AutoCompleteSource = AutoCompleteSource.ListItems;
             cbmCustomers.DataSource = customers;
-            cbmCustomers.DisplayMember = "CustomerName";
+            cbmCustomers.DisplayMember = "CustCode";
             cbmCustomers.ValueMember = "Id";
 
             SystemUserService systemUserService = new SystemUserService();
@@ -84,68 +86,16 @@ namespace BaoHien.UI
         private void SetupColumns()
         {
             dgwBillingList.AutoGenerateColumns = false;
-            DataGridViewTextBoxColumn indexColumn = new DataGridViewTextBoxColumn();
-            indexColumn.Width = 30;
-            indexColumn.DataPropertyName = "Index";
-            indexColumn.HeaderText = "STT";
-            indexColumn.ValueType = typeof(string);
-            dgwBillingList.Columns.Add(indexColumn);
-
-            DataGridViewTextBoxColumn createdDateColumn = new DataGridViewTextBoxColumn();
-            createdDateColumn.DataPropertyName = "CreatedDate";
-            createdDateColumn.Width = 100;
-            createdDateColumn.HeaderText = "Ngày tạo";
-            createdDateColumn.ValueType = typeof(string);
-            dgwBillingList.Columns.Add(createdDateColumn);
-
-            DataGridViewTextBoxColumn billCodeColumn = new DataGridViewTextBoxColumn();
-            billCodeColumn.Width = 100;
-            billCodeColumn.DataPropertyName = "BillCode";
-            billCodeColumn.HeaderText = "Mã đặt hàng";
-            billCodeColumn.ValueType = typeof(string);
-            dgwBillingList.Columns.Add(billCodeColumn);
-
-            DataGridViewTextBoxColumn customerNameColumn = new DataGridViewTextBoxColumn();
-            customerNameColumn.DataPropertyName = "CustomerName";
-            customerNameColumn.Width = 200;
-            customerNameColumn.HeaderText = "Khách hàng";
-            customerNameColumn.ValueType = typeof(string);
-            dgwBillingList.Columns.Add(customerNameColumn);
-
-            DataGridViewTextBoxColumn customerCodeColumn = new DataGridViewTextBoxColumn();
-            customerCodeColumn.DataPropertyName = "CustomerCode";
-            customerCodeColumn.Width = 150;
-            customerCodeColumn.HeaderText = "Mã khách hàng";
-            customerCodeColumn.ValueType = typeof(string);
-            dgwBillingList.Columns.Add(customerCodeColumn);
-
-            DataGridViewTextBoxColumn createByColumn = new DataGridViewTextBoxColumn();
-            createByColumn.DataPropertyName = "CreateBy";
-            createByColumn.Width = 100;
-            createByColumn.HeaderText = "Người tạo";
-            createByColumn.ValueType = typeof(string);
-            dgwBillingList.Columns.Add(createByColumn);
-
-            DataGridViewTextBoxColumn totalColumn = new DataGridViewTextBoxColumn();
-            totalColumn.DataPropertyName = "Total";
-            totalColumn.Width = 100;
-            totalColumn.HeaderText = "Tổng";
-            totalColumn.ValueType = typeof(string);
-            dgwBillingList.Columns.Add(totalColumn);
-
-            DataGridViewTextBoxColumn noteColumn = new DataGridViewTextBoxColumn();
-            noteColumn.DataPropertyName = "Note";
-            noteColumn.Width = 300;
-            noteColumn.HeaderText = "Chú ý";
-            noteColumn.ValueType = typeof(string);
-            dgwBillingList.Columns.Add(noteColumn);
-
-            DataGridViewImageColumn deleteButton = new DataGridViewImageColumn();
-            deleteButton.Image = Properties.Resources.erase;
-            deleteButton.Width = 40;
-            deleteButton.HeaderText = "Xóa";
-            deleteButton.ImageLayout = DataGridViewImageCellLayout.Normal;
-            dgwBillingList.Columns.Add(deleteButton);
+            
+            dgwBillingList.Columns.Add(Global.CreateCell("Index", "STT", 30));
+            dgwBillingList.Columns.Add(Global.CreateCell("CreatedDate", "Ngày", 100));
+            dgwBillingList.Columns.Add(Global.CreateCell("BillCode", "Mã hóa đơn", 100));
+            dgwBillingList.Columns.Add(Global.CreateCell("CustomerName", "Khách hàng", 200));
+            dgwBillingList.Columns.Add(Global.CreateCell("CustomerCode", "Mã khách hàng", 150));
+            dgwBillingList.Columns.Add(Global.CreateCell("CreateBy", "Người tạo", 150));
+            dgwBillingList.Columns.Add(Global.CreateCellWithAlignment("Total", "Tổng", 100, DataGridViewContentAlignment.MiddleRight));
+            dgwBillingList.Columns.Add(Global.CreateCell("Note", "Ghi chú", 150));
+            dgwBillingList.Columns.Add(Global.CreateCellDeleteAction());
         }
 
         private void BillList_Load(object sender, EventArgs e)
@@ -234,6 +184,22 @@ namespace BaoHien.UI
 
                 }
 
+            }
+        }
+
+        private void cbmCustomers_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbmCustomers.SelectedValue != null)
+            {
+                Customer cm = null;
+                if (cbmCustomers.SelectedValue is Customer)
+                    cm = (Customer)cbmCustomers.SelectedValue;
+                else
+                    cm = customers.Where(x => x.Id == (int)cbmCustomers.SelectedValue).FirstOrDefault();
+                if (cm != null)
+                {
+                    lbCustomerName.Text = cm.CustomerName;
+                }
             }
         }
     }

@@ -14,55 +14,13 @@ namespace BaoHien.Model
             set { index = value; }
         }
 
-        string productCode;
-        public string ProductCode
-        {
-            get { return productCode; }
-            set { productCode = value; }
-        }
-
-        string productName;
-        public string ProductName
-        {
-            get { return productName; }
-            set { productName = value; }
-        }
-
-        string attributeName;
-        public string AttributeName
-        {
-            get { return attributeName; }
-            set { attributeName = value; }
-        }
-
-        string unitName;
-        public string UnitName
-        {
-            get
-            {
-                return unitName;
-            }
-            set
-            {
-                unitName = value;
-            }
-        }
-
-        string quantity;
-        public string Quantity
-        {
-            get { return quantity; }
-            set { quantity = value; }
-        }
-
-        DateTime createdDate;
-        public DateTime CreatedDate
+        string createdDate;
+        public string CreatedDate
         {
             get { return createdDate; }
             set { createdDate = value; }
         }
 
-        // For detail product
         string recordCode;
         public string RecordCode
         {

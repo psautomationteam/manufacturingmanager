@@ -10,6 +10,7 @@ using BaoHien.Services.MeasurementUnits;
 using DAL;
 using DAL.Helper;
 using BaoHien.Services.ProductLogs;
+using BaoHien.Common;
 
 namespace BaoHien.UI
 {
@@ -85,37 +86,11 @@ namespace BaoHien.UI
         private void SetupColumns()
         {
             dgvBaseUnitList.AutoGenerateColumns = false;
-            DataGridViewTextBoxColumn indexColumn = new DataGridViewTextBoxColumn();
-            indexColumn.Width = 30;
-            indexColumn.DataPropertyName = "Index";
-            indexColumn.HeaderText = "STT";
-            indexColumn.ValueType = typeof(string);
-            indexColumn.Frozen = true;
-            dgvBaseUnitList.Columns.Add(indexColumn);
 
-            DataGridViewTextBoxColumn nameColumn = new DataGridViewTextBoxColumn();
-            nameColumn.Width = 220;
-            nameColumn.DataPropertyName = "Name";
-            nameColumn.HeaderText = "Tên đơn vị tính";
-            nameColumn.ValueType = typeof(string);
-            nameColumn.Frozen = true;
-            dgvBaseUnitList.Columns.Add(nameColumn);
-
-            DataGridViewTextBoxColumn descriptionColumn = new DataGridViewTextBoxColumn();
-            descriptionColumn.Width = 400;// dgvBaseUnitList.Width - nameColumn.Width - deleteButton.Width;
-            descriptionColumn.DataPropertyName = "Description";
-            descriptionColumn.HeaderText = "Đặc tả";
-            descriptionColumn.Frozen = true;
-            descriptionColumn.ValueType = typeof(string);
-            dgvBaseUnitList.Columns.Add(descriptionColumn);
-
-            DataGridViewImageColumn deleteButton = new DataGridViewImageColumn();
-            deleteButton.Image = Properties.Resources.erase;
-            deleteButton.Width = 40;
-            deleteButton.HeaderText = "Xóa";
-            deleteButton.ReadOnly = true;
-            deleteButton.ImageLayout = DataGridViewImageCellLayout.Normal;
-            dgvBaseUnitList.Columns.Add(deleteButton);
+            dgvBaseUnitList.Columns.Add(Global.CreateCell("Index", "STT", 30));
+            dgvBaseUnitList.Columns.Add(Global.CreateCell("Name", "Tên đơn vị tính", 220));
+            dgvBaseUnitList.Columns.Add(Global.CreateCell("Description", "Đặc tả", 400));
+            dgvBaseUnitList.Columns.Add(Global.CreateCellDeleteAction());
         }
 
         private void dgvBaseUnitList_CellDoubleClick(object sender, DataGridViewCellEventArgs e)

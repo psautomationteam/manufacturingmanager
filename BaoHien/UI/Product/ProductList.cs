@@ -11,6 +11,7 @@ using DAL;
 using BaoHien.Services.MeasurementUnits;
 using BaoHien.Model;
 using DAL.Helper;
+using BaoHien.Common;
 namespace BaoHien.UI
 {
     public partial class ProductList : UserControl
@@ -124,53 +125,13 @@ namespace BaoHien.UI
         private void SetupColumns()
         {
             dgvProductList.AutoGenerateColumns = false;
-            DataGridViewTextBoxColumn indexColumn = new DataGridViewTextBoxColumn();
-            indexColumn.Width = 30;
-            indexColumn.DataPropertyName = "Index";
-            indexColumn.HeaderText = "STT";
-            indexColumn.ValueType = typeof(string);
-            indexColumn.Frozen = true;
-            dgvProductList.Columns.Add(indexColumn);
 
-            DataGridViewTextBoxColumn productNameColumn = new DataGridViewTextBoxColumn();
-            productNameColumn.Width = 150;
-            productNameColumn.DataPropertyName = "ProductName";
-            productNameColumn.HeaderText = "Tên sản phẩm";
-            productNameColumn.ValueType = typeof(string);
-            productNameColumn.Frozen = true;
-            dgvProductList.Columns.Add(productNameColumn);
-            
-            DataGridViewTextBoxColumn typeCodeColumn = new DataGridViewTextBoxColumn();
-            typeCodeColumn.DataPropertyName = "ProductCode";
-            typeCodeColumn.Width = 100;
-            typeCodeColumn.HeaderText = "Mã sản phẩm";
-            typeCodeColumn.Frozen = true;
-            typeCodeColumn.ValueType = typeof(string);
-            dgvProductList.Columns.Add(typeCodeColumn);
-
-            DataGridViewTextBoxColumn productTypeColumn = new DataGridViewTextBoxColumn();
-            productTypeColumn.DataPropertyName = "ProductType";
-            productTypeColumn.Width = 100;
-            productTypeColumn.HeaderText = "Loại sản phẩm";
-            productTypeColumn.Frozen = true;
-            productTypeColumn.ValueType = typeof(string);
-            dgvProductList.Columns.Add(productTypeColumn);
-            
-            DataGridViewTextBoxColumn descriptionColumn = new DataGridViewTextBoxColumn();
-            descriptionColumn.Width = 170;// dgvProductList.Width - productNameColumn.Width - typeCodeColumn.Width - deleteButton.Width;
-            descriptionColumn.DataPropertyName = "Description";
-            descriptionColumn.HeaderText = "Đặc tả";
-            descriptionColumn.Frozen = true;
-            descriptionColumn.ValueType = typeof(string);
-            dgvProductList.Columns.Add(descriptionColumn);
-
-            DataGridViewImageColumn deleteButton = new DataGridViewImageColumn();
-            deleteButton.Image = Properties.Resources.erase;
-            deleteButton.Width = 40;
-            deleteButton.HeaderText = "Xóa";
-            deleteButton.ReadOnly = true;
-            deleteButton.ImageLayout = DataGridViewImageCellLayout.Normal;
-            dgvProductList.Columns.Add(deleteButton);
+            dgvProductList.Columns.Add(Global.CreateCell("Index", "STT", 30));
+            dgvProductList.Columns.Add(Global.CreateCell("ProductCode", "Mã sản phẩm", 100));
+            dgvProductList.Columns.Add(Global.CreateCell("ProductName", "Tên sản phẩm", 150));
+            dgvProductList.Columns.Add(Global.CreateCell("ProductType", "Loại sản phẩm", 170));
+            dgvProductList.Columns.Add(Global.CreateCell("Description", "Đặc tả", 170));
+            dgvProductList.Columns.Add(Global.CreateCellDeleteAction());
         }
 
         private void dgvProductList_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
