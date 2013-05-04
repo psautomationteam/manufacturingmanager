@@ -24,6 +24,12 @@ namespace BaoHien.Common
             return msp;
         }
 
+        public static Paragraph ParaRightBeforeHeaderRight(string content)
+        {
+            Paragraph msp = new Paragraph(content, FontConfig.BoldFont);
+            return msp;
+        }
+
         public static Paragraph ParaRightBelowHeader(string content)
         {
             Paragraph msp = new Paragraph(content, FontConfig.ItalicFont);

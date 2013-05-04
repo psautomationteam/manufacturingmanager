@@ -23,7 +23,7 @@ namespace BaoHien.UI
         List<EmployeesReport> employees_reports = new List<EmployeesReport>();
         EmployeeLogService employeeLogService;
         List<EmployeeReport> employee_reports = new List<EmployeeReport>();
-        string textForPrint = "";
+        string textForPrint = "", textEmployee = "";
         int modeReport = 0;
 
         public CommissionReport()
@@ -71,6 +71,7 @@ namespace BaoHien.UI
                 if (employeeId == 0)
                 {
                     double total = 0.0;
+                    textForPrint = "Từ ngày " + dtpFrom.Value.ToString(BHConstant.DATE_FORMAT) + " đến ngày " + dtpTo.Value.ToString(BHConstant.DATE_FORMAT); 
                     employees_reports = employeeLogService.GetReportsOfEmployees(dtpFrom.Value, dtpTo.Value.AddDays(1).Date, ref total);
                     dgwEmployeeCommissionList.DataSource = employees_reports;
                     SetupDataGrid();
@@ -79,7 +80,8 @@ namespace BaoHien.UI
                 else
                 {
                     modeReport = 1;
-                    textForPrint = "Nhân viên: " + ((Employee)cbmEmployees.SelectedItem).FullName;
+                    textForPrint = "Từ ngày " + dtpFrom.Value.ToString(BHConstant.DATE_FORMAT) + " đến ngày " + dtpTo.Value.ToString(BHConstant.DATE_FORMAT); 
+                    textEmployee = ((Employee)cbmEmployees.SelectedItem).FullName;
                     double total = 0.0;
                     employee_reports = employeeLogService.GetReportsOfEmployee(employeeId, dtpFrom.Value, 
                         dtpTo.Value.AddDays(1).Date, ref total);
@@ -175,13 +177,14 @@ namespace BaoHien.UI
             doc.Add(FormatConfig.ParaRightBeforeHeader("In ngày : " + DateTime.Now.ToString(BHConstant.DATETIME_FORMAT)));
             doc.Add(FormatConfig.ParaHeader("BÁO CÁO HOA HỒNG"));
 
+            doc.Add(FormatConfig.ParaRightBelowHeader("(" + textForPrint + ")"));
             if (modeReport != 1)
             {
                 doc.Add(EmployeesTable());
             }
             else
             {
-                doc.Add(FormatConfig.ParaRightBelowHeader("(" + textForPrint + ")"));
+                doc.Add(FormatConfig.ParaCommonInfo("Người bán hàng : ", textEmployee));
                 doc.Add(EmployeeDetailTable());
             }
 
