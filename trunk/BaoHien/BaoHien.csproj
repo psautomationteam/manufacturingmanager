@@ -112,6 +112,7 @@
     <Compile Include="Common\RandomGeneration.cs" />
     <Compile Include="Common\RawPrinter.cs" />
     <Compile Include="Model\BillSearchCriteria.cs" />
+    <Compile Include="Model\ProductsReport.cs" />
     <Compile Include="Model\CustomersReport.cs" />
     <Compile Include="Model\CustomerReport.cs" />
     <Compile Include="Model\EmployeeReport.cs" />

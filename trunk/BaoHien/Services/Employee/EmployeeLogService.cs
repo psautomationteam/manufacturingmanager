@@ -155,14 +155,11 @@ namespace BaoHien.Services.Employees
             {
                 reports.Add(new EmployeesReport
                 {
-                    ID = log.Id,
                     EmployeeName = log.Employee.FullName,
                     RecordCode = log.RecordCode,
-                    BeforeNumber = log.BeforeNumber.ToString(),
-                    Amount = Global.formatVNDCurrencyText((log.AfterNumber - log.BeforeNumber).ToString()),
                     AfterNumberText = Global.formatVNDCurrencyText(log.AfterNumber.ToString()),
                     AfterNumber = log.AfterNumber,
-                    CreatedDate = log.CreatedDate,
+                    CreatedDate = log.CreatedDate.ToString(BHConstant.DATE_FORMAT),
                     Index = ++index
                 });
             }
@@ -172,8 +169,5 @@ namespace BaoHien.Services.Employees
         {
             return SelectItemByWhere<EmployeeLog>(func);
         }
-
-        
-                
     }
 }

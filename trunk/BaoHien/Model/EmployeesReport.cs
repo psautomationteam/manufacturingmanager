@@ -7,13 +7,6 @@ namespace BaoHien.Model
 {
     class EmployeesReport
     {
-        int id;
-        public int ID
-        {
-            get { return id; }
-            set { id = value; }
-        }
-
         int index;
         public int Index
         {
@@ -28,26 +21,18 @@ namespace BaoHien.Model
             set { employeeName = value; }
         }
 
-        DateTime createdDate;
-        public DateTime CreatedDate
+        string createdDate;
+        public string CreatedDate
         {
             get { return createdDate; }
             set { createdDate = value; }
         }
 
-        // For detail employee
         string recordCode;
         public string RecordCode
         {
             get { return recordCode; }
             set { recordCode = value; }
-        }
-
-        string beforeNumber;
-        public string BeforeNumber
-        {
-            get { return beforeNumber; }
-            set { beforeNumber = value; }
         }
 
         string afterNumberText;
@@ -62,13 +47,6 @@ namespace BaoHien.Model
         {
             get { return afterNumber; }
             set { afterNumber = value; }
-        }
-
-        string amount;
-        public string Amount
-        {
-            get { return amount; }
-            set { amount = value; }
         }
     }
 }

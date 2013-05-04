@@ -1204,12 +1204,7 @@ namespace BaoHien.UI
                 }
             }
         }
-
-        private void AddOrder_Shown(object sender, EventArgs e)
-        {
-            txtNote.Focus();
-        }
-
+        
         private void cbxCustomer_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cbxCustomer.SelectedValue != null)

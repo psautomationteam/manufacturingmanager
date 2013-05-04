@@ -10,6 +10,7 @@ using BaoHien.Services.ProductAttributes;
 using DAL;
 using BaoHien.Services.BaseAttributes;
 using DAL.Helper;
+using BaoHien.Common;
 
 namespace BaoHien.UI
 {
@@ -56,6 +57,7 @@ namespace BaoHien.UI
             }
             loadProductAttributeList();
         }
+
         public void loadProductAttributeList()
         {
             BaseAttributeService baseAttributeService = new BaseAttributeService();
@@ -66,6 +68,7 @@ namespace BaoHien.UI
 
             }
         }
+
         private void setUpDataGrid(List<BaseAttribute> baseAttributes)
         {
             if (baseAttributes != null)
@@ -85,51 +88,16 @@ namespace BaoHien.UI
 
             }
         }
+
         private void SetupColumns()
         {
             dgvProductAttributeList.AutoGenerateColumns = false;
 
-            DataGridViewTextBoxColumn indexColumn = new DataGridViewTextBoxColumn();
-            indexColumn.Width = 30;
-            indexColumn.DataPropertyName = "Index";
-            indexColumn.HeaderText = "STT";
-            indexColumn.ValueType = typeof(string);
-            indexColumn.Frozen = true;
-            dgvProductAttributeList.Columns.Add(indexColumn);
-
-            DataGridViewTextBoxColumn attributeNameColumn = new DataGridViewTextBoxColumn();
-            attributeNameColumn.Width = 150;
-            attributeNameColumn.DataPropertyName = "AttributeName";
-            attributeNameColumn.HeaderText = "Tên Quy cách";
-            attributeNameColumn.ValueType = typeof(string);
-            attributeNameColumn.Frozen = true;
-            dgvProductAttributeList.Columns.Add(attributeNameColumn);
-
-
-
-            DataGridViewTextBoxColumn attributeCodeColumn = new DataGridViewTextBoxColumn();
-            attributeCodeColumn.DataPropertyName = "AttributeCode";
-            attributeCodeColumn.Width = 120;
-            attributeCodeColumn.HeaderText = "Mã Quy cách";
-            attributeCodeColumn.Frozen = true;
-            attributeCodeColumn.ValueType = typeof(string);
-            dgvProductAttributeList.Columns.Add(attributeCodeColumn);
-
-            DataGridViewTextBoxColumn descriptionColumn = new DataGridViewTextBoxColumn();
-            descriptionColumn.Width = 350;// dgvProductAttributeList.Width - attributeNameColumn.Width - attributeCodeColumn.Width;
-            descriptionColumn.DataPropertyName = "Description";
-            descriptionColumn.HeaderText = "Đặc tả";
-            descriptionColumn.Frozen = true;
-            descriptionColumn.ValueType = typeof(string);
-            dgvProductAttributeList.Columns.Add(descriptionColumn);
-
-            DataGridViewImageColumn deleteButton = new DataGridViewImageColumn();
-            deleteButton.Image = Properties.Resources.erase;
-            deleteButton.Width = 40;
-            deleteButton.HeaderText = "Xóa";
-            deleteButton.ReadOnly = true;
-            deleteButton.ImageLayout = DataGridViewImageCellLayout.Normal;
-            dgvProductAttributeList.Columns.Add(deleteButton);
+            dgvProductAttributeList.Columns.Add(Global.CreateCell("Index", "STT", 30));
+            dgvProductAttributeList.Columns.Add(Global.CreateCell("AttributeCode", "Mã Quy cách", 100));
+            dgvProductAttributeList.Columns.Add(Global.CreateCell("AttributeName", "Tên Quy cách", 150));
+            dgvProductAttributeList.Columns.Add(Global.CreateCell("Description", "Đặc tả", 400));
+            dgvProductAttributeList.Columns.Add(Global.CreateCellDeleteAction());
         }
 
         private void dgvProductAttributeList_CellDoubleClick(object sender, DataGridViewCellEventArgs e)

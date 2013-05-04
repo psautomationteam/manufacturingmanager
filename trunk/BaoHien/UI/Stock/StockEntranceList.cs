@@ -62,48 +62,13 @@ namespace BaoHien.UI
         private void SetupColumns()
         {
             dgwStockEntranceList.AutoGenerateColumns = false;
-            DataGridViewTextBoxColumn indexColumn = new DataGridViewTextBoxColumn();
-            indexColumn.Width = 30;
-            indexColumn.DataPropertyName = "Index";
-            indexColumn.HeaderText = "STT";
-            indexColumn.ValueType = typeof(string);
-            dgwStockEntranceList.Columns.Add(indexColumn);
 
-            DataGridViewTextBoxColumn entrancedDateColumn = new DataGridViewTextBoxColumn();
-            entrancedDateColumn.DataPropertyName = "EntrancedDate";
-            entrancedDateColumn.Width = 100;
-            entrancedDateColumn.HeaderText = "Ngày tạo";
-            entrancedDateColumn.ValueType = typeof(string);
-            dgwStockEntranceList.Columns.Add(entrancedDateColumn);
-
-            DataGridViewTextBoxColumn entranceCodeColumn = new DataGridViewTextBoxColumn();
-            entranceCodeColumn.Width = 100;
-            entranceCodeColumn.DataPropertyName = "EntranceCode";
-            entranceCodeColumn.HeaderText = "Mã sản phẩm";
-            entranceCodeColumn.ValueType = typeof(string);
-            dgwStockEntranceList.Columns.Add(entranceCodeColumn);
-
-            DataGridViewTextBoxColumn entrancedByColumn = new DataGridViewTextBoxColumn();
-            entrancedByColumn.Width = 200;
-            entrancedByColumn.DataPropertyName = "EntrancedBy";
-            entrancedByColumn.HeaderText = "Người tạo";
-            entrancedByColumn.ValueType = typeof(string);
-            dgwStockEntranceList.Columns.Add(entrancedByColumn);
-
-            DataGridViewTextBoxColumn noteColumn = new DataGridViewTextBoxColumn();
-            noteColumn.DataPropertyName = "Note";
-            noteColumn.Width = 400;
-            noteColumn.HeaderText = "Chú ý";
-            noteColumn.ValueType = typeof(string);
-            dgwStockEntranceList.Columns.Add(noteColumn);
-
-            DataGridViewImageColumn deleteButton = new DataGridViewImageColumn();
-            deleteButton.Image = Properties.Resources.erase;
-            deleteButton.Width = 40;
-            deleteButton.HeaderText = "Xóa";
-            deleteButton.ReadOnly = true;
-            deleteButton.ImageLayout = DataGridViewImageCellLayout.Normal;
-            dgwStockEntranceList.Columns.Add(deleteButton);
+            dgwStockEntranceList.Columns.Add(Global.CreateCell("Index", "STT", 30));
+            dgwStockEntranceList.Columns.Add(Global.CreateCell("EntrancedDate", "Ngày tạo", 100));
+            dgwStockEntranceList.Columns.Add(Global.CreateCell("EntranceCode", "Mã nhập kho", 150));
+            dgwStockEntranceList.Columns.Add(Global.CreateCell("EntrancedBy", "Người tạo", 200));
+            dgwStockEntranceList.Columns.Add(Global.CreateCell("Note", "Ghi chú", 300));
+            dgwStockEntranceList.Columns.Add(Global.CreateCellDeleteAction());
         }
 
         public void loadEntranceStockList()

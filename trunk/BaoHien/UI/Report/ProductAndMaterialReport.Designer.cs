@@ -44,6 +44,7 @@
             this.label5 = new System.Windows.Forms.Label();
             this.dgwStockEntranceList = new System.Windows.Forms.DataGridView();
             this.label8 = new System.Windows.Forms.Label();
+            this.btnPrint = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgwStockEntranceList)).BeginInit();
             this.SuspendLayout();
@@ -65,7 +66,7 @@
             this.groupBox1.Controls.Add(this.label5);
             this.groupBox1.Location = new System.Drawing.Point(19, 16);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(1053, 118);
+            this.groupBox1.Size = new System.Drawing.Size(1053, 102);
             this.groupBox1.TabIndex = 17;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Thông tin tạo báo cáo";
@@ -205,10 +206,21 @@
             this.label8.TabIndex = 20;
             this.label8.Text = "Chú ý: mặc định sẽ là tình trạng hiện tại trong kho và thành phẩm";
             // 
+            // btnPrint
+            // 
+            this.btnPrint.Location = new System.Drawing.Point(932, 136);
+            this.btnPrint.Name = "btnPrint";
+            this.btnPrint.Size = new System.Drawing.Size(120, 23);
+            this.btnPrint.TabIndex = 22;
+            this.btnPrint.Text = "In danh sách này";
+            this.btnPrint.UseVisualStyleBackColor = true;
+            this.btnPrint.Click += new System.EventHandler(this.btnPrint_Click);
+            // 
             // ProductAndMaterialReport
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.btnPrint);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.dgwStockEntranceList);
             this.Controls.Add(this.label8);
@@ -240,5 +252,6 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.ComboBox cbmUnits;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Button btnPrint;
     }
 }

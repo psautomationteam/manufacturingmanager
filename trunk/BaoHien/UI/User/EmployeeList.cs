@@ -32,12 +32,14 @@ namespace BaoHien.UI
             SetupColumns();
             loadEmployeeList();
         }
+
         public void loadEmployeeList()
         {
             EmployeeService employeeService = new EmployeeService();
             List<Employee> employees = employeeService.GetEmployees();
             setUpDataGrid(employees);
         }
+
         private void setUpDataGrid(List<Employee> employees)
         {
             if (employees != null)
@@ -62,93 +64,20 @@ namespace BaoHien.UI
 
             }
         }
+
         private void SetupColumns()
         {
             dgvEmployeeList.AutoGenerateColumns = false;
-            DataGridViewTextBoxColumn indexColumn = new DataGridViewTextBoxColumn();
-            indexColumn.Width = 30;
-            indexColumn.DataPropertyName = "Index";
-            indexColumn.HeaderText = "STT";
-            indexColumn.ValueType = typeof(string);
-            indexColumn.Frozen = true;
-            dgvEmployeeList.Columns.Add(indexColumn);
 
-            DataGridViewTextBoxColumn fullNameColumn = new DataGridViewTextBoxColumn();
-            fullNameColumn.Width = 100;
-            fullNameColumn.DataPropertyName = "FullName";
-            fullNameColumn.HeaderText = "Tên nhân viên";
-            fullNameColumn.ValueType = typeof(string);
-            fullNameColumn.Frozen = true;
-            dgvEmployeeList.Columns.Add(fullNameColumn);
-
-
-
-            DataGridViewTextBoxColumn nicknameColumn = new DataGridViewTextBoxColumn();
-            nicknameColumn.DataPropertyName = "NickName";
-            nicknameColumn.Width = 50;
-            nicknameColumn.HeaderText = "NickName";
-            nicknameColumn.Frozen = true;
-            nicknameColumn.ValueType = typeof(string);
-            dgvEmployeeList.Columns.Add(nicknameColumn);
-
-            DataGridViewTextBoxColumn addressColumn = new DataGridViewTextBoxColumn();
-            addressColumn.DataPropertyName = "Address";
-            addressColumn.Width = 70;
-            addressColumn.HeaderText = "Địa chỉ";
-            addressColumn.Frozen = true;
-            addressColumn.ValueType = typeof(string);
-
-            dgvEmployeeList.Columns.Add(addressColumn);
-
-            DataGridViewTextBoxColumn phoneColumn = new DataGridViewTextBoxColumn();
-            phoneColumn.DataPropertyName = "Phone";
-            phoneColumn.Width = 70;
-            phoneColumn.HeaderText = "Điện thoại bàn";
-            phoneColumn.Frozen = true;
-            phoneColumn.ValueType = typeof(string);
-
-            dgvEmployeeList.Columns.Add(phoneColumn);
-
-            DataGridViewTextBoxColumn mobilePhoneColumn = new DataGridViewTextBoxColumn();
-            mobilePhoneColumn.DataPropertyName = "MobilePhone";
-            mobilePhoneColumn.Width = 70;
-            mobilePhoneColumn.HeaderText = "Di động";
-            mobilePhoneColumn.Frozen = true;
-            mobilePhoneColumn.ValueType = typeof(string);
-            dgvEmployeeList.Columns.Add(mobilePhoneColumn);
-
-            DataGridViewTextBoxColumn codeColumn = new DataGridViewTextBoxColumn();
-            codeColumn.DataPropertyName = "Code";
-            codeColumn.Width = 50;
-            codeColumn.HeaderText = "Mã nhân viên";
-            codeColumn.Frozen = true;
-            codeColumn.ValueType = typeof(string);
-            dgvEmployeeList.Columns.Add(codeColumn);
-
-            DataGridViewTextBoxColumn typeColumn = new DataGridViewTextBoxColumn();
-            typeColumn.DataPropertyName = "Type";
-            typeColumn.Width = 50;
-            typeColumn.HeaderText = "Kiểu";
-            typeColumn.Frozen = true;
-            typeColumn.ValueType = typeof(string);
-            dgvEmployeeList.Columns.Add(typeColumn);
-
-            DataGridViewTextBoxColumn descriptionColumn = new DataGridViewTextBoxColumn();
-            descriptionColumn.DataPropertyName = "Description";
-            descriptionColumn.Width = 160;//dgvProductList.Width - productNameColumn.Width - addressColumn.Width - emailColumn.Width - faxColumn.Width - employeeColumn.Width;
-            descriptionColumn.HeaderText = "Mô tả nhân viên";
-            descriptionColumn.Frozen = true;
-            descriptionColumn.ValueType = typeof(string);
-            dgvEmployeeList.Columns.Add(descriptionColumn);
-
-            DataGridViewImageColumn deleteButton = new DataGridViewImageColumn();
-            deleteButton.Image = Properties.Resources.erase;
-            deleteButton.Width = 40;
-            deleteButton.HeaderText = "Xóa";
-            deleteButton.ReadOnly = true;
-            deleteButton.ImageLayout = DataGridViewImageCellLayout.Normal;
-            dgvEmployeeList.Columns.Add(deleteButton);
-
+            dgvEmployeeList.Columns.Add(Global.CreateCell("Index", "STT", 30));
+            dgvEmployeeList.Columns.Add(Global.CreateCell("Code", "Mã nhân viên", 200));
+            dgvEmployeeList.Columns.Add(Global.CreateCell("FullName", "Tên nhân viên", 100));
+            dgvEmployeeList.Columns.Add(Global.CreateCell("NickName", "Tên viết tắt", 100));
+            dgvEmployeeList.Columns.Add(Global.CreateCell("Address", "Địa chỉ", 200));
+            dgvEmployeeList.Columns.Add(Global.CreateCell("Phone", "Điện thoại bàn", 100));
+            dgvEmployeeList.Columns.Add(Global.CreateCell("MobilePhone", "Di động", 100));
+            dgvEmployeeList.Columns.Add(Global.CreateCell("Description", "Mô tả nhân viên", 300));
+            dgvEmployeeList.Columns.Add(Global.CreateCellDeleteAction());
         }
 
         private void dgvEmployeeList_CellDoubleClick(object sender, DataGridViewCellEventArgs e)

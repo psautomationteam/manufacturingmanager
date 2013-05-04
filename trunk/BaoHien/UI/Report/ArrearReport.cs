@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
 using System.Data;
 using System.Linq;
 using System.Text;
@@ -14,12 +13,22 @@ using BaoHien.Common;
 using DAL.Helper;
 using BaoHien.Services.Orders;
 using BaoHien.Services.Bills;
+using Microsoft.Win32;
+using System.Diagnostics;
+using iTextSharp.text.pdf;
+using System.Drawing.Printing;
+using iTextSharp.text;
+using System.IO;
 
 namespace BaoHien.UI
 {
     public partial class ArrearReport : UserControl
     {
         List<Customer> customers;
+        int modeReport = 0;
+        List<CustomerReport> customerReports = new List<CustomerReport>();
+        List<CustomersReport> customersReports = new List<CustomersReport>();
+        string textForPrint = "";
 
         public ArrearReport()
         {
@@ -32,17 +41,20 @@ namespace BaoHien.UI
         
         void LoadReport()
         {
+            modeReport = 0;
             lbTotal.Text = "(VND) 0";
             if (cbmCustomers.SelectedValue != null)
             {
                 int customerId = (int)cbmCustomers.SelectedValue;
                 if (customerId != 0)
                 {
+                    modeReport = 1;
+                    textForPrint = "Khách hàng: " + ((Customer)cbmCustomers.SelectedItem).CustomerName;
                     double total = 0.0;
                     CustomerLogService customerLogService = new CustomerLogService();
-                    List<CustomerReport> arrearReportModels = customerLogService.GetReportsOfCustomer(customerId, dtpFrom.Value, 
+                    customerReports = customerLogService.GetReportsOfCustomer(customerId, dtpFrom.Value, 
                         dtpTo.Value.AddDays(1).Date, ref total);
-                    dgwStockEntranceList.DataSource = arrearReportModels;
+                    dgwStockEntranceList.DataSource = customerReports;
                     SetupColumnOneCustomer();
                     lbTotal.Text = Global.formatVNDCurrencyText(total.ToString());
                 }
@@ -50,8 +62,8 @@ namespace BaoHien.UI
                 {
                     double total = 0.0;
                     CustomerLogService customerLogService = new CustomerLogService();
-                    List<CustomersReport> arrearReportModels = customerLogService.GetReportsOfCustomers(dtpFrom.Value, dtpTo.Value.AddDays(1).Date, ref total);
-                    dgwStockEntranceList.DataSource = arrearReportModels;
+                    customersReports = customerLogService.GetReportsOfCustomers(dtpFrom.Value, dtpTo.Value.AddDays(1).Date, ref total);
+                    dgwStockEntranceList.DataSource = customersReports;
                     SetupColumnAllCustomers();
                     setColorRow(4);
                     lbTotal.Text = Global.formatVNDCurrencyText(total.ToString());
@@ -69,16 +81,17 @@ namespace BaoHien.UI
             customers = customerService.GetCustomers();
             Customer ctm = new Customer { 
                 Id = 0,
-                CustomerName = "Tất cả"
+                CustomerName = "Tất cả",
+                CustCode = "Tất cả"
             };
             customers.Add(ctm);
             customers = customers.OrderBy(ct => ct.Id).ToList();
-            if (customers != null)
-            {
-                cbmCustomers.DataSource = customers;
-                cbmCustomers.DisplayMember = "CustomerName";
-                cbmCustomers.ValueMember = "Id";
-            }
+
+            cbmCustomers.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            cbmCustomers.AutoCompleteSource = AutoCompleteSource.ListItems;
+            cbmCustomers.DataSource = customers;
+            cbmCustomers.DisplayMember = "CustCode";
+            cbmCustomers.ValueMember = "Id";
         }
         
         private void SetupColumnOneCustomer()
@@ -86,55 +99,13 @@ namespace BaoHien.UI
             dgwStockEntranceList.Columns.Clear();
             dgwStockEntranceList.AutoGenerateColumns = false;
 
-            DataGridViewTextBoxColumn indexColumn = new DataGridViewTextBoxColumn();
-            indexColumn.Width = 30;
-            indexColumn.DataPropertyName = "Index";
-            indexColumn.HeaderText = "STT";
-            indexColumn.ValueType = typeof(string);
-            dgwStockEntranceList.Columns.Add(indexColumn);
-
-            DataGridViewTextBoxColumn dateColumn = new DataGridViewTextBoxColumn();
-            dateColumn.DefaultCellStyle.Format = BHConstant.DATETIME_FORMAT;
-            dateColumn.Width = 100;
-            dateColumn.DataPropertyName = "Date";
-            dateColumn.HeaderText = "Ngày";
-            dateColumn.ValueType = typeof(string);
-            dgwStockEntranceList.Columns.Add(dateColumn);
-            
-            DataGridViewTextBoxColumn productNameColumn = new DataGridViewTextBoxColumn();
-            productNameColumn.Width = 150;
-            productNameColumn.DataPropertyName = "ProductName";
-            productNameColumn.HeaderText = "Mặt hàng";
-            productNameColumn.ValueType = typeof(string);
-            dgwStockEntranceList.Columns.Add(productNameColumn);
-
-            DataGridViewTextBoxColumn AttrNameColumn = new DataGridViewTextBoxColumn();
-            AttrNameColumn.Width = 100;
-            AttrNameColumn.DataPropertyName = "AttrName";
-            AttrNameColumn.HeaderText = "Quy cách";
-            AttrNameColumn.ValueType = typeof(string);
-            dgwStockEntranceList.Columns.Add(AttrNameColumn);
-
-            DataGridViewTextBoxColumn numberColumn = new DataGridViewTextBoxColumn();
-            numberColumn.Width = 80;
-            numberColumn.DataPropertyName = "Number";
-            numberColumn.HeaderText = "Số lượng";
-            numberColumn.ValueType = typeof(string);
-            dgwStockEntranceList.Columns.Add(numberColumn);
-
-            DataGridViewTextBoxColumn UnitColumn = new DataGridViewTextBoxColumn();
-            UnitColumn.Width = 100;
-            UnitColumn.DataPropertyName = "Unit";
-            UnitColumn.HeaderText = "ĐVT";
-            UnitColumn.ValueType = typeof(string);
-            dgwStockEntranceList.Columns.Add(UnitColumn);
-
-            DataGridViewTextBoxColumn costColumn = new DataGridViewTextBoxColumn();
-            costColumn.Width = 100;
-            costColumn.DataPropertyName = "Cost";
-            costColumn.HeaderText = "Đơn giá";
-            costColumn.ValueType = typeof(string);
-            dgwStockEntranceList.Columns.Add(costColumn);
+            dgwStockEntranceList.Columns.Add(Global.CreateCell("Index", "STT", 30));
+            dgwStockEntranceList.Columns.Add(Global.CreateCell("Date", "Ngày", 100));
+            dgwStockEntranceList.Columns.Add(Global.CreateCell("ProductName", "Mặt hàng", 150));
+            dgwStockEntranceList.Columns.Add(Global.CreateCell("AttrName", "Quy cách", 100));
+            dgwStockEntranceList.Columns.Add(Global.CreateCellWithAlignment("Number", "Số lượng", 80, DataGridViewContentAlignment.MiddleRight));
+            dgwStockEntranceList.Columns.Add(Global.CreateCellWithAlignment("Unit", "ĐVT", 100, DataGridViewContentAlignment.MiddleRight));
+            dgwStockEntranceList.Columns.Add(Global.CreateCellWithAlignment("Cost", "Tổng giá", 100, DataGridViewContentAlignment.MiddleRight));
         }
 
         private void SetupColumnAllCustomers()
@@ -142,48 +113,12 @@ namespace BaoHien.UI
             dgwStockEntranceList.Columns.Clear();
             dgwStockEntranceList.AutoGenerateColumns = false;
 
-            DataGridViewTextBoxColumn indexColumn = new DataGridViewTextBoxColumn();
-            indexColumn.Width = 30;
-            indexColumn.DataPropertyName = "Index";
-            indexColumn.HeaderText = "STT";
-            indexColumn.ValueType = typeof(string);
-            dgwStockEntranceList.Columns.Add(indexColumn);
-
-            DataGridViewTextBoxColumn dateColumn = new DataGridViewTextBoxColumn();
-            dateColumn.DefaultCellStyle.Format = BHConstant.DATETIME_FORMAT;
-            dateColumn.Width = 100;
-            dateColumn.DataPropertyName = "Date";
-            dateColumn.HeaderText = "Ngày";
-            dateColumn.ValueType = typeof(string);
-            dgwStockEntranceList.Columns.Add(dateColumn);
-
-            DataGridViewTextBoxColumn customerNameColumn = new DataGridViewTextBoxColumn();
-            customerNameColumn.Width = 150;
-            customerNameColumn.DataPropertyName = "CustomerName";
-            customerNameColumn.HeaderText = "Tên khách hàng";
-            customerNameColumn.ValueType = typeof(string);
-            dgwStockEntranceList.Columns.Add(customerNameColumn);
-
-            DataGridViewTextBoxColumn customerCodeColumn = new DataGridViewTextBoxColumn();
-            customerCodeColumn.Width = 150;
-            customerCodeColumn.DataPropertyName = "CustomerCode";
-            customerCodeColumn.HeaderText = "Mã khách hàng";
-            customerCodeColumn.ValueType = typeof(string);
-            dgwStockEntranceList.Columns.Add(customerCodeColumn);
-
-            DataGridViewTextBoxColumn recordCodeColumn = new DataGridViewTextBoxColumn();
-            recordCodeColumn.Width = 100;
-            recordCodeColumn.DataPropertyName = "RecordCode";
-            recordCodeColumn.HeaderText = "Mã phiếu";
-            recordCodeColumn.ValueType = typeof(string);
-            dgwStockEntranceList.Columns.Add(recordCodeColumn);
-
-            DataGridViewTextBoxColumn amountColumn = new DataGridViewTextBoxColumn();
-            amountColumn.DataPropertyName = "Amount";
-            amountColumn.Width = 150;
-            amountColumn.HeaderText = "Số tiền";
-            amountColumn.ValueType = typeof(string);
-            dgwStockEntranceList.Columns.Add(amountColumn);
+            dgwStockEntranceList.Columns.Add(Global.CreateCell("Index", "STT", 30));
+            dgwStockEntranceList.Columns.Add(Global.CreateCell("Date", "Ngày", 100));
+            dgwStockEntranceList.Columns.Add(Global.CreateCell("CustomerName", "Tên khách hàng", 150));
+            dgwStockEntranceList.Columns.Add(Global.CreateCell("CustomerCode", "Mã khách hàng", 150));
+            dgwStockEntranceList.Columns.Add(Global.CreateCell("RecordCode", "Mã phiếu", 150));
+            dgwStockEntranceList.Columns.Add(Global.CreateCellWithAlignment("Amount", "Số tiền", 80, DataGridViewContentAlignment.MiddleRight));
         }
 
         private void btnSearch_Click(object sender, EventArgs e)
@@ -198,7 +133,7 @@ namespace BaoHien.UI
             {
                 if (row.Cells[followValueColumn].Value.ToString().Contains("BH"))
                 {
-                    row.DefaultCellStyle.BackColor = Color.LightGreen;
+                    row.DefaultCellStyle.BackColor = System.Drawing.Color.LightGreen;
                 }
             }
         }
@@ -236,6 +171,154 @@ namespace BaoHien.UI
                             frmAddBill.ShowDialog();
                         }
                     } break;
+            }
+        }
+
+        private void btnPrint_Click(object sender, EventArgs e)
+        {
+            if ((modeReport == 1 && customerReports.Count > 0)
+                || (modeReport != 1 && customersReports.Count > 0))
+            {
+                PrintDialog pd = new PrintDialog();
+                pd.PrinterSettings = new PrinterSettings();
+                if (DialogResult.OK == pd.ShowDialog(this))
+                {
+                    this.Cursor = Cursors.AppStarting;
+                    Print(pd.PrinterSettings.PrinterName);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Không có dữ liệu để in ấn!", "Lỗi hệ thống");
+            }
+        }
+
+        private void ExportFile()
+        {
+            Global.checkDirSaveFile();
+            var doc = new Document();
+            PdfWriter docWriter = PdfWriter.GetInstance(doc, new FileStream(BHConstant.SAVE_IN_DIRECTORY + @"\CongNo.pdf", FileMode.Create));
+            PdfWriterEvents writerEvent;
+
+            Image watermarkImage = Image.GetInstance(AppDomain.CurrentDomain.BaseDirectory + @"logo.png");
+            watermarkImage.SetAbsolutePosition(doc.PageSize.Width / 2 - 70, 600);
+            writerEvent = new PdfWriterEvents(watermarkImage);
+            docWriter.PageEvent = writerEvent;
+
+            doc.Open();
+
+            doc.Add(FormatConfig.ParaRightBeforeHeader("In ngày : " + DateTime.Now.ToString(BHConstant.DATETIME_FORMAT)));
+            doc.Add(FormatConfig.ParaHeader("BÁO CÁO CÔNG NỢ"));
+
+            if (modeReport != 1)
+                doc.Add(CustomersTable());
+            else
+            {
+                doc.Add(FormatConfig.ParaRightBelowHeader("(" + textForPrint + ")"));
+                doc.Add(CustomerDetailTable());
+            }
+            doc.Add(FormatConfig.ParaCommonInfo("Ghi chú : ", String.Concat(Enumerable.Repeat("...", 96))));
+
+            doc.Close();
+        }
+
+        private PdfPTable CustomersTable()
+        {
+            PdfPTable table = FormatConfig.Table(6, new float[] { 0.5f, 1.5f, 2.5f, 2.5f, 2f, 1f });
+            table.AddCell(FormatConfig.TableCellHeader("STT"));
+            table.AddCell(FormatConfig.TableCellHeader("Ngày"));
+            table.AddCell(FormatConfig.TableCellHeader("Tên khách hàng"));
+            table.AddCell(FormatConfig.TableCellHeader("Mã khách hàng"));
+            table.AddCell(FormatConfig.TableCellHeader("Mã phiếu"));
+            table.AddCell(FormatConfig.TableCellHeader("Số tiền"));
+
+            foreach (CustomersReport item in customersReports)
+            {
+                table.AddCell(FormatConfig.TableCellBody(item.Index.ToString(), PdfPCell.ALIGN_CENTER));
+                table.AddCell(FormatConfig.TableCellBody(item.Date, PdfPCell.ALIGN_LEFT));
+                table.AddCell(FormatConfig.TableCellBody(item.CustomerName, PdfPCell.ALIGN_LEFT));
+                table.AddCell(FormatConfig.TableCellBody(item.CustomerCode, PdfPCell.ALIGN_LEFT));
+                table.AddCell(FormatConfig.TableCellBody(item.RecordCode, PdfPCell.ALIGN_LEFT));
+                table.AddCell(FormatConfig.TableCellBody(item.Amount, PdfPCell.ALIGN_RIGHT));
+            }
+            return table;
+        }
+
+        private PdfPTable CustomerDetailTable()
+        {
+            PdfPTable table = FormatConfig.Table(7, new float[] { 0.5f, 1.5f, 2f, 2f, 1.2f, 1.3f, 1.5f });
+            table.AddCell(FormatConfig.TableCellHeader("STT"));
+            table.AddCell(FormatConfig.TableCellHeader("Ngày"));
+            table.AddCell(FormatConfig.TableCellHeader("Mặt hàng"));
+            table.AddCell(FormatConfig.TableCellHeader("Quy cách"));
+            table.AddCell(FormatConfig.TableCellHeader("Số lượng"));
+            table.AddCell(FormatConfig.TableCellHeader("ĐVT"));
+            table.AddCell(FormatConfig.TableCellHeader("Tổng giá"));
+
+            foreach (CustomerReport item in customerReports)
+            {
+                if (string.IsNullOrEmpty(item.Index))
+                {
+                    table.AddCell(FormatConfig.TableCellBoldBody(item.Date, PdfPCell.ALIGN_LEFT, 7));
+                }
+                else
+                {
+                    table.AddCell(FormatConfig.TableCellBody(item.Index, PdfPCell.ALIGN_CENTER));
+                    table.AddCell(FormatConfig.TableCellBody(item.Date, PdfPCell.ALIGN_LEFT));
+                    table.AddCell(FormatConfig.TableCellBody(item.ProductName, PdfPCell.ALIGN_LEFT));
+                    table.AddCell(FormatConfig.TableCellBody(item.AttrName, PdfPCell.ALIGN_LEFT));
+                    table.AddCell(FormatConfig.TableCellBody(item.Number, PdfPCell.ALIGN_RIGHT));
+                    table.AddCell(FormatConfig.TableCellBody(item.Unit, PdfPCell.ALIGN_RIGHT));
+                    table.AddCell(FormatConfig.TableCellBody(item.Cost, PdfPCell.ALIGN_RIGHT));
+                }
+            }
+            return table;
+        }
+
+        private void Print(string printerName)
+        {
+            ExportFile();
+            // Print the file to the printer.
+            try
+            {
+                string foxit = Registry.LocalMachine.OpenSubKey("Software").OpenSubKey("Foxit Software").OpenSubKey("Foxit Reader")
+                    .GetValue("InnoSetupUpdatePath").ToString().Replace("unins000", "Foxit Reader");
+                string file1 = BHConstant.SAVE_IN_DIRECTORY + @"\CongNo.pdf";
+
+                Process pdf_print1 = new Process();
+                pdf_print1.StartInfo.FileName = foxit;
+                pdf_print1.StartInfo.Arguments = string.Format(@"-t ""{0}"" ""{1}""", file1, printerName);
+                pdf_print1.StartInfo.CreateNoWindow = true;
+                pdf_print1.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                pdf_print1.Start();
+                pdf_print1.WaitForExit(20000);
+                if (!pdf_print1.HasExited)
+                {
+                    pdf_print1.Kill();
+                    pdf_print1.Dispose();
+                    MessageBox.Show("Không thể in danh sách khách hàng lúc này!");
+                }
+            }
+            catch
+            {
+                MessageBox.Show("Không thể kết nối máy in!");
+            }
+            this.Cursor = Cursors.Default;
+        }
+
+        private void cbmCustomers_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbmCustomers.SelectedValue != null)
+            {
+                Customer cm = null;
+                if (cbmCustomers.SelectedValue is Customer)
+                    cm = (Customer)cbmCustomers.SelectedValue;
+                else
+                    cm = customers.Where(x => x.Id == (int)cbmCustomers.SelectedValue).FirstOrDefault();
+                if (cm != null)
+                {
+                    lbCustomerName.Text = cm.CustomerName;
+                }
             }
         }
     }

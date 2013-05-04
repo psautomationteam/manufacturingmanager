@@ -8,6 +8,7 @@ using BaoHien.Properties;
 using System.Globalization;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Windows.Forms;
 
 namespace BaoHien.Common
 {
@@ -237,6 +238,37 @@ namespace BaoHien.Common
                 context.SubmitChanges();
             }
             return result;
+        }
+
+        public static DataGridViewTextBoxColumn CreateCell(string DataPropertyName, string HeaderText, int Width)
+        {
+            DataGridViewTextBoxColumn cell = new DataGridViewTextBoxColumn();
+            cell.DataPropertyName = DataPropertyName;
+            cell.HeaderText = HeaderText;
+            cell.Width = Width;
+            cell.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            return cell;
+        }
+
+        public static DataGridViewTextBoxColumn CreateCellWithAlignment(string DataPropertyName, string HeaderText, int Width, DataGridViewContentAlignment alignment)
+        {
+            DataGridViewTextBoxColumn cell = new DataGridViewTextBoxColumn();
+            cell.DataPropertyName = DataPropertyName;
+            cell.HeaderText = HeaderText;
+            cell.Width = Width;
+            cell.DefaultCellStyle.Alignment = alignment;
+            return cell;
+        }
+
+        public static DataGridViewImageColumn CreateCellDeleteAction()
+        {
+            DataGridViewImageColumn cell = new DataGridViewImageColumn();
+            cell.Image = Properties.Resources.erase;
+            cell.HeaderText = "Xóa";
+            cell.Width = 40;
+            cell.ImageLayout = DataGridViewImageCellLayout.Normal;
+            cell.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            return cell;
         }
     }
 }

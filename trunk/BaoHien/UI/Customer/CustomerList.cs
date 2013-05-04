@@ -76,68 +76,15 @@ namespace BaoHien.UI
         {
             dgvProductList.AutoGenerateColumns = false;
 
-            DataGridViewTextBoxColumn indexColumn = new DataGridViewTextBoxColumn();
-            indexColumn.Width = 30;
-            indexColumn.DataPropertyName = "Index";
-            indexColumn.HeaderText = "STT";
-            indexColumn.ValueType = typeof(string);
-            dgvProductList.Columns.Add(indexColumn);
-
-            DataGridViewTextBoxColumn customerNameColumn = new DataGridViewTextBoxColumn();
-            customerNameColumn.Width = 150;
-            customerNameColumn.DataPropertyName = "CustomerName";
-            customerNameColumn.HeaderText = "Tên khách hàng";
-            customerNameColumn.ValueType = typeof(string);
-            dgvProductList.Columns.Add(customerNameColumn);
-
-            DataGridViewTextBoxColumn customerCodeColumn = new DataGridViewTextBoxColumn();
-            customerCodeColumn.Width = 150;
-            customerCodeColumn.DataPropertyName = "CustCode";
-            customerCodeColumn.HeaderText = "Mã khách hàng";
-            customerCodeColumn.ValueType = typeof(string);
-            dgvProductList.Columns.Add(customerCodeColumn);
-
-            DataGridViewTextBoxColumn customerPhoneColumn = new DataGridViewTextBoxColumn();
-            customerPhoneColumn.Width = 100;
-            customerPhoneColumn.DataPropertyName = "CustomerPhone";
-            customerPhoneColumn.HeaderText = "SĐT Cty";
-            customerPhoneColumn.ValueType = typeof(string);
-            dgvProductList.Columns.Add(customerPhoneColumn);
-
-            DataGridViewTextBoxColumn customerPersonNameColumn = new DataGridViewTextBoxColumn();
-            customerPersonNameColumn.DataPropertyName = "CustomerPersonName";
-            customerPersonNameColumn.Width = 150;
-            customerPersonNameColumn.HeaderText = "Tên người liên lạc";
-            customerPersonNameColumn.ValueType = typeof(string);
-            dgvProductList.Columns.Add(customerPersonNameColumn);
-
-            DataGridViewTextBoxColumn customerPersonPhoneColumn = new DataGridViewTextBoxColumn();
-            customerPersonPhoneColumn.DataPropertyName = "CustomerPersonPhone";
-            customerPersonPhoneColumn.Width = 150;
-            customerPersonPhoneColumn.HeaderText = "SĐT người liên lạc";
-            customerPersonPhoneColumn.ValueType = typeof(string);
-            dgvProductList.Columns.Add(customerPersonPhoneColumn);
-            
-            DataGridViewTextBoxColumn favorProductColumn = new DataGridViewTextBoxColumn();
-            favorProductColumn.DataPropertyName = "FavoriteProduct";
-            favorProductColumn.Width = 150;
-            favorProductColumn.HeaderText = "Dòng sản phẩm";
-            favorProductColumn.ValueType = typeof(string);
-            dgvProductList.Columns.Add(favorProductColumn);
-
-            DataGridViewTextBoxColumn employeeColumn = new DataGridViewTextBoxColumn();
-            employeeColumn.DataPropertyName = "Employee";
-            employeeColumn.Width = 150;
-            employeeColumn.HeaderText = "Nhân viên phụ trách";
-            employeeColumn.ValueType = typeof(string);
-            dgvProductList.Columns.Add(employeeColumn);
-
-            DataGridViewImageColumn deleteButton = new DataGridViewImageColumn();
-            deleteButton.Image = Properties.Resources.erase;
-            deleteButton.Width = 40;
-            deleteButton.HeaderText = "Xóa";
-            deleteButton.ImageLayout = DataGridViewImageCellLayout.Normal;
-            dgvProductList.Columns.Add(deleteButton);           
+            dgvProductList.Columns.Add(Global.CreateCell("Index", "STT", 30));
+            dgvProductList.Columns.Add(Global.CreateCell("CustomerName", "Khách hàng", 200));
+            dgvProductList.Columns.Add(Global.CreateCell("CustCode", "Mã khách hàng", 150));
+            dgvProductList.Columns.Add(Global.CreateCell("CustomerPhone", "SĐT Cty", 100));
+            dgvProductList.Columns.Add(Global.CreateCell("CustomerPersonName", "Tên người liên lạc", 150));
+            dgvProductList.Columns.Add(Global.CreateCell("CustomerPersonPhone", "SĐT người liên lạc", 150));
+            dgvProductList.Columns.Add(Global.CreateCell("FavoriteProduct", "Dòng sản phẩm", 150));
+            dgvProductList.Columns.Add(Global.CreateCell("Employee", "Nhân viên phụ trách", 150));
+            dgvProductList.Columns.Add(Global.CreateCellDeleteAction());        
         }
 
         private void btnDelete_Click(object sender, EventArgs e)

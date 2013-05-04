@@ -45,12 +45,16 @@
             this.label8 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.lblTotal = new System.Windows.Forms.Label();
+            this.lbCustomerName = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgwBillingList)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.lbCustomerName);
+            this.groupBox1.Controls.Add(this.label12);
             this.groupBox1.Controls.Add(this.cbmCustomers);
             this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.btnSearch);
@@ -72,15 +76,16 @@
             // cbmCustomers
             // 
             this.cbmCustomers.FormattingEnabled = true;
-            this.cbmCustomers.Location = new System.Drawing.Point(725, 49);
+            this.cbmCustomers.Location = new System.Drawing.Point(725, 20);
             this.cbmCustomers.Name = "cbmCustomers";
             this.cbmCustomers.Size = new System.Drawing.Size(187, 21);
             this.cbmCustomers.TabIndex = 4;
+            this.cbmCustomers.SelectedIndexChanged += new System.EventHandler(this.cbmCustomers_SelectedIndexChanged);
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(651, 52);
+            this.label4.Location = new System.Drawing.Point(651, 24);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(68, 13);
             this.label4.TabIndex = 10;
@@ -215,6 +220,23 @@
             this.lblTotal.TabIndex = 21;
             this.lblTotal.Text = "0";
             // 
+            // lbCustomerName
+            // 
+            this.lbCustomerName.AutoSize = true;
+            this.lbCustomerName.Location = new System.Drawing.Point(731, 52);
+            this.lbCustomerName.Name = "lbCustomerName";
+            this.lbCustomerName.Size = new System.Drawing.Size(0, 13);
+            this.lbCustomerName.TabIndex = 24;
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(627, 52);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(92, 13);
+            this.label12.TabIndex = 23;
+            this.label12.Text = "Tên khách hàng :";
+            // 
             // BillList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -255,5 +277,7 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label lblTotal;
+        private System.Windows.Forms.Label lbCustomerName;
+        private System.Windows.Forms.Label label12;
     }
 }

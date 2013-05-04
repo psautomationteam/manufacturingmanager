@@ -62,12 +62,5 @@ namespace BaoHien.Model
             get { return cost; }
             set { cost = value; }
         }
-
-        string commission;
-        public string Commission
-        {
-            get { return commission; }
-            set { commission = value; }
-        }
     }
 }
