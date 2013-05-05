@@ -123,7 +123,7 @@ namespace BaoHien.UI
         {
             BillSearchCriteria billSearchCriteria = new BillSearchCriteria
             {
-                Code = txtCode.Text,
+                Code = txtCode.Text.ToLower(),
                 CreatedBy = (cbmUsers.SelectedValue != null && cbmUsers.SelectedIndex != 0) ? (int?)cbmUsers.SelectedValue : (int?)null,
                 CustId = (cbmCustomers.SelectedValue != null && cbmCustomers.SelectedIndex != 0) ? (int?)cbmCustomers.SelectedValue : (int?)null,
                 From = dtpFrom.Value != null ? dtpFrom.Value : (DateTime?)null,

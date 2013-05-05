@@ -793,7 +793,7 @@ namespace BaoHien.UI
             }
         }
         
-        private void printForStock()
+        private void printXK()
         {
             Global.checkDirSaveFile();
             var doc = new PDF.Document();
@@ -867,7 +867,7 @@ namespace BaoHien.UI
             doc.Close();
         }
 
-        private void printOrder(bool preview)
+        private void printBH(bool preview)
         {
             Global.checkDirSaveFile();
             var doc = new PDF.Document();
@@ -887,7 +887,7 @@ namespace BaoHien.UI
             doc.Open();
 
             doc.Add(FormatConfig.ParaRightBeforeHeader("Mã số phiếu : " + getOrderCode()));
-            doc.Add(FormatConfig.ParaHeader("PHIẾU XUẤT KHO"));
+            doc.Add(FormatConfig.ParaHeader("PHIẾU BÁN HÀNG"));
             doc.Add(FormatConfig.ParaRightBelowHeader("(SẼ BỔ SUNG HÓA ĐƠN TÀI CHÍNH VÀ THU THÊM THUẾ GTGT 10% SAU)"));
 
             doc.Add(FormatConfig.ParaCommonInfoAllBold("Tên khách hàng : ", getCustomerName()));
@@ -1061,9 +1061,9 @@ namespace BaoHien.UI
         private void Print(string printerName)
         {
             if(BHNumber > 0)
-                printOrder(false);
+                printBH(false);
             if(XKNumber > 0)
-                printForStock();
+                printXK();
             // Print the file to the printer.
             try
             {
@@ -1072,7 +1072,7 @@ namespace BaoHien.UI
                 string file1 = BHConstant.SAVE_IN_DIRECTORY + @"\BHang" + false.ToString() + ".pdf";
                 string file2 = BHConstant.SAVE_IN_DIRECTORY + @"\XKho.pdf";
 
-                for(int i = 0; i > BHNumber; i++)
+                for(int i = 0; i < BHNumber; i++)
                 {
                     Process pdf_print1 = new Process();
                     pdf_print1.StartInfo.FileName = foxit;
@@ -1089,7 +1089,7 @@ namespace BaoHien.UI
                     }
                 }
 
-                for (int i = 0; i > XKNumber; i++)
+                for (int i = 0; i < XKNumber; i++)
                 {
                     Process pdf_print2 = new Process();
                     pdf_print2.StartInfo.FileName = foxit;
@@ -1115,7 +1115,7 @@ namespace BaoHien.UI
 
         private DialogResult Preview()
         {
-            printOrder(true);
+            printBH(true);
             PrintPreview printPreview = new PrintPreview(BHConstant.SAVE_IN_DIRECTORY + @"\BHang" + true.ToString() + ".pdf");
             DialogResult r = printPreview.ShowDialog(this);
             return r;

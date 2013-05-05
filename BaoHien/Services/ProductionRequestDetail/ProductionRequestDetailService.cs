@@ -17,28 +17,25 @@ namespace BaoHien.Services.ProductionRequestDetails
                 idsInString.Add(id.ToString());
             }
             ProductionRequestDetail productionRequestDetail = OnGetItem<ProductionRequestDetail>(idsInString);
-
             return productionRequestDetail;
         }
+
         public List<ProductionRequestDetail> GetProductionRequestDetails()
         {
             List<ProductionRequestDetail> productionRequestDetails = OnGetItems<ProductionRequestDetail>();
-
             return productionRequestDetails;
         }
+
         public bool AddProductionRequestDetail(ProductionRequestDetail product)
         {
             return OnAddItem<ProductionRequestDetail>(product);
         }
-        public bool DeleteProductionRequestDetail(List<System.Int32> ids)
+
+        public bool DeleteProductionRequestDetail(string id)
         {
-            List<string> idsInString = new List<string>();
-            foreach (System.Int32 id in ids)
-            {
-                idsInString.Add(id.ToString());
-            }
-            return OnDeleteItem<ProductionRequestDetail>(idsInString);
+            return OnDeleteItem<ProductionRequestDetail>(id);
         }
+
         public bool UpdateProductionRequestDetail(ProductionRequestDetail productionRequestDetail)
         {
             return OnUpdateItem<ProductionRequestDetail>(productionRequestDetail, productionRequestDetail.Id.ToString());

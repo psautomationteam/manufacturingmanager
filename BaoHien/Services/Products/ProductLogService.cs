@@ -7,6 +7,7 @@ using DAL;
 using DAL.Helper;
 using BaoHien.Model;
 using BaoHien.Common;
+using System.Linq.Expressions;
 
 namespace BaoHien.Services.ProductLogs
 {
@@ -37,6 +38,11 @@ namespace BaoHien.Services.ProductLogs
         public bool UpdateProductLog(ProductLog productLog)
         {
             return OnUpdateItem<ProductLog>(productLog, productLog.Id.ToString());
+        }
+
+        public List<ProductLog> SelectProductLogByWhere(Expression<Func<ProductLog, bool>> func)
+        {
+            return SelectItemByWhere<ProductLog>(func);
         }
 
         public List<MeasurementUnit> GetUnitsOfProductAttribute(int productId, int attrId)
@@ -98,73 +104,13 @@ namespace BaoHien.Services.ProductLogs
             return result;
         }
 
-        public List<ProductLog> GetLogsOfProductAttributeUnit(int productId, int attrId, int unitId, DateTime from, DateTime to)
-        {
-            List<ProductLog> result = new List<ProductLog>();
-            using (BaoHienDBDataContext context = new BaoHienDBDataContext(SettingManager.BuildStringConnection()))
-            {
-                result = context.ProductLogs.Where(p => p.ProductId == productId && p.AttributeId == attrId &&
-                    p.UnitId == unitId && p.CreatedDate >= from && p.CreatedDate <= to).ToList();
-            }
-            return result;
-        }
-
-        public List<ProductLog> GetLogsOfProductAttribute(int productId, int attrId, DateTime from, DateTime to)
-        {
-            List<ProductLog> result = new List<ProductLog>();
-            using (BaoHienDBDataContext context = new BaoHienDBDataContext(SettingManager.BuildStringConnection()))
-            {
-                result = context.ProductLogs.Where(p => p.ProductId == productId && p.AttributeId == attrId &&
-                    p.CreatedDate >= from && p.CreatedDate <= to)
-                    .GroupBy(p => p.UnitId).Select(p => p.First()).ToList();
-            }
-            return result;
-        }
-
-        public List<ProductLog> GetLogsOfProduct(int productId, DateTime from, DateTime to)
-        {
-            List<ProductLog> result = new List<ProductLog>();
-            using (BaoHienDBDataContext context = new BaoHienDBDataContext(SettingManager.BuildStringConnection()))
-            {
-                result = context.ProductLogs.Where(p => p.ProductId == productId &&
-                    p.CreatedDate >= from && p.CreatedDate <= to).OrderByDescending(pl => pl.CreatedDate)
-                    .GroupBy(p => new { p.AttributeId, p.UnitId }).Select(p => p.First()).ToList();
-            }
-            return result;
-        }
-
-        public List<ProductLog> GetLogsOfProducts(int productTypeId, DateTime from, DateTime to)
-        {
-            List<ProductLog> result = new List<ProductLog>();
-            using (BaoHienDBDataContext context = new BaoHienDBDataContext(SettingManager.BuildStringConnection()))
-            {
-                result = context.ProductLogs.Where(p => p.Product.ProductType == productTypeId &&
-                    p.CreatedDate >= from && p.CreatedDate <= to)
-                    .OrderByDescending(pl => pl.CreatedDate)
-                    .GroupBy(p => new { p.ProductId, p.AttributeId, p.UnitId }).Select(p => p.First()).ToList();
-            }
-            return result;
-        }
-
-        public List<ProductLog> GetLogsOfProducts(DateTime from, DateTime to)
-        {
-            List<ProductLog> result = new List<ProductLog>();
-            using (BaoHienDBDataContext context = new BaoHienDBDataContext(SettingManager.BuildStringConnection()))
-            {
-                result = context.ProductLogs.Where(p => p.CreatedDate >= from && p.CreatedDate <= to)
-                    .OrderByDescending(pl => pl.CreatedDate)
-                    .GroupBy(p => new { p.ProductId, p.AttributeId, p.UnitId }).Select(p => p.First()).ToList();
-            }
-            return result;
-        }
-
         public List<ProductReport> GetReportsOfProductAttributeUnit(int productId, int attrId, int unitId, DateTime from, DateTime to)
         {
             List<ProductReport> result = new List<ProductReport>();
             using (BaoHienDBDataContext context = new BaoHienDBDataContext(SettingManager.BuildStringConnection()))
             {
                 List<ProductLog> logs = context.ProductLogs.Where(p => p.ProductId == productId && p.AttributeId == attrId &&
-                    p.UnitId == unitId && p.CreatedDate >= from && p.CreatedDate <= to)
+                    p.UnitId == unitId && p.CreatedDate >= from && p.CreatedDate <= to && p.Status == BHConstant.ACTIVE_STATUS)
                     .OrderByDescending(p => p.CreatedDate).ToList();
                 ConvertLogToReportDetail(logs, ref result);
             }
@@ -202,7 +148,7 @@ namespace BaoHien.Services.ProductLogs
                      ProductName = type.ProductName
                 });
 
-                List<ProductLog> tmp = logs.Where(x => x.Product.ProductType == type.Id)
+                List<ProductLog> tmp = logs.Where(x => x.Product.ProductType == type.Id && x.Status == BHConstant.ACTIVE_STATUS)
                     .GroupBy(x => new { x.ProductId, x.AttributeId, x.UnitId }).Select(x => x.First()).ToList();
                 index = 0;
                 foreach (ProductLog item in tmp)
@@ -219,9 +165,9 @@ namespace BaoHien.Services.ProductLogs
                     pr.LastNumber = logs.Where(x => x.ProductId == item.ProductId && x.AttributeId == item.AttributeId && x.UnitId == item.UnitId)
                         .OrderByDescending(x => x.CreatedDate).First().AfterNumber.ToString();
                     pr.ImportNumber = logs.Where(x => x.ProductId == item.ProductId && x.AttributeId == item.AttributeId && x.UnitId == item.UnitId
-                        && x.RecordCode.Contains(BHConstant.PREFIX_FOR_ENTRANCE) && x.BeforeNumber < x.AfterNumber).Sum(x => x.Amount).ToString();
+                        && x.Status == BHConstant.ACTIVE_STATUS && x.BeforeNumber < x.AfterNumber).Sum(x => x.Amount).ToString();
                     pr.ExportNumber = logs.Where(x => x.ProductId == item.ProductId && x.AttributeId == item.AttributeId && x.UnitId == item.UnitId
-                        && x.RecordCode.Contains(BHConstant.PREFIX_FOR_ORDER) && x.BeforeNumber > x.AfterNumber).Sum(x => x.Amount).ToString();
+                        && x.Status == BHConstant.ACTIVE_STATUS && x.BeforeNumber > x.AfterNumber).Sum(x => x.Amount).ToString();
                     reports.Add(pr);
                 }
             }

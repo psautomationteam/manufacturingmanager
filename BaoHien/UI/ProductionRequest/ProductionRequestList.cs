@@ -132,9 +132,6 @@ namespace BaoHien.UI
                             ProductLogService productLogService = new ProductLogService();
                             foreach (ProductionRequestDetail prd in productionRequestDetails)
                             {
-                                List<int> ids = new List<int>();
-                                ids.Add(prd.Id);
-                                ids.Add(prd.ProductionRequestId);
                                 ProductLog pl = productLogService.GetNewestProductUnitLog(prd.ProductId, prd.AttributeId, prd.UnitId);
                                 ProductLog plg = new ProductLog
                                 {
@@ -144,24 +141,32 @@ namespace BaoHien.UI
                                     RecordCode = pr.ReqCode,
                                     BeforeNumber = pl.AfterNumber,
                                     Amount = prd.NumberUnit,
-                                    AfterNumber = (prd.Direction == true) ? 
-                                        ((pl.AfterNumber - prd.NumberUnit) > 0 ? (pl.AfterNumber - prd.NumberUnit) : 0 )
+                                    AfterNumber = (prd.Direction == true) ?
+                                        ((pl.AfterNumber - prd.NumberUnit) > 0 ? (pl.AfterNumber - prd.NumberUnit) : 0)
                                         : (pl.AfterNumber + prd.NumberUnit),
-                                    CreatedDate = DateTime.Now
+                                    CreatedDate = DateTime.Now,
+                                    Status = BHConstant.DEACTIVE_STATUS
                                 };
                                 ret = productLogService.AddProductLog(plg);
-                                ret = productionRequestDetailService.DeleteProductionRequestDetail(ids);
+                                ret = productionRequestDetailService.DeleteProductionRequestDetail(prd.Id.ToString());
                                 if (!ret)
                                 {
                                     MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
                                     return;
                                 }
                             }
+
+                            List<ProductLog> deactives = productLogService.SelectProductLogByWhere(x => x.RecordCode == pr.ReqCode && x.Status == BHConstant.ACTIVE_STATUS).ToList();
+                            foreach (ProductLog item in deactives)
+                            {
+                                item.Status = BHConstant.DEACTIVE_STATUS;
+                                productLogService.UpdateProductLog(item);
+                            }
                         }
+
                         if (!productionRequestService.DeleteProductionRequest(id))
                         {
                             MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
-
                         }
                         loadProductionRequestList();
                     }
@@ -175,7 +180,7 @@ namespace BaoHien.UI
         {
             ProductionRequestSearchCriteria productionRequestSearchCriteria = new ProductionRequestSearchCriteria
             {
-                CodeRequest = txtCode.Text != null ? txtCode.Text : "",
+                CodeRequest = txtCode.Text != null ? txtCode.Text.ToLower() : "",
                 RequestedBy = (cbmUsers.SelectedValue != null && cbmUsers.SelectedIndex != 0) ? (int?)cbmUsers.SelectedValue : (int?)null,
                 From = dtpFrom.Value != null ? dtpFrom.Value : (DateTime?)null,
                 To = dtpTo.Value != null ? dtpTo.Value.AddDays(1).Date : (DateTime?)null,

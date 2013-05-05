@@ -48,19 +48,19 @@ namespace BaoHien.Services.Customers
                 }
                 if (search.Code != "")
                 {
-                    customers = customers.Where(pr => pr.CustCode.Contains(search.Code)).ToList();
+                    customers = customers.Where(pr => pr.CustCode.ToLower().Contains(search.Code)).ToList();
                 }
                 if (search.Phone != "")
                 {
-                    customers = customers.Where(pr => pr.Phone.Contains(search.Phone)).ToList();
+                    customers = customers.Where(pr => pr.Phone.ToLower().Contains(search.Phone)).ToList();
                 }
                 if (search.Name != "")
                 {
-                    customers = customers.Where(pr => pr.CustomerName.Contains(search.Name)).ToList();
+                    customers = customers.Where(pr => pr.CustomerName.ToLower().Contains(search.Name)).ToList();
                 }
                 if (search.FavorProduct != "")
                 {
-                    customers = customers.Where(pr => pr.FavoriteProduct.Contains(search.FavorProduct)).ToList();
+                    customers = customers.Where(pr => pr.FavoriteProduct != null && pr.FavoriteProduct.ToLower().Contains(search.FavorProduct)).ToList();
                 }
             }
             return customers.OrderBy(x => x.CustomerName).ToList();

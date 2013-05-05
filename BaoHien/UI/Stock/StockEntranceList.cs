@@ -13,6 +13,7 @@ using DAL.Helper;
 using BaoHien.Model;
 using BaoHien.Services.ProductLogs;
 using BaoHien.Common;
+using BaoHien.Services.ProductInStocks;
 
 namespace BaoHien.UI
 {
@@ -109,7 +110,9 @@ namespace BaoHien.UI
                         EntranceStock es = entranceStockService.GetEntranceStock(id);
 
                         ProductLogService productLogService = new ProductLogService();
-                        foreach (EntranceStockDetail esd in es.EntranceStockDetails)
+                        EntranceStockDetailService entranceStockDetailService = new EntranceStockDetailService();
+                        List<EntranceStockDetail> details = entranceStockDetailService.SelectEntranceStockDetailByWhere(x => x.EntranceStockId == es.Id).ToList();
+                        foreach (EntranceStockDetail esd in details)
                         {
                             ProductLog pl = productLogService.GetNewestProductUnitLog(esd.ProductId, esd.AttributeId, esd.UnitId);
                             ProductLog plg = new ProductLog
@@ -121,14 +124,22 @@ namespace BaoHien.UI
                                 BeforeNumber = pl.AfterNumber,
                                 Amount = esd.NumberUnit,
                                 AfterNumber = (pl.AfterNumber - esd.NumberUnit) > 0 ? (pl.AfterNumber - esd.NumberUnit) : 0,
-                                CreatedDate = DateTime.Now
+                                CreatedDate = DateTime.Now,
+                                Status = BHConstant.DEACTIVE_STATUS
                             };
-                            bool ret = productLogService.AddProductLog(plg);
+                            productLogService.AddProductLog(plg);
+                            //ret = enstranceStockDetailService.DeleteEntranceStockDetail(esd.Id);
+                        }
+
+                        List<ProductLog> deactives = productLogService.SelectProductLogByWhere(x => x.RecordCode == es.EntranceCode && x.Status == BHConstant.ACTIVE_STATUS).ToList();
+                        foreach (ProductLog item in deactives)
+                        {
+                            item.Status = BHConstant.DEACTIVE_STATUS;
+                            bool ret = productLogService.UpdateProductLog(item);
                         }
                         if (!entranceStockService.DeleteEntranceStock(id))
                         {
                             MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
-
                         }
                         loadEntranceStockList();
                     }
@@ -154,7 +165,7 @@ namespace BaoHien.UI
         {
             EntranceStockSearchCriteria entranceStockSearchCriteria = new EntranceStockSearchCriteria
             {
-                Code = txtCode.Text != null ? txtCode.Text : "",
+                Code = txtCode.Text != null ? txtCode.Text.ToLower() : "",
                 CreatedBy = (cbmUsers.SelectedValue != null && cbmUsers.SelectedIndex != 0) ? (int?)cbmUsers.SelectedValue : (int?)null,
                 From = dtpFrom.Value != null ? dtpFrom.Value : (DateTime?)null,
                 To = dtpTo.Value != null ? dtpTo.Value.AddDays(1).Date : (DateTime?)null,

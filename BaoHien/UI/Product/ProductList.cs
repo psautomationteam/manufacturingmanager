@@ -29,20 +29,13 @@ namespace BaoHien.UI
 
         private void searchProduct()
         {
-            ProductSearchCriteria productSearchCriteria = new ProductSearchCriteria();
-            if (txtCode.Text != null && txtCode.Text != "" && txtCode.Text != " ")
+            ProductSearchCriteria productSearchCriteria = new ProductSearchCriteria()
             {
-                productSearchCriteria.ProductCode = txtCode.Text;
-            }
-            if (txtName.Text != null && txtName.Text != "" && txtName.Text != " ")
-            {
-                productSearchCriteria.ProductName = txtName.Text;
-            }
+                ProductCode = string.IsNullOrEmpty(txtCode.Text) ? "" : txtCode.Text.ToLower(),
+                ProductName = string.IsNullOrEmpty(txtName.Text) ? "" : txtName.Text.ToLower(),
+                ProductTypeId = cbProductTypes.SelectedValue != null && cbProductTypes.SelectedIndex > 0 ? (int)cbProductTypes.SelectedValue : (int?)null
+            };
 
-            if (cbProductTypes.SelectedValue != null && (int)cbProductTypes.SelectedValue > 0)
-            {
-                productSearchCriteria.ProductTypeId = (int?)cbProductTypes.SelectedValue;
-            }            
             ProductService productService = new ProductService();
             List<Product> products = productService.SearchingProduct(productSearchCriteria);
             if (products != null)

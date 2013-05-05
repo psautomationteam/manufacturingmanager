@@ -66,7 +66,7 @@ namespace BaoHien.Services.Employees
             using (BaoHienDBDataContext context = new BaoHienDBDataContext(SettingManager.BuildStringConnection()))
             {
                 result = context.EmployeeLogs
-                    .Where(c => c.EmployeeId == employeeId && c.CreatedDate >= from && c.CreatedDate <= to)
+                    .Where(c => c.EmployeeId == employeeId && c.CreatedDate >= from && c.CreatedDate <= to && c.Status == BHConstant.ACTIVE_STATUS)
                     .OrderByDescending(c => c.CreatedDate).ToList();
             }
             return result;
@@ -78,7 +78,8 @@ namespace BaoHien.Services.Employees
             using (BaoHienDBDataContext context = new BaoHienDBDataContext(SettingManager.BuildStringConnection()))
             {
                 result = context.EmployeeLogs
-                    .Where(c => c.CreatedDate >= from && c.CreatedDate <= to).OrderByDescending(el => el.CreatedDate)
+                    .Where(c => c.CreatedDate >= from && c.CreatedDate <= to && c.Status == BHConstant.ACTIVE_STATUS)
+                    .OrderByDescending(el => el.CreatedDate)
                     .GroupBy(c => c.EmployeeId).Select(el => el.First()).ToList();
             }
             return result;
@@ -90,7 +91,7 @@ namespace BaoHien.Services.Employees
             using (BaoHienDBDataContext context = new BaoHienDBDataContext(SettingManager.BuildStringConnection()))
             {
                 List<EmployeeLog> logs = context.EmployeeLogs
-                    .Where(c => c.EmployeeId == employeeId && c.CreatedDate >= from && c.CreatedDate <= to)
+                    .Where(c => c.EmployeeId == employeeId && c.CreatedDate >= from && c.CreatedDate <= to && c.Status == BHConstant.ACTIVE_STATUS)
                     .OrderByDescending(c => c.CreatedDate).ToList();
                 List<Order> orders = context.Orders.Where(x => logs.Select(y => y.RecordCode).Contains(x.OrderCode)).ToList();
                 List<OrderDetail> details = context.OrderDetails.Where(x => orders.Select(y => y.Id).Contains(x.OrderId)).ToList();
@@ -141,7 +142,7 @@ namespace BaoHien.Services.Employees
             using (BaoHienDBDataContext context = new BaoHienDBDataContext(SettingManager.BuildStringConnection()))
             {
                 List<EmployeeLog> logs = context.EmployeeLogs
-                    .Where(c => c.CreatedDate >= from && c.CreatedDate <= to)
+                    .Where(c => c.CreatedDate >= from && c.CreatedDate <= to && c.Status == BHConstant.ACTIVE_STATUS)
                     .OrderBy(x => x.CreatedDate).ToList();
                 ConvertEmployeeLogsToReports(logs, ref result, ref total);
             }

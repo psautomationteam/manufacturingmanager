@@ -13,26 +13,30 @@ namespace BaoHien.Services.Bills
         public Bill GetBill(System.Int32 id)
         {
             Bill bill = OnGetItem<Bill>(id.ToString());
-
             return bill;
         }
+
         public List<Bill> GetBills()
         {
             List<Bill> bills = OnGetItems<Bill>();
-            return bills;
+            return bills.OrderByDescending(x => x.CreatedDate).ToList();
         }
+
         public bool AddBill(Bill bill)
         {
             return OnAddItem<Bill>(bill);
         }
+
         public bool DeleteBill(System.Int32 id)
         {
             return OnDeleteItem<Bill>(id.ToString());
         }
+
         public bool UpdateBill(Bill bill)
         {
             return OnUpdateItem<Bill>(bill, bill.Id.ToString());
         }
+
         public List<Bill> SearchingBill(BillSearchCriteria billSearchCriteria)
         {
             List<Bill> bills = OnGetItems<Bill>();
@@ -48,7 +52,7 @@ namespace BaoHien.Services.Bills
                 }
                 if (billSearchCriteria.Code != "")
                 {
-                    bills = bills.Where(pr => pr.BillCode.Contains(billSearchCriteria.Code)).ToList();
+                    bills = bills.Where(pr => pr.BillCode.ToLower().Contains(billSearchCriteria.Code)).ToList();
                 }
                 if (billSearchCriteria.To.HasValue && billSearchCriteria.From.HasValue)
                 {
