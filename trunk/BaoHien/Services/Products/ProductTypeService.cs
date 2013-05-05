@@ -44,7 +44,6 @@ namespace BaoHien.Services.Products
         }
         public List<ProductType> SearchingProductType(ProductTypeSearchCriteria productTypeSearchCriteria)
         {
-
             IQueryable<ProductType> query = null;
             BaoHienDBDataContext context = BaoHienRepository.GetBaoHienDBDataContext();
             if (context != null)
@@ -55,11 +54,11 @@ namespace BaoHien.Services.Products
             }
             if (productTypeSearchCriteria.ProductTypeCode != null)
             {
-                query = query.Where(p => p.TypeCode.Contains(productTypeSearchCriteria.ProductTypeCode));
+                query = query.Where(p => p.TypeCode.ToLower().Contains(productTypeSearchCriteria.ProductTypeCode));
             }
             if (productTypeSearchCriteria.ProductTypeName != null)
             {
-                query = query.Where(p => p.ProductName.Contains(productTypeSearchCriteria.ProductTypeName));
+                query = query.Where(p => p.ProductName.ToLower().Contains(productTypeSearchCriteria.ProductTypeName));
             }
             
             if (query != null)

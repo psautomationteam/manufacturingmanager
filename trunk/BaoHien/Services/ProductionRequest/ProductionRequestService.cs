@@ -14,27 +14,30 @@ namespace BaoHien.Services.ProductionRequests
         public ProductionRequest GetProductionRequest(System.Int32 id)
         {
             ProductionRequest productionRequest = OnGetItem<ProductionRequest>(id.ToString());
-
             return productionRequest;
         }
+
         public List<ProductionRequest> GetProductionRequests()
         {
             List<ProductionRequest> productionRequests = OnGetItems<ProductionRequest>();
-
-            return productionRequests;
+            return productionRequests.OrderByDescending(x => x.RequestedDate).ToList();
         }
+
         public bool AddProductionRequest(ProductionRequest product)
         {
             return OnAddItem<ProductionRequest>(product);
         }
+
         public bool DeleteProductionRequest(System.Int32 id)
         {
             return OnDeleteItem<ProductionRequest>(id.ToString());
         }
+
         public bool UpdateProductionRequest(ProductionRequest productionRequest)
         {
             return OnUpdateItem<ProductionRequest>(productionRequest, productionRequest.Id.ToString());
         }
+
         public List<ProductionRequest> SearchingProductionRequest(ProductionRequestSearchCriteria productionRequestSearchCriteria)
         {
             List<ProductionRequest> productionRequests = OnGetItems<ProductionRequest>();           
@@ -46,7 +49,7 @@ namespace BaoHien.Services.ProductionRequests
                 }
                 if (productionRequestSearchCriteria.CodeRequest != "")
                 {
-                    productionRequests = productionRequests.Where(pr => pr.ReqCode.Contains(productionRequestSearchCriteria.CodeRequest)).ToList();
+                    productionRequests = productionRequests.Where(pr => pr.ReqCode.ToLower().Contains(productionRequestSearchCriteria.CodeRequest)).ToList();
                 }
                 if (productionRequestSearchCriteria.To.HasValue && productionRequestSearchCriteria.From.HasValue)
                 {

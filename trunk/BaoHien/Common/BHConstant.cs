@@ -48,6 +48,9 @@ namespace BaoHien.Common
         public static string DATETIME_FORMAT = "dd/MM/yyyy HH:mm:ss";
         public static string DATE_FORMAT = "dd/MM/yyyy";
 
+        public static int DEACTIVE_STATUS = 1;
+        public static int ACTIVE_STATUS = 0;
+
         // FOR DB CONFIG
         public const string INIT_IP = "127.0.0.1";
         public const string INIT_PORT = "1433";

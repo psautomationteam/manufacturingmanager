@@ -7,6 +7,7 @@ using BaoHien.Services.Base;
 using DAL.Helper;
 using BaoHien.Model;
 using BaoHien.Common;
+using System.Linq.Expressions;
 
 namespace BaoHien.Services.Customers
 {
@@ -37,6 +38,11 @@ namespace BaoHien.Services.Customers
         public bool UpdateCustomerLog(CustomerLog customerLog)
         {
             return OnUpdateItem<CustomerLog>(customerLog, customerLog.Id.ToString());
+        }
+
+        public List<CustomerLog> SelectCustomerLogByWhere(Expression<Func<CustomerLog, bool>> func)
+        {
+            return SelectItemByWhere<CustomerLog>(func);
         }
 
         public CustomerLog GetNewestCustomerLog(int customerId)

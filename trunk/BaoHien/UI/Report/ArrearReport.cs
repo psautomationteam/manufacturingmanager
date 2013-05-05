@@ -229,7 +229,6 @@ namespace BaoHien.UI
                 doc.Add(FormatConfig.ParaCommonInfo("ĐT : ", customerPrint.Phone + " Fax: " + customerPrint.Fax));
                 doc.Add(CustomerDetailTable());
             }
-            doc.Add(FormatConfig.ParaCommonInfo("Tổng : ", lbTotal.Text));
             doc.Add(FormatConfig.ParaCommonInfo("", "Quý khách hàng kiểm tra và đối chiếu, nếu có thắc mắc vui lòng liên hệ số điện thoại trên."));
             doc.Add(FormatConfig.ParaCommonInfo("", "Chân thành cảm ơn sự hợp tác của quí khách."));
             doc.Add(FormatConfig.ParaCommonInfo("Ghi chú : ", String.Concat(Enumerable.Repeat("...", 96))));
@@ -256,6 +255,8 @@ namespace BaoHien.UI
                 table.AddCell(FormatConfig.TableCellBody(item.RecordCode, PdfPCell.ALIGN_LEFT));
                 table.AddCell(FormatConfig.TableCellBody(item.Amount, PdfPCell.ALIGN_RIGHT));
             }
+            table.AddCell(FormatConfig.TableCellBoldBody("Tổng", PdfPCell.ALIGN_RIGHT, 5));
+            table.AddCell(FormatConfig.TableCellBody(lbTotal.Text.Split(' ')[2], PdfPCell.ALIGN_RIGHT));
             return table;
         }
 
@@ -287,6 +288,8 @@ namespace BaoHien.UI
                     table.AddCell(FormatConfig.TableCellBody(item.Cost, PdfPCell.ALIGN_RIGHT));
                 }
             }
+            table.AddCell(FormatConfig.TableCellBoldBody("Tổng", PdfPCell.ALIGN_RIGHT, 6));
+            table.AddCell(FormatConfig.TableCellBody(lbTotal.Text.Split(' ')[2], PdfPCell.ALIGN_RIGHT));
             return table;
         }
 

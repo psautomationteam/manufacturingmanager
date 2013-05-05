@@ -15,6 +15,7 @@ using BaoHien.Model;
 using BaoHien.Common;
 using BaoHien.Services.ProductLogs;
 using BaoHien.Services.Employees;
+using BaoHien.Services.OrderDetails;
 
 namespace BaoHien.UI
 {
@@ -147,7 +148,7 @@ namespace BaoHien.UI
         {
             OrderSearchCriteria search = new OrderSearchCriteria
             {
-                Code = string.IsNullOrEmpty(txtCode.Text) ? txtCode.Text : "",
+                Code = string.IsNullOrEmpty(txtCode.Text) ? txtCode.Text.ToLower() : "",
                 CreatedBy = (cbmUsers.SelectedValue != null && cbmUsers.SelectedIndex != 0) ? (int?)cbmUsers.SelectedValue : (int?)null,
                 Customer = (cbmCustomers.SelectedValue != null && cbmCustomers.SelectedIndex != 0) ? (int?)cbmCustomers.SelectedValue : (int?)null,
                 From = dtpFrom.Value != null ? dtpFrom.Value : (DateTime?)null,
@@ -166,9 +167,11 @@ namespace BaoHien.UI
                 DataGridViewRow currentRow = dgwOrderList.Rows[e.RowIndex];
 
                 OrderService orderService = new OrderService();
-                //Product mu = (Product)dgv.DataBoundItem;
                 int id = ObjectHelper.GetValueFromAnonymousType<int>(currentRow.DataBoundItem, "Id");
                 Order order = orderService.GetOrder(id);
+
+                #region CustomerLog
+
                 CustomerLogService cls = new CustomerLogService();
                 CustomerLog newest = cls.GetNewestCustomerLog(order.CustId);
                 double beforeDebit = 0.0;
@@ -183,13 +186,27 @@ namespace BaoHien.UI
                     BeforeDebit = beforeDebit,
                     Amount = order.Total,
                     AfterDebit = beforeDebit - order.Total,
-                    CreatedDate = DateTime.Now
+                    CreatedDate = DateTime.Now,
+                    Status = BHConstant.DEACTIVE_STATUS
                 };
                 bool kq = cls.AddCustomerLog(cl);
 
+                List<CustomerLog> deactiveCustomerLog = cls.SelectCustomerLogByWhere(x => x.Status == BHConstant.ACTIVE_STATUS && x.RecordCode == order.OrderCode).ToList();
+                foreach (CustomerLog item in deactiveCustomerLog)
+                {
+                    item.Status = BHConstant.DEACTIVE_STATUS;
+                    cls.UpdateCustomerLog(item);
+                }
+
+                #endregion
+
+                #region ProductLog
+
                 double totalCommission = 0.0;
                 ProductLogService productLogService = new ProductLogService();
-                foreach (OrderDetail od in order.OrderDetails)
+                OrderDetailService orderDetailService = new OrderDetailService();
+                List<OrderDetail> details = orderDetailService.SelectOrderDetailByWhere(x => x.OrderId == order.Id).ToList();
+                foreach (OrderDetail od in details)
                 {
                     totalCommission += od.Commission;
                     ProductLog pl = productLogService.GetNewestProductUnitLog(od.ProductId, od.AttributeId, od.UnitId);
@@ -204,8 +221,19 @@ namespace BaoHien.UI
                         AfterNumber = pl.AfterNumber + od.NumberUnit,
                         CreatedDate = DateTime.Now
                     };
-                    bool ret = productLogService.AddProductLog(plg);
+                    productLogService.AddProductLog(plg);
                 }
+
+                List<ProductLog> deactiveProductLog = productLogService.SelectProductLogByWhere(x => x.RecordCode == order.OrderCode && x.Status == BHConstant.ACTIVE_STATUS).ToList();
+                foreach (ProductLog item in deactiveProductLog)
+                {
+                    item.Status = BHConstant.DEACTIVE_STATUS;
+                    productLogService.UpdateProductLog(item);
+                }
+
+                #endregion
+
+                #region EmployeeLog
 
                 int salerId = (int)order.Customer.SalerId;
                 if (salerId > 0)
@@ -219,10 +247,20 @@ namespace BaoHien.UI
                         BeforeNumber = el.AfterNumber,
                         Amount = totalCommission,
                         AfterNumber = el.AfterNumber - totalCommission,
-                        CreatedDate = DateTime.Now
+                        CreatedDate = DateTime.Now,
+                        Status = BHConstant.DEACTIVE_STATUS
                     };
                     kq = els.AddEmployeeLog(newel);
+
+                    List<EmployeeLog> deactiveEmployeeLog = els.SelectEmployeeLogByWhere(x => x.RecordCode == order.OrderCode && x.Status == BHConstant.ACTIVE_STATUS).ToList();
+                    foreach (EmployeeLog item in deactiveEmployeeLog)
+                    {
+                        item.Status = BHConstant.DEACTIVE_STATUS;
+                        els.UpdateEmployeeLog(item);
+                    }
                 }
+
+                #endregion
 
                 if (!orderService.DeleteOrder(id) && kq)
                 {

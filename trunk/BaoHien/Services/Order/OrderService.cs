@@ -14,15 +14,13 @@ namespace BaoHien.Services.Orders
         public Order GetOrder(System.Int32 id)
         {
             Order order = OnGetItem<Order>(id.ToString());
-
             return order;
         }
 
         public List<Order> GetOrders()
         {
             List<Order> orders = OnGetItems<Order>();
-
-            return orders;
+            return orders.OrderByDescending(x => x.CreatedDate).ToList();
         }
 
         public bool AddOrder(Order order)
@@ -42,7 +40,6 @@ namespace BaoHien.Services.Orders
 
         public List<Order> SelectOrderByWhere(Expression<Func<Order, bool>> func)
         {
-
             return SelectItemByWhere<Order>(func);
         }
 
@@ -61,7 +58,7 @@ namespace BaoHien.Services.Orders
                 }
                 if (productionRequestSearchCriteria.Code != "")
                 {
-                    orders = orders.Where(pr => pr.OrderCode.Contains(productionRequestSearchCriteria.Code)).ToList();
+                    orders = orders.Where(pr => pr.OrderCode.ToLower().Contains(productionRequestSearchCriteria.Code)).ToList();
                 }
                 if (productionRequestSearchCriteria.To.HasValue && productionRequestSearchCriteria.From.HasValue)
                 {

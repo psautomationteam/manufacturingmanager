@@ -15,14 +15,12 @@ namespace BaoHien.Services.Products
         public Product GetProduct(System.Int32 id)
         {
             Product product = OnGetItem<Product>(id.ToString());
-
             return product;
         }
 
         public List<Product> GetProducts()
         {
             List<Product> products = OnGetItems<Product>();
-
             return products;
         }
 
@@ -43,7 +41,6 @@ namespace BaoHien.Services.Products
 
         public List<Product> SelectProductByWhere(Expression<Func<Product, bool>> func)
         {
-
             return SelectItemByWhere<Product>(func);
         }
 
@@ -60,11 +57,11 @@ namespace BaoHien.Services.Products
             }
             if (productSearchCriteria.ProductCode != null)
             {
-                query = query.Where(p => p.ProductCode.Contains(productSearchCriteria.ProductCode));
+                query = query.Where(p => p.ProductCode.ToLower().Contains(productSearchCriteria.ProductCode));
             }
             if (productSearchCriteria.ProductName != null)
             {
-                query = query.Where(p => p.ProductName.Contains(productSearchCriteria.ProductName));
+                query = query.Where(p => p.ProductName.ToLower().Contains(productSearchCriteria.ProductName));
             }
             if (query != null)
                 return query.ToList();

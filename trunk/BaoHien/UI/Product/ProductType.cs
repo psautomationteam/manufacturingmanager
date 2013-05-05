@@ -106,17 +106,11 @@ namespace BaoHien.UI
 
         private void searchProductType()
         {
-            ProductTypeSearchCriteria producTypeSearchCriteria = new ProductTypeSearchCriteria();
-            if (txtCode.Text != null && txtCode.Text != "" && txtCode.Text != " ")
+            ProductTypeSearchCriteria producTypeSearchCriteria = new ProductTypeSearchCriteria
             {
-                producTypeSearchCriteria.ProductTypeCode = txtCode.Text;
-            }
-            if (txtName.Text != null && txtName.Text != "" && txtName.Text != " ")
-            {
-                producTypeSearchCriteria.ProductTypeName = txtName.Text;
-            }
-
-
+                ProductTypeCode = string.IsNullOrEmpty(txtCode.Text) ? "" : txtCode.Text.ToLower(),
+                ProductTypeName = string.IsNullOrEmpty(txtName.Text) ? "" : txtName.Text.ToLower()
+            };
 
             ProductTypeService producTypeService = new ProductTypeService();
             List<ProductType> productTypes = producTypeService.SearchingProductType(producTypeSearchCriteria);

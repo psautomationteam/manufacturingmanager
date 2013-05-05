@@ -163,14 +163,14 @@ namespace BaoHien.UI
         {
             CustomerSearchCriteria search = new CustomerSearchCriteria
             {
-                Code = string.IsNullOrEmpty(txtCode.Text) ? "" : txtCode.Text ,
-                Phone = string.IsNullOrEmpty(txtPhone.Text) ? "" : txtPhone.Text,
-                Name = string.IsNullOrEmpty(txtName.Text) ? "" : txtName.Text,
+                Code = string.IsNullOrEmpty(txtCode.Text) ? "" : txtCode.Text.ToLower() ,
+                Phone = string.IsNullOrEmpty(txtPhone.Text) ? "" : txtPhone.Text.ToLower(),
+                Name = string.IsNullOrEmpty(txtName.Text) ? "" : txtName.Text.ToLower(),
                 Saler = (cmbSaler.SelectedValue != null && (int)cmbSaler.SelectedValue > 0) ? (int?)cmbSaler.SelectedValue : (int?)null,
-                FavorProduct = string.IsNullOrEmpty(txtFavoriteProduct.Text) ? "" : txtFavoriteProduct.Text
+                FavorProduct = string.IsNullOrEmpty(txtFavoriteProduct.Text) ? "" : txtFavoriteProduct.Text.ToLower()
             };
             CustomerService service = new CustomerService();
-            List<Customer> customers = service.SearchingCustomer(search);
+            customers = service.SearchingCustomer(search);
             setUpDataGrid(customers);
         }
 

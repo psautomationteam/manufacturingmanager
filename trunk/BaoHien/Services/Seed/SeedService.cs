@@ -34,7 +34,6 @@ namespace BaoHien.Services.Seeds
 
         public List<SeedID> SelectSeedIDByWhere(Expression<Func<SeedID, bool>> func)
         {
-
             return SelectItemByWhere<SeedID>(func);
         }
     }
