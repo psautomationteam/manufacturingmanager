@@ -13,7 +13,7 @@ namespace BaoHien.Common
         private static Font headerFont()
         {
             BaseFont bfTimes = BaseFont.CreateFont(BHConstant.HEADER_FONT_PATH, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-            Font f = new Font(bfTimes, 15, Font.BOLD, iTextSharp.text.BaseColor.BLACK);
+            Font f = new Font(bfTimes, 20, Font.BOLD, iTextSharp.text.BaseColor.BLACK);
             return f;
         }
 

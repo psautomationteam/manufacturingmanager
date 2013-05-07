@@ -40,7 +40,7 @@
             this.dgvEmployeeList.Name = "dgvEmployeeList";
             this.dgvEmployeeList.ReadOnly = true;
             this.dgvEmployeeList.Size = new System.Drawing.Size(1016, 544);
-            this.dgvEmployeeList.TabIndex = 20;
+            this.dgvEmployeeList.TabIndex = 1;
             this.dgvEmployeeList.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvEmployeeList_CellClick);
             this.dgvEmployeeList.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvEmployeeList_CellDoubleClick);
             // 
@@ -49,7 +49,7 @@
             this.btnAdd.Location = new System.Drawing.Point(33, 22);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(107, 43);
-            this.btnAdd.TabIndex = 19;
+            this.btnAdd.TabIndex = 0;
             this.btnAdd.Text = "Thêm nhân viên mới";
             this.btnAdd.UseVisualStyleBackColor = true;
             this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);

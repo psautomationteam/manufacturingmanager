@@ -149,7 +149,8 @@ namespace BaoHien.Services.ProductLogs
                 });
 
                 List<ProductLog> tmp = logs.Where(x => x.Product.ProductType == type.Id && x.Status == BHConstant.ACTIVE_STATUS)
-                    .GroupBy(x => new { x.ProductId, x.AttributeId, x.UnitId }).Select(x => x.First()).ToList();
+                    .GroupBy(x => new { x.ProductId, x.AttributeId, x.UnitId }).Select(x => x.First())
+                    .OrderByDescending(x => x.BaseAttribute.Jampo).ToList();
                 index = 0;
                 foreach (ProductLog item in tmp)
                 {
@@ -157,6 +158,7 @@ namespace BaoHien.Services.ProductLogs
                     {
                         ProductCode = item.Product.ProductCode,
                         ProductName = item.Product.ProductName + " - " + item.BaseAttribute.AttributeName,
+                        Jampo = item.BaseAttribute.Jampo ? "Jampo" : "",
                         UnitName = item.MeasurementUnit.Name,
                         FirstNumber = item.BeforeNumber.ToString(),
                         Index = (++index).ToString()

@@ -65,7 +65,7 @@
             this.btnCancel.Location = new System.Drawing.Point(522, 387);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
-            this.btnCancel.TabIndex = 3;
+            this.btnCancel.TabIndex = 7;
             this.btnCancel.Text = "Hủy";
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
@@ -76,7 +76,7 @@
             this.btnAdd.Location = new System.Drawing.Point(619, 387);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(75, 23);
-            this.btnAdd.TabIndex = 2;
+            this.btnAdd.TabIndex = 6;
             this.btnAdd.Text = "Thêm";
             this.btnAdd.UseVisualStyleBackColor = true;
             this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
@@ -97,7 +97,7 @@
             this.dgvBaseAttributes.Location = new System.Drawing.Point(14, 20);
             this.dgvBaseAttributes.Name = "dgvBaseAttributes";
             this.dgvBaseAttributes.Size = new System.Drawing.Size(658, 143);
-            this.dgvBaseAttributes.TabIndex = 0;
+            this.dgvBaseAttributes.TabIndex = 5;
             // 
             // groupBox1
             // 
@@ -135,7 +135,7 @@
             this.txtDescription.Multiline = true;
             this.txtDescription.Name = "txtDescription";
             this.txtDescription.Size = new System.Drawing.Size(532, 92);
-            this.txtDescription.TabIndex = 6;
+            this.txtDescription.TabIndex = 4;
             // 
             // label7
             // 
@@ -169,7 +169,7 @@
             this.chkAuto.Location = new System.Drawing.Point(273, 50);
             this.chkAuto.Name = "chkAuto";
             this.chkAuto.Size = new System.Drawing.Size(86, 17);
-            this.chkAuto.TabIndex = 4;
+            this.chkAuto.TabIndex = 3;
             this.chkAuto.Text = "Sinh tự dộng";
             this.chkAuto.UseVisualStyleBackColor = true;
             this.chkAuto.CheckedChanged += new System.EventHandler(this.chkAuto_CheckedChanged);

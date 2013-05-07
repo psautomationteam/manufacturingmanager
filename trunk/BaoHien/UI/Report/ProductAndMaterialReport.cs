@@ -97,8 +97,9 @@ namespace BaoHien.UI
             dgwStockEntranceList.AutoGenerateColumns = false;
 
             dgwStockEntranceList.Columns.Add(Global.CreateCell("Index", "STT", 30));
-            dgwStockEntranceList.Columns.Add(Global.CreateCell("ProductCode", "Mã sản phẩm", 50));
+            dgwStockEntranceList.Columns.Add(Global.CreateCell("ProductCode", "Mã SP", 80));
             dgwStockEntranceList.Columns.Add(Global.CreateCell("ProductName", "Tên và qui cách", 200));
+            dgwStockEntranceList.Columns.Add(Global.CreateCell("Jampo", "Jampo", 50));
             dgwStockEntranceList.Columns.Add(Global.CreateCell("UnitName", "Đơn vị tính", 100));
             dgwStockEntranceList.Columns.Add(Global.CreateCellWithAlignment("FirstNumber", "Đầu kì", 100, DataGridViewContentAlignment.MiddleRight));
             dgwStockEntranceList.Columns.Add(Global.CreateCellWithAlignment("ImportNumber", "Nhập", 100, DataGridViewContentAlignment.MiddleRight));
@@ -314,7 +315,8 @@ namespace BaoHien.UI
         private void ExportFile()
         {
             Global.checkDirSaveFile();
-            var doc = new Document();
+            var doc = new Document(PageSize.A4, 20, 20, 10, 10);
+            
             PdfWriter docWriter = PdfWriter.GetInstance(doc, new FileStream(BHConstant.SAVE_IN_DIRECTORY + @"\Kho.pdf", FileMode.Create));
             PdfWriterEvents writerEvent;
 
@@ -343,10 +345,11 @@ namespace BaoHien.UI
 
         private PdfPTable ProductsTable()
         {
-            PdfPTable table = FormatConfig.Table(8, new float[] { 0.5f, 1.5f, 2.5f, 1f, 1f, 1f, 1f, 1f });
+            PdfPTable table = FormatConfig.Table(9, new float[] { 0.5f, 1.3f, 2.5f, 0.7f, 1f, 1f, 1f, 1f, 1f });
             table.AddCell(FormatConfig.TableCellHeader("STT"));
-            table.AddCell(FormatConfig.TableCellHeader("Mã sản phẩm"));
+            table.AddCell(FormatConfig.TableCellHeader("Mã SP"));            
             table.AddCell(FormatConfig.TableCellHeader("Tên và qui cách"));
+            table.AddCell(FormatConfig.TableCellHeader("Jampo"));
             table.AddCell(FormatConfig.TableCellHeader("ĐVT"));
             table.AddCell(FormatConfig.TableCellHeader("Đầu kì"));
             table.AddCell(FormatConfig.TableCellHeader("Nhập"));
@@ -357,13 +360,14 @@ namespace BaoHien.UI
             {
                 if (string.IsNullOrEmpty(item.Index))
                 {
-                    table.AddCell(FormatConfig.TableCellBoldBody(item.ProductName, PdfPCell.ALIGN_LEFT, 8));
+                    table.AddCell(FormatConfig.TableCellBoldBody(item.ProductName, PdfPCell.ALIGN_LEFT, 9));
                 }
                 else
                 {
                     table.AddCell(FormatConfig.TableCellBody(item.Index, PdfPCell.ALIGN_CENTER));
                     table.AddCell(FormatConfig.TableCellBody(item.ProductCode, PdfPCell.ALIGN_LEFT));
                     table.AddCell(FormatConfig.TableCellBody(item.ProductName, PdfPCell.ALIGN_LEFT));
+                    table.AddCell(FormatConfig.TableCellBody(item.Jampo, PdfPCell.ALIGN_LEFT));
                     table.AddCell(FormatConfig.TableCellBody(item.UnitName, PdfPCell.ALIGN_RIGHT));
                     table.AddCell(FormatConfig.TableCellBody(item.FirstNumber, PdfPCell.ALIGN_RIGHT));
                     table.AddCell(FormatConfig.TableCellBody(item.ImportNumber, PdfPCell.ALIGN_RIGHT));

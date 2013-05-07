@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.lbCustomerName = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
             this.dtpTo = new System.Windows.Forms.DateTimePicker();
             this.label2 = new System.Windows.Forms.Label();
             this.btnSearch = new System.Windows.Forms.Button();
@@ -40,8 +42,6 @@
             this.label3 = new System.Windows.Forms.Label();
             this.lbTotal = new System.Windows.Forms.Label();
             this.btnPrint = new System.Windows.Forms.Button();
-            this.label4 = new System.Windows.Forms.Label();
-            this.lbCustomerName = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgwStockEntranceList)).BeginInit();
             this.SuspendLayout();
@@ -64,13 +64,30 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Thông tin tạo báo cáo";
             // 
+            // lbCustomerName
+            // 
+            this.lbCustomerName.AutoSize = true;
+            this.lbCustomerName.Location = new System.Drawing.Point(802, 28);
+            this.lbCustomerName.Name = "lbCustomerName";
+            this.lbCustomerName.Size = new System.Drawing.Size(0, 13);
+            this.lbCustomerName.TabIndex = 12;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(707, 28);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(89, 13);
+            this.label4.TabIndex = 11;
+            this.label4.Text = "Tên khách hàng:";
+            // 
             // dtpTo
             // 
             this.dtpTo.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.dtpTo.Location = new System.Drawing.Point(304, 25);
             this.dtpTo.Name = "dtpTo";
             this.dtpTo.Size = new System.Drawing.Size(149, 20);
-            this.dtpTo.TabIndex = 10;
+            this.dtpTo.TabIndex = 1;
             // 
             // label2
             // 
@@ -86,7 +103,7 @@
             this.btnSearch.Location = new System.Drawing.Point(974, 22);
             this.btnSearch.Name = "btnSearch";
             this.btnSearch.Size = new System.Drawing.Size(73, 25);
-            this.btnSearch.TabIndex = 2;
+            this.btnSearch.TabIndex = 3;
             this.btnSearch.Text = "Báo Cáo";
             this.btnSearch.UseVisualStyleBackColor = true;
             this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
@@ -97,7 +114,7 @@
             this.cbmCustomers.Location = new System.Drawing.Point(546, 25);
             this.cbmCustomers.Name = "cbmCustomers";
             this.cbmCustomers.Size = new System.Drawing.Size(145, 21);
-            this.cbmCustomers.TabIndex = 1;
+            this.cbmCustomers.TabIndex = 2;
             this.cbmCustomers.SelectedIndexChanged += new System.EventHandler(this.cbmCustomers_SelectedIndexChanged);
             // 
             // label5
@@ -162,27 +179,10 @@
             this.btnPrint.Location = new System.Drawing.Point(954, 88);
             this.btnPrint.Name = "btnPrint";
             this.btnPrint.Size = new System.Drawing.Size(112, 25);
-            this.btnPrint.TabIndex = 24;
+            this.btnPrint.TabIndex = 4;
             this.btnPrint.Text = "In danh sách này";
             this.btnPrint.UseVisualStyleBackColor = true;
             this.btnPrint.Click += new System.EventHandler(this.btnPrint_Click);
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(707, 28);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(89, 13);
-            this.label4.TabIndex = 11;
-            this.label4.Text = "Tên khách hàng:";
-            // 
-            // lbCustomerName
-            // 
-            this.lbCustomerName.AutoSize = true;
-            this.lbCustomerName.Location = new System.Drawing.Point(802, 28);
-            this.lbCustomerName.Name = "lbCustomerName";
-            this.lbCustomerName.Size = new System.Drawing.Size(0, 13);
-            this.lbCustomerName.TabIndex = 12;
             // 
             // ArrearReport
             // 

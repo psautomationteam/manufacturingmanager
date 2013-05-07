@@ -199,7 +199,7 @@ namespace BaoHien.UI
         private void ExportFile()
         {
             Global.checkDirSaveFile();
-            var doc = new Document();
+            var doc = new Document(PageSize.A4, 20, 20, 10, 10);
             PdfWriter docWriter = PdfWriter.GetInstance(doc, new FileStream(BHConstant.SAVE_IN_DIRECTORY + @"\CongNo.pdf", FileMode.Create));
             PdfWriterEvents writerEvent;
 

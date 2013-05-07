@@ -51,7 +51,7 @@
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label5.ForeColor = System.Drawing.Color.Blue;
-            this.label5.Location = new System.Drawing.Point(2, 207);
+            this.label5.Location = new System.Drawing.Point(12, 187);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(210, 14);
             this.label5.TabIndex = 17;
@@ -59,9 +59,9 @@
             // 
             // btnAdd
             // 
-            this.btnAdd.Location = new System.Drawing.Point(331, 187);
+            this.btnAdd.Location = new System.Drawing.Point(276, 216);
             this.btnAdd.Name = "btnAdd";
-            this.btnAdd.Size = new System.Drawing.Size(99, 23);
+            this.btnAdd.Size = new System.Drawing.Size(72, 23);
             this.btnAdd.TabIndex = 5;
             this.btnAdd.Text = "Thêm";
             this.btnAdd.UseVisualStyleBackColor = true;
@@ -71,14 +71,14 @@
             // 
             this.txtCode.Location = new System.Drawing.Point(152, 49);
             this.txtCode.Name = "txtCode";
-            this.txtCode.Size = new System.Drawing.Size(178, 20);
+            this.txtCode.Size = new System.Drawing.Size(209, 20);
             this.txtCode.TabIndex = 1;
             // 
             // txtName
             // 
             this.txtName.Location = new System.Drawing.Point(152, 16);
             this.txtName.Name = "txtName";
-            this.txtName.Size = new System.Drawing.Size(278, 20);
+            this.txtName.Size = new System.Drawing.Size(209, 20);
             this.txtName.TabIndex = 0;
             // 
             // label3
@@ -113,7 +113,7 @@
             this.txtPass.Location = new System.Drawing.Point(152, 81);
             this.txtPass.Name = "txtPass";
             this.txtPass.PasswordChar = '*';
-            this.txtPass.Size = new System.Drawing.Size(178, 20);
+            this.txtPass.Size = new System.Drawing.Size(209, 20);
             this.txtPass.TabIndex = 2;
             // 
             // label4
@@ -134,7 +134,7 @@
             "Người Bán Hàng"});
             this.cbUserType.Location = new System.Drawing.Point(152, 151);
             this.cbUserType.Name = "cbUserType";
-            this.cbUserType.Size = new System.Drawing.Size(121, 21);
+            this.cbUserType.Size = new System.Drawing.Size(209, 21);
             this.cbUserType.TabIndex = 4;
             // 
             // lblErrorMessage
@@ -150,7 +150,7 @@
             this.txtConfirmPass.Location = new System.Drawing.Point(152, 116);
             this.txtConfirmPass.Name = "txtConfirmPass";
             this.txtConfirmPass.PasswordChar = '*';
-            this.txtConfirmPass.Size = new System.Drawing.Size(178, 20);
+            this.txtConfirmPass.Size = new System.Drawing.Size(209, 20);
             this.txtConfirmPass.TabIndex = 3;
             this.txtConfirmPass.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
@@ -166,7 +166,7 @@
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(240, 187);
+            this.btnCancel.Location = new System.Drawing.Point(184, 216);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 6;
@@ -184,7 +184,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(455, 234);
+            this.ClientSize = new System.Drawing.Size(378, 251);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.txtConfirmPass);
             this.Controls.Add(this.label6);

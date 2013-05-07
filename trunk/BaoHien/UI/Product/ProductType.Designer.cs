@@ -61,7 +61,7 @@
             this.btnSearch.Location = new System.Drawing.Point(967, 24);
             this.btnSearch.Name = "btnSearch";
             this.btnSearch.Size = new System.Drawing.Size(75, 23);
-            this.btnSearch.TabIndex = 4;
+            this.btnSearch.TabIndex = 2;
             this.btnSearch.Text = "Tìm";
             this.btnSearch.UseVisualStyleBackColor = true;
             this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
@@ -71,14 +71,14 @@
             this.txtName.Location = new System.Drawing.Point(621, 26);
             this.txtName.Name = "txtName";
             this.txtName.Size = new System.Drawing.Size(242, 20);
-            this.txtName.TabIndex = 3;
+            this.txtName.TabIndex = 1;
             // 
             // txtCode
             // 
             this.txtCode.Location = new System.Drawing.Point(139, 26);
             this.txtCode.Name = "txtCode";
             this.txtCode.Size = new System.Drawing.Size(297, 20);
-            this.txtCode.TabIndex = 1;
+            this.txtCode.TabIndex = 0;
             // 
             // label2
             // 
@@ -103,7 +103,7 @@
             this.btnAdd.Location = new System.Drawing.Point(979, 87);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(75, 43);
-            this.btnAdd.TabIndex = 1;
+            this.btnAdd.TabIndex = 3;
             this.btnAdd.Text = "Thêm loại sản phẩm";
             this.btnAdd.UseVisualStyleBackColor = true;
             this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
@@ -115,7 +115,7 @@
             this.dgvProductTypeList.Name = "dgvProductTypeList";
             this.dgvProductTypeList.ReadOnly = true;
             this.dgvProductTypeList.Size = new System.Drawing.Size(1052, 484);
-            this.dgvProductTypeList.TabIndex = 2;
+            this.dgvProductTypeList.TabIndex = 4;
             this.dgvProductTypeList.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvProductTypeList_CellClick);
             this.dgvProductTypeList.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvProductTypeList_CellDoubleClick);
             // 

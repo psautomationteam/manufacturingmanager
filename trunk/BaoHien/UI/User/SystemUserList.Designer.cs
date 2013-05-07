@@ -41,26 +41,26 @@
             this.dgvUserList.Name = "dgvUserList";
             this.dgvUserList.ReadOnly = true;
             this.dgvUserList.Size = new System.Drawing.Size(1012, 542);
-            this.dgvUserList.TabIndex = 17;
+            this.dgvUserList.TabIndex = 1;
             this.dgvUserList.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvUserList_CellClick);
             this.dgvUserList.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvUserList_CellDoubleClick);
             // 
             // btnAdd
             // 
-            this.btnAdd.Location = new System.Drawing.Point(169, 22);
+            this.btnAdd.Location = new System.Drawing.Point(47, 37);
             this.btnAdd.Name = "btnAdd";
-            this.btnAdd.Size = new System.Drawing.Size(107, 43);
-            this.btnAdd.TabIndex = 16;
+            this.btnAdd.Size = new System.Drawing.Size(123, 28);
+            this.btnAdd.TabIndex = 0;
             this.btnAdd.Text = "Thêm người dùng mới";
             this.btnAdd.UseVisualStyleBackColor = true;
             this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
             // 
             // btnDelete
             // 
-            this.btnDelete.Location = new System.Drawing.Point(49, 22);
+            this.btnDelete.Location = new System.Drawing.Point(185, 37);
             this.btnDelete.Name = "btnDelete";
-            this.btnDelete.Size = new System.Drawing.Size(104, 43);
-            this.btnDelete.TabIndex = 18;
+            this.btnDelete.Size = new System.Drawing.Size(160, 28);
+            this.btnDelete.TabIndex = 2;
             this.btnDelete.Text = "Tạm dừng người được chọn";
             this.btnDelete.UseVisualStyleBackColor = true;
             this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);

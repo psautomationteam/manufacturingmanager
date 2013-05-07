@@ -66,7 +66,7 @@
             this.cbProductTypes.Location = new System.Drawing.Point(566, 27);
             this.cbProductTypes.Name = "cbProductTypes";
             this.cbProductTypes.Size = new System.Drawing.Size(259, 21);
-            this.cbProductTypes.TabIndex = 2;
+            this.cbProductTypes.TabIndex = 1;
             // 
             // label5
             // 
@@ -82,7 +82,7 @@
             this.btnSearch.Location = new System.Drawing.Point(947, 28);
             this.btnSearch.Name = "btnSearch";
             this.btnSearch.Size = new System.Drawing.Size(75, 52);
-            this.btnSearch.TabIndex = 4;
+            this.btnSearch.TabIndex = 3;
             this.btnSearch.Text = "Tìm";
             this.btnSearch.UseVisualStyleBackColor = true;
             this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
@@ -92,7 +92,7 @@
             this.txtName.Location = new System.Drawing.Point(146, 64);
             this.txtName.Name = "txtName";
             this.txtName.Size = new System.Drawing.Size(259, 20);
-            this.txtName.TabIndex = 1;
+            this.txtName.TabIndex = 2;
             // 
             // txtCode
             // 
@@ -135,7 +135,7 @@
             this.dgvProductList.Name = "dgvProductList";
             this.dgvProductList.ReadOnly = true;
             this.dgvProductList.Size = new System.Drawing.Size(1039, 443);
-            this.dgvProductList.TabIndex = 8;
+            this.dgvProductList.TabIndex = 5;
             this.dgvProductList.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvProductList_CellClick);
             this.dgvProductList.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvProductList_CellDoubleClick);
             // 
@@ -144,7 +144,7 @@
             this.btnAdd.Location = new System.Drawing.Point(986, 123);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(75, 43);
-            this.btnAdd.TabIndex = 1;
+            this.btnAdd.TabIndex = 4;
             this.btnAdd.Text = "Thêm sản phẩm";
             this.btnAdd.UseVisualStyleBackColor = true;
             this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);

@@ -64,7 +64,7 @@ namespace BaoHien.Common
         public static PdfPTable Table(int column, float[] ratio)
         {
             PdfPTable table = new PdfPTable(column);
-            table.TotalWidth = 515f;
+            table.TotalWidth = 550f;
             table.LockedWidth = true;
             table.SetWidths(ratio);
             table.HorizontalAlignment = 1;

@@ -103,7 +103,7 @@
             this.txtFavoriteProduct.Location = new System.Drawing.Point(107, 229);
             this.txtFavoriteProduct.Name = "txtFavoriteProduct";
             this.txtFavoriteProduct.Size = new System.Drawing.Size(591, 20);
-            this.txtFavoriteProduct.TabIndex = 19;
+            this.txtFavoriteProduct.TabIndex = 10;
             // 
             // label15
             // 
@@ -201,7 +201,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(402, 81);
+            this.label5.Location = new System.Drawing.Point(402, 77);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(27, 13);
             this.label5.TabIndex = 9;
@@ -303,7 +303,7 @@
             this.txtContactPersonEmail.Location = new System.Drawing.Point(107, 59);
             this.txtContactPersonEmail.Name = "txtContactPersonEmail";
             this.txtContactPersonEmail.Size = new System.Drawing.Size(219, 20);
-            this.txtContactPersonEmail.TabIndex = 2;
+            this.txtContactPersonEmail.TabIndex = 13;
             // 
             // label13
             // 
@@ -319,7 +319,7 @@
             this.txtContactPersonPhone.Location = new System.Drawing.Point(444, 24);
             this.txtContactPersonPhone.Name = "txtContactPersonPhone";
             this.txtContactPersonPhone.Size = new System.Drawing.Size(254, 20);
-            this.txtContactPersonPhone.TabIndex = 1;
+            this.txtContactPersonPhone.TabIndex = 12;
             // 
             // label12
             // 
@@ -335,7 +335,7 @@
             this.txtContactPersonName.Location = new System.Drawing.Point(108, 27);
             this.txtContactPersonName.Name = "txtContactPersonName";
             this.txtContactPersonName.Size = new System.Drawing.Size(218, 20);
-            this.txtContactPersonName.TabIndex = 0;
+            this.txtContactPersonName.TabIndex = 11;
             // 
             // label11
             // 
@@ -363,7 +363,7 @@
             this.btnCancel.Location = new System.Drawing.Point(544, 399);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
-            this.btnCancel.TabIndex = 3;
+            this.btnCancel.TabIndex = 15;
             this.btnCancel.Text = "Hủy";
             this.btnCancel.UseVisualStyleBackColor = true;
             // 
@@ -373,7 +373,7 @@
             this.btnAdd.Location = new System.Drawing.Point(625, 399);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(75, 23);
-            this.btnAdd.TabIndex = 2;
+            this.btnAdd.TabIndex = 14;
             this.btnAdd.Text = "Thêm";
             this.btnAdd.UseVisualStyleBackColor = true;
             this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
