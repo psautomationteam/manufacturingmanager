@@ -59,7 +59,7 @@ namespace BaoHien.Common
         public const string INIT_USER_ID = "";
         public const string INIT_PW = "";
 
-        public const string CONTENT_FONT_PATH = @"C:\Windows\Fonts\CALIBRI.TTF";
+        public const string CONTENT_FONT_PATH = @"C:\Windows\Fonts\TIMES.TTF";
         public const string HEADER_FONT_PATH = @"C:\Windows\Fonts\CAMBRIAB.TTF";
     }
 }

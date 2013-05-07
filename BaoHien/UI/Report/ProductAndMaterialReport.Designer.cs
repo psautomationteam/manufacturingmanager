@@ -77,7 +77,7 @@
             this.cbmUnits.Location = new System.Drawing.Point(734, 65);
             this.cbmUnits.Name = "cbmUnits";
             this.cbmUnits.Size = new System.Drawing.Size(188, 21);
-            this.cbmUnits.TabIndex = 20;
+            this.cbmUnits.TabIndex = 5;
             // 
             // label6
             // 
@@ -94,7 +94,7 @@
             this.cbmAttrs.Location = new System.Drawing.Point(425, 65);
             this.cbmAttrs.Name = "cbmAttrs";
             this.cbmAttrs.Size = new System.Drawing.Size(188, 21);
-            this.cbmAttrs.TabIndex = 18;
+            this.cbmAttrs.TabIndex = 4;
             this.cbmAttrs.SelectedIndexChanged += new System.EventHandler(this.cbmAttrs_SelectedIndexChanged);
             // 
             // label4
@@ -112,7 +112,7 @@
             this.cbmProductTypes.Location = new System.Drawing.Point(734, 26);
             this.cbmProductTypes.Name = "cbmProductTypes";
             this.cbmProductTypes.Size = new System.Drawing.Size(188, 21);
-            this.cbmProductTypes.TabIndex = 16;
+            this.cbmProductTypes.TabIndex = 2;
             this.cbmProductTypes.SelectedIndexChanged += new System.EventHandler(this.cbmProductTypes_SelectedIndexChanged);
             // 
             // label3
@@ -130,7 +130,7 @@
             this.dtpTo.Location = new System.Drawing.Point(425, 27);
             this.dtpTo.Name = "dtpTo";
             this.dtpTo.Size = new System.Drawing.Size(188, 20);
-            this.dtpTo.TabIndex = 14;
+            this.dtpTo.TabIndex = 1;
             // 
             // label2
             // 
@@ -147,7 +147,7 @@
             this.dtpFrom.Location = new System.Drawing.Point(104, 27);
             this.dtpFrom.Name = "dtpFrom";
             this.dtpFrom.Size = new System.Drawing.Size(188, 20);
-            this.dtpFrom.TabIndex = 11;
+            this.dtpFrom.TabIndex = 0;
             // 
             // label1
             // 
@@ -163,7 +163,7 @@
             this.btnSearch.Location = new System.Drawing.Point(962, 26);
             this.btnSearch.Name = "btnSearch";
             this.btnSearch.Size = new System.Drawing.Size(71, 60);
-            this.btnSearch.TabIndex = 1;
+            this.btnSearch.TabIndex = 6;
             this.btnSearch.Text = "Báo Cáo";
             this.btnSearch.UseVisualStyleBackColor = true;
             this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
@@ -174,7 +174,7 @@
             this.cbmProducts.Location = new System.Drawing.Point(104, 65);
             this.cbmProducts.Name = "cbmProducts";
             this.cbmProducts.Size = new System.Drawing.Size(188, 21);
-            this.cbmProducts.TabIndex = 9;
+            this.cbmProducts.TabIndex = 3;
             this.cbmProducts.SelectedIndexChanged += new System.EventHandler(this.cbmProducts_SelectedIndexChanged);
             // 
             // label5
@@ -211,7 +211,7 @@
             this.btnPrint.Location = new System.Drawing.Point(932, 136);
             this.btnPrint.Name = "btnPrint";
             this.btnPrint.Size = new System.Drawing.Size(120, 23);
-            this.btnPrint.TabIndex = 22;
+            this.btnPrint.TabIndex = 7;
             this.btnPrint.Text = "In danh sách này";
             this.btnPrint.UseVisualStyleBackColor = true;
             this.btnPrint.Click += new System.EventHandler(this.btnPrint_Click);

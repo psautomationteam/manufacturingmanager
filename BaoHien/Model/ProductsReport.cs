@@ -27,6 +27,13 @@ namespace BaoHien.Model
             get { return productName; }
             set { productName = value; }
         }
+        
+        string jampo;
+        public string Jampo
+        {
+            get { return jampo; }
+            set { jampo = value; }
+        }
 
         string unitName;
         public string UnitName

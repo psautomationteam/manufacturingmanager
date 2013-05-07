@@ -40,7 +40,7 @@
             this.dgvProductAttributeList.Name = "dgvProductAttributeList";
             this.dgvProductAttributeList.ReadOnly = true;
             this.dgvProductAttributeList.Size = new System.Drawing.Size(1030, 545);
-            this.dgvProductAttributeList.TabIndex = 17;
+            this.dgvProductAttributeList.TabIndex = 1;
             this.dgvProductAttributeList.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvProductAttributeList_CellClick);
             this.dgvProductAttributeList.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvProductAttributeList_CellDoubleClick);
             this.dgvProductAttributeList.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dgvProductAttributeList_CellFormatting);
@@ -50,7 +50,7 @@
             this.btnAdd.Location = new System.Drawing.Point(23, 18);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(75, 43);
-            this.btnAdd.TabIndex = 16;
+            this.btnAdd.TabIndex = 0;
             this.btnAdd.Text = "Thêm Quy cách mới";
             this.btnAdd.UseVisualStyleBackColor = true;
             this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);

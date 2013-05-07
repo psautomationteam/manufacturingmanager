@@ -40,6 +40,7 @@
             this.lbTotal = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.btnPrint = new System.Windows.Forms.Button();
+            this.btnExportExcel = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgwEmployeeCommissionList)).BeginInit();
             this.SuspendLayout();
@@ -50,7 +51,7 @@
             this.dtpTo.Location = new System.Drawing.Point(345, 24);
             this.dtpTo.Name = "dtpTo";
             this.dtpTo.Size = new System.Drawing.Size(149, 20);
-            this.dtpTo.TabIndex = 10;
+            this.dtpTo.TabIndex = 1;
             // 
             // groupBox1
             // 
@@ -82,7 +83,7 @@
             this.btnSearch.Location = new System.Drawing.Point(939, 21);
             this.btnSearch.Name = "btnSearch";
             this.btnSearch.Size = new System.Drawing.Size(73, 25);
-            this.btnSearch.TabIndex = 2;
+            this.btnSearch.TabIndex = 3;
             this.btnSearch.Text = "Báo Cáo";
             this.btnSearch.UseVisualStyleBackColor = true;
             this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
@@ -93,7 +94,7 @@
             this.cbmEmployees.Location = new System.Drawing.Point(643, 24);
             this.cbmEmployees.Name = "cbmEmployees";
             this.cbmEmployees.Size = new System.Drawing.Size(208, 21);
-            this.cbmEmployees.TabIndex = 1;
+            this.cbmEmployees.TabIndex = 2;
             this.cbmEmployees.SelectedIndexChanged += new System.EventHandler(this.cbmEmployees_SelectedIndexChanged);
             // 
             // label5
@@ -129,7 +130,7 @@
             this.dgwEmployeeCommissionList.Name = "dgwEmployeeCommissionList";
             this.dgwEmployeeCommissionList.ReadOnly = true;
             this.dgwEmployeeCommissionList.Size = new System.Drawing.Size(1053, 498);
-            this.dgwEmployeeCommissionList.TabIndex = 24;
+            this.dgwEmployeeCommissionList.TabIndex = 6;
             this.dgwEmployeeCommissionList.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgwEmployeeCommissionList_CellDoubleClick);
             // 
             // lbTotal
@@ -158,15 +159,27 @@
             this.btnPrint.Location = new System.Drawing.Point(938, 88);
             this.btnPrint.Name = "btnPrint";
             this.btnPrint.Size = new System.Drawing.Size(106, 25);
-            this.btnPrint.TabIndex = 27;
+            this.btnPrint.TabIndex = 4;
             this.btnPrint.Text = "In danh sách này";
             this.btnPrint.UseVisualStyleBackColor = true;
             this.btnPrint.Click += new System.EventHandler(this.btnPrint_Click);
+            // 
+            // btnExportExcel
+            // 
+            this.btnExportExcel.Location = new System.Drawing.Point(785, 88);
+            this.btnExportExcel.Name = "btnExportExcel";
+            this.btnExportExcel.Size = new System.Drawing.Size(134, 25);
+            this.btnExportExcel.TabIndex = 5;
+            this.btnExportExcel.Text = "Xuất danh sách ra Excel";
+            this.btnExportExcel.UseVisualStyleBackColor = true;
+            this.btnExportExcel.Visible = false;
+            this.btnExportExcel.Click += new System.EventHandler(this.btnExportExcel_Click);
             // 
             // CommissionReport
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.btnExportExcel);
             this.Controls.Add(this.btnPrint);
             this.Controls.Add(this.lbTotal);
             this.Controls.Add(this.label3);
@@ -196,5 +209,6 @@
         private System.Windows.Forms.Label lbTotal;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button btnPrint;
+        private System.Windows.Forms.Button btnExportExcel;
     }
 }

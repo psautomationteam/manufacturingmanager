@@ -158,7 +158,7 @@
             this.dgwStockEntranceList.Name = "dgwStockEntranceList";
             this.dgwStockEntranceList.ReadOnly = true;
             this.dgwStockEntranceList.Size = new System.Drawing.Size(1041, 464);
-            this.dgwStockEntranceList.TabIndex = 16;
+            this.dgwStockEntranceList.TabIndex = 5;
             this.dgwStockEntranceList.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgwStockEntranceList_CellClick);
             this.dgwStockEntranceList.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgwStockEntranceList_CellDoubleClick);
             // 

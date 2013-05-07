@@ -40,7 +40,7 @@
             this.dgvBaseUnitList.Name = "dgvBaseUnitList";
             this.dgvBaseUnitList.ReadOnly = true;
             this.dgvBaseUnitList.Size = new System.Drawing.Size(1007, 541);
-            this.dgvBaseUnitList.TabIndex = 14;
+            this.dgvBaseUnitList.TabIndex = 1;
             this.dgvBaseUnitList.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvBaseUnitList_CellClick);
             this.dgvBaseUnitList.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvBaseUnitList_CellDoubleClick);
             // 
@@ -49,7 +49,7 @@
             this.btnAdd.Location = new System.Drawing.Point(44, 23);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(75, 43);
-            this.btnAdd.TabIndex = 13;
+            this.btnAdd.TabIndex = 0;
             this.btnAdd.Text = "Thêm đơn vị mới";
             this.btnAdd.UseVisualStyleBackColor = true;
             this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);

@@ -68,7 +68,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(73, 131);
+            this.label10.Location = new System.Drawing.Point(73, 127);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(58, 13);
             this.label10.TabIndex = 21;
@@ -133,7 +133,7 @@
             // 
             // txtAddress
             // 
-            this.txtAddress.Location = new System.Drawing.Point(146, 152);
+            this.txtAddress.Location = new System.Drawing.Point(146, 155);
             this.txtAddress.Name = "txtAddress";
             this.txtAddress.Size = new System.Drawing.Size(528, 20);
             this.txtAddress.TabIndex = 7;
@@ -141,7 +141,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(88, 159);
+            this.label7.Location = new System.Drawing.Point(88, 158);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(43, 13);
             this.label7.TabIndex = 12;
@@ -149,7 +149,7 @@
             // 
             // txtEmail
             // 
-            this.txtEmail.Location = new System.Drawing.Point(490, 97);
+            this.txtEmail.Location = new System.Drawing.Point(490, 93);
             this.txtEmail.Name = "txtEmail";
             this.validator1.SetRegularExpression(this.txtEmail, "^([\\w\\-\\.]+)@((\\[([0-9]{1,3}\\.){3}[0-9]{1,3}\\])|(([\\w\\-]+\\.)+)([a-zA-Z]{2,4}))$");
             this.txtEmail.Size = new System.Drawing.Size(184, 20);
@@ -159,7 +159,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(448, 100);
+            this.label6.Location = new System.Drawing.Point(444, 96);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(35, 13);
             this.label6.TabIndex = 10;
@@ -186,7 +186,7 @@
             // 
             // txtMobilePhone
             // 
-            this.txtMobilePhone.Location = new System.Drawing.Point(146, 97);
+            this.txtMobilePhone.Location = new System.Drawing.Point(146, 93);
             this.txtMobilePhone.Name = "txtMobilePhone";
             this.validator1.SetRegularExpression(this.txtMobilePhone, "[0-9]");
             this.txtMobilePhone.Size = new System.Drawing.Size(196, 20);
@@ -196,7 +196,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(58, 105);
+            this.label4.Location = new System.Drawing.Point(58, 96);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(73, 13);
             this.label4.TabIndex = 6;
@@ -262,7 +262,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(691, 352);
+            this.ClientSize = new System.Drawing.Size(691, 339);
             this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.lblErrorMessage);

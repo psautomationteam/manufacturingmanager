@@ -52,7 +52,7 @@
             this.txtNote.Multiline = true;
             this.txtNote.Name = "txtNote";
             this.txtNote.Size = new System.Drawing.Size(479, 57);
-            this.txtNote.TabIndex = 3;
+            this.txtNote.TabIndex = 4;
             // 
             // label8
             // 
@@ -69,7 +69,7 @@
             this.txtCreatedDate.Location = new System.Drawing.Point(92, 70);
             this.txtCreatedDate.Name = "txtCreatedDate";
             this.txtCreatedDate.Size = new System.Drawing.Size(151, 20);
-            this.txtCreatedDate.TabIndex = 2;
+            this.txtCreatedDate.TabIndex = 3;
             // 
             // label7
             // 
@@ -86,7 +86,7 @@
             this.cbxCustomer.Location = new System.Drawing.Point(370, 11);
             this.cbxCustomer.Name = "cbxCustomer";
             this.cbxCustomer.Size = new System.Drawing.Size(201, 21);
-            this.cbxCustomer.TabIndex = 0;
+            this.cbxCustomer.TabIndex = 1;
             this.validator1.SetType(this.cbxCustomer, Itboy.Components.ValidationType.Required);
             this.cbxCustomer.SelectedIndexChanged += new System.EventHandler(this.cbxCustomer_SelectedIndexChanged);
             // 
@@ -105,7 +105,7 @@
             this.txtOrderCode.Location = new System.Drawing.Point(92, 13);
             this.txtOrderCode.Name = "txtOrderCode";
             this.txtOrderCode.Size = new System.Drawing.Size(151, 20);
-            this.txtOrderCode.TabIndex = 15;
+            this.txtOrderCode.TabIndex = 0;
             // 
             // label1
             // 
@@ -130,7 +130,7 @@
             this.btnSave.Location = new System.Drawing.Point(497, 168);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
-            this.btnSave.TabIndex = 4;
+            this.btnSave.TabIndex = 5;
             this.btnSave.Text = "Lưu";
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
@@ -141,7 +141,7 @@
             this.btnCancel.Location = new System.Drawing.Point(396, 169);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
-            this.btnCancel.TabIndex = 5;
+            this.btnCancel.TabIndex = 6;
             this.btnCancel.Text = "Hủy";
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
@@ -158,7 +158,7 @@
             this.txtAmount.Name = "txtAmount";
             this.txtAmount.PreFix = "(VND) ";
             this.txtAmount.Size = new System.Drawing.Size(151, 20);
-            this.txtAmount.TabIndex = 23;
+            this.txtAmount.TabIndex = 2;
             this.txtAmount.ThousandsSeparator = '.';
             this.txtAmount.WorkingText = null;
             // 

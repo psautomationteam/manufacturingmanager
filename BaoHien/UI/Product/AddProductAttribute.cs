@@ -16,6 +16,7 @@ namespace BaoHien.UI
     public partial class AddProductAttribute : BaseForm
     {
         BaseAttribute baseAttribute;
+
         public AddProductAttribute()
         {
             InitializeComponent();
@@ -35,6 +36,7 @@ namespace BaoHien.UI
                     baseAttribute.Description = txtDescription.Text;
                     baseAttribute.AttributeName = txtName.Text;
                     baseAttribute.AttributeCode = txtCode.Text;
+                    baseAttribute.Jampo = ckbJambo.Checked;
 
                     BaseAttributeService baseAttributeService = new BaseAttributeService();
                     bool result = baseAttributeService.UpdateBaseAttribute(baseAttribute);
@@ -53,10 +55,10 @@ namespace BaoHien.UI
                 {
                     baseAttribute = new BaseAttribute
                     {
-
                         AttributeName = txtName.Text,
                         Description = txtDescription.Text,
-                        AttributeCode = txtCode.Text
+                        AttributeCode = txtCode.Text,
+                        Jampo = ckbJambo.Checked
                     };
                     BaseAttributeService baseAttributeService = new BaseAttributeService();
                     bool result = baseAttributeService.AddBaseAttribute(baseAttribute);
@@ -73,19 +75,20 @@ namespace BaoHien.UI
                 }
             }
         }
+
         public void loadDataForEditProductAttribute(int productAttributeId)
         {
             this.Text = "Chỉnh sửa quy cách này";
             this.btnSave.Text = "Cập nhật";
 
             BaseAttributeService baseAttributeService = new BaseAttributeService();
-
             baseAttribute = baseAttributeService.GetBaseAttribute(productAttributeId);
             if (baseAttribute != null)
             {
                 txtDescription.Text = baseAttribute.Description;
                 txtCode.Text = baseAttribute.AttributeCode;
                 txtName.Text = baseAttribute.AttributeName;
+                ckbJambo.Checked = baseAttribute.Jampo;
             }
         }
     }

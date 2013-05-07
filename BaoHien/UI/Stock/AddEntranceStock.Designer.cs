@@ -75,16 +75,16 @@
             // 
             // txtDate
             // 
-            this.txtDate.Location = new System.Drawing.Point(605, 18);
+            this.txtDate.Location = new System.Drawing.Point(585, 18);
             this.txtDate.Name = "txtDate";
-            this.txtDate.Size = new System.Drawing.Size(100, 20);
+            this.txtDate.Size = new System.Drawing.Size(120, 20);
             this.txtDate.TabIndex = 2;
             // 
             // txtUser
             // 
-            this.txtUser.Location = new System.Drawing.Point(368, 19);
+            this.txtUser.Location = new System.Drawing.Point(336, 19);
             this.txtUser.Name = "txtUser";
-            this.txtUser.Size = new System.Drawing.Size(158, 20);
+            this.txtUser.Size = new System.Drawing.Size(170, 20);
             this.txtUser.TabIndex = 1;
             // 
             // txtCode
@@ -107,7 +107,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(564, 22);
+            this.label3.Location = new System.Drawing.Point(544, 21);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(35, 13);
             this.label3.TabIndex = 2;
@@ -116,7 +116,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(317, 21);
+            this.label2.Location = new System.Drawing.Point(285, 21);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(45, 13);
             this.label2.TabIndex = 1;
@@ -136,7 +136,7 @@
             this.btnSave.Location = new System.Drawing.Point(646, 414);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
-            this.btnSave.TabIndex = 2;
+            this.btnSave.TabIndex = 5;
             this.btnSave.Text = "Lưu";
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
@@ -147,7 +147,7 @@
             this.dgvStockEntranceDetails.Location = new System.Drawing.Point(6, 19);
             this.dgvStockEntranceDetails.Name = "dgvStockEntranceDetails";
             this.dgvStockEntranceDetails.Size = new System.Drawing.Size(713, 294);
-            this.dgvStockEntranceDetails.TabIndex = 0;
+            this.dgvStockEntranceDetails.TabIndex = 4;
             this.dgvStockEntranceDetails.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvStockEntranceDetails_CellEndEdit);
             this.dgvStockEntranceDetails.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dgvStockEntranceDetails_DataError);
             this.dgvStockEntranceDetails.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.dgvStockEntranceDetails_EditingControlShowing);
@@ -168,7 +168,7 @@
             this.btnDelete.Location = new System.Drawing.Point(558, 414);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(75, 23);
-            this.btnDelete.TabIndex = 3;
+            this.btnDelete.TabIndex = 6;
             this.btnDelete.Text = "Hủy";
             this.btnDelete.UseVisualStyleBackColor = true;
             this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
@@ -182,7 +182,7 @@
             this.btnCreateSP.Location = new System.Drawing.Point(16, 414);
             this.btnCreateSP.Name = "btnCreateSP";
             this.btnCreateSP.Size = new System.Drawing.Size(116, 23);
-            this.btnCreateSP.TabIndex = 15;
+            this.btnCreateSP.TabIndex = 7;
             this.btnCreateSP.Text = "Tạo sản phẩm";
             this.btnCreateSP.UseVisualStyleBackColor = true;
             this.btnCreateSP.Click += new System.EventHandler(this.btnCreateSP_Click);

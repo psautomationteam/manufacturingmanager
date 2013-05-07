@@ -63,6 +63,7 @@ namespace BaoHien.UI
 
         void LoadReport()
         {
+            btnExportExcel.Visible = false;
             modeReport = 0;
             lbTotal.Text = "(VND) 0";
             if (cbmEmployees.SelectedValue != null)
@@ -80,6 +81,7 @@ namespace BaoHien.UI
                 else
                 {
                     modeReport = 1;
+                    btnExportExcel.Visible = true;
                     textForPrint = "Từ ngày " + dtpFrom.Value.ToString(BHConstant.DATE_FORMAT) + " đến ngày " + dtpTo.Value.ToString(BHConstant.DATE_FORMAT); 
                     textEmployee = ((Employee)cbmEmployees.SelectedItem).FullName;
                     double total = 0.0;
@@ -163,7 +165,7 @@ namespace BaoHien.UI
         private void ExportFile()
         {
             Global.checkDirSaveFile();
-            var doc = new Document();
+            var doc = new Document(PageSize.A4, 20, 20, 10, 10);
             PdfWriter docWriter = PdfWriter.GetInstance(doc, new FileStream(BHConstant.SAVE_IN_DIRECTORY + @"\HHong.pdf", FileMode.Create));
             PdfWriterEvents writerEvent;
 
@@ -278,6 +280,23 @@ namespace BaoHien.UI
                 MessageBox.Show("Không thể kết nối máy in!");
             }
             this.Cursor = Cursors.Default;
+        }
+
+        private void btnExportExcel_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.Title = "Chọn đường dẫn lưu file ...";
+            sfd.DefaultExt = "xls";
+            sfd.Filter = "Excel 2007 (.xlsx)|.xlsx";
+            if (sfd.ShowDialog() == DialogResult.OK)
+            {
+                string filepath = sfd.FileName;
+                bool result = Global.ExportDataGridViewToXLS(filepath, dgwEmployeeCommissionList);
+                if (result)
+                    MessageBox.Show("Đã lưu thành công!", "Thông tin", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                else
+                    MessageBox.Show("Hệ thống có lỗi, chưa lưu được!", "Thông tin", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

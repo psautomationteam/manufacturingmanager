@@ -44,7 +44,7 @@
             this.btnCancel.Location = new System.Drawing.Point(777, 496);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(82, 28);
-            this.btnCancel.TabIndex = 4;
+            this.btnCancel.TabIndex = 3;
             this.btnCancel.Text = "Hủy";
             this.btnCancel.UseVisualStyleBackColor = true;
             // 
@@ -54,7 +54,7 @@
             this.btnOK.Location = new System.Drawing.Point(689, 496);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(82, 28);
-            this.btnOK.TabIndex = 3;
+            this.btnOK.TabIndex = 2;
             this.btnOK.Text = "Chấp nhận";
             this.btnOK.UseVisualStyleBackColor = true;
             this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
@@ -90,7 +90,7 @@
             this.txtXKNumber.Location = new System.Drawing.Point(179, 501);
             this.txtXKNumber.Name = "txtXKNumber";
             this.txtXKNumber.Size = new System.Drawing.Size(86, 20);
-            this.txtXKNumber.TabIndex = 1;
+            this.txtXKNumber.TabIndex = 0;
             this.txtXKNumber.Text = "0";
             this.txtXKNumber.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
@@ -99,7 +99,7 @@
             this.txtBHNumber.Location = new System.Drawing.Point(506, 501);
             this.txtBHNumber.Name = "txtBHNumber";
             this.txtBHNumber.Size = new System.Drawing.Size(86, 20);
-            this.txtBHNumber.TabIndex = 2;
+            this.txtBHNumber.TabIndex = 1;
             this.txtBHNumber.Text = "0";
             this.txtBHNumber.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 

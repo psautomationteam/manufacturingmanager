@@ -171,13 +171,21 @@ namespace BaoHien.UI
                             BeforeDebit = beforeDebit,
                             Amount = bill.Amount,
                             AfterDebit = beforeDebit + bill.Amount,
-                            CreatedDate = DateTime.Now
+                            CreatedDate = DateTime.Now,
+                            Status = BHConstant.DEACTIVE_STATUS
                         };
                         bool kq = cls.AddCustomerLog(cl);
+
+                        List<CustomerLog> deactiveCustomerLog = cls.SelectCustomerLogByWhere(x => x.Status == BHConstant.ACTIVE_STATUS && x.RecordCode == bill.BillCode).ToList();
+                        foreach (CustomerLog item in deactiveCustomerLog)
+                        {
+                            item.Status = BHConstant.DEACTIVE_STATUS;
+                            cls.UpdateCustomerLog(item);
+                        }
+
                         if (!billService.DeleteBill(id) && kq)
                         {
                             MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
-
                         }
                         loadBillList();
                     }

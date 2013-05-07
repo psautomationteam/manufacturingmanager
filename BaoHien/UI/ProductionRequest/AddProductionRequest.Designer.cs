@@ -151,7 +151,7 @@
             this.dgvMaterial.Location = new System.Drawing.Point(6, 19);
             this.dgvMaterial.Name = "dgvMaterial";
             this.dgvMaterial.Size = new System.Drawing.Size(431, 294);
-            this.dgvMaterial.TabIndex = 0;
+            this.dgvMaterial.TabIndex = 4;
             this.dgvMaterial.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvMaterial_CellEndEdit);
             this.dgvMaterial.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.dgvMaterial_CellValidating);
             this.dgvMaterial.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dgvMaterial_DataError);
@@ -173,7 +173,7 @@
             this.dgvProduct.Location = new System.Drawing.Point(6, 19);
             this.dgvProduct.Name = "dgvProduct";
             this.dgvProduct.Size = new System.Drawing.Size(463, 294);
-            this.dgvProduct.TabIndex = 0;
+            this.dgvProduct.TabIndex = 5;
             this.dgvProduct.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvProduct_CellEndEdit);
             this.dgvProduct.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvProduct_CellEnter);
             this.dgvProduct.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.dgvProduct_CellValidating);
@@ -185,7 +185,7 @@
             this.btnSave.Location = new System.Drawing.Point(862, 424);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
-            this.btnSave.TabIndex = 3;
+            this.btnSave.TabIndex = 6;
             this.btnSave.Text = "Lưu";
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
@@ -196,7 +196,7 @@
             this.btnDelete.Location = new System.Drawing.Point(777, 425);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(75, 23);
-            this.btnDelete.TabIndex = 4;
+            this.btnDelete.TabIndex = 7;
             this.btnDelete.Text = "Hủy";
             this.btnDelete.UseVisualStyleBackColor = true;
             // 
@@ -209,7 +209,7 @@
             this.btnCreateNK.Location = new System.Drawing.Point(12, 423);
             this.btnCreateNK.Name = "btnCreateNK";
             this.btnCreateNK.Size = new System.Drawing.Size(116, 23);
-            this.btnCreateNK.TabIndex = 14;
+            this.btnCreateNK.TabIndex = 8;
             this.btnCreateNK.Text = "Tạo phiếu nhập kho";
             this.btnCreateNK.UseVisualStyleBackColor = true;
             this.btnCreateNK.Click += new System.EventHandler(this.btnCreateNK_Click);

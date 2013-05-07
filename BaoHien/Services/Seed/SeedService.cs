@@ -14,7 +14,8 @@ namespace BaoHien.Services.Seeds
     {
         public string AddSeedID(string prefix)
         {
-            SeedID seed = SelectSeedIDByWhere(x => x.Prefix == prefix && x.CreateDate.Date == DateTime.Now.Date).FirstOrDefault();
+            SeedID seed = SelectSeedIDByWhere(x => x.Prefix == prefix && x.CreateDate.Date == DateTime.Now.Date)
+                .OrderByDescending(x => x.ID).FirstOrDefault();
             SeedID newseed = new SeedID
             {
                 CreateDate = DateTime.Now,
