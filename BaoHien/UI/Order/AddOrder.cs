@@ -102,6 +102,35 @@ namespace BaoHien.UI
                         #region Update Order Detail
 
                         OrderDetailService orderDetailService = new OrderDetailService();
+                        List<OrderDetailEntity> rev_details = old_orderDetails.Where(x => !orderDetails.Select(y => y.ProductId.ToString() + '_' +
+                            y.AttributeId.ToString() + '_' + y.UnitId.ToString()).Contains(x.ProductId.ToString() + '_' +
+                            x.AttributeId.ToString() + '_' + x.UnitId.ToString())).ToList();
+                        foreach(OrderDetailEntity item in rev_details)
+                        {
+                            ProductLog pl = productLogService.GetNewestProductUnitLog(item.ProductId, item.AttributeId, item.UnitId);
+                            ProductLog plg = new ProductLog
+                            {
+                                AttributeId = item.AttributeId,
+                                ProductId = item.ProductId,
+                                UnitId = item.UnitId,
+                                RecordCode = order.OrderCode,
+                                BeforeNumber = pl.AfterNumber,
+                                Amount = Math.Abs(item.NumberUnit),
+                                AfterNumber = pl.AfterNumber + item.NumberUnit,
+                                CreatedDate = createdDate,
+                                Status = BHConstant.DEACTIVE_STATUS
+                            };
+                            productLogService.AddProductLog(plg);
+
+                            List<ProductLog> deactiveProductLog = productLogService.SelectProductLogByWhere(x => x.RecordCode == order.OrderCode
+                                && x.Status == BHConstant.ACTIVE_STATUS && x.ProductId == item.ProductId && x.AttributeId == item.AttributeId
+                                && x.UnitId == item.UnitId).ToList();
+                            foreach (ProductLog i in deactiveProductLog)
+                            {
+                                i.Status = BHConstant.DEACTIVE_STATUS;
+                                productLogService.UpdateProductLog(i);
+                            }
+                        }
                         foreach (OrderDetail od in orderDetails)
                         {
                             if (od.ProductId > 0 && od.AttributeId > 0 && od.UnitId > 0)
