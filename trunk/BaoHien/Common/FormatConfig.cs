@@ -19,7 +19,7 @@ namespace BaoHien.Common
         public static Paragraph ParaRightBeforeHeader(string content)
         {
             Paragraph msp = new Paragraph(content, FontConfig.SmallItalicFont);
-            msp.IndentationLeft = 350;
+            msp.IndentationLeft = 400;
             msp.Alignment = Element.ALIGN_LEFT;
             return msp;
         }
@@ -68,8 +68,8 @@ namespace BaoHien.Common
             table.LockedWidth = true;
             table.SetWidths(ratio);
             table.HorizontalAlignment = 1;
-            table.SpacingBefore = 15f;
-            table.SpacingAfter = 15f;
+            table.SpacingBefore = 10f;
+            table.SpacingAfter = 10f;
             return table;
         }
 
