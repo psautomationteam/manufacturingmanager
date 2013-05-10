@@ -249,10 +249,10 @@ namespace BaoHien.UI
             foreach (CustomersReport item in customersReports)
             {
                 table.AddCell(FormatConfig.TableCellBody(item.Index.ToString(), PdfPCell.ALIGN_CENTER));
-                table.AddCell(FormatConfig.TableCellBody(item.Date, PdfPCell.ALIGN_LEFT));
-                table.AddCell(FormatConfig.TableCellBody(item.CustomerName, PdfPCell.ALIGN_LEFT));
-                table.AddCell(FormatConfig.TableCellBody(item.CustomerCode, PdfPCell.ALIGN_LEFT));
-                table.AddCell(FormatConfig.TableCellBody(item.RecordCode, PdfPCell.ALIGN_LEFT));
+                table.AddCell(FormatConfig.TableCellBody(item.Date, PdfPCell.ALIGN_CENTER));
+                table.AddCell(FormatConfig.TableCellBody(item.CustomerName, PdfPCell.ALIGN_CENTER));
+                table.AddCell(FormatConfig.TableCellBody(item.CustomerCode, PdfPCell.ALIGN_CENTER));
+                table.AddCell(FormatConfig.TableCellBody(item.RecordCode, PdfPCell.ALIGN_CENTER));
                 table.AddCell(FormatConfig.TableCellBody(item.Amount, PdfPCell.ALIGN_RIGHT));
             }
             table.AddCell(FormatConfig.TableCellBoldBody("Tổng", PdfPCell.ALIGN_RIGHT, 5));
@@ -280,11 +280,11 @@ namespace BaoHien.UI
                 else
                 {
                     table.AddCell(FormatConfig.TableCellBody(item.Index, PdfPCell.ALIGN_CENTER));
-                    table.AddCell(FormatConfig.TableCellBody(item.Date, PdfPCell.ALIGN_LEFT));
-                    table.AddCell(FormatConfig.TableCellBody(item.ProductName, PdfPCell.ALIGN_LEFT));
-                    table.AddCell(FormatConfig.TableCellBody(item.AttrName, PdfPCell.ALIGN_LEFT));
+                    table.AddCell(FormatConfig.TableCellBody(item.Date, PdfPCell.ALIGN_CENTER));
+                    table.AddCell(FormatConfig.TableCellBody(item.ProductName, PdfPCell.ALIGN_CENTER));
+                    table.AddCell(FormatConfig.TableCellBody(item.AttrName, PdfPCell.ALIGN_CENTER));
                     table.AddCell(FormatConfig.TableCellBody(item.Number, PdfPCell.ALIGN_RIGHT));
-                    table.AddCell(FormatConfig.TableCellBody(item.Unit, PdfPCell.ALIGN_RIGHT));
+                    table.AddCell(FormatConfig.TableCellBody(item.Unit, PdfPCell.ALIGN_CENTER));
                     table.AddCell(FormatConfig.TableCellBody(item.Cost, PdfPCell.ALIGN_RIGHT));
                 }
             }

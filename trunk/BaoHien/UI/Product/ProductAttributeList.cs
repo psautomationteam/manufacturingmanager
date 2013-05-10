@@ -126,15 +126,22 @@ namespace BaoHien.UI
                     if (result == DialogResult.Yes)
                     {
                         DataGridViewRow currentRow = dgvProductAttributeList.Rows[e.RowIndex];
-
-                        BaseAttributeService productAttributeService = new BaseAttributeService();
+                        BaseAttributeService baseAttributeService = new BaseAttributeService();
                         int id = ObjectHelper.GetValueFromAnonymousType<int>(currentRow.DataBoundItem, "Id");
-                        if (!productAttributeService.DeleteBaseAttribute(id))
+                        ProductAttributeService productAttributeService = new ProductAttributeService();
+                        List<ProductAttribute> productList = productAttributeService.SelectProductAttributeByWhere(x => x.AttributeId == id);
+                        if (productList.Count > 0)
                         {
-                            MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
-                           
+                            MessageBox.Show("Quy cách sản phẩm này đang được sử dụng. Không xóa được!");
                         }
-                        loadProductAttributeList();
+                        else
+                        {
+                            if (!baseAttributeService.DeleteBaseAttribute(id))
+                            {
+                                MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                            }
+                            loadProductAttributeList();
+                        }
                     }
 
                 }

@@ -209,7 +209,7 @@ namespace BaoHien.UI
             doc.Add(FormatConfig.ParaRightBeforeHeader("In ngày : " + DateTime.Now.ToString(BHConstant.DATETIME_FORMAT)));
             doc.Add(FormatConfig.ParaHeader("DANH SÁCH KHÁCH HÀNG"));
 
-            PdfPTable table = FormatConfig.Table(7, new float[] { 0.5f, 2f, 1f, 1f, 2.5f, 2f, 1f });
+            PdfPTable table = FormatConfig.Table(7, new float[] { 0.5f, 2f, 1.3f, 1.3f, 2f, 1.6f, 1.3f });
             table.AddCell(FormatConfig.TableCellHeader("STT"));
             table.AddCell(FormatConfig.TableCellHeader("Tên khách hàng"));
             table.AddCell(FormatConfig.TableCellHeader("Mã KH"));

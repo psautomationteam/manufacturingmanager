@@ -265,13 +265,14 @@ namespace BaoHien.UI
                     {
                         #region Create New
 
+                        SeedService ss = new SeedService();
                         order = new Order
                         {
                             CustId = cbxCustomer.SelectedValue != null ? (int)cbxCustomer.SelectedValue : 0,
                             Discount = discount,
                             Note = txtNote.Text,
                             VAT = vat,
-                            OrderCode = txtOrderCode.Text,
+                            OrderCode = ss.AddSeedID(BHConstant.PREFIX_FOR_ORDER),
                             CreatedDate = createdDate,
                             CreateBy = userId,
                             Reason = txtReason.Text,
@@ -415,9 +416,7 @@ namespace BaoHien.UI
             else
             {
                 txtCreatedDate.Text = DateTime.Now.ToString(BHConstant.DATE_FORMAT);
-
-                SeedService ss = new SeedService();
-                txtOrderCode.Text = ss.AddSeedID(BHConstant.PREFIX_FOR_ORDER); //RandomGeneration.GeneratingCode(BHConstant.PREFIX_FOR_ORDER);
+                txtOrderCode.Text = Global.GetTempSeedID(BHConstant.PREFIX_FOR_ORDER);
             }
         }
 
@@ -830,7 +829,7 @@ namespace BaoHien.UI
             PdfWriterEvents writerEvent;
 
             Image watermarkImage = Image.GetInstance(AppDomain.CurrentDomain.BaseDirectory + @"logo.png");
-            watermarkImage.SetAbsolutePosition(doc.PageSize.Width / 2 - 70, 550);
+            watermarkImage.SetAbsolutePosition(doc.PageSize.Width / 2 - 100, 505);
             writerEvent = new PdfWriterEvents(watermarkImage);
             docWriter.PageEvent = writerEvent;
 
@@ -847,7 +846,7 @@ namespace BaoHien.UI
             PDF.pdf.PdfPTable table = FormatConfig.Table(6, new float[] { 0.5f, 4.5f, 1.5f, 0.7f, 0.8f, 2f });
             table.AddCell(FormatConfig.TableCellHeader("STT"));
             table.AddCell(FormatConfig.TableCellHeader("Tên sản phẩm"));
-            table.AddCell(FormatConfig.TableCellHeader("Mã sản phẩm"));
+            table.AddCell(FormatConfig.TableCellHeader("Mã SP"));
             table.AddCell(FormatConfig.TableCellHeader("ĐVT"));
             table.AddCell(FormatConfig.TableCellHeader("Số lượng"));
             table.AddCell(FormatConfig.TableCellHeader("Ghi chú"));
@@ -862,10 +861,10 @@ namespace BaoHien.UI
                                         PdfPCell.ALIGN_LEFT));
                     table.AddCell(FormatConfig.TableCellBody(
                                         getProductCode(orderDetails[i].ProductId),
-                                        PdfPCell.ALIGN_LEFT));
+                                        PdfPCell.ALIGN_CENTER));
                     table.AddCell(FormatConfig.TableCellBody(
                                         getUnitName(orderDetails[i].UnitId),
-                                        PdfPCell.ALIGN_LEFT));
+                                        PdfPCell.ALIGN_CENTER));
                     table.AddCell(FormatConfig.TableCellBody(
                                         orderDetails[i].NumberUnit.ToString(),
                                         PdfPCell.ALIGN_CENTER));
@@ -909,7 +908,7 @@ namespace BaoHien.UI
             }
 
             Image watermarkImage = Image.GetInstance(AppDomain.CurrentDomain.BaseDirectory + @"logo.png");
-            watermarkImage.SetAbsolutePosition(doc.PageSize.Width / 2 - 70, 550);
+            watermarkImage.SetAbsolutePosition(doc.PageSize.Width / 2 - 100, 495);
             writerEvent = new PdfWriterEvents(watermarkImage);
             docWriter.PageEvent = writerEvent;
 
@@ -924,10 +923,10 @@ namespace BaoHien.UI
             doc.Add(FormatConfig.ParaCommonInfo("Lý do xuất kho : ", txtReason.Text));
             doc.Add(FormatConfig.ParaCommonInfo("Xuất tại kho : ", txtWare.Text));
 
-            PDF.pdf.PdfPTable table = FormatConfig.Table(7, new float[] { 0.5f, 3.5f, 1f, 0.7f, 0.8f, 1.5f, 2f });
+            PDF.pdf.PdfPTable table = FormatConfig.Table(7, new float[] { 0.5f, 3.5f, 1.5f, 0.7f, 0.7f, 1.1f, 2f });
             table.AddCell(FormatConfig.TableCellHeader("STT"));
             table.AddCell(FormatConfig.TableCellHeader("Tên sản phẩm"));
-            table.AddCell(FormatConfig.TableCellHeader("Mã sản phẩm"));
+            table.AddCell(FormatConfig.TableCellHeader("Mã SP"));
             table.AddCell(FormatConfig.TableCellHeader("ĐVT"));
             table.AddCell(FormatConfig.TableCellHeader("Số lượng"));
             table.AddCell(FormatConfig.TableCellHeader("Giá (VND)"));
@@ -943,10 +942,10 @@ namespace BaoHien.UI
                                         PdfPCell.ALIGN_LEFT));
                     table.AddCell(FormatConfig.TableCellBody(
                                         getProductCode(orderDetails[i].ProductId),
-                                        PdfPCell.ALIGN_LEFT));
+                                        PdfPCell.ALIGN_CENTER));
                     table.AddCell(FormatConfig.TableCellBody(
                                         getUnitName(orderDetails[i].UnitId),
-                                        PdfPCell.ALIGN_LEFT));
+                                        PdfPCell.ALIGN_CENTER));
                     table.AddCell(FormatConfig.TableCellBody(
                                         orderDetails[i].NumberUnit.ToString(),
                                         PdfPCell.ALIGN_CENTER));
@@ -976,7 +975,7 @@ namespace BaoHien.UI
 
             doc.Add(table);
 
-            doc.Add(FormatConfig.ParaCommonInfo("Cộng thành tiền (viết bằng chữ) : ", Global.convertCurrencyToText(totalWithTax.ToString())));
+            doc.Add(FormatConfig.ParaCommonInfoWithItalicContent("Cộng thành tiền (viết bằng chữ) : ", Global.convertCurrencyToText(totalWithTax.ToString())));
 
             doc.Add(FormatConfig.ParaCommonInfo("Ghi chú : ", string.IsNullOrEmpty(txtNote.Text) ?
                 String.Concat(Enumerable.Repeat("...", 48)) : txtNote.Text));
@@ -1024,7 +1023,10 @@ namespace BaoHien.UI
 
         private string getOrderCode()
         {
-            return txtOrderCode.Text;
+            if (order != null && !string.IsNullOrEmpty(order.OrderCode))
+                return order.OrderCode;
+            else
+                return txtOrderCode.Text;
         }
 
         private string getCustomerName()
@@ -1252,26 +1254,33 @@ namespace BaoHien.UI
 
         private void dgwOrderDetails_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
-            if (e.Value != null && orderDetails.Count > 0)
+            try
             {
-                DataGridViewCell cell = dgwOrderDetails.Rows[e.RowIndex].Cells[e.ColumnIndex];
-                switch (e.ColumnIndex)
+                if (e.Value != null && orderDetails.Count > 0)
                 {
-                    case PriceCell:
-                        {
-                            cell.ToolTipText = Global.formatVNDCurrencyText(orderDetails[e.RowIndex].Price.ToString());
-                        } break;
-                    case CommissionCell:
-                        {
-                            cell.ToolTipText = Global.formatVNDCurrencyText(orderDetails[e.RowIndex].Commission.ToString());
-                        } break;
-                    case TotalCell:
-                        {
-                            cell.ToolTipText = Global.formatVNDCurrencyText(orderDetails[e.RowIndex].Cost.ToString());
-                        } break;
-                    default:
-                        break;
+                    DataGridViewCell cell = dgwOrderDetails.Rows[e.RowIndex].Cells[e.ColumnIndex];
+                    switch (e.ColumnIndex)
+                    {
+                        case PriceCell:
+                            {
+                                cell.ToolTipText = Global.formatVNDCurrencyText(orderDetails[e.RowIndex].Price.ToString());
+                            } break;
+                        case CommissionCell:
+                            {
+                                cell.ToolTipText = Global.formatVNDCurrencyText(orderDetails[e.RowIndex].Commission.ToString());
+                            } break;
+                        case TotalCell:
+                            {
+                                cell.ToolTipText = Global.formatVNDCurrencyText(orderDetails[e.RowIndex].Cost.ToString());
+                            } break;
+                        default:
+                            break;
+                    }
                 }
+            }
+            catch (Exception ex)
+            { 
+                
             }
         }
 

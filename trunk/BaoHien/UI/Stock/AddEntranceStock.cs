@@ -75,8 +75,7 @@ namespace BaoHien.UI
                 txtUser.Enabled = false;
                 txtDate.Text = DateTime.Now.ToString(BHConstant.DATE_FORMAT);
 
-                SeedService ss = new SeedService();
-                txtCode.Text = ss.AddSeedID(BHConstant.PREFIX_FOR_ENTRANCE); //RandomGeneration.GeneratingCode(BHConstant.PREFIX_FOR_ENTRANCE);
+                txtCode.Text = Global.GetTempSeedID(BHConstant.PREFIX_FOR_ENTRANCE);
             }
             txtDate.Enabled = false;
             txtUser.Enabled = false;
@@ -453,10 +452,11 @@ namespace BaoHien.UI
                 }
                 else//add new
                 {
+                    SeedService ss = new SeedService();
                     entranceStock = new EntranceStock
                     {
 
-                        EntranceCode = txtCode.Text,
+                        EntranceCode = ss.AddSeedID(BHConstant.PREFIX_FOR_ENTRANCE),
                         EntrancedBy = userId,
                         EntrancedDate = createdDate,
                         Note = txtNote.Text
