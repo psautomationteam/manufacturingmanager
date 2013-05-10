@@ -184,8 +184,7 @@ namespace BaoHien.UI
                 txtUser.Text = (Global.CurrentUser != null) ? Global.CurrentUser.FullName : "";
                 txtUser.Enabled = false;
 
-                SeedService ss = new SeedService();
-                txtCode.Text = ss.AddSeedID(BHConstant.PREFIX_FOR_PRODUCTION); //RandomGeneration.GeneratingCode(BHConstant.PREFIX_FOR_PRODUCTION);
+                txtCode.Text = Global.GetTempSeedID(BHConstant.PREFIX_FOR_PRODUCTION);
             }
             ProductAttributeService productAttrService = new ProductAttributeService();
             productForProducts = new BindingList<ProductAttributeModel>(productAttrService.GetProductAndAttribute());
@@ -642,10 +641,12 @@ namespace BaoHien.UI
                             MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
                             return;
                         }
+
+                        SeedService ss = new SeedService();
                         productionRequest = new ProductionRequest
                         {
                             Note = txtNote.Text,
-                            ReqCode = txtCode.Text,
+                            ReqCode = ss.AddSeedID(BHConstant.PREFIX_FOR_PRODUCTION),
                             RequestedDate = DateTime.Now,
                             RequestedBy = userId,
                         };

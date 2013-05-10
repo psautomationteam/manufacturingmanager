@@ -365,10 +365,10 @@ namespace BaoHien.UI
                 else
                 {
                     table.AddCell(FormatConfig.TableCellBody(item.Index, PdfPCell.ALIGN_CENTER));
-                    table.AddCell(FormatConfig.TableCellBody(item.ProductCode, PdfPCell.ALIGN_LEFT));
-                    table.AddCell(FormatConfig.TableCellBody(item.ProductName, PdfPCell.ALIGN_LEFT));
-                    table.AddCell(FormatConfig.TableCellBody(item.Jampo, PdfPCell.ALIGN_LEFT));
-                    table.AddCell(FormatConfig.TableCellBody(item.UnitName, PdfPCell.ALIGN_RIGHT));
+                    table.AddCell(FormatConfig.TableCellBody(item.ProductCode, PdfPCell.ALIGN_CENTER));
+                    table.AddCell(FormatConfig.TableCellBody(item.ProductName, PdfPCell.ALIGN_CENTER));
+                    table.AddCell(FormatConfig.TableCellBody(item.Jampo, PdfPCell.ALIGN_CENTER));
+                    table.AddCell(FormatConfig.TableCellBody(item.UnitName, PdfPCell.ALIGN_CENTER));
                     table.AddCell(FormatConfig.TableCellBody(item.FirstNumber, PdfPCell.ALIGN_RIGHT));
                     table.AddCell(FormatConfig.TableCellBody(item.ImportNumber, PdfPCell.ALIGN_RIGHT));
                     table.AddCell(FormatConfig.TableCellBody(item.ExportNumber, PdfPCell.ALIGN_RIGHT));
@@ -392,8 +392,8 @@ namespace BaoHien.UI
             foreach (ProductReport item in productReports)
             {
                 table.AddCell(FormatConfig.TableCellBody((++index).ToString(), PdfPCell.ALIGN_CENTER));
-                table.AddCell(FormatConfig.TableCellBody(item.CreatedDate, PdfPCell.ALIGN_LEFT));
-                table.AddCell(FormatConfig.TableCellBody(item.RecordCode, PdfPCell.ALIGN_LEFT));
+                table.AddCell(FormatConfig.TableCellBody(item.CreatedDate, PdfPCell.ALIGN_CENTER));
+                table.AddCell(FormatConfig.TableCellBody(item.RecordCode, PdfPCell.ALIGN_CENTER));
                 table.AddCell(FormatConfig.TableCellBody(item.BeforeNumber, PdfPCell.ALIGN_RIGHT));
                 table.AddCell(FormatConfig.TableCellBody(item.Amount, PdfPCell.ALIGN_RIGHT));
                 table.AddCell(FormatConfig.TableCellBody(item.AfterNumber, PdfPCell.ALIGN_RIGHT));

@@ -49,6 +49,18 @@ namespace BaoHien.Common
             return pr;
         }
 
+        public static Paragraph ParaCommonInfoWithItalicContent(string field, string value)
+        {
+            Paragraph pr = new Paragraph();
+            Phrase phr = new Phrase();
+            Chunk chk1 = new Chunk(field, FontConfig.BoldFont);
+            Chunk chk2 = new Chunk(value, FontConfig.ItalicFont);
+            phr.Add(chk1);
+            phr.Add(chk2);
+            pr.Add(phr);
+            return pr;
+        }
+
         public static Paragraph ParaCommonInfoAllBold(string field, string value)
         {
             Paragraph pr = new Paragraph();
@@ -64,7 +76,7 @@ namespace BaoHien.Common
         public static PdfPTable Table(int column, float[] ratio)
         {
             PdfPTable table = new PdfPTable(column);
-            table.TotalWidth = 550f;
+            table.TotalWidth = 560f;
             table.LockedWidth = true;
             table.SetWidths(ratio);
             table.HorizontalAlignment = 1;
@@ -83,6 +95,7 @@ namespace BaoHien.Common
             PdfPCell cell = new PdfPCell(new Phrase(new Chunk(content, FontConfig.BoldFont)));
             cell.Border = bolder;
             cell.HorizontalAlignment = 1;
+            cell.MinimumHeight = 25;
             return cell;
         }
 
@@ -90,6 +103,7 @@ namespace BaoHien.Common
         {
             PdfPCell cell = new PdfPCell(new Phrase(new Chunk(content, FontConfig.NormalFont)));
             cell.HorizontalAlignment = format;
+            cell.MinimumHeight = 25;
             return cell;
         }
 
@@ -98,6 +112,7 @@ namespace BaoHien.Common
             PdfPCell cell = new PdfPCell(new Phrase(new Chunk(content, font)));
             cell.HorizontalAlignment = format;
             cell.Border = PdfPCell.NO_BORDER;
+            cell.MinimumHeight = 25;
             return cell;
         }
 
@@ -106,6 +121,7 @@ namespace BaoHien.Common
             PdfPCell cell = new PdfPCell(new Phrase(new Chunk(content, FontConfig.BoldFont)));
             cell.Colspan = colspan;
             cell.HorizontalAlignment = format;
+            cell.MinimumHeight = 25;
             return cell;
         }
     }

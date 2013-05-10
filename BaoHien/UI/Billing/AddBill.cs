@@ -60,9 +60,7 @@ namespace BaoHien.UI
             else
             {
                 txtCreatedDate.Text = DateTime.Now.ToString(BHConstant.DATE_FORMAT);
-
-                SeedService ss = new SeedService();
-                txtOrderCode.Text = ss.AddSeedID(BHConstant.PREFIX_FOR_BILLING); //RandomGeneration.GeneratingCode(BHConstant.PREFIX_FOR_BILLING);
+                txtOrderCode.Text = Global.GetTempSeedID(BHConstant.PREFIX_FOR_BILLING);
             }
             txtCreatedDate.Enabled = false;
         }
@@ -87,10 +85,11 @@ namespace BaoHien.UI
                         MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
                         return;
                     }
-
+                    
+                    SeedService ss = new SeedService();
                     bill = new Bill
                     {
-                        BillCode = txtOrderCode.Text,
+                        BillCode = ss.AddSeedID(BHConstant.PREFIX_FOR_BILLING),
                         Note = txtNote.Text,
                         CreatedDate = DateTime.Now,
                         Amount = amount,

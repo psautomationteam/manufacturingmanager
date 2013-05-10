@@ -105,8 +105,8 @@ namespace BaoHien.Common
 
         public static string convertCurrencyToText(string number)
         {
-            string[] dv = { "", "mươi", "trăm", "nghìn", "triệu", "tỉ" };
-            string[] cs = { "không", "một", "hai", "ba", "bốn", "năm", "sáu", "bảy", "tám", "chín" };
+            string[] dv = { "", "Mươi", "Trăm", "Nghìn", "Triệu", "Tỉ" };
+            string[] cs = { "Không", "Một", "Hai", "Ba", "Bốn", "Năm", "Sáu", "Bảy", "Tám", "Chín" };
             string doc;
             int i, j, k, n, len, found, ddv, rd;
 
@@ -155,7 +155,7 @@ namespace BaoHien.Common
                                 if (n - j == 3) doc += cs[1] + " ";
                                 if (n - j == 2)
                                 {
-                                    doc += "mười ";
+                                    doc += "Mười ";
                                     ddv = 0;
                                 }
                                 if (n - j == 1)
@@ -164,14 +164,14 @@ namespace BaoHien.Common
                                     else k = i + j - 1;
 
                                     if (number[k] != '1' && number[k] != '0')
-                                        doc += "mốt ";
+                                        doc += "Mốt ";
                                     else
                                         doc += cs[1] + " ";
                                 }
                                 break;
                             case '5':
                                 if (i + j == len - 1)
-                                    doc += "lăm ";
+                                    doc += "Lăm ";
                                 else
                                     doc += cs[5] + " ";
                                 break;
@@ -196,7 +196,7 @@ namespace BaoHien.Common
                     {
                         if (rd == 1)
                             for (k = 0; k < (len - i - n) / 9; k++)
-                                doc += "tỉ ";
+                                doc += "Tỉ ";
                         rd = 0;
                     }
                     else
@@ -209,7 +209,7 @@ namespace BaoHien.Common
             if (len == 1)
                 if (number[0] == '0' || number[0] == '5') return cs[(int)number[0] - 48];
 
-            return doc + " đồng";
+            return doc + " Đồng";
         }
 
         public static bool isAdmin()
@@ -217,29 +217,9 @@ namespace BaoHien.Common
             return (CurrentUser.Type == BHConstant.USER_TYPE_ID1) ? true : false;
         }
 
-        public static string GetSeedID(string prefix)
+        public static string GetTempSeedID(string prefix)
         {
-            string result = "";
-            using (BaoHienDBDataContext context = DAL.Helper.BaoHienRepository.GetBaoHienDBDataContext())
-            {
-                SeedID seed = context.SeedIDs.Where(x => x.Prefix == prefix && x.CreateDate.Date == DateTime.Now.Date).FirstOrDefault();
-                SeedID newseed = new SeedID
-                {
-                    CreateDate = DateTime.Now,
-                    Prefix = prefix
-                };
-                int max_id = 1;
-                if (seed != null)
-                {
-                    max_id = Convert.ToInt32(seed.Value) + 1;
-                }
-                newseed.Value = max_id.ToString();
-                newseed.Result = newseed.Prefix + newseed.CreateDate.Date.ToString("ddMMyy") + 
-                    String.Concat(Enumerable.Repeat("0", BHConstant.MAX_ID - max_id.ToString().Length)) + max_id.ToString();
-                result = newseed.Result;
-                context.SeedIDs.InsertOnSubmit(newseed);
-                context.SubmitChanges();
-            }
+            string result = prefix + DateTime.Now.ToString("ddMMyy") + "----";
             return result;
         }
 
@@ -388,7 +368,7 @@ namespace BaoHien.Common
                             cell.DataType = new EnumValue<CellValues>(CellValues.SharedString);
                         }
                         // Insert the text into the SharedStringTablePart.
-                        string value = dgw[j, i].Value != null ? dgw[j, i].Value.ToString() : "";
+                        string value = dgw[j, i].Value != null ? ((j == 7 || j == 8) ? dgw[j, i].Value.ToString().Replace(".", "") : dgw[j, i].Value.ToString()) : "";
                         index = Global.InsertSharedStringItem(value, shareStringPart);
                         cell = Global.InsertCellInWorksheet(cl, row, worksheetPart);
                         cell.CellValue = new CellValue(index.ToString());

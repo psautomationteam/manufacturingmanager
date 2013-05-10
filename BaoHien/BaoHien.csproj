@@ -111,8 +111,6 @@
     <Compile Include="Common\FontConfig.cs" />
     <Compile Include="Common\FormatConfig.cs" />
     <Compile Include="Common\Global.cs" />
-    <Compile Include="Common\RandomGeneration.cs" />
-    <Compile Include="Common\RawPrinter.cs" />
     <Compile Include="Model\BillSearchCriteria.cs" />
     <Compile Include="Model\ProductsReport.cs" />
     <Compile Include="Model\CustomersReport.cs" />
