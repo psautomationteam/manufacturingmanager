@@ -124,7 +124,7 @@ namespace BaoHien.UI
                                 BeforeNumber = pl.AfterNumber,
                                 Amount = esd.NumberUnit,
                                 AfterNumber = (pl.AfterNumber - esd.NumberUnit) > 0 ? (pl.AfterNumber - esd.NumberUnit) : 0,
-                                CreatedDate = DateTime.Now,
+                                CreatedDate = BaoHienRepository.GetBaoHienDBDataContext().GetSystemDate(),
                                 Status = BHConstant.DEACTIVE_STATUS
                             };
                             productLogService.AddProductLog(plg);

@@ -127,6 +127,8 @@ namespace BaoHien.UI
                         ProductionRequest pr = productionRequestService.GetProductionRequest(id);
                         List<ProductionRequestDetail> productionRequestDetails = productionRequestDetailService.GetProductionRequestDetails().Where(p => p.ProductionRequestId == id).ToList();
                         bool ret = false;
+                        DateTime systime = BaoHienRepository.GetBaoHienDBDataContext().GetSystemDate();
+
                         if (productionRequestDetails != null)
                         {
                             ProductLogService productLogService = new ProductLogService();
@@ -144,7 +146,7 @@ namespace BaoHien.UI
                                     AfterNumber = (prd.Direction == true) ?
                                         ((pl.AfterNumber - prd.NumberUnit) > 0 ? (pl.AfterNumber - prd.NumberUnit) : 0)
                                         : (pl.AfterNumber + prd.NumberUnit),
-                                    CreatedDate = DateTime.Now,
+                                    CreatedDate = systime,
                                     Status = BHConstant.DEACTIVE_STATUS
                                 };
                                 ret = productLogService.AddProductLog(plg);

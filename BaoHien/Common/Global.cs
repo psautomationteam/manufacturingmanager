@@ -12,6 +12,7 @@ using System.Windows.Forms;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml;
+using DAL.Helper;
 
 namespace BaoHien.Common
 {
@@ -214,12 +215,12 @@ namespace BaoHien.Common
 
         public static bool isAdmin()
         {
-            return (CurrentUser.Type == BHConstant.USER_TYPE_ID1) ? true : false;
+            return (CurrentUser != null) && (CurrentUser.Type == BHConstant.USER_TYPE_ID1) ? true : false;
         }
 
         public static string GetTempSeedID(string prefix)
         {
-            string result = prefix + DateTime.Now.ToString("ddMMyy") + "----";
+            string result = prefix + BaoHienRepository.GetBaoHienDBDataContext().GetSystemDate().ToString("ddMMyy") + "----";
             return result;
         }
 

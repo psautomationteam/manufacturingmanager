@@ -327,7 +327,7 @@ namespace BaoHien.UI
 
             doc.Open();
 
-            doc.Add(FormatConfig.ParaRightBeforeHeader("In ngày : " + DateTime.Now.ToString(BHConstant.DATETIME_FORMAT)));
+            doc.Add(FormatConfig.ParaRightBeforeHeader("In ngày : " + BaoHienRepository.GetBaoHienDBDataContext().GetSystemDate().ToString(BHConstant.DATETIME_FORMAT)));
             doc.Add(FormatConfig.ParaHeader("BÁO CÁO KHO VÀ THÀNH PHẨM"));
 
             doc.Add(FormatConfig.ParaRightBelowHeader("(" + textForPrint + ")"));

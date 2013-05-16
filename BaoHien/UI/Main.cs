@@ -15,7 +15,8 @@ namespace BaoHien.UI
 {
     public partial class Main : Form
     {
-        
+        private int modeClose = 0;
+
         public Main()
         {
             InitializeComponent();
@@ -37,6 +38,7 @@ namespace BaoHien.UI
 
         private void menuLogout_Click(object sender, EventArgs e)
         {
+            modeClose = 1;
             this.Hide();
             Form main = new Login();
             main.ShowDialog();
@@ -201,18 +203,28 @@ namespace BaoHien.UI
             frm.ShowDialog();
         }
 
+        private void menuCleaner_Click(object sender, EventArgs e)
+        {
+            Cleaner.Cleaner frm = new Cleaner.Cleaner();
+            pnlMain.Controls.Clear();
+            frm.ShowDialog();
+        }
+
         #endregion
 
         private void Main_Load(object sender, EventArgs e)
         {
-            //Settings.Default.FirstRun = 1;
-            //Settings.Default.Save();
-            //if (Settings.Default.FirstRun == 1)
-            //{
-            //    DBConfiguration dBConfiguration = new DBConfiguration();
-            //    dBConfiguration.Show();
-            //}
+            if (!Global.isAdmin())
+            {
+                menuSystemUser.Visible = false;
+                menuCleaner.Visible = false;
+            }
         }
 
+        private void Main_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            if (modeClose == 0)
+                Application.Exit();
+        }
     }
 }

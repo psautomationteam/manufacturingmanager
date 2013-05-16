@@ -53,6 +53,7 @@
             this.menuCommission = new System.Windows.Forms.ToolStripMenuItem();
             this.menuSystem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuSystemUser = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuCleaner = new System.Windows.Forms.ToolStripMenuItem();
             this.menuDBConfig = new System.Windows.Forms.ToolStripMenuItem();
             this.menuHelp = new System.Windows.Forms.ToolStripMenuItem();
             this.menuGuide = new System.Windows.Forms.ToolStripMenuItem();
@@ -268,6 +269,7 @@
             // 
             this.menuSystem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuSystemUser,
+            this.menuCleaner,
             this.menuDBConfig});
             this.menuSystem.Name = "menuSystem";
             this.menuSystem.Size = new System.Drawing.Size(72, 20);
@@ -279,6 +281,13 @@
             this.menuSystemUser.Size = new System.Drawing.Size(167, 22);
             this.menuSystemUser.Text = "Người Dùng";
             this.menuSystemUser.Click += new System.EventHandler(this.menuSystemUser_Click);
+            // 
+            // menuCleaner
+            // 
+            this.menuCleaner.Name = "menuCleaner";
+            this.menuCleaner.Size = new System.Drawing.Size(167, 22);
+            this.menuCleaner.Text = "Xóa dữ liệu";
+            this.menuCleaner.Click += new System.EventHandler(this.menuCleaner_Click);
             // 
             // menuDBConfig
             // 
@@ -299,13 +308,13 @@
             // menuGuide
             // 
             this.menuGuide.Name = "menuGuide";
-            this.menuGuide.Size = new System.Drawing.Size(152, 22);
+            this.menuGuide.Size = new System.Drawing.Size(149, 22);
             this.menuGuide.Text = "Hướng Dẫn";
             // 
             // menuAbout
             // 
             this.menuAbout.Name = "menuAbout";
-            this.menuAbout.Size = new System.Drawing.Size(152, 22);
+            this.menuAbout.Size = new System.Drawing.Size(149, 22);
             this.menuAbout.Text = "TT Phần Mềm";
             this.menuAbout.Click += new System.EventHandler(this.menuAbout_Click);
             // 
@@ -479,6 +488,7 @@
             this.Name = "Main";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Bao Hien Ltd - He Thong Quan Ly Kinh Doanh";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Main_FormClosed);
             this.Load += new System.EventHandler(this.Main_Load);
             this.menuMain.ResumeLayout(false);
             this.menuMain.PerformLayout();
@@ -538,6 +548,7 @@
         private System.Windows.Forms.ToolStripButton toolStripButton2;
         private System.Windows.Forms.ToolStripLabel toolStripLabel6;
         private System.Windows.Forms.ToolStripMenuItem menuDBConfig;
+        private System.Windows.Forms.ToolStripMenuItem menuCleaner;
 
     }
 }

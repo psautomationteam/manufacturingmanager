@@ -19,7 +19,7 @@ namespace BaoHien.Common
         public static Paragraph ParaRightBeforeHeader(string content)
         {
             Paragraph msp = new Paragraph(content, FontConfig.SmallItalicFont);
-            msp.IndentationLeft = 400;
+            msp.IndentationLeft = 380;
             msp.Alignment = Element.ALIGN_LEFT;
             return msp;
         }
@@ -34,6 +34,7 @@ namespace BaoHien.Common
         {
             Paragraph msp = new Paragraph(content, FontConfig.ItalicFont);
             msp.Alignment = Element.ALIGN_CENTER;
+            msp.SpacingAfter = 5;
             return msp;
         }
 
@@ -45,6 +46,7 @@ namespace BaoHien.Common
             Chunk chk2 = new Chunk(value, FontConfig.NormalFont);
             phr.Add(chk1);
             phr.Add(chk2);
+            pr.SpacingBefore = 5;
             pr.Add(phr);
             return pr;
         }
@@ -76,7 +78,7 @@ namespace BaoHien.Common
         public static PdfPTable Table(int column, float[] ratio)
         {
             PdfPTable table = new PdfPTable(column);
-            table.TotalWidth = 560f;
+            table.TotalWidth = 580f;
             table.LockedWidth = true;
             table.SetWidths(ratio);
             table.HorizontalAlignment = 1;
@@ -87,7 +89,9 @@ namespace BaoHien.Common
 
         public static PdfPCell TableCellHeader(string content)
         {
-            return TableCellHeaderCommon(content, PdfPCell.BOX);
+            PdfPCell cell = TableCellHeaderCommon(content, PdfPCell.BOX);
+            cell.MinimumHeight = 25;
+            return cell;
         }
 
         public static PdfPCell TableCellHeaderCommon(string content, int bolder)
@@ -95,7 +99,6 @@ namespace BaoHien.Common
             PdfPCell cell = new PdfPCell(new Phrase(new Chunk(content, FontConfig.BoldFont)));
             cell.Border = bolder;
             cell.HorizontalAlignment = 1;
-            cell.MinimumHeight = 25;
             return cell;
         }
 
@@ -112,7 +115,6 @@ namespace BaoHien.Common
             PdfPCell cell = new PdfPCell(new Phrase(new Chunk(content, font)));
             cell.HorizontalAlignment = format;
             cell.Border = PdfPCell.NO_BORDER;
-            cell.MinimumHeight = 25;
             return cell;
         }
 

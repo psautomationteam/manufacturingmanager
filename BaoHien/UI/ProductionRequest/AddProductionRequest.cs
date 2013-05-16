@@ -179,7 +179,7 @@ namespace BaoHien.UI
             }
             else
             {
-                txtDate.Text = DateTime.Now.ToString(BHConstant.DATE_FORMAT);
+                txtDate.Text = BaoHienRepository.GetBaoHienDBDataContext().GetSystemDate().ToString(BHConstant.DATE_FORMAT);
                 txtDate.Enabled = false;
                 txtUser.Text = (Global.CurrentUser != null) ? Global.CurrentUser.FullName : "";
                 txtUser.Enabled = false;
@@ -419,211 +419,11 @@ namespace BaoHien.UI
                 {
                     ProductionRequestService prs = new ProductionRequestService();
                     ProductionRequestDetailService productionRequestDetailService = new ProductionRequestDetailService();
-
+                    DateTime systime = BaoHienRepository.GetBaoHienDBDataContext().GetSystemDate();
                     if (productionRequest != null)
                     {
                         #region Fix Update
 
-                        //bool result = prs.UpdateProductionRequest(productionRequest);
-                        //if (result)
-                        //{
-                        //    // ProductInStock
-                        //    foreach (ProductionRequestDetail prd in productionRequestDetailInProductions)
-                        //    {
-                        //        if (prd.ProductId > 0 && prd.AttributeId > 0)
-                        //        {
-                        //            if (prd.Id == 0)
-                        //            {
-                        //                prd.ProductionRequestId = productionRequest.Id;
-                        //                result = productionRequestDetailService.AddProductionRequestDetail(prd);
-
-                        //                //Save in Production In Stock
-                        //                ProductInStock productInStock = new ProductInStock();
-                        //                List<ProductInStock> lstProductInStock = pis.SelectProductByWhere(pt => pt.ProductId == prd.ProductId && pt.AttributeId == prd.AttributeId);
-                        //                productInStock.AttributeId = prd.AttributeId;
-                        //                productInStock.ProductId = prd.ProductId;
-                        //                productInStock.LatestUpdate = DateTime.Now;
-                        //                productInStock.StatusOfData = (byte)BHConstant.DATA_STATUS_IN_STOCK_FOR_EDIT;
-                        //                if (lstProductInStock.Count > 0)
-                        //                {
-                        //                    productInStock.NumberOfInput = lstProductInStock.Last<ProductInStock>().NumberOfInput + prd.NumberUnit;
-                        //                    productInStock.NumberOfOutput = lstProductInStock.Last<ProductInStock>().NumberOfOutput;
-                        //                    productInStock.NumberOfItem = (int)productInStock.NumberOfInput;
-                        //                }
-                        //                else
-                        //                {
-                        //                    productInStock.NumberOfInput = prd.NumberUnit;
-                        //                    productInStock.NumberOfOutput = 0;
-                        //                    productInStock.NumberOfItem = (int)prd.NumberUnit;
-                        //                }
-                        //                pis.AddProductInStock(productInStock);
-                        //            }
-                        //            else
-                        //            {
-                        //                ProductionRequestDetailModel original = new ProductionRequestDetailModel();
-                        //                original = originalProductions.Where(p => p.Id == prd.Id).ToList().FirstOrDefault();
-                        //                result = productionRequestDetailService.UpdateProductionRequestDetail(prd);
-
-                        //                //Update so luong
-                        //                if (original != null)
-                        //                {
-                        //                    if (prd.ProductId == original.ProductId && prd.AttributeId == original.AttributeId && prd.NumberUnit != original.NumberUnit)
-                        //                    {
-                        //                        ProductInStock productInStock = new ProductInStock();
-                        //                        List<ProductInStock> lstProductInStock = pis.SelectProductByWhere(pt => pt.ProductId == prd.ProductId && pt.AttributeId == prd.AttributeId);
-
-                        //                        productInStock.AttributeId = prd.AttributeId;
-                        //                        productInStock.ProductId = prd.ProductId;
-                        //                        productInStock.LatestUpdate = DateTime.Now;
-                        //                        productInStock.NumberOfInput = lstProductInStock.Last<ProductInStock>().NumberOfInput + prd.NumberUnit - original.NumberUnit;
-                        //                        productInStock.NumberOfOutput = lstProductInStock.Last<ProductInStock>().NumberOfOutput;
-                        //                        productInStock.NumberOfItem = lstProductInStock.Last<ProductInStock>().NumberOfItem + prd.NumberUnit - original.NumberUnit;
-                        //                        productInStock.StatusOfData = (byte)BHConstant.DATA_STATUS_IN_STOCK_FOR_INPUT;
-                        //                        pis.UpdateProductInStock(productInStock);
-                        //                    }
-
-                        //                    //Sua chi tiet phieu
-                        //                    else if (prd.ProductId != original.ProductId || prd.AttributeId != original.AttributeId)
-                        //                    {
-
-                        //                        //Tao moi
-                        //                        List<ProductInStock> lstNewProduct = pis.SelectProductByWhere(pt => pt.ProductId == prd.ProductId && pt.AttributeId == prd.AttributeId);
-                        //                        ProductInStock newProductInStock = new ProductInStock();
-                        //                        newProductInStock.AttributeId = prd.AttributeId;
-                        //                        newProductInStock.ProductId = prd.ProductId;
-                        //                        newProductInStock.LatestUpdate = DateTime.Now;
-                        //                        newProductInStock.StatusOfData = (byte)BHConstant.DATA_STATUS_IN_STOCK_FOR_INPUT;
-
-                        //                        if (lstNewProduct.Count > 0)
-                        //                        {
-                        //                            newProductInStock.NumberOfInput = lstNewProduct.Last<ProductInStock>().NumberOfInput + prd.NumberUnit;
-                        //                            newProductInStock.NumberOfOutput = lstNewProduct.Last<ProductInStock>().NumberOfOutput;
-                        //                            newProductInStock.NumberOfItem = lstNewProduct.Last<ProductInStock>().NumberOfItem + prd.NumberUnit;
-                        //                        }
-                        //                        else
-                        //                        {
-                        //                            newProductInStock.NumberOfInput = prd.NumberUnit;
-                        //                            newProductInStock.NumberOfOutput = 0;
-                        //                            newProductInStock.NumberOfItem = prd.NumberUnit;
-                        //                        }
-                        //                        pis.AddProductInStock(newProductInStock);
-
-                        //                        //Xoa cu
-                        //                        List<ProductInStock> lstOldProduct = pis.SelectProductByWhere(pt => pt.ProductId == original.ProductId && pt.AttributeId == original.AttributeId);
-                        //                        if (lstOldProduct.Count > 0)
-                        //                        {
-                        //                            ProductInStock oldProductInStock = new ProductInStock();
-                        //                            oldProductInStock.AttributeId = original.AttributeId;
-                        //                            oldProductInStock.ProductId = original.ProductId;
-                        //                            oldProductInStock.LatestUpdate = DateTime.Now;
-                        //                            oldProductInStock.StatusOfData = (byte)BHConstant.DATA_STATUS_IN_STOCK_FOR_EDIT;
-                        //                            newProductInStock.NumberOfInput = lstNewProduct.Last<ProductInStock>().NumberOfInput - original.NumberUnit;
-                        //                            newProductInStock.NumberOfOutput = lstNewProduct.Last<ProductInStock>().NumberOfOutput;
-                        //                            newProductInStock.NumberOfItem = lstNewProduct.Last<ProductInStock>().NumberOfItem - original.NumberUnit;
-                        //                            pis.AddProductInStock(newProductInStock);
-                        //                        }
-                        //                    }
-                        //                }
-                        //            }
-
-                        //        }
-                        //    }
-
-                        //    //MaterialInStock
-                        //    foreach (ProductionRequestDetail prd in productionRequestDetailInMaterials)
-                        //    {
-                        //        if (prd.ProductId > 0 && prd.AttributeId > 0)
-                        //        {
-                        //            if (prd.Id == 0)
-                        //            {
-                        //                prd.ProductionRequestId = productionRequest.Id;
-                        //                result = productionRequestDetailService.AddProductionRequestDetail(prd);
-
-                        //                //Save in Materail In Stock
-                        //                MaterialInStock materialInStock = new MaterialInStock();
-                        //                List<MaterialInStock> lstMaterial = mis.SelectMaterialInStockByWhere(pt => pt.ProductId == prd.ProductId && pt.AttributeId == prd.AttributeId);
-                        //                if (lstMaterial != null)
-                        //                {
-                        //                    materialInStock.AttributeId = prd.AttributeId;
-                        //                    materialInStock.ProductId = prd.ProductId;
-                        //                    materialInStock.LatestUpdate = DateTime.Now;
-                        //                    materialInStock.StatusOfData = (byte)BHConstant.DATA_STATUS_IN_STOCK_FOR_OUTPUT;
-                        //                    materialInStock.NumberOfInput = lstMaterial.Last<MaterialInStock>() != null?lstMaterial.Last<MaterialInStock>().NumberOfInput: 0;
-                        //                    materialInStock.NumberOfOutput = lstMaterial.Last<MaterialInStock>() != null ?lstMaterial.Last<MaterialInStock>().NumberOfOutput + prd.NumberUnit: 0;
-                        //                    materialInStock.NumberOfItem = lstMaterial.Last<MaterialInStock>() != null ?lstMaterial.Last<MaterialInStock>().NumberOfItem - prd.NumberUnit:0;
-                        //                    mis.AddMaterialInStock(materialInStock);
-                        //                }
-                        //            }
-                        //            else
-                        //            {
-                        //                ProductionRequestDetailModel original = new ProductionRequestDetailModel();
-                        //                original = originalProductions.Where(p => p.Id == prd.Id).ToList().FirstOrDefault();
-                        //                result = productionRequestDetailService.UpdateProductionRequestDetail(prd);
-
-                        //                if (original != null)
-                        //                {
-                        //                    if (prd.ProductId == original.ProductId && prd.AttributeId == original.AttributeId && prd.NumberUnit != original.NumberUnit)
-                        //                    {
-
-                        //                        //Update Qty
-                        //                        List<MaterialInStock> lstNewMaterial = mis.SelectMaterialInStockByWhere(pt => pt.ProductId == prd.ProductId && pt.AttributeId == prd.AttributeId);
-                        //                        MaterialInStock newMaterialInStock = new MaterialInStock();
-                        //                        newMaterialInStock.AttributeId = prd.AttributeId;
-                        //                        newMaterialInStock.ProductId = prd.ProductId;
-                        //                        newMaterialInStock.LatestUpdate = DateTime.Now;
-                        //                        newMaterialInStock.NumberOfInput = lstNewMaterial.Last<MaterialInStock>().NumberOfInput;
-                        //                        newMaterialInStock.NumberOfOutput = lstNewMaterial.Last<MaterialInStock>().NumberOfOutput - prd.NumberUnit;
-                        //                        newMaterialInStock.NumberOfItem = lstNewMaterial.Last<MaterialInStock>().NumberOfItem - prd.NumberUnit;
-                        //                        newMaterialInStock.StatusOfData = (byte)BHConstant.DATA_STATUS_IN_STOCK_FOR_EDIT;
-                        //                        mis.AddMaterialInStock(newMaterialInStock);
-                        //                    }
-                        //                    else if (prd.ProductId != original.ProductId || prd.AttributeId != original.AttributeId || prd.NumberUnit != original.NumberUnit)
-                        //                    {
-
-                        //                        //Tao moi
-                        //                        List<MaterialInStock> lstNewMaterial = mis.SelectMaterialInStockByWhere(pt => pt.ProductId == prd.ProductId && pt.AttributeId == prd.AttributeId);
-                        //                        MaterialInStock newMaterialInStock = new MaterialInStock();
-                        //                        newMaterialInStock.AttributeId = prd.AttributeId;
-                        //                        newMaterialInStock.ProductId = prd.ProductId;
-                        //                        newMaterialInStock.LatestUpdate = DateTime.Now;
-                        //                        newMaterialInStock.NumberOfInput = lstNewMaterial.Last<MaterialInStock>().NumberOfInput;
-                        //                        newMaterialInStock.NumberOfOutput = lstNewMaterial.Last<MaterialInStock>().NumberOfOutput - prd.NumberUnit;
-                        //                        newMaterialInStock.NumberOfItem = lstNewMaterial.Last<MaterialInStock>().NumberOfItem - prd.NumberUnit;
-                        //                        newMaterialInStock.StatusOfData = (byte)BHConstant.DATA_STATUS_IN_STOCK_FOR_OUTPUT;
-                        //                        mis.AddMaterialInStock(newMaterialInStock);
-
-                        //                        //Xoa Cu
-                        //                        List<MaterialInStock> lstOldMaterial = mis.SelectMaterialInStockByWhere(pt => pt.ProductId == original.ProductId && pt.AttributeId == original.AttributeId);
-                        //                        MaterialInStock oldMaterialInStock = new MaterialInStock();
-                        //                        oldMaterialInStock.AttributeId = prd.AttributeId;
-                        //                        oldMaterialInStock.ProductId = prd.ProductId;
-                        //                        oldMaterialInStock.LatestUpdate = DateTime.Now;
-                        //                        oldMaterialInStock.NumberOfInput = lstOldMaterial.Last<MaterialInStock>().NumberOfInput;
-                        //                        oldMaterialInStock.NumberOfOutput = lstOldMaterial.Last<MaterialInStock>().NumberOfOutput - original.NumberUnit;
-                        //                        oldMaterialInStock.NumberOfItem = lstOldMaterial.Last<MaterialInStock>().NumberOfItem + original.NumberUnit;
-                        //                        oldMaterialInStock.StatusOfData = (byte)BHConstant.DATA_STATUS_IN_STOCK_FOR_EDIT;
-                        //                        mis.AddMaterialInStock(oldMaterialInStock);
-                        //                    }
-                        //                }
-                        //            }
-                        //        }
-                        //    }
-                        //}
-
-                        //if (result)
-                        //{
-                        //    MessageBox.Show("Phiếu sản xuất đã được cập nhật thành công");
-                        //    if (this.CallFromUserControll != null && this.CallFromUserControll is ProductionRequestList)
-                        //    {
-                        //        ((ProductionRequestList)this.CallFromUserControll).loadProductionRequestList();
-                        //    }
-                        //    this.Close();
-                        //}
-                        //else
-                        //{
-                        //    MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
-                        //    return;
-                        //}
 
                         #endregion
 
@@ -647,7 +447,7 @@ namespace BaoHien.UI
                         {
                             Note = txtNote.Text,
                             ReqCode = ss.AddSeedID(BHConstant.PREFIX_FOR_PRODUCTION),
-                            RequestedDate = DateTime.Now,
+                            RequestedDate = systime,
                             RequestedBy = userId,
                         };
 
@@ -678,7 +478,7 @@ namespace BaoHien.UI
                                         BeforeNumber = pl.AfterNumber,
                                         Amount = prd.NumberUnit,
                                         AfterNumber = pl.AfterNumber + prd.NumberUnit,
-                                        CreatedDate = DateTime.Now
+                                        CreatedDate = systime
                                     };
                                     result = productLogService.AddProductLog(plg);
                                 }
@@ -707,7 +507,7 @@ namespace BaoHien.UI
                                         BeforeNumber = pl.AfterNumber,
                                         Amount = prd.NumberUnit,
                                         AfterNumber = pl.AfterNumber - prd.NumberUnit,
-                                        CreatedDate = DateTime.Now
+                                        CreatedDate = systime
                                     };
                                     result = productLogService.AddProductLog(plg);
                                 }

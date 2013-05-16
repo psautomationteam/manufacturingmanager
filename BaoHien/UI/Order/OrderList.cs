@@ -169,6 +169,7 @@ namespace BaoHien.UI
                 OrderService orderService = new OrderService();
                 int id = ObjectHelper.GetValueFromAnonymousType<int>(currentRow.DataBoundItem, "Id");
                 Order order = orderService.GetOrder(id);
+                DateTime systime = BaoHienRepository.GetBaoHienDBDataContext().GetSystemDate();
 
                 #region CustomerLog
 
@@ -186,7 +187,7 @@ namespace BaoHien.UI
                     BeforeDebit = beforeDebit,
                     Amount = order.Total,
                     AfterDebit = beforeDebit - order.Total,
-                    CreatedDate = DateTime.Now,
+                    CreatedDate = systime,
                     Status = BHConstant.DEACTIVE_STATUS
                 };
                 bool kq = cls.AddCustomerLog(cl);
@@ -219,7 +220,7 @@ namespace BaoHien.UI
                         BeforeNumber = pl.AfterNumber,
                         Amount = od.NumberUnit,
                         AfterNumber = pl.AfterNumber + od.NumberUnit,
-                        CreatedDate = DateTime.Now
+                        CreatedDate = systime
                     };
                     productLogService.AddProductLog(plg);
                 }
@@ -247,7 +248,7 @@ namespace BaoHien.UI
                         BeforeNumber = el.AfterNumber,
                         Amount = totalCommission,
                         AfterNumber = el.AfterNumber - totalCommission,
-                        CreatedDate = DateTime.Now,
+                        CreatedDate = systime,
                         Status = BHConstant.DEACTIVE_STATUS
                     };
                     kq = els.AddEmployeeLog(newel);

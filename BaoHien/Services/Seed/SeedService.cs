@@ -7,6 +7,7 @@ using BaoHien.Services.Base;
 using System.Linq.Expressions;
 using BaoHien.Model;
 using BaoHien.Common;
+using DAL.Helper;
 
 namespace BaoHien.Services.Seeds
 {
@@ -14,11 +15,12 @@ namespace BaoHien.Services.Seeds
     {
         public string AddSeedID(string prefix)
         {
-            SeedID seed = SelectSeedIDByWhere(x => x.Prefix == prefix && x.CreateDate.Date == DateTime.Now.Date)
+            DateTime systime = BaoHienRepository.GetBaoHienDBDataContext().GetSystemDate();
+            SeedID seed = SelectSeedIDByWhere(x => x.Prefix == prefix && x.CreateDate.Date == systime.Date)
                 .OrderByDescending(x => x.ID).FirstOrDefault();
             SeedID newseed = new SeedID
             {
-                CreateDate = DateTime.Now,
+                CreateDate = systime,
                 Prefix = prefix
             };
             int max_id = 1;

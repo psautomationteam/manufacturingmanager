@@ -160,6 +160,7 @@ namespace BaoHien.UI
                         CustomerLogService cls = new CustomerLogService();
                         CustomerLog newest = cls.GetNewestCustomerLog(bill.CustId);
                         double beforeDebit = 0.0;
+                        DateTime systime = BaoHienRepository.GetBaoHienDBDataContext().GetSystemDate();
                         if (newest != null)
                         {
                             beforeDebit = newest.AfterDebit;
@@ -171,7 +172,7 @@ namespace BaoHien.UI
                             BeforeDebit = beforeDebit,
                             Amount = bill.Amount,
                             AfterDebit = beforeDebit + bill.Amount,
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = systime,
                             Status = BHConstant.DEACTIVE_STATUS
                         };
                         bool kq = cls.AddCustomerLog(cl);

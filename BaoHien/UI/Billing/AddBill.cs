@@ -13,6 +13,7 @@ using BaoHien.Services.Customers;
 using BaoHien.Services.SystemUsers;
 using BaoHien.UI.Base;
 using BaoHien.Services.Seeds;
+using DAL.Helper;
 
 namespace BaoHien.UI
 {
@@ -59,7 +60,7 @@ namespace BaoHien.UI
             }
             else
             {
-                txtCreatedDate.Text = DateTime.Now.ToString(BHConstant.DATE_FORMAT);
+                txtCreatedDate.Text = BaoHienRepository.GetBaoHienDBDataContext().GetSystemDate().ToString(BHConstant.DATE_FORMAT);
                 txtOrderCode.Text = Global.GetTempSeedID(BHConstant.PREFIX_FOR_BILLING);
             }
             txtCreatedDate.Enabled = false;
@@ -75,6 +76,7 @@ namespace BaoHien.UI
                     double amount = 0;
                     string amountStr = string.IsNullOrEmpty(txtAmount.WorkingText) ? txtAmount.Text : txtAmount.WorkingText;
                     double.TryParse(amountStr, out amount);
+                    DateTime systime = BaoHienRepository.GetBaoHienDBDataContext().GetSystemDate();
                     int userId = 0;
                     if (Global.CurrentUser != null)
                     {
@@ -91,7 +93,7 @@ namespace BaoHien.UI
                     {
                         BillCode = ss.AddSeedID(BHConstant.PREFIX_FOR_BILLING),
                         Note = txtNote.Text,
-                        CreatedDate = DateTime.Now,
+                        CreatedDate = systime,
                         Amount = amount,
                         CustId = cbxCustomer.SelectedValue != null ? (int)cbxCustomer.SelectedValue : 0,
                         UserId = userId
@@ -112,7 +114,7 @@ namespace BaoHien.UI
                         BeforeDebit = beforeDebit,
                         Amount = bill.Amount,
                         AfterDebit = beforeDebit - bill.Amount,
-                        CreatedDate = DateTime.Now
+                        CreatedDate = systime
                     };
                     result = cls.AddCustomerLog(cl);
                     if (result)
@@ -127,33 +129,7 @@ namespace BaoHien.UI
                 }
                 else
                 {
-                    //double amount = 0;
-                    //double.TryParse(txtAmount.Text, out amount);
-                    //int userId = 0;
-                    //if (Global.CurrentUser != null)
-                    //{
-                    //    userId = Global.CurrentUser.Id;
-                    //}
-                    //else
-                    //{
-                    //    MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
-                    //    return;
-                    //}
-                    //bill.BillCode = txtOrderCode.Text;
-                    //bill.Note = txtNote.Text;
-                    //bill.Amount = amount;
-                    //bill.CustId = cbxCustomer.SelectedValue != null ? (int)cbxCustomer.SelectedValue : 0;
-                    //bill.UserId = userId;
-                    //bool result = billService.UpdateBill(bill);
-                    //if (result)
-                    //{
-                    //    MessageBox.Show("Phiếu thanh toán đã được cập nhật!");
-                    //}
-                    //else
-                    //{
-                    //    MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
-                    //    return;
-                    //}
+                    
                 }
                 if (this.CallFromUserControll != null && this.CallFromUserControll is BillList)
                 {
