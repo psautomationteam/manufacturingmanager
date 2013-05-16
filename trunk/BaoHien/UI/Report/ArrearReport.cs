@@ -216,7 +216,7 @@ namespace BaoHien.UI
                 doc.Add(FormatConfig.ParaRightBeforeHeaderRight("ĐT: " + BHConstant.COMPANY_PHONE + " Fax: " + BHConstant.COMPANY_FAX));
             }
 
-            doc.Add(FormatConfig.ParaRightBeforeHeader("In ngày : " + DateTime.Now.ToString(BHConstant.DATETIME_FORMAT)));
+            doc.Add(FormatConfig.ParaRightBeforeHeader("In ngày : " + BaoHienRepository.GetBaoHienDBDataContext().GetSystemDate().ToString(BHConstant.DATETIME_FORMAT)));
             doc.Add(FormatConfig.ParaHeader("BÁO CÁO CÔNG NỢ"));
 
             doc.Add(FormatConfig.ParaRightBelowHeader("(" + textForPrint + ")"));

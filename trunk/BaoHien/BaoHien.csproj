@@ -138,6 +138,12 @@
     <Compile Include="UI\About\About.Designer.cs">
       <DependentUpon>About.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\Cleaner\Cleaner.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Cleaner\Cleaner.Designer.cs">
+      <DependentUpon>Cleaner.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\Configuration\DBConfiguration.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -380,6 +386,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Billing\BillList.resx">
       <DependentUpon>BillList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Cleaner\Cleaner.resx">
+      <DependentUpon>Cleaner.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Configuration\DBConfiguration.resx">
       <DependentUpon>DBConfiguration.cs</DependentUpon>

@@ -206,7 +206,7 @@ namespace BaoHien.UI
 
             doc.Open();
 
-            doc.Add(FormatConfig.ParaRightBeforeHeader("In ngày : " + DateTime.Now.ToString(BHConstant.DATETIME_FORMAT)));
+            doc.Add(FormatConfig.ParaRightBeforeHeader("In ngày : " + BaoHienRepository.GetBaoHienDBDataContext().GetSystemDate().ToString(BHConstant.DATETIME_FORMAT)));
             doc.Add(FormatConfig.ParaHeader("DANH SÁCH KHÁCH HÀNG"));
 
             PdfPTable table = FormatConfig.Table(7, new float[] { 0.5f, 2f, 1.3f, 1.3f, 2f, 1.6f, 1.3f });

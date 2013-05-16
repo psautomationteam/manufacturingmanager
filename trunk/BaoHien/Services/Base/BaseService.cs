@@ -137,18 +137,6 @@ namespace BaoHien.Services.Base
             try
             {
                 Type type = typeof(TItem);
-                //if (type.GetProperties().Any(x => x.Name == Constant.PRIMARYKEY_PROPERTY_NAME))
-                //{
-                    //PropertyInfo property = type.GetProperty(Constant.PRIMARYKEY_PROPERTY_NAME);
-                    //property.SetValue(initialValue, id, null);
-               // }
-
-                //if (type.GetProperties().Any(x => x.Name == Constant.CREATED_DATE_PROPERTY_NAME))
-                //{
-                    //PropertyInfo property = type.GetProperty(Constant.CREATED_DATE_PROPERTY_NAME);
-                    //property.SetValue(initialValue, DateTime.Now, null);
-                //}
-
 
                 Type typeofClassWithGenericStaticMethod = typeof(BaoHienRepository);
 

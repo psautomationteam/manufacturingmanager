@@ -69,7 +69,7 @@ namespace BaoHien.UI
                     BHNumber = PrintPreview.BHNumber;
                     double discount = 0;
                     Double.TryParse(txtDiscount.WorkingText, out discount);
-                    DateTime createdDate = DateTime.Now;
+                    DateTime createdDate = BaoHienRepository.GetBaoHienDBDataContext().GetSystemDate();
 
                     double vat = 0;
                     Double.TryParse(txtVAT.WorkingText, out vat);
@@ -415,7 +415,7 @@ namespace BaoHien.UI
             }
             else
             {
-                txtCreatedDate.Text = DateTime.Now.ToString(BHConstant.DATE_FORMAT);
+                txtCreatedDate.Text = BaoHienRepository.GetBaoHienDBDataContext().GetSystemDate().ToString(BHConstant.DATE_FORMAT);
                 txtOrderCode.Text = Global.GetTempSeedID(BHConstant.PREFIX_FOR_ORDER);
             }
         }
@@ -829,7 +829,7 @@ namespace BaoHien.UI
             PdfWriterEvents writerEvent;
 
             Image watermarkImage = Image.GetInstance(AppDomain.CurrentDomain.BaseDirectory + @"logo.png");
-            watermarkImage.SetAbsolutePosition(doc.PageSize.Width / 2 - 100, 505);
+            watermarkImage.SetAbsolutePosition(doc.PageSize.Width / 2 - 120, 495);
             writerEvent = new PdfWriterEvents(watermarkImage);
             docWriter.PageEvent = writerEvent;
 
@@ -843,7 +843,7 @@ namespace BaoHien.UI
             doc.Add(FormatConfig.ParaCommonInfo("Lý do xuất kho : ", txtReason.Text));
             doc.Add(FormatConfig.ParaCommonInfo("Xuất tại kho : ", txtWare.Text));
 
-            PDF.pdf.PdfPTable table = FormatConfig.Table(6, new float[] { 0.5f, 4.5f, 1.5f, 0.7f, 0.8f, 2f });
+            PDF.pdf.PdfPTable table = FormatConfig.Table(6, new float[] { 0.5f, 4.5f, 1.6f, 0.7f, 0.7f, 2f });
             table.AddCell(FormatConfig.TableCellHeader("STT"));
             table.AddCell(FormatConfig.TableCellHeader("Tên sản phẩm"));
             table.AddCell(FormatConfig.TableCellHeader("Mã SP"));
@@ -879,8 +879,8 @@ namespace BaoHien.UI
             doc.Add(FormatConfig.ParaCommonInfo("Ghi chú : ", string.IsNullOrEmpty(txtNote.Text) ?
                 String.Concat(Enumerable.Repeat("...", 96)) :  txtNote.Text));
 
-            DateTime date = DateTime.Now;
-            doc.Add(FormatConfig.ParaRightBeforeHeader(string.Format("Ngày {0} tháng {1} năm {2}", date.Day, date.Month, date.Year)));
+            DateTime date = BaoHienRepository.GetBaoHienDBDataContext().GetSystemDate();
+            doc.Add(FormatConfig.ParaRightBeforeHeader(string.Format("Xuất ngày {0} tháng {1} năm {2}", date.Day, date.Month, date.Year)));
             PDF.pdf.PdfPTable table2 = FormatConfig.Table(4, new float[] { 2.5f, 2f, 2f, 3.5f });
             table2.AddCell(FormatConfig.TableCellHeaderCommon("NGƯỜI LẬP PHIẾU", PdfPCell.NO_BORDER));
             table2.AddCell(FormatConfig.TableCellHeaderCommon("NGƯỜI NHẬN", PdfPCell.NO_BORDER));
@@ -908,7 +908,7 @@ namespace BaoHien.UI
             }
 
             Image watermarkImage = Image.GetInstance(AppDomain.CurrentDomain.BaseDirectory + @"logo.png");
-            watermarkImage.SetAbsolutePosition(doc.PageSize.Width / 2 - 100, 495);
+            watermarkImage.SetAbsolutePosition(doc.PageSize.Width / 2 - 120, 476);
             writerEvent = new PdfWriterEvents(watermarkImage);
             docWriter.PageEvent = writerEvent;
 
@@ -923,7 +923,7 @@ namespace BaoHien.UI
             doc.Add(FormatConfig.ParaCommonInfo("Lý do xuất kho : ", txtReason.Text));
             doc.Add(FormatConfig.ParaCommonInfo("Xuất tại kho : ", txtWare.Text));
 
-            PDF.pdf.PdfPTable table = FormatConfig.Table(7, new float[] { 0.5f, 3.5f, 1.5f, 0.7f, 0.7f, 1.1f, 2f });
+            PDF.pdf.PdfPTable table = FormatConfig.Table(7, new float[] { 0.5f, 3.5f, 1.6f, 0.7f, 0.7f, 1.3f, 1.7f });
             table.AddCell(FormatConfig.TableCellHeader("STT"));
             table.AddCell(FormatConfig.TableCellHeader("Tên sản phẩm"));
             table.AddCell(FormatConfig.TableCellHeader("Mã SP"));
@@ -980,8 +980,8 @@ namespace BaoHien.UI
             doc.Add(FormatConfig.ParaCommonInfo("Ghi chú : ", string.IsNullOrEmpty(txtNote.Text) ?
                 String.Concat(Enumerable.Repeat("...", 48)) : txtNote.Text));
 
-            DateTime date = DateTime.Now;
-            doc.Add(FormatConfig.ParaRightBeforeHeader(string.Format("Ngày {0} tháng {1} năm {2}", date.Day, date.Month, date.Year)));
+            DateTime date = BaoHienRepository.GetBaoHienDBDataContext().GetSystemDate();
+            doc.Add(FormatConfig.ParaRightBeforeHeader(string.Format("Xuất ngày {0} tháng {1} năm {2}", date.Day, date.Month, date.Year)));
             PDF.pdf.PdfPTable table2 = FormatConfig.Table(4, new float[] { 2.5f, 2f, 2f, 3.5f });
             table2.AddCell(FormatConfig.TableCellHeaderCommon("NGƯỜI LẬP PHIẾU", PdfPCell.NO_BORDER));
             table2.AddCell(FormatConfig.TableCellHeaderCommon("NGƯỜI NHẬN", PdfPCell.NO_BORDER));

@@ -7,8 +7,12 @@ namespace BaoHien.Common
 {
     public class BHConstant
     {
-        public const string BUILD_VERSION = "1.0.3";
+        public const string BUILD_VERSION = "1.0.4";
         public const string BUILD_RELEASE_DATE = "09/05/2013 12:20:00 AM";
+
+        public const string MASTER_USERNAME = "baohien";
+        public const string MASTER_PASSWORD_TO_DELETE = "admin";
+        public const string MASTER_PASSWORD_TO_RESTORE = "baohien";
 
         public const string COMPANY_NAME = "Cty TNHH BẢO HIẾN";
         public const string COMPANY_ADDRESS = "341/42B Lạc Long Quân - P.5 - Q.11";

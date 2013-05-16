@@ -82,16 +82,6 @@ namespace BaoHien.UI
                     bool result = productService.AddProduct(product);
 
                     long newProductId = BaoHienRepository.GetMaxId<Product>();
-                    //PriceService priceService = new PriceService();
-                    //double price = 0;
-                    //Double.TryParse(txtPrice.Text, out price);
-                    //Price newPrice = new Price
-                    //{
-                    //    Id = (int)newProductId,
-                    //    Price1 = price,
-                    //    UpdatedDate = DateTime.Now
-                    //};
-                    //result = priceService.AddPrice(newPrice);
 
                     result = UpdateAttribute(newProductId);
                     if (result)

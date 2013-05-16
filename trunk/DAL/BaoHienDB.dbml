@@ -8,23 +8,10 @@
       <Column Name="Status" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
       <Column Name="Type" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
       <Column Name="FullName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
-      <Association Name="SystemUser_Bill" Member="Bills" ThisKey="Id" OtherKey="UserId" Type="Bill" />
       <Association Name="SystemUser_EntranceStock" Member="EntranceStocks" ThisKey="Id" OtherKey="EntrancedBy" Type="EntranceStock" />
       <Association Name="SystemUser_ProductionRequest" Member="ProductionRequests" ThisKey="Id" OtherKey="RequestedBy" Type="ProductionRequest" />
       <Association Name="SystemUser_Order" Member="Orders" ThisKey="Id" OtherKey="CreateBy" Type="Order" />
-    </Type>
-  </Table>
-  <Table Name="dbo.Bill" Member="Bills">
-    <Type Name="Bill">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="BillCode" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
-      <Column Name="CustId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="UserId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="Amount" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
-      <Column Name="Note" Type="System.String" DbType="NVarChar(250)" CanBeNull="true" />
-      <Column Name="CreatedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
-      <Association Name="SystemUser_Bill" Member="SystemUser" ThisKey="UserId" OtherKey="Id" Type="SystemUser" IsForeignKey="true" />
-      <Association Name="Customer_Bill" Member="Customer" ThisKey="CustId" OtherKey="Id" Type="Customer" IsForeignKey="true" />
+      <Association Name="SystemUser_Bill" Member="Bills" ThisKey="Id" OtherKey="UserId" Type="Bill" />
     </Type>
   </Table>
   <Table Name="dbo.EntranceStock" Member="EntranceStocks">
@@ -52,19 +39,6 @@
       <Association Name="MeasurementUnit_EntranceStockDetail" Member="MeasurementUnit" ThisKey="UnitId" OtherKey="Id" Type="MeasurementUnit" IsForeignKey="true" />
       <Association Name="Product_EntranceStockDetail" Member="Product" ThisKey="ProductId" OtherKey="Id" Type="Product" IsForeignKey="true" />
       <Association Name="BaseAttribute_EntranceStockDetail" Member="BaseAttribute" ThisKey="AttributeId" OtherKey="Id" Type="BaseAttribute" IsForeignKey="true" />
-    </Type>
-  </Table>
-  <Table Name="dbo.Liability" Member="Liabilities">
-    <Type Name="Liability">
-      <Column Name="LiabilityID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="CustomerID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="Code" Type="System.String" DbType="VarChar(25)" CanBeNull="true" />
-      <Column Name="Debit" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Column Name="Credit" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Column Name="Type" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
-      <Column Name="CreatedDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Column Name="CreatedBy" Type="System.Int32" DbType="Int" CanBeNull="true" />
     </Type>
   </Table>
   <Table Name="dbo.MeasurementUnit" Member="MeasurementUnits">
@@ -222,9 +196,9 @@
       <Column Name="Status" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
       <Column Name="SalerId" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="FavoriteProduct" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
-      <Association Name="Customer_Bill" Member="Bills" ThisKey="Id" OtherKey="CustId" Type="Bill" />
       <Association Name="Customer_Order" Member="Orders" ThisKey="Id" OtherKey="CustId" Type="Order" />
       <Association Name="Customer_CustomerLog" Member="CustomerLogs" ThisKey="Id" OtherKey="CustomerId" Type="CustomerLog" />
+      <Association Name="Customer_Bill" Member="Bills" ThisKey="Id" OtherKey="CustId" Type="Bill" />
       <Association Name="Employee_Customer" Member="Employee" ThisKey="SalerId" OtherKey="Id" Type="Employee" IsForeignKey="true" />
     </Type>
   </Table>
@@ -292,6 +266,20 @@
       <Association Name="BaseAttribute_ProductAttribute" Member="ProductAttributes" ThisKey="Id" OtherKey="AttributeId" Type="ProductAttribute" />
       <Association Name="BaseAttribute_ProductionRequestDetail" Member="ProductionRequestDetails" ThisKey="Id" OtherKey="AttributeId" Type="ProductionRequestDetail" />
       <Association Name="BaseAttribute_ProductLog" Member="ProductLogs" ThisKey="Id" OtherKey="AttributeId" Type="ProductLog" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Bill" Member="Bills">
+    <Type Name="Bill">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="BillCode" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CustId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="UserId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Amount" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="Note" Type="System.String" DbType="NVarChar(250)" CanBeNull="true" />
+      <Column Name="Status" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
+      <Column Name="CreatedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Customer_Bill" Member="Customer" ThisKey="CustId" OtherKey="Id" Type="Customer" IsForeignKey="true" />
+      <Association Name="SystemUser_Bill" Member="SystemUser" ThisKey="UserId" OtherKey="Id" Type="SystemUser" IsForeignKey="true" />
     </Type>
   </Table>
   <Function Name="dbo.GenerateRandomString" Method="GenerateRandomString">

