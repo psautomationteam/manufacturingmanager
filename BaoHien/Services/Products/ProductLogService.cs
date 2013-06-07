@@ -160,10 +160,11 @@ namespace BaoHien.Services.ProductLogs
                         ProductName = item.Product.ProductName + " - " + item.BaseAttribute.AttributeName,
                         Jampo = item.BaseAttribute.Jampo ? "Jampo" : "",
                         UnitName = item.MeasurementUnit.Name,
-                        FirstNumber = item.BeforeNumber.ToString(),
                         Index = (++index).ToString()
                     };
 
+                    pr.FirstNumber = logs.Where(x => x.ProductId == item.ProductId && x.AttributeId == item.AttributeId && x.UnitId == item.UnitId
+                         && x.Status == BHConstant.ACTIVE_STATUS).OrderBy(x => x.CreatedDate).First().BeforeNumber.ToString();
                     pr.LastNumber = logs.Where(x => x.ProductId == item.ProductId && x.AttributeId == item.AttributeId && x.UnitId == item.UnitId)
                         .OrderByDescending(x => x.CreatedDate).First().AfterNumber.ToString();
                     pr.ImportNumber = logs.Where(x => x.ProductId == item.ProductId && x.AttributeId == item.AttributeId && x.UnitId == item.UnitId

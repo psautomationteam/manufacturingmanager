@@ -182,12 +182,12 @@
             this.txtCode.Size = new System.Drawing.Size(140, 20);
             this.txtCode.TabIndex = 2;
             this.validator1.SetType(this.txtCode, Itboy.Components.ValidationType.Required);
-            this.txtCode.Leave += new System.EventHandler(this.txtCode_Leave);
+            this.txtCode.MouseLeave += new System.EventHandler(this.txtCode_MouseLeave);
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(65, 55);
+            this.label2.Location = new System.Drawing.Point(65, 52);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(38, 13);
             this.label2.TabIndex = 2;
@@ -204,7 +204,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(14, 26);
+            this.label1.Location = new System.Drawing.Point(14, 23);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(91, 13);
             this.label1.TabIndex = 0;

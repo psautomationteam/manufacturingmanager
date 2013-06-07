@@ -1190,12 +1190,18 @@ namespace BaoHien.UI
         {
             AddEntranceStock frm = new AddEntranceStock();
             frm.ShowDialog();
+            ProductAttributeService productAttrService = new ProductAttributeService();
+            productAttrs = new BindingList<ProductAttributeModel>(productAttrService.GetProductAndAttribute());
+            ((DataGridViewComboBoxColumn)dgwOrderDetails.Columns[0]).DataSource = productAttrs;
         }
 
         private void btnCreateSX_Click(object sender, EventArgs e)
         {
             AddProductionRequest frmRequest = new AddProductionRequest();
             frmRequest.ShowDialog();
+            ProductAttributeService productAttrService = new ProductAttributeService();
+            productAttrs = new BindingList<ProductAttributeModel>(productAttrService.GetProductAndAttribute());
+            ((DataGridViewComboBoxColumn)dgwOrderDetails.Columns[0]).DataSource = productAttrs;
         }
 
         private void btnCreateKH_Click(object sender, EventArgs e)
