@@ -7,8 +7,8 @@ namespace BaoHien.Common
 {
     public class BHConstant
     {
-        public const string BUILD_VERSION = "1.0.4";
-        public const string BUILD_RELEASE_DATE = "09/05/2013 12:20:00 AM";
+        public const string BUILD_VERSION = "1.0.5";
+        public const string BUILD_RELEASE_DATE = "07/06/2013 11:00:00 PM";
 
         public const string MASTER_USERNAME = "baohien";
         public const string MASTER_PASSWORD_TO_DELETE = "admin";

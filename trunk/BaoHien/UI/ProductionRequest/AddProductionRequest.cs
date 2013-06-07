@@ -33,7 +33,6 @@ namespace BaoHien.UI
         BindingList<ProductionRequestDetail> productionRequestDetailInProductions;
         BindingList<ProductionRequestDetail> productionRequestDetailInMaterials;
         BindingList<ProductAttributeModel> productForProducts;
-        BindingList<ProductAttributeModel> productForMaterials;
         BindingList<ProductionRequestDetailModel> originalMaterials;
         BindingList<ProductionRequestDetailModel> originalProductions;
 
@@ -188,7 +187,6 @@ namespace BaoHien.UI
             }
             ProductAttributeService productAttrService = new ProductAttributeService();
             productForProducts = new BindingList<ProductAttributeModel>(productAttrService.GetProductAndAttribute());
-            productForMaterials = productForProducts;
             units = new BindingList<MeasurementUnit>(unitService.GetMeasurementUnits());
         }
 
@@ -726,6 +724,10 @@ namespace BaoHien.UI
         {
             AddEntranceStock frmStock = new AddEntranceStock();
             frmStock.ShowDialog();
+            ProductAttributeService productAttrService = new ProductAttributeService();
+            productForProducts = new BindingList<ProductAttributeModel>(productAttrService.GetProductAndAttribute());
+            ((DataGridViewComboBoxColumn)dgvMaterial.Columns[0]).DataSource = productForProducts;
+            ((DataGridViewComboBoxColumn)dgvProduct.Columns[0]).DataSource = productForProducts;
         }
     }
 }

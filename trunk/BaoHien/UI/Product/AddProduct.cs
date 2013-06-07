@@ -23,11 +23,11 @@ namespace BaoHien.UI
     public partial class AddProduct : BaseForm
     {
         Product product;
+        List<Product> products;
         List<MeasurementUnit> measurementUnits;
         List<ProductType> productTypes;
         List<BaseAttribute> baseAttributes;
         int mode = 0; // default "New status"
-        string code = "";
         List<int> oldAttr;
         ProductLogService productLogService;
 
@@ -103,6 +103,9 @@ namespace BaoHien.UI
 
         private void AddProduct_Load(object sender, EventArgs e)
         {
+            ProductService productService = new ProductService();
+            products = productService.GetProducts();
+
             productLogService = new ProductLogService();
             dgvBaseAttributes.AutoGenerateColumns = false;
             loadSomeData();
@@ -237,12 +240,6 @@ namespace BaoHien.UI
             MessageBox.Show("Có lỗi nhập liệu xảy ra,vui lòng kiểm tra lại!");
         }
 
-        private void txtCode_Leave(object sender, EventArgs e)
-        {
-            TextBox tx = sender as TextBox;
-            code = tx.Text;
-        }
-
         private bool UpdateAttribute(long newProductId)
         {
             DataGridViewRowCollection selectedRows = dgvBaseAttributes.Rows;
@@ -290,6 +287,28 @@ namespace BaoHien.UI
             }
             BaoHienRepository.ResetDBDataContext();
             return result;
+        }
+
+        private void txtCode_MouseLeave(object sender, EventArgs e)
+        {
+            string code = txtCode.Text;
+            if (!string.IsNullOrEmpty(code))
+            {
+                Product p = products.Where(x => x.ProductCode == code).FirstOrDefault();
+                if (p != null)
+                {
+                    if (MessageBox.Show("Sản phẩm với mã này hiện đang tồn tại, bạn có muốn load lại sản phẩm này không ?", "Thông báo ...", MessageBoxButtons.YesNo, MessageBoxIcon.Information)
+                        == System.Windows.Forms.DialogResult.Yes)
+                    {
+                        loadDataForEditProduct(p.Id);
+                        AddProduct_Load(null, null);
+                    }
+                    else
+                    {
+                        this.Close();
+                    }
+                }
+            }
         }
     }
 }
