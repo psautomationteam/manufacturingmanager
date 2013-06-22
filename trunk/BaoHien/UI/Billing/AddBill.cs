@@ -41,7 +41,7 @@ namespace BaoHien.UI
             }
             if (customers != null)
             {
-                cbxCustomer.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+                cbxCustomer.AutoCompleteMode = AutoCompleteMode.Append;
                 cbxCustomer.AutoCompleteSource = AutoCompleteSource.ListItems;
                 cbxCustomer.DataSource = customers;
                 cbxCustomer.DisplayMember = "CustCode";

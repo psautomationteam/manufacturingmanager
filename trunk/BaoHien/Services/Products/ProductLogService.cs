@@ -124,6 +124,23 @@ namespace BaoHien.Services.ProductLogs
             {
                 List<ProductLog> logs = context.ProductLogs.Where(x => x.CreatedDate >= from && x.CreatedDate <= to)
                     .OrderBy(pl => pl.CreatedDate).ToList();
+                List<ProductLog> log_stocks = context.ProductLogs.Where(x => x.CreatedDate < from && x.Status == BHConstant.ACTIVE_STATUS)
+                    .OrderBy(x => x.CreatedDate)
+                    .GroupBy(x => new { x.ProductId, x.AttributeId, x.UnitId }).Select(x => x.First())
+                    .ToList();
+                List<ProductLog> obs_list = new List<ProductLog>();
+                foreach (ProductLog item in log_stocks)
+                {
+                    if (logs.Where(x => x.ProductId == item.ProductId && x.AttributeId == item.AttributeId && x.UnitId == item.UnitId).FirstOrDefault()
+                        != null)
+                        obs_list.Add(item);
+                }
+                log_stocks = log_stocks.Except(obs_list).ToList();
+                log_stocks.ForEach(x => x.Amount = 0);
+                log_stocks.ForEach(x => x.BeforeNumber = x.AfterNumber);
+                log_stocks = log_stocks.Except(log_stocks.Where(x => x.AfterNumber <= 0).ToList()).ToList();
+                logs.AddRange(log_stocks);
+                //logs = log_stocks;
                 if (unitId > 0)
                     logs = logs.Where(x => x.UnitId == unitId).ToList();
                 if (attrId > 0)
@@ -172,6 +189,10 @@ namespace BaoHien.Services.ProductLogs
                     pr.ExportNumber = logs.Where(x => x.ProductId == item.ProductId && x.AttributeId == item.AttributeId && x.UnitId == item.UnitId
                         && x.Status == BHConstant.ACTIVE_STATUS && x.BeforeNumber > x.AfterNumber).Sum(x => x.Amount).ToString();
                     reports.Add(pr);
+                    //if ((Convert.ToInt32(pr.FirstNumber) + Convert.ToInt32(pr.ImportNumber) - Convert.ToInt32(pr.ExportNumber)) != Convert.ToInt32(pr.LastNumber))
+                    //{
+                    //    int tmp2 = 1;
+                    //}
                 }
             }
         }
