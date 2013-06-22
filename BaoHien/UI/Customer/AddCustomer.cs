@@ -11,6 +11,7 @@ using BaoHien.Services.Customers;
 using DAL;
 using BaoHien.Services.SystemUsers;
 using BaoHien.Services.Employees;
+using BaoHien.Common;
 
 namespace BaoHien.UI
 {
@@ -57,6 +58,39 @@ namespace BaoHien.UI
             {
                 if (customer != null && customer.Id > 0)
                 {
+                    Employee emp = null;
+                    int old_saler_id = (int)customer.SalerId;
+                    if (cmbSaler.SelectedValue != null)
+                    {
+                        emp = salers.Single(x => x.Id == (int)cmbSaler.SelectedValue);
+                        customer.Employee = emp;
+                    }
+                    if (emp == null || emp.Id != old_saler_id)
+                    {
+                        DialogResult dl = MessageBox.Show("Chuyến nhân viên của khách hàng và đồng ý chuyển hoa hồng cho nhân viên mới?", "Thông tin!", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                        if (dl == DialogResult.Yes)
+                        {
+                            EmployeeLogService els = new EmployeeLogService();
+                            var epls = els.GetEmployeeLogs().Where(x => x.EmployeeId == old_saler_id || x.EmployeeId == emp.Id).OrderBy(x => x.CreatedDate);
+                            EmployeeLog beforeLog = null;
+                            foreach(EmployeeLog epl in epls)
+                            {
+                                if (beforeLog == null)
+                                {
+                                    beforeLog = epl;
+                                    if(epl.EmployeeId != emp.Id)
+                                        epl.EmployeeId = emp.Id;
+                                    els.UpdateEmployeeLog(epl);
+                                    continue;
+                                }
+                                epl.EmployeeId = emp.Id;
+                                epl.BeforeNumber = beforeLog.AfterNumber;
+                                epl.AfterNumber = (epl.Status == BHConstant.DEACTIVE_STATUS) ? epl.BeforeNumber - epl.Amount : epl.BeforeNumber + epl.Amount;
+                                els.UpdateEmployeeLog(epl);
+                                beforeLog = epl;
+                            }
+                        }
+                    }
                     customer.Description = txtDescription.Text;
                     customer.CustCode = txtCode.Text;
                     customer.Address = txtAddress.Text;
@@ -70,11 +104,6 @@ namespace BaoHien.UI
                     customer.Phone = txtPhoneNumber.Text;
                     customer.CustomerName = txtName.Text;
                     customer.FavoriteProduct = txtFavoriteProduct.Text;
-                    if (cmbSaler.SelectedValue != null)
-                    {
-                        Employee emp = salers.Single(x => x.Id == (int)cmbSaler.SelectedValue);
-                        customer.Employee = emp;
-                    }
                     CustomerService customerService = new CustomerService();
                     bool result = customerService.UpdateCustomer(customer);
                     if (result)
@@ -84,7 +113,6 @@ namespace BaoHien.UI
                         {
                             ((CustomerList)this.CallFromUserControll).loadCustomerList();
                         }
-
                         this.Close();
                     }
                     else

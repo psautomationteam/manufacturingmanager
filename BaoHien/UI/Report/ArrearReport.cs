@@ -90,7 +90,7 @@ namespace BaoHien.UI
             customers.Add(ctm);
             customers = customers.OrderBy(ct => ct.Id).ToList();
 
-            cbmCustomers.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            cbmCustomers.AutoCompleteMode = AutoCompleteMode.Append;
             cbmCustomers.AutoCompleteSource = AutoCompleteSource.ListItems;
             cbmCustomers.DataSource = customers;
             cbmCustomers.DisplayMember = "CustCode";

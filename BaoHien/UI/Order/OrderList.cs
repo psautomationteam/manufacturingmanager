@@ -52,7 +52,7 @@ namespace BaoHien.UI
             customers.Add(new Customer() { Id = 0, CustomerName = "Tất cả", CustCode = "Tất cả" });
             customers = customers.OrderBy(x => x.Id).ToList();
 
-            cbmCustomers.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            cbmCustomers.AutoCompleteMode = AutoCompleteMode.Append;
             cbmCustomers.AutoCompleteSource = AutoCompleteSource.ListItems;
             cbmCustomers.DataSource = customers;
             cbmCustomers.DisplayMember = "CustCode";

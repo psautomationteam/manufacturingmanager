@@ -94,7 +94,7 @@ namespace BaoHien.UI
                         order.Note = txtNote.Text;
                         order.VAT = vat;
                         order.OrderCode = txtOrderCode.Text;
-                        order.CreateBy = userId;
+                        //order.CreateBy = userId;
                         order.Reason = txtReason.Text;
                         order.WareHouse = txtWare.Text;
                         order.Total = totalWithTax;
@@ -339,7 +339,7 @@ namespace BaoHien.UI
                         result = cls.AddCustomerLog(cl);
 
                         int salerId = (int)order.Customer.SalerId;
-                        if (salerId > 0)
+                        if (salerId > 0 && totalCommission > 0)
                         {
                             EmployeeLogService els = new EmployeeLogService();
                             EmployeeLog el = els.GetNewestEmployeeLog(order.CreateBy);
@@ -386,7 +386,7 @@ namespace BaoHien.UI
             }
             if (customers != null)
             {
-                cbxCustomer.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+                cbxCustomer.AutoCompleteMode = AutoCompleteMode.Append;
                 cbxCustomer.AutoCompleteSource = AutoCompleteSource.ListItems;
 
                 cbxCustomer.DataSource = customers;
@@ -747,7 +747,7 @@ namespace BaoHien.UI
                         if (prodCode != null)
                         {
                             prodCode.DropDownStyle = ComboBoxStyle.DropDown;
-                            prodCode.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+                            prodCode.AutoCompleteMode = AutoCompleteMode.Append;
                             prodCode.AutoCompleteCustomSource = source;
                             prodCode.AutoCompleteSource = AutoCompleteSource.CustomSource;
                             prodCode.MaxDropDownItems = 5;
@@ -771,7 +771,7 @@ namespace BaoHien.UI
                         if (prodCode != null)
                         {
                             prodCode.DropDownStyle = ComboBoxStyle.DropDown;
-                            prodCode.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+                            prodCode.AutoCompleteMode = AutoCompleteMode.Append;
                             prodCode.AutoCompleteCustomSource = source;
                             prodCode.AutoCompleteSource = AutoCompleteSource.CustomSource;
                             prodCode.MaxDropDownItems = 5;

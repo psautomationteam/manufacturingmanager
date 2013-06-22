@@ -206,7 +206,7 @@ namespace BaoHien.UI
                             if (prodCode != null)
                             {
                                 prodCode.DropDownStyle = ComboBoxStyle.DropDown;
-                                prodCode.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+                                prodCode.AutoCompleteMode = AutoCompleteMode.Append;
                                 prodCode.AutoCompleteCustomSource = source;
                                 prodCode.AutoCompleteSource = AutoCompleteSource.CustomSource;
                                 prodCode.MaxDropDownItems = 5;
@@ -231,7 +231,7 @@ namespace BaoHien.UI
                             if (prodCode != null)
                             {
                                 prodCode.DropDownStyle = ComboBoxStyle.DropDown;
-                                prodCode.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+                                prodCode.AutoCompleteMode = AutoCompleteMode.Append;
                                 prodCode.AutoCompleteCustomSource = source;
                                 prodCode.AutoCompleteSource = AutoCompleteSource.CustomSource;
                                 prodCode.MaxDropDownItems = 5;
@@ -313,7 +313,7 @@ namespace BaoHien.UI
                             if (prodCode != null)
                             {
                                 prodCode.DropDownStyle = ComboBoxStyle.DropDown;
-                                prodCode.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+                                prodCode.AutoCompleteMode = AutoCompleteMode.Append;
                                 prodCode.AutoCompleteCustomSource = source;
                                 prodCode.AutoCompleteSource = AutoCompleteSource.CustomSource;
                                 prodCode.MaxDropDownItems = 5;
@@ -338,7 +338,7 @@ namespace BaoHien.UI
                             if (prodCode != null)
                             {
                                 prodCode.DropDownStyle = ComboBoxStyle.DropDown;
-                                prodCode.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+                                prodCode.AutoCompleteMode = AutoCompleteMode.Append;
                                 prodCode.AutoCompleteCustomSource = source;
                                 prodCode.AutoCompleteSource = AutoCompleteSource.CustomSource;
                                 prodCode.MaxDropDownItems = 5;

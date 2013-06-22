@@ -136,6 +136,12 @@ namespace BaoHien.UI
                     }
                 }
             }
+
+            var product_codes = new AutoCompleteStringCollection();
+            product_codes.AddRange(products.Select(x => x.ProductCode).ToArray());
+            txtCode.AutoCompleteCustomSource = product_codes;
+            txtCode.AutoCompleteMode = AutoCompleteMode.Append;
+            txtCode.AutoCompleteSource = AutoCompleteSource.CustomSource;
         }
 
         private void loadSomeData()
@@ -294,10 +300,14 @@ namespace BaoHien.UI
             string code = txtCode.Text;
             if (!string.IsNullOrEmpty(code))
             {
-                Product p = products.Where(x => x.ProductCode == code).FirstOrDefault();
+                Product p = null;
+                if (product != null)
+                    p = products.Where(x => x.ProductCode == code && x.Id != product.Id).FirstOrDefault();
+                else
+                    p = products.Where(x => x.ProductCode == code).FirstOrDefault();
                 if (p != null)
                 {
-                    if (MessageBox.Show("Sản phẩm với mã này hiện đang tồn tại, bạn có muốn load lại sản phẩm này không ?", "Thông báo ...", MessageBoxButtons.YesNo, MessageBoxIcon.Information)
+                    if (MessageBox.Show("Sản phẩm với mã này hiện đang tồn tại, bạn có muốn chỉnh sửa lại sản phẩm này không ?", "Thông báo ...", MessageBoxButtons.YesNo, MessageBoxIcon.Information)
                         == System.Windows.Forms.DialogResult.Yes)
                     {
                         loadDataForEditProduct(p.Id);
