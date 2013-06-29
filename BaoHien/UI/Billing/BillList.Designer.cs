@@ -206,6 +206,7 @@
             this.dgwBillingList.TabIndex = 0;
             this.dgwBillingList.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgwBillingList_CellClick);
             this.dgwBillingList.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgwBillingList_CellDoubleClick);
+            this.dgwBillingList.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.dgwBillingList_DataBindingComplete);
             // 
             // label8
             // 

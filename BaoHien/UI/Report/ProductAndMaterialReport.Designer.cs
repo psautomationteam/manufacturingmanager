@@ -195,6 +195,7 @@
             this.dgwStockEntranceList.Size = new System.Drawing.Size(1053, 456);
             this.dgwStockEntranceList.TabIndex = 21;
             this.dgwStockEntranceList.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgwStockEntranceList_CellDoubleClick);
+            this.dgwStockEntranceList.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.dgwStockEntranceList_DataBindingComplete);
             // 
             // label8
             // 

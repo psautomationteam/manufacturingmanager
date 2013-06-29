@@ -19,7 +19,7 @@ namespace BaoHien.Services
         public List<EntranceStock> GetEntranceStocks()
         {
             List<EntranceStock> entranceStocks = OnGetItems<EntranceStock>();
-            return entranceStocks.OrderByDescending(x => x.EntrancedDate).ToList();
+            return entranceStocks.OrderByDescending(x => x.CreatedDate).ToList();
         }
 
         public bool AddEntranceStock(EntranceStock entranceStock)
@@ -45,7 +45,7 @@ namespace BaoHien.Services
             {
                 if (entranceStockSearchCriteria.CreatedBy.HasValue)
                 {
-                    entranceStocks = entranceStocks.Where(pr => pr.EntrancedBy == entranceStockSearchCriteria.CreatedBy.Value).ToList();
+                    entranceStocks = entranceStocks.Where(pr => pr.UserId == entranceStockSearchCriteria.CreatedBy.Value).ToList();
                 }
                 if (entranceStockSearchCriteria.Code != "")
                 {
@@ -54,8 +54,8 @@ namespace BaoHien.Services
                 if (entranceStockSearchCriteria.To.HasValue && entranceStockSearchCriteria.From.HasValue)
                 {
                     entranceStocks = entranceStocks.
-                        Where(pr => pr.EntrancedDate.CompareTo(entranceStockSearchCriteria.From.Value) >= 0
-                            && pr.EntrancedDate.CompareTo(entranceStockSearchCriteria.To.Value) <= 0)
+                        Where(pr => pr.CreatedDate.CompareTo(entranceStockSearchCriteria.From.Value) >= 0
+                            && pr.CreatedDate.CompareTo(entranceStockSearchCriteria.To.Value) <= 0)
                             .ToList();
                 }
             }

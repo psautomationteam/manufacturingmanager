@@ -39,52 +39,7 @@ namespace BaoHien.Services.Employees
         {
             return OnUpdateItem<EmployeeLog>(employeeLog, employeeLog.Id.ToString());
         }
-
-        public EmployeeLog GetNewestEmployeeLog(int employeeId)
-        {
-            EmployeeLog result = null;
-            using (BaoHienDBDataContext context = new BaoHienDBDataContext(SettingManager.BuildStringConnection()))
-            {
-                result = context.EmployeeLogs.Where(c => c.EmployeeId == employeeId)
-                    .OrderByDescending(c => c.CreatedDate).FirstOrDefault();
-            } 
-            if (result == null)
-                result = new EmployeeLog
-                {
-                    Id = 0,
-                    EmployeeId = 0,
-                    AfterNumber = 0,
-                    Amount = 0,
-                    BeforeNumber = 0
-                };
-            return result;
-        }
-
-        public List<EmployeeLog> GetLogsOfEmployee(int employeeId, DateTime from, DateTime to)
-        {
-            List<EmployeeLog> result = new List<EmployeeLog>();
-            using (BaoHienDBDataContext context = new BaoHienDBDataContext(SettingManager.BuildStringConnection()))
-            {
-                result = context.EmployeeLogs
-                    .Where(c => c.EmployeeId == employeeId && c.CreatedDate >= from && c.CreatedDate <= to && c.Status == BHConstant.ACTIVE_STATUS)
-                    .OrderByDescending(c => c.CreatedDate).ToList();
-            }
-            return result;
-        }
-
-        public List<EmployeeLog> GetLogsOfEmployees(DateTime from, DateTime to)
-        {
-            List<EmployeeLog> result = new List<EmployeeLog>();
-            using (BaoHienDBDataContext context = new BaoHienDBDataContext(SettingManager.BuildStringConnection()))
-            {
-                result = context.EmployeeLogs
-                    .Where(c => c.CreatedDate >= from && c.CreatedDate <= to && c.Status == BHConstant.ACTIVE_STATUS)
-                    .OrderByDescending(el => el.CreatedDate)
-                    .GroupBy(c => c.EmployeeId).Select(el => el.First()).ToList();
-            }
-            return result;
-        }
-
+        
         public List<EmployeeReport> GetReportsOfEmployee(int employeeId, DateTime from, DateTime to, ref double total)
         {
             List<EmployeeReport> result = new List<EmployeeReport>();

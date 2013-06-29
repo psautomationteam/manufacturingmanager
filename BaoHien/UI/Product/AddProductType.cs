@@ -32,7 +32,7 @@ namespace BaoHien.UI
                 if (productType != null && productType.Id > 0)//edit
                 {
                     productType.Description = txtDescription.Text;
-                    productType.ProductName = txtName.Text;
+                    productType.TypeName = txtName.Text;
                     productType.TypeCode = txtCode.Text;
 
                     ProductTypeService productTypeService = new ProductTypeService();
@@ -45,7 +45,7 @@ namespace BaoHien.UI
                     }
                     else
                     {
-                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
                 else//add new
@@ -54,7 +54,7 @@ namespace BaoHien.UI
                     {
 
                         Description = txtDescription.Text,
-                        ProductName = txtName.Text,
+                        TypeName = txtName.Text,
                         TypeCode = txtCode.Text
                     };
                     ProductTypeService productTypeService = new ProductTypeService();
@@ -67,7 +67,7 @@ namespace BaoHien.UI
                     }
                     else
                     {
-                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
             }
@@ -79,12 +79,12 @@ namespace BaoHien.UI
 
             ProductTypeService productTypeService = new ProductTypeService();
            
-           productType = productTypeService.GetProductType(productTypeId);
+            productType = productTypeService.GetProductType(productTypeId);
             if (productType != null)
             {
                 txtDescription.Text = productType.Description;
                 txtCode.Text = productType.TypeCode;
-                txtName.Text = productType.ProductName;
+                txtName.Text = productType.TypeName;
             }
         }
     }

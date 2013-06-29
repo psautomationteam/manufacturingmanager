@@ -71,23 +71,11 @@ namespace BaoHien.UI
                         if (dl == DialogResult.Yes)
                         {
                             EmployeeLogService els = new EmployeeLogService();
-                            var epls = els.GetEmployeeLogs().Where(x => x.EmployeeId == old_saler_id || x.EmployeeId == emp.Id).OrderBy(x => x.CreatedDate);
-                            EmployeeLog beforeLog = null;
+                            var epls = els.GetEmployeeLogs().Where(x => x.EmployeeId == old_saler_id);
                             foreach(EmployeeLog epl in epls)
                             {
-                                if (beforeLog == null)
-                                {
-                                    beforeLog = epl;
-                                    if(epl.EmployeeId != emp.Id)
-                                        epl.EmployeeId = emp.Id;
-                                    els.UpdateEmployeeLog(epl);
-                                    continue;
-                                }
                                 epl.EmployeeId = emp.Id;
-                                epl.BeforeNumber = beforeLog.AfterNumber;
-                                epl.AfterNumber = (epl.Status == BHConstant.DEACTIVE_STATUS) ? epl.BeforeNumber - epl.Amount : epl.BeforeNumber + epl.Amount;
                                 els.UpdateEmployeeLog(epl);
-                                beforeLog = epl;
                             }
                         }
                     }
@@ -117,7 +105,7 @@ namespace BaoHien.UI
                     }
                     else
                     {
-                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
                 else
@@ -152,7 +140,7 @@ namespace BaoHien.UI
                     }
                     else
                     {
-                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
             }

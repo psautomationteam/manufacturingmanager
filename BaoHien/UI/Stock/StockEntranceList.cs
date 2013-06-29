@@ -44,16 +44,14 @@ namespace BaoHien.UI
             dgwStockEntranceList.AutoGenerateColumns = false;
             if (entranceStocks != null)
             {
-                int index = 0;
                 var query = from entranceStock in entranceStocks
                             select new
                             {
                                 Id = entranceStock.Id,
                                 Note = entranceStock.Note,
                                 EntranceCode = entranceStock.EntranceCode,
-                                EntrancedDate = entranceStock.EntrancedDate.ToString(BHConstant.DATE_FORMAT),
-                                EntrancedBy = entranceStock.SystemUser.FullName,
-                                Index = ++index
+                                CreatedDate = entranceStock.CreatedDate.ToString(BHConstant.DATE_FORMAT),
+                                UserId = entranceStock.SystemUser.FullName
                             };
                 dgwStockEntranceList.DataSource = query.ToList();
                 productionRequestInTotal.Text = query.Count().ToString();
@@ -64,10 +62,9 @@ namespace BaoHien.UI
         {
             dgwStockEntranceList.AutoGenerateColumns = false;
 
-            dgwStockEntranceList.Columns.Add(Global.CreateCell("Index", "STT", 30));
-            dgwStockEntranceList.Columns.Add(Global.CreateCell("EntrancedDate", "Ngày tạo", 100));
+            dgwStockEntranceList.Columns.Add(Global.CreateCell("CreatedDate", "Ngày tạo", 100));
             dgwStockEntranceList.Columns.Add(Global.CreateCell("EntranceCode", "Mã nhập kho", 150));
-            dgwStockEntranceList.Columns.Add(Global.CreateCell("EntrancedBy", "Người tạo", 200));
+            dgwStockEntranceList.Columns.Add(Global.CreateCell("UserId", "Người tạo", 200));
             dgwStockEntranceList.Columns.Add(Global.CreateCell("Note", "Ghi chú", 300));
             dgwStockEntranceList.Columns.Add(Global.CreateCellDeleteAction());
         }
@@ -102,10 +99,10 @@ namespace BaoHien.UI
                     MessageBoxIcon.Question);
                     if (result == DialogResult.Yes)
                     {
+                        DateTime systime = BaoHienRepository.GetBaoHienDBDataContext().GetSystemDate();
                         DataGridViewRow currentRow = dgwStockEntranceList.Rows[e.RowIndex];
 
                         EntranceStockService entranceStockService = new EntranceStockService();
-                        //Product mu = (Product)dgv.DataBoundItem;
                         int id = ObjectHelper.GetValueFromAnonymousType<int>(currentRow.DataBoundItem, "Id");
                         EntranceStock es = entranceStockService.GetEntranceStock(id);
 
@@ -114,32 +111,20 @@ namespace BaoHien.UI
                         List<EntranceStockDetail> details = entranceStockDetailService.SelectEntranceStockDetailByWhere(x => x.EntranceStockId == es.Id).ToList();
                         foreach (EntranceStockDetail esd in details)
                         {
-                            ProductLog pl = productLogService.GetNewestProductUnitLog(esd.ProductId, esd.AttributeId, esd.UnitId);
-                            ProductLog plg = new ProductLog
+                            ProductLog pl = productLogService.GetProductLog(esd.ProductId, esd.AttributeId, esd.UnitId);
+                            if (pl != null)
                             {
-                                AttributeId = esd.AttributeId,
-                                ProductId = esd.ProductId,
-                                UnitId = esd.UnitId,
-                                RecordCode = es.EntranceCode,
-                                BeforeNumber = pl.AfterNumber,
-                                Amount = esd.NumberUnit,
-                                AfterNumber = (pl.AfterNumber - esd.NumberUnit) > 0 ? (pl.AfterNumber - esd.NumberUnit) : 0,
-                                CreatedDate = BaoHienRepository.GetBaoHienDBDataContext().GetSystemDate(),
-                                Status = BHConstant.DEACTIVE_STATUS
-                            };
-                            productLogService.AddProductLog(plg);
-                            //ret = enstranceStockDetailService.DeleteEntranceStockDetail(esd.Id);
-                        }
-
-                        List<ProductLog> deactives = productLogService.SelectProductLogByWhere(x => x.RecordCode == es.EntranceCode && x.Status == BHConstant.ACTIVE_STATUS).ToList();
-                        foreach (ProductLog item in deactives)
-                        {
-                            item.Status = BHConstant.DEACTIVE_STATUS;
-                            bool ret = productLogService.UpdateProductLog(item);
+                                pl.UpdatedDate = systime;
+                                pl.Amount -= esd.NumberUnit;
+                                if (pl.Amount < 0)
+                                    pl.Amount = 0;
+                                productLogService.UpdateProductLog(pl);
+                            }
+                            entranceStockDetailService.DeleteEntranceStockDetail(esd.Id);
                         }
                         if (!entranceStockService.DeleteEntranceStock(id))
                         {
-                            MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                            MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                         loadEntranceStockList();
                     }
@@ -177,6 +162,19 @@ namespace BaoHien.UI
                 entranceStocks = new List<EntranceStock>();
             }
             setUpDataGrid(entranceStocks);
+        }
+
+        private void dgwStockEntranceList_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            DataGridView gridView = sender as DataGridView;
+            if (null != gridView)
+            {
+                gridView.AutoResizeRowHeadersWidth(DataGridViewRowHeadersWidthSizeMode.AutoSizeToDisplayedHeaders);
+                foreach (DataGridViewRow r in gridView.Rows)
+                {
+                    gridView.Rows[r.Index].HeaderCell.Value = (r.Index + 1).ToString();
+                }
+            }
         }
     }
 }

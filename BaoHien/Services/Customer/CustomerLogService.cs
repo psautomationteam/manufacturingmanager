@@ -44,40 +44,11 @@ namespace BaoHien.Services.Customers
         {
             return SelectItemByWhere<CustomerLog>(func);
         }
-
-        public CustomerLog GetNewestCustomerLog(int customerId)
+        
+        public CustomerLog GetCustomerLog(string recordCode)
         {
-            CustomerLog result = null;
-            using (BaoHienDBDataContext context = new BaoHienDBDataContext(SettingManager.BuildStringConnection()))
-            {
-                result = context.CustomerLogs.Where(c => c.CustomerId == customerId)
-                    .OrderByDescending(c => c.CreatedDate).FirstOrDefault();
-            }
-            return result;
-        }
-
-        public List<CustomerLog> GetLogsOfCustomer(int customerId, DateTime from, DateTime to)
-        {
-            List<CustomerLog> result = new List<CustomerLog>();
-            using (BaoHienDBDataContext context = new BaoHienDBDataContext(SettingManager.BuildStringConnection()))
-            {
-                result = context.CustomerLogs
-                    .Where(c => c.CustomerId == customerId && c.CreatedDate >= from && c.CreatedDate <= to)
-                    .OrderByDescending(c => c.CreatedDate).ToList();
-            }
-            return result;
-        }
-
-        public List<CustomerLog> GetLogsOfCustomers(DateTime from, DateTime to)
-        {
-            List<CustomerLog> result = new List<CustomerLog>();
-            using (BaoHienDBDataContext context = new BaoHienDBDataContext(SettingManager.BuildStringConnection()))
-            {
-                result = context.CustomerLogs.Where(c => c.CreatedDate >= from && c.CreatedDate <= to)
-                    .OrderByDescending(c => c.CreatedDate)
-                    .GroupBy(c => c.CustomerId).Select(c => c.First()).ToList();
-            }
-            return result;
+            CustomerLog customerLog = GetCustomerLogs().Where(x => x.RecordCode == recordCode).FirstOrDefault();
+            return customerLog;
         }
 
         public List<CustomerReport> GetReportsOfCustomer(int customerId, DateTime from, DateTime to, ref double total)
@@ -86,7 +57,7 @@ namespace BaoHien.Services.Customers
             using (BaoHienDBDataContext context = new BaoHienDBDataContext(SettingManager.BuildStringConnection()))
             {
                 List<CustomerLog> logs = context.CustomerLogs
-                    .Where(c => c.CustomerId == customerId && c.CreatedDate >= from && c.CreatedDate <= to)
+                    .Where(c => c.CustomerId == customerId && c.CreatedDate >= from && c.CreatedDate <= to && c.Status == BHConstant.ACTIVE_STATUS)
                     .OrderByDescending(c => c.CreatedDate).ToList();
                 List<Order> orders = context.Orders.Where(x => logs.Select(y => y.RecordCode).Contains(x.OrderCode)).ToList();
                 List<OrderDetail> details = context.OrderDetails.Where(x => orders.Select(y => y.Id).Contains(x.OrderId)).ToList();
@@ -134,9 +105,9 @@ namespace BaoHien.Services.Customers
             List<CustomersReport> result = new List<CustomersReport>();
             using (BaoHienDBDataContext context = new BaoHienDBDataContext(SettingManager.BuildStringConnection()))
             {
-                List<CustomerLog> logs = context.CustomerLogs.Where(c => c.CreatedDate >= from && c.CreatedDate <= to)
+                List<CustomerLog> logs = context.CustomerLogs.Where(c => c.CreatedDate >= from && c.CreatedDate <= to && c.Status == BHConstant.ACTIVE_STATUS)
                     .OrderBy(c => c.CreatedDate).ToList();
-                total = logs.Sum(x => x.AfterDebit - x.BeforeDebit);
+                total = logs.Sum(x => x.Amount);
                 ConvertLogToReport(logs, ref result);
             }
             return result;

@@ -84,7 +84,7 @@ namespace BaoHien.UI
                     }
                     else
                     {
-                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
                     
@@ -101,19 +101,12 @@ namespace BaoHien.UI
 
                     bool result = billService.AddBill(bill);
                     CustomerLogService cls = new CustomerLogService();
-                    CustomerLog newest = cls.GetNewestCustomerLog(bill.CustId);
-                    double beforeDebit = 0.0;
-                    if (newest != null)
-                    {
-                        beforeDebit = newest.AfterDebit;
-                    }
                     CustomerLog cl = new CustomerLog
                     {
                         CustomerId = bill.CustId,
                         RecordCode = bill.BillCode,
-                        BeforeDebit = beforeDebit,
                         Amount = bill.Amount,
-                        AfterDebit = beforeDebit - bill.Amount,
+                        Direction = BHConstant.DIRECTION_IN,
                         CreatedDate = systime
                     };
                     result = cls.AddCustomerLog(cl);
@@ -123,7 +116,7 @@ namespace BaoHien.UI
                     }
                     else
                     {
-                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
                 }

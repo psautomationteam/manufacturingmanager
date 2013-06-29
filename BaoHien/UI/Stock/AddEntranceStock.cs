@@ -63,7 +63,7 @@ namespace BaoHien.UI
             {
                 txtCode.Text = entranceStock.EntranceCode;
                 txtNote.Text = entranceStock.Note;
-                txtDate.Text = entranceStock.EntrancedDate.ToString(BHConstant.DATE_FORMAT);
+                txtDate.Text = entranceStock.CreatedDate.ToString(BHConstant.DATE_FORMAT);
                 txtUser.Text = entranceStock.SystemUser.FullName;
             }
             else
@@ -74,7 +74,6 @@ namespace BaoHien.UI
                 }                
                 txtUser.Enabled = false;
                 txtDate.Text = BaoHienRepository.GetBaoHienDBDataContext().GetSystemDate().ToString(BHConstant.DATE_FORMAT);
-
                 txtCode.Text = Global.GetTempSeedID(BHConstant.PREFIX_FOR_ENTRANCE);
             }
             txtDate.Enabled = false;
@@ -301,7 +300,7 @@ namespace BaoHien.UI
                 }
                 else
                 {
-                    MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                    MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
                 if (entranceStock != null)//update
@@ -319,8 +318,8 @@ namespace BaoHien.UI
                     entranceStock = new EntranceStock
                     {
                         EntranceCode = ss.AddSeedID(BHConstant.PREFIX_FOR_ENTRANCE),
-                        EntrancedBy = userId,
-                        EntrancedDate = systime,
+                        UserId = userId,
+                        CreatedDate = systime,
                         Note = txtNote.Text
                     };
                     EntranceStockService entranceStockService = new EntranceStockService();
@@ -335,24 +334,30 @@ namespace BaoHien.UI
                             bool ret = entranceStockDetailService.AddEntranceStockDetail(od);
                             if (!ret)
                             {
-                                MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                                MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                 return;
                             }
 
                             //Save in Product Log
-                            ProductLog pl = productLogService.GetNewestProductUnitLog(od.ProductId, od.AttributeId, od.UnitId);
-                            ProductLog plg = new ProductLog
+                            ProductLog pl = productLogService.GetProductLog(od.ProductId, od.AttributeId, od.UnitId);
+                            if (pl == null)
                             {
-                                AttributeId = od.AttributeId,
-                                ProductId = od.ProductId,
-                                UnitId = od.UnitId,
-                                RecordCode = entranceStock.EntranceCode,
-                                BeforeNumber = pl.AfterNumber,
-                                Amount = od.NumberUnit,
-                                AfterNumber = pl.AfterNumber + od.NumberUnit,
-                                CreatedDate = systime
-                            };
-                            result = productLogService.AddProductLog(plg);
+                                pl = new ProductLog()
+                                {
+                                    AttributeId = od.AttributeId,
+                                    ProductId = od.ProductId,
+                                    UnitId = od.UnitId,
+                                    Amount = od.NumberUnit,
+                                    UpdatedDate = systime
+                                };
+                                productLogService.AddProductLog(pl);
+                            }
+                            else
+                            {
+                                pl.Amount += od.NumberUnit;
+                                pl.UpdatedDate = systime;
+                                productLogService.UpdateProductLog(pl);
+                            }
                         }
                     }
                     if (result)
@@ -363,7 +368,7 @@ namespace BaoHien.UI
                     }
                     else
                     {
-                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
             }

@@ -62,7 +62,6 @@ namespace BaoHien.UI
             dgwBillingList.AutoGenerateColumns = false;
             if (bills != null)
             {
-                int index = 0;
                 var query = from bill in bills
                             select new
                             {
@@ -73,9 +72,8 @@ namespace BaoHien.UI
                                 Total = Global.formatVNDCurrencyText(bill.Amount.ToString()),
                                 TotalInCurrency = bill.Amount,
                                 Note = bill.Note,
-                                CreateBy = bill.SystemUser.FullName,
-                                CreatedDate = bill.CreatedDate.ToString(BHConstant.DATE_FORMAT),
-                                Index = ++index
+                                UserId = bill.SystemUser.FullName,
+                                CreatedDate = bill.CreatedDate.ToString(BHConstant.DATE_FORMAT)
                             };
                 dgwBillingList.DataSource = query.ToList();
                 lblTotal.Text = Global.formatVNDCurrencyText(query.Select(x => x.TotalInCurrency).Sum().ToString());
@@ -87,12 +85,11 @@ namespace BaoHien.UI
         {
             dgwBillingList.AutoGenerateColumns = false;
             
-            dgwBillingList.Columns.Add(Global.CreateCell("Index", "STT", 30));
             dgwBillingList.Columns.Add(Global.CreateCell("CreatedDate", "Ngày", 100));
             dgwBillingList.Columns.Add(Global.CreateCell("BillCode", "Mã hóa đơn", 100));
             dgwBillingList.Columns.Add(Global.CreateCell("CustomerName", "Khách hàng", 200));
             dgwBillingList.Columns.Add(Global.CreateCell("CustomerCode", "Mã khách hàng", 150));
-            dgwBillingList.Columns.Add(Global.CreateCell("CreateBy", "Người tạo", 150));
+            dgwBillingList.Columns.Add(Global.CreateCell("UserId", "Người tạo", 150));
             dgwBillingList.Columns.Add(Global.CreateCellWithAlignment("Total", "Tổng", 100, DataGridViewContentAlignment.MiddleRight));
             dgwBillingList.Columns.Add(Global.CreateCell("Note", "Ghi chú", 150));
             dgwBillingList.Columns.Add(Global.CreateCellDeleteAction());
@@ -154,39 +151,15 @@ namespace BaoHien.UI
                         DataGridViewRow currentRow = dgwBillingList.Rows[e.RowIndex];
 
                         BillService billService = new BillService();
-                        //Product mu = (Product)dgv.DataBoundItem;
                         int id = ObjectHelper.GetValueFromAnonymousType<int>(currentRow.DataBoundItem, "Id");
                         Bill bill = billService.GetBill(id);
                         CustomerLogService cls = new CustomerLogService();
-                        CustomerLog newest = cls.GetNewestCustomerLog(bill.CustId);
-                        double beforeDebit = 0.0;
-                        DateTime systime = BaoHienRepository.GetBaoHienDBDataContext().GetSystemDate();
-                        if (newest != null)
-                        {
-                            beforeDebit = newest.AfterDebit;
-                        }
-                        CustomerLog cl = new CustomerLog
-                        {
-                            CustomerId = bill.CustId,
-                            RecordCode = bill.BillCode,
-                            BeforeDebit = beforeDebit,
-                            Amount = bill.Amount,
-                            AfterDebit = beforeDebit + bill.Amount,
-                            CreatedDate = systime,
-                            Status = BHConstant.DEACTIVE_STATUS
-                        };
-                        bool kq = cls.AddCustomerLog(cl);
-
-                        List<CustomerLog> deactiveCustomerLog = cls.SelectCustomerLogByWhere(x => x.Status == BHConstant.ACTIVE_STATUS && x.RecordCode == bill.BillCode).ToList();
-                        foreach (CustomerLog item in deactiveCustomerLog)
-                        {
-                            item.Status = BHConstant.DEACTIVE_STATUS;
-                            cls.UpdateCustomerLog(item);
-                        }
+                        CustomerLog cl = cls.SelectCustomerLogByWhere(x => x.RecordCode == bill.BillCode).FirstOrDefault();
+                        bool kq = cls.DeleteCustomerLog(cl.Id);
 
                         if (!billService.DeleteBill(id) && kq)
                         {
-                            MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                            MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                         loadBillList();
                     }
@@ -208,6 +181,19 @@ namespace BaoHien.UI
                 if (cm != null)
                 {
                     lbCustomerName.Text = cm.CustomerName;
+                }
+            }
+        }
+
+        private void dgwBillingList_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            DataGridView gridView = sender as DataGridView;
+            if (null != gridView)
+            {
+                gridView.AutoResizeRowHeadersWidth(DataGridViewRowHeadersWidthSizeMode.AutoSizeToDisplayedHeaders);
+                foreach (DataGridViewRow r in gridView.Rows)
+                {
+                    gridView.Rows[r.Index].HeaderCell.Value = (r.Index + 1).ToString();
                 }
             }
         }

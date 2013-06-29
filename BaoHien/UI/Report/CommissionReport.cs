@@ -71,15 +71,16 @@ namespace BaoHien.UI
                 int employeeId = (int)cbmEmployees.SelectedValue;
                 if (employeeId == 0)
                 {
+                    SetupDataGrid();
                     double total = 0.0;
                     textForPrint = "Từ ngày " + dtpFrom.Value.ToString(BHConstant.DATE_FORMAT) + " đến ngày " + dtpTo.Value.ToString(BHConstant.DATE_FORMAT); 
                     employees_reports = employeeLogService.GetReportsOfEmployees(dtpFrom.Value, dtpTo.Value.AddDays(1).Date, ref total);
                     dgwEmployeeCommissionList.DataSource = employees_reports;
-                    SetupDataGrid();
                     lbTotal.Text = Global.formatVNDCurrencyText(total.ToString());
                 }
                 else
                 {
+                    SetupDataGridDetail();
                     modeReport = 1;
                     btnExportExcel.Visible = true;
                     textForPrint = "Từ ngày " + dtpFrom.Value.ToString(BHConstant.DATE_FORMAT) + " đến ngày " + dtpTo.Value.ToString(BHConstant.DATE_FORMAT); 
@@ -88,7 +89,6 @@ namespace BaoHien.UI
                     employee_reports = employeeLogService.GetReportsOfEmployee(employeeId, dtpFrom.Value, 
                         dtpTo.Value.AddDays(1).Date, ref total);
                     dgwEmployeeCommissionList.DataSource = employee_reports;
-                    SetupDataGridDetail();
                     lbTotal.Text = Global.formatVNDCurrencyText(total.ToString());
                 }
             }
@@ -104,7 +104,6 @@ namespace BaoHien.UI
             dgwEmployeeCommissionList.Columns.Clear();
             dgwEmployeeCommissionList.AutoGenerateColumns = false;
 
-            dgwEmployeeCommissionList.Columns.Add(Global.CreateCell("Index", "STT", 30));
             dgwEmployeeCommissionList.Columns.Add(Global.CreateCell("CreatedDate", "Ngày", 100));
             dgwEmployeeCommissionList.Columns.Add(Global.CreateCell("EmployeeName", "Nhân viên", 150));
             dgwEmployeeCommissionList.Columns.Add(Global.CreateCell("RecordCode", "Mã phiếu", 150));
@@ -116,7 +115,6 @@ namespace BaoHien.UI
             dgwEmployeeCommissionList.Columns.Clear();
             dgwEmployeeCommissionList.AutoGenerateColumns = false;
 
-            dgwEmployeeCommissionList.Columns.Add(Global.CreateCell("Index", "STT", 30));
             dgwEmployeeCommissionList.Columns.Add(Global.CreateCell("Date", "Ngày", 100));
             dgwEmployeeCommissionList.Columns.Add(Global.CreateCell("CustomerName", "Tên khách hàng", 150));
             dgwEmployeeCommissionList.Columns.Add(Global.CreateCell("ProductName", "Mặt hàng", 150));
@@ -296,6 +294,19 @@ namespace BaoHien.UI
                     MessageBox.Show("Đã lưu thành công!", "Thông tin", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 else
                     MessageBox.Show("Hệ thống có lỗi, chưa lưu được!", "Thông tin", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void dgwEmployeeCommissionList_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            DataGridView gridView = sender as DataGridView;
+            if (null != gridView)
+            {
+                gridView.AutoResizeRowHeadersWidth(DataGridViewRowHeadersWidthSizeMode.AutoSizeToDisplayedHeaders);
+                foreach (DataGridViewRow r in gridView.Rows)
+                {
+                    gridView.Rows[r.Index].HeaderCell.Value = (r.Index + 1).ToString();
+                }
             }
         }
     }

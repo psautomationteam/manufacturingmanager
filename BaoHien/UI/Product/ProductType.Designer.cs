@@ -100,9 +100,9 @@
             // 
             // btnAdd
             // 
-            this.btnAdd.Location = new System.Drawing.Point(979, 87);
+            this.btnAdd.Location = new System.Drawing.Point(936, 76);
             this.btnAdd.Name = "btnAdd";
-            this.btnAdd.Size = new System.Drawing.Size(75, 43);
+            this.btnAdd.Size = new System.Drawing.Size(118, 22);
             this.btnAdd.TabIndex = 3;
             this.btnAdd.Text = "Thêm loại sản phẩm";
             this.btnAdd.UseVisualStyleBackColor = true;
@@ -111,18 +111,19 @@
             // dgvProductTypeList
             // 
             this.dgvProductTypeList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvProductTypeList.Location = new System.Drawing.Point(12, 136);
+            this.dgvProductTypeList.Location = new System.Drawing.Point(12, 104);
             this.dgvProductTypeList.Name = "dgvProductTypeList";
             this.dgvProductTypeList.ReadOnly = true;
-            this.dgvProductTypeList.Size = new System.Drawing.Size(1052, 484);
+            this.dgvProductTypeList.Size = new System.Drawing.Size(1052, 516);
             this.dgvProductTypeList.TabIndex = 4;
             this.dgvProductTypeList.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvProductTypeList_CellClick);
             this.dgvProductTypeList.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvProductTypeList_CellDoubleClick);
+            this.dgvProductTypeList.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.dgvProductTypeList_DataBindingComplete);
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 98);
+            this.label3.Location = new System.Drawing.Point(9, 81);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(132, 13);
             this.label3.TabIndex = 4;
@@ -133,7 +134,7 @@
             this.lblTotalResult.AutoSize = true;
             this.lblTotalResult.Font = new System.Drawing.Font("Arial", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTotalResult.ForeColor = System.Drawing.Color.Blue;
-            this.lblTotalResult.Location = new System.Drawing.Point(148, 97);
+            this.lblTotalResult.Location = new System.Drawing.Point(145, 80);
             this.lblTotalResult.Name = "lblTotalResult";
             this.lblTotalResult.Size = new System.Drawing.Size(16, 16);
             this.lblTotalResult.TabIndex = 5;

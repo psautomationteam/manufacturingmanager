@@ -44,24 +44,8 @@ namespace BaoHien.UI
         {
             if (employees != null)
             {
-                int index = 0;
-                var query = from employee in employees
-
-                            select new
-                            {
-                                Id = employee.Id,
-                                Address = employee.Address,
-                                Code = employee.Code,
-                                Description = employee.Description,
-                                MobilePhone = employee.MobilePhone,
-                                Phone = employee.Phone,
-                                Status = employee.Status,
-                                Type = employee.Type,
-                                FullName = employee.FullName,
-                                Index = ++index
-                            };
-                dgvEmployeeList.DataSource = query.ToList();
-
+                dgvEmployeeList.DataSource = employees.ToList();
+                lblTotalResult.Text = employees.Count.ToString();
             }
         }
 
@@ -69,7 +53,6 @@ namespace BaoHien.UI
         {
             dgvEmployeeList.AutoGenerateColumns = false;
 
-            dgvEmployeeList.Columns.Add(Global.CreateCell("Index", "STT", 30));
             dgvEmployeeList.Columns.Add(Global.CreateCell("Code", "Mã nhân viên", 200));
             dgvEmployeeList.Columns.Add(Global.CreateCell("FullName", "Tên nhân viên", 100));
             dgvEmployeeList.Columns.Add(Global.CreateCell("NickName", "Tên viết tắt", 100));
@@ -112,7 +95,7 @@ namespace BaoHien.UI
 
                         if (!employeeService.DeleteEmployee(id))
                         {
-                            MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                            MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                         }
                         loadEmployeeList();
@@ -120,6 +103,19 @@ namespace BaoHien.UI
 
                 }
 
+            }
+        }
+
+        private void dgvEmployeeList_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            DataGridView gridView = sender as DataGridView;
+            if (null != gridView)
+            {
+                gridView.AutoResizeRowHeadersWidth(DataGridViewRowHeadersWidthSizeMode.AutoSizeToDisplayedHeaders);
+                foreach (DataGridViewRow r in gridView.Rows)
+                {
+                    gridView.Rows[r.Index].HeaderCell.Value = (r.Index + 1).ToString();
+                }
             }
         }
     }

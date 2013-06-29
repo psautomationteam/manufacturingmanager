@@ -34,7 +34,7 @@ namespace BaoHien.UI
             if (validator1.Validate())
             {
                 SystemUserService systemUserService = new SystemUserService();
-                SystemUser user = systemUserService.GetSystemUsers().Where(u => u.username == txtUsername.Text && u.password == txtPassword.Text).FirstOrDefault();
+                SystemUser user = systemUserService.GetSystemUsers().Where(u => u.Username == txtUsername.Text && u.Password == txtPassword.Text).FirstOrDefault();
                 if (txtUsername.Text == BHConstant.MASTER_USERNAME)
                 {
                     if (txtPassword.Text == BHConstant.MASTER_PASSWORD_TO_DELETE)

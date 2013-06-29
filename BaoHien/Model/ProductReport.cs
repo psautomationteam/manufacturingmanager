@@ -14,11 +14,11 @@ namespace BaoHien.Model
             set { index = value; }
         }
 
-        string createdDate;
-        public string CreatedDate
+        string updatedDateString;
+        public string UpdatedDateString
         {
-            get { return createdDate; }
-            set { createdDate = value; }
+            get { return updatedDateString; }
+            set { updatedDateString = value; }
         }
 
         string recordCode;
@@ -28,25 +28,25 @@ namespace BaoHien.Model
             set { recordCode = value; }
         }
 
-        string beforeNumber;
-        public string BeforeNumber
-        {
-            get { return beforeNumber; }
-            set { beforeNumber = value; }
-        }
-
-        string afterNumber;
-        public string AfterNumber
-        {
-            get { return afterNumber; }
-            set { afterNumber = value; }
-        }
-
         string amount;
         public string Amount
         {
             get { return amount; }
             set { amount = value; }
+        }
+
+        DateTime updatedDate;
+        public DateTime UpdatedDate
+        {
+            get { return updatedDate; }
+            set { updatedDate = value; }
+        }
+
+        bool direction;
+        public bool Direction
+        {
+            get { return direction; }
+            set { direction = value; }
         }
     }
 }

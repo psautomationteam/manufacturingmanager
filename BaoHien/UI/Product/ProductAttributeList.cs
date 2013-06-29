@@ -33,31 +33,7 @@ namespace BaoHien.UI
             SetupColumns();
             loadProductAttributeList();
         }
-
-        private void dgvProductAttributeList_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
-        {
-
-        }
-
-        private void btnDelete_Click(object sender, EventArgs e)
-        {
-            DataGridViewSelectedRowCollection selectedRows = dgvProductAttributeList.SelectedRows;
-
-            foreach (DataGridViewRow dgv in selectedRows)
-            {
-
-                BaseAttributeService productAttributeService = new BaseAttributeService();
-                int id = ObjectHelper.GetValueFromAnonymousType<int>(dgv.DataBoundItem, "Id");
-                if (!productAttributeService.DeleteBaseAttribute(id))
-                {
-                    MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
-                    break;
-                }
-
-            }
-            loadProductAttributeList();
-        }
-
+        
         public void loadProductAttributeList()
         {
             BaseAttributeService baseAttributeService = new BaseAttributeService();
@@ -73,27 +49,14 @@ namespace BaoHien.UI
         {
             if (baseAttributes != null)
             {
-                int index = 0;
-                var query = from baseAttribute in baseAttributes
-
-                            select new
-                            {
-                                AttributeName = baseAttribute.AttributeName,
-                                AttributeCode = baseAttribute.AttributeCode,
-                                Description = baseAttribute.Description,
-                                Id = baseAttribute.Id,
-                                Index = ++index
-                            };
-                dgvProductAttributeList.DataSource = query.ToList();
-
+                dgvProductAttributeList.DataSource = baseAttributes.ToList();
+                lblTotalResult.Text = baseAttributes.Count.ToString();
             }
         }
 
         private void SetupColumns()
         {
             dgvProductAttributeList.AutoGenerateColumns = false;
-
-            dgvProductAttributeList.Columns.Add(Global.CreateCell("Index", "STT", 30));
             dgvProductAttributeList.Columns.Add(Global.CreateCell("AttributeCode", "Mã Quy cách", 100));
             dgvProductAttributeList.Columns.Add(Global.CreateCell("AttributeName", "Tên Quy cách", 150));
             dgvProductAttributeList.Columns.Add(Global.CreateCell("Description", "Đặc tả", 400));
@@ -138,7 +101,7 @@ namespace BaoHien.UI
                         {
                             if (!baseAttributeService.DeleteBaseAttribute(id))
                             {
-                                MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                                MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             }
                             loadProductAttributeList();
                         }
@@ -146,6 +109,19 @@ namespace BaoHien.UI
 
                 }
 
+            }
+        }
+
+        private void dgvProductAttributeList_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            DataGridView gridView = sender as DataGridView;
+            if (null != gridView)
+            {
+                gridView.AutoResizeRowHeadersWidth(DataGridViewRowHeadersWidthSizeMode.AutoSizeToDisplayedHeaders);
+                foreach (DataGridViewRow r in gridView.Rows)
+                {
+                    gridView.Rows[r.Index].HeaderCell.Value = (r.Index + 1).ToString();
+                }
             }
         }
     }

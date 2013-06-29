@@ -56,12 +56,12 @@ namespace BaoHien.UI.Cleaner
                     if(chkNK.Checked)
                     {
                         sqlQuery += "UPDATE productlog SET status = 1 WHERE createddate < '" + dateString + "' AND recordcode like '%" + BHConstant.PREFIX_FOR_ENTRANCE + "%'; ";
-                        sqlQuery += "UPDATE entrancestock SET status = 3  WHERE entranceddate < '" + dateString + "'; ";
+                        sqlQuery += "UPDATE entrancestock SET status = 3  WHERE CreatedDate < '" + dateString + "'; ";
                     }
                     if (chkSX.Checked)
                     {
                         sqlQuery += "UPDATE productlog SET status = 1 WHERE createddate < '" + dateString + "' AND recordcode like '%" + BHConstant.PREFIX_FOR_PRODUCTION + "%'; ";
-                        sqlQuery += "UPDATE productionrequest SET status = 3  WHERE requesteddate < '" + dateString + "'; ";
+                        sqlQuery += "UPDATE productionrequest SET status = 3  WHERE CreatedDate < '" + dateString + "'; ";
                     }
                     if (!string.IsNullOrEmpty(sqlQuery))
                     {

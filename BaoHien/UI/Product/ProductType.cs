@@ -50,53 +50,9 @@ namespace BaoHien.UI
         {
             if (productTypes != null)
             {
-                int index = 0;
-                var query = from productType in productTypes
-
-                            select new
-                            {
-                                
-                                ProductName = productType.ProductName,
-                                TypeCode = productType.TypeCode,
-                                Description = productType.Description,
-                                Id = productType.Id,
-                                Status = productType.Status,
-                                Index = ++index
-                            };
-                dgvProductTypeList.DataSource = query.ToList();
+                dgvProductTypeList.DataSource = productTypes.ToList();
                 lblTotalResult.Text = productTypes.Count.ToString();
             }
-        }
-
-        private void btnDelete_Click(object sender, EventArgs e)
-        {
-            DataGridViewSelectedRowCollection selectedRows = dgvProductTypeList.SelectedRows;
-
-            foreach (DataGridViewRow dgv in selectedRows)
-            {
-
-                ProductTypeService productTypeService = new ProductTypeService();
-                int id = ObjectHelper.GetValueFromAnonymousType<int>(dgv.DataBoundItem, "Id");
-                ProductService productService = new ProductService();
-                List<Product> productList = productService.SelectProductByWhere(pt => pt.ProductType == id);
-                bool deleteAllProductForThisType = true;
-                foreach (Product p in productList)
-                {
-                    if (!productService.DeleteProduct(p.Id))
-                    {
-                        deleteAllProductForThisType = false;
-                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
-                        break;
-                    }
-                }
-                if (!deleteAllProductForThisType || !productTypeService.DeleteProductType(id))
-                {
-                    MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
-                    break;
-                }
-
-            }
-            loadProductTypeList();
         }
 
         private void btnSearch_Click(object sender, EventArgs e)
@@ -116,7 +72,6 @@ namespace BaoHien.UI
             List<ProductType> productTypes = producTypeService.SearchingProductType(producTypeSearchCriteria);
             if (productTypes != null)
             {
-                
                 dgvProductTypeList.DataSource = productTypes;
                 lblTotalResult.Text = productTypes.Count.ToString();
             }
@@ -125,10 +80,8 @@ namespace BaoHien.UI
         private void SetupColumns()
         {
             dgvProductTypeList.AutoGenerateColumns = false;
-
-            dgvProductTypeList.Columns.Add(Global.CreateCell("Index", "STT", 30));
-            dgvProductTypeList.Columns.Add(Global.CreateCell("TypeCode", "Mã loại sản phẩm", 100));
-            dgvProductTypeList.Columns.Add(Global.CreateCell("ProductName", "Tên sản phẩm", 150));
+            dgvProductTypeList.Columns.Add(Global.CreateCell("TypeCode", "Mã LSP", 100));
+            dgvProductTypeList.Columns.Add(Global.CreateCell("TypeName", "Tên LSP", 150));
             dgvProductTypeList.Columns.Add(Global.CreateCell("Description", "Đặc tả", 300));
             dgvProductTypeList.Columns.Add(Global.CreateCellDeleteAction());
         }
@@ -172,7 +125,7 @@ namespace BaoHien.UI
                         {
                             if (!producTypeService.DeleteProductType(id))
                             {
-                                MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                                MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             }
                             loadProductTypeList();
                         }
@@ -182,6 +135,19 @@ namespace BaoHien.UI
                 
             }
             
+        }
+
+        private void dgvProductTypeList_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            DataGridView gridView = sender as DataGridView;
+            if (null != gridView)
+            {
+                gridView.AutoResizeRowHeadersWidth(DataGridViewRowHeadersWidthSizeMode.AutoSizeToDisplayedHeaders);
+                foreach (DataGridViewRow r in gridView.Rows)
+                {
+                    gridView.Rows[r.Index].HeaderCell.Value = (r.Index + 1).ToString();
+                }
+            }
         }
     }
 }

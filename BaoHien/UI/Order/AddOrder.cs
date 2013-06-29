@@ -80,24 +80,22 @@ namespace BaoHien.UI
                     }
                     else
                     {
-                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return false;
                     }
                     if (order != null)//update
                     {
                         #region Update
-
-                        double tax = totalWithTax - order.Total;
-
+                        
                         order.CustId = cbxCustomer.SelectedValue != null ? (int)cbxCustomer.SelectedValue : 0;
                         order.Discount = discount;
                         order.Note = txtNote.Text;
                         order.VAT = vat;
                         order.OrderCode = txtOrderCode.Text;
-                        //order.CreateBy = userId;
                         order.Reason = txtReason.Text;
                         order.WareHouse = txtWare.Text;
                         order.Total = totalWithTax;
+                        order.UpdatedDate = createdDate;
 
                         #region Update Order Detail
 
@@ -107,62 +105,39 @@ namespace BaoHien.UI
                             x.AttributeId.ToString() + '_' + x.UnitId.ToString())).ToList();
                         foreach(OrderDetailEntity item in rev_details)
                         {
-                            ProductLog pl = productLogService.GetNewestProductUnitLog(item.ProductId, item.AttributeId, item.UnitId);
-                            ProductLog plg = new ProductLog
+                            ProductLog pl = productLogService.GetProductLog(item.ProductId, item.AttributeId, item.UnitId);
+                            if (pl != null)
                             {
-                                AttributeId = item.AttributeId,
-                                ProductId = item.ProductId,
-                                UnitId = item.UnitId,
-                                RecordCode = order.OrderCode,
-                                BeforeNumber = pl.AfterNumber,
-                                Amount = Math.Abs(item.NumberUnit),
-                                AfterNumber = pl.AfterNumber + item.NumberUnit,
-                                CreatedDate = createdDate,
-                                Status = BHConstant.DEACTIVE_STATUS
-                            };
-                            productLogService.AddProductLog(plg);
-
-                            List<ProductLog> deactiveProductLog = productLogService.SelectProductLogByWhere(x => x.RecordCode == order.OrderCode
-                                && x.Status == BHConstant.ACTIVE_STATUS && x.ProductId == item.ProductId && x.AttributeId == item.AttributeId
-                                && x.UnitId == item.UnitId).ToList();
-                            foreach (ProductLog i in deactiveProductLog)
-                            {
-                                i.Status = BHConstant.DEACTIVE_STATUS;
-                                productLogService.UpdateProductLog(i);
+                                pl.UpdatedDate = createdDate;
+                                pl.Amount += item.NumberUnit;
+                                productLogService.UpdateProductLog(pl);
                             }
                         }
                         foreach (OrderDetail od in orderDetails)
                         {
                             if (od.ProductId > 0 && od.AttributeId > 0 && od.UnitId > 0)
                             {
+                                totalCommission += od.Commission;
                                 OrderDetailEntity tmp_ode = old_orderDetails.Where(x => x.ProductId == od.ProductId &&
                                     x.AttributeId == od.AttributeId && x.UnitId == od.UnitId && x.OrderId == order.Id).FirstOrDefault();
                                 if (tmp_ode != null)
                                 {
                                     double amount = tmp_ode.NumberUnit - od.NumberUnit;
-
                                     bool ret = orderDetailService.UpdateOrderDetail(od);
-                                    totalCommission += od.Commission;
 
                                     //Save in Production Log
                                     if (amount != 0)
                                     {
-                                        ProductLog pl = productLogService.GetNewestProductUnitLog(od.ProductId, od.AttributeId, od.UnitId);
-                                        ProductLog plg = new ProductLog
+                                        ProductLog pl = productLogService.GetProductLog(od.ProductId, od.AttributeId, od.UnitId); 
+                                        if (pl != null)
                                         {
-                                            AttributeId = od.AttributeId,
-                                            ProductId = od.ProductId,
-                                            UnitId = od.UnitId,
-                                            RecordCode = order.OrderCode,
-                                            BeforeNumber = pl.AfterNumber,
-                                            Amount = Math.Abs(amount),
-                                            AfterNumber = pl.AfterNumber + amount,
-                                            CreatedDate = createdDate
-                                        };
-                                        ret = productLogService.AddProductLog(plg);
+                                            pl.UpdatedDate = createdDate;
+                                            pl.Amount += amount;
+                                            productLogService.UpdateProductLog(pl);
+                                        }
                                         if (!ret)
                                         {
-                                            MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                                            MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                             return false;
                                         }
                                     }
@@ -170,25 +145,18 @@ namespace BaoHien.UI
                                 else
                                 {
                                     bool ret = orderDetailService.AddOrderDetail(od);
-                                    totalCommission += od.Commission;
 
                                     //Save in Production Log
-                                    ProductLog pl = productLogService.GetNewestProductUnitLog(od.ProductId, od.AttributeId, od.UnitId);
-                                    ProductLog plg = new ProductLog
+                                    ProductLog pl = productLogService.GetProductLog(od.ProductId, od.AttributeId, od.UnitId); 
+                                    if (pl != null)
                                     {
-                                        AttributeId = od.AttributeId,
-                                        ProductId = od.ProductId,
-                                        UnitId = od.UnitId,
-                                        RecordCode = order.OrderCode,
-                                        BeforeNumber = pl.AfterNumber,
-                                        Amount = od.NumberUnit,
-                                        AfterNumber = pl.AfterNumber - od.NumberUnit,
-                                        CreatedDate = createdDate
-                                    };
-                                    ret = productLogService.AddProductLog(plg);
+                                        pl.UpdatedDate = createdDate;
+                                        pl.Amount -= od.NumberUnit;
+                                        productLogService.UpdateProductLog(pl);
+                                    }
                                     if (!ret)
                                     {
-                                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                         return false;
                                     }
                                 }
@@ -202,47 +170,21 @@ namespace BaoHien.UI
 
                         #region KH & NV
 
-                        if (tax != 0)
+                        CustomerLogService cls = new CustomerLogService();
+                        CustomerLog newest = cls.GetCustomerLog(order.OrderCode);
+                        if(newest != null)
                         {
-                            CustomerLogService cls = new CustomerLogService();
-                            CustomerLog newest = cls.GetNewestCustomerLog(order.CustId);
-                            double beforeDebit = 0.0;
-                            if (newest != null)
-                            {
-                                beforeDebit = newest.AfterDebit;
-                            }
-                            CustomerLog cl = new CustomerLog
-                            {
-                                CustomerId = order.CustId,
-                                RecordCode = order.OrderCode,
-                                BeforeDebit = beforeDebit,
-                                Amount = tax,
-                                AfterDebit = beforeDebit + tax,
-                                CreatedDate = createdDate
-                            };
-                            result = cls.AddCustomerLog(cl);
+                            newest.Amount = totalWithTax;
+                            cls.UpdateCustomerLog(newest);
                         }
 
                         int salerId = (int)order.Customer.SalerId;
                         if (salerId > 0)
                         {
                             EmployeeLogService els = new EmployeeLogService();
-                            EmployeeLog el = els.GetNewestEmployeeLog(order.CreateBy);
                             EmployeeLog order_el = els.SelectEmployeeLogByWhere(x => x.RecordCode == order.OrderCode).FirstOrDefault();
-                            double commission = totalCommission - order_el.Amount;
-                            if (commission != 0)
-                            {
-                                EmployeeLog newel = new EmployeeLog
-                                {
-                                    EmployeeId = salerId,
-                                    RecordCode = order.OrderCode,
-                                    BeforeNumber = el.AfterNumber,
-                                    Amount = commission,
-                                    AfterNumber = el.AfterNumber + commission,
-                                    CreatedDate = createdDate
-                                };
-                                result = els.AddEmployeeLog(newel);
-                            }
+                            order_el.Amount = totalCommission;
+                            els.UpdateEmployeeLog(order_el);
                         }
 
                         #endregion
@@ -255,7 +197,7 @@ namespace BaoHien.UI
                         }
                         else
                         {
-                            MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                            MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return false;
                         }
 
@@ -274,7 +216,7 @@ namespace BaoHien.UI
                             VAT = vat,
                             OrderCode = ss.AddSeedID(BHConstant.PREFIX_FOR_ORDER),
                             CreatedDate = createdDate,
-                            CreateBy = userId,
+                            UserId = userId,
                             Reason = txtReason.Text,
                             WareHouse = txtWare.Text,
                             Total = totalWithTax
@@ -295,22 +237,28 @@ namespace BaoHien.UI
                                 totalCommission += od.Commission;
 
                                 //Save in Production Log
-                                ProductLog pl = productLogService.GetNewestProductUnitLog(od.ProductId, od.AttributeId, od.UnitId);
-                                ProductLog plg = new ProductLog
+                                ProductLog pl = productLogService.GetProductLog(od.ProductId, od.AttributeId, od.UnitId);
+                                if (pl == null)
                                 {
-                                    AttributeId = od.AttributeId,
-                                    ProductId = od.ProductId,
-                                    UnitId = od.UnitId,
-                                    RecordCode = order.OrderCode,
-                                    BeforeNumber = pl.AfterNumber,
-                                    Amount = od.NumberUnit,
-                                    AfterNumber = pl.AfterNumber - od.NumberUnit,
-                                    CreatedDate = createdDate
-                                };
-                                ret = productLogService.AddProductLog(plg);
+                                    pl = new ProductLog()
+                                    {
+                                        AttributeId = od.AttributeId,
+                                        ProductId = od.ProductId,
+                                        UnitId = od.UnitId,
+                                        Amount = od.NumberUnit,
+                                        UpdatedDate = createdDate
+                                    };
+                                    productLogService.AddProductLog(pl);
+                                }
+                                else
+                                {
+                                    pl.UpdatedDate = createdDate;
+                                    pl.Amount -= od.NumberUnit;
+                                    result = productLogService.UpdateProductLog(pl);
+                                }
                                 if (!ret)
                                 {
-                                    MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                                    MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                     return false;
                                 }
                             }
@@ -321,19 +269,12 @@ namespace BaoHien.UI
                         #region KH & NV
 
                         CustomerLogService cls = new CustomerLogService();
-                        CustomerLog newest = cls.GetNewestCustomerLog(order.CustId);
-                        double beforeDebit = 0.0;
-                        if (newest != null)
-                        {
-                            beforeDebit = newest.AfterDebit;
-                        }
                         CustomerLog cl = new CustomerLog
                         {
                             CustomerId = order.CustId,
                             RecordCode = order.OrderCode,
-                            BeforeDebit = beforeDebit,
                             Amount = totalWithTax,
-                            AfterDebit = beforeDebit + totalWithTax,
+                            Direction = BHConstant.DIRECTION_OUT,
                             CreatedDate = createdDate
                         };
                         result = cls.AddCustomerLog(cl);
@@ -342,14 +283,11 @@ namespace BaoHien.UI
                         if (salerId > 0 && totalCommission > 0)
                         {
                             EmployeeLogService els = new EmployeeLogService();
-                            EmployeeLog el = els.GetNewestEmployeeLog(order.CreateBy);
                             EmployeeLog newel = new EmployeeLog
                             {
                                 EmployeeId = salerId,
                                 RecordCode = order.OrderCode,
-                                BeforeNumber = el.AfterNumber,
                                 Amount = totalCommission,
-                                AfterNumber = el.AfterNumber + totalCommission,
                                 CreatedDate = createdDate
                             };
                             result = els.AddEmployeeLog(newel);
@@ -365,7 +303,7 @@ namespace BaoHien.UI
                         }
                         else
                         {
-                            MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                            MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return false;
                         }
                         #endregion
@@ -373,7 +311,7 @@ namespace BaoHien.UI
                 }
                 return false;
             }
-            MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+            MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
             return false;
         }
 
@@ -506,13 +444,11 @@ namespace BaoHien.UI
                 {
                     this.Text = "Xem thông tin phiếu bán hàng";
                     btnPrintS.Enabled = false;
-                    //btnPrint.Visible = false;
                 }
             }
             else
             {
                 this.Text = "Tạo phiếu bán hàng";
-               // btnPrint.Visible = false;
             }
         }
 
@@ -653,11 +589,9 @@ namespace BaoHien.UI
                 dgv.Rows[rowIndex].Cells[NumberUnitCell].Value != null &&
                 (colIndex == UnitCell || colIndex == NumberUnitCell || colIndex == ProductAttrCell))
             {
-                ProductLog pl = productLogService.GetNewestProductUnitLog(
-                    orderDetails[rowIndex].ProductId,
-                    orderDetails[rowIndex].AttributeId,
+                ProductLog pl = productLogService.GetProductLog(orderDetails[rowIndex].ProductId, orderDetails[rowIndex].AttributeId,
                     (int)dgv.Rows[rowIndex].Cells[UnitCell].Value);
-                if (pl.Id == 0)
+                if (pl == null)
                 {
                     MessageBox.Show("Sản phẩm với đơn vị tính này hiện chưa có trong kho.");
                     dgv.Rows[rowIndex].Cells[NumberUnitCell].Value = 0;
@@ -667,7 +601,7 @@ namespace BaoHien.UI
                 }
                 else
                 {
-                    double current_number = pl.AfterNumber;
+                    double current_number = pl.Amount;
                     if (isUpdating)
                     {
                         OrderDetailEntity ode = old_orderDetails.Where(x => x.ProductId == orderDetails[rowIndex].ProductId &&

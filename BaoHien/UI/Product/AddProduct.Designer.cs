@@ -98,6 +98,7 @@
             this.dgvBaseAttributes.Name = "dgvBaseAttributes";
             this.dgvBaseAttributes.Size = new System.Drawing.Size(658, 143);
             this.dgvBaseAttributes.TabIndex = 5;
+            this.dgvBaseAttributes.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.dgvBaseAttributes_DataBindingComplete);
             // 
             // groupBox1
             // 
