@@ -34,26 +34,7 @@ namespace BaoHien.UI
             SetupColumns();
             loadMeasurementUnitList();
         }
-
-        private void btnDelete_Click(object sender, EventArgs e)
-        {
-           DataGridViewSelectedRowCollection selectedRows =  dgvBaseUnitList.SelectedRows;
-            
-           foreach (DataGridViewRow dgv in selectedRows)
-            {
-               
-               MeasurementUnitService measurementUnitService = new MeasurementUnitService();
-               int id = ObjectHelper.GetValueFromAnonymousType<int>(dgv.DataBoundItem, "Id");
-               if (!measurementUnitService.DeleteMeasurementUnit(id))
-               {
-                   MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
-                   break;
-               }
-
-            }
-            loadMeasurementUnitList();
-        }
-
+        
         public void loadMeasurementUnitList()
         {
             MeasurementUnitService measurementUnitService = new MeasurementUnitService();
@@ -68,18 +49,8 @@ namespace BaoHien.UI
         {
             if (measurementUnits != null)
             {
-                int index = 0;
-                var query = from measurementUnit in measurementUnits
-
-                            select new
-                            {
-                                Name = measurementUnit.Name,
-                                Description = measurementUnit.Description,
-                                Id = measurementUnit.Id,
-                                Index = ++index
-                            };
-                dgvBaseUnitList.DataSource = query.ToList();
-
+                dgvBaseUnitList.DataSource = measurementUnits.ToList();
+                lblTotalResult.Text = measurementUnits.Count.ToString();
             }
         }
 
@@ -87,7 +58,6 @@ namespace BaoHien.UI
         {
             dgvBaseUnitList.AutoGenerateColumns = false;
 
-            dgvBaseUnitList.Columns.Add(Global.CreateCell("Index", "STT", 30));
             dgvBaseUnitList.Columns.Add(Global.CreateCell("Name", "Tên đơn vị tính", 220));
             dgvBaseUnitList.Columns.Add(Global.CreateCell("Description", "Đặc tả", 400));
             dgvBaseUnitList.Columns.Add(Global.CreateCellDeleteAction());
@@ -128,18 +98,31 @@ namespace BaoHien.UI
                         {
                             if (!measurementUnitService.DeleteMeasurementUnit(id))
                             {
-                                MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                                MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             }
                             loadMeasurementUnitList();
                         }
                         else
                         {
-                            MessageBox.Show("Đơn vị này đang được sử dụng!");
+                            MessageBox.Show("Đơn vị tính này đang được sử dụng!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                         }
                     }
 
                 }
 
+            }
+        }
+
+        private void dgvBaseUnitList_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            DataGridView gridView = sender as DataGridView;
+            if (null != gridView)
+            {
+                gridView.AutoResizeRowHeadersWidth(DataGridViewRowHeadersWidthSizeMode.AutoSizeToDisplayedHeaders);
+                foreach (DataGridViewRow r in gridView.Rows)
+                {
+                    gridView.Rows[r.Index].HeaderCell.Value = (r.Index + 1).ToString();
+                }
             }
         }
     }

@@ -76,7 +76,7 @@ namespace BaoHien.UI
             ProductType pt = new ProductType
             {
                 Id = 0,
-                ProductName = "Tất cả"
+                TypeName = "Tất cả"
             };
             productTypes = productTypeService.GetProductTypes();
             productTypes.Add(pt);
@@ -84,7 +84,7 @@ namespace BaoHien.UI
             if (productTypes != null)
             {
                 cbmProductTypes.DataSource = productTypes;
-                cbmProductTypes.DisplayMember = "ProductName";
+                cbmProductTypes.DisplayMember = "TypeName";
                 cbmProductTypes.ValueMember = "Id";
             }
             LoadProducts(0);
@@ -92,11 +92,9 @@ namespace BaoHien.UI
 
         private void SetupColumnProducts(List<ProductsReport> data)
         {
-            dgwStockEntranceList.DataSource = data;
             dgwStockEntranceList.Columns.Clear();
             dgwStockEntranceList.AutoGenerateColumns = false;
 
-            dgwStockEntranceList.Columns.Add(Global.CreateCell("Index", "STT", 30));
             dgwStockEntranceList.Columns.Add(Global.CreateCell("ProductCode", "Mã SP", 80));
             dgwStockEntranceList.Columns.Add(Global.CreateCell("ProductName", "Tên và qui cách", 200));
             dgwStockEntranceList.Columns.Add(Global.CreateCell("Jampo", "Jampo", 50));
@@ -105,20 +103,19 @@ namespace BaoHien.UI
             dgwStockEntranceList.Columns.Add(Global.CreateCellWithAlignment("ImportNumber", "Nhập", 100, DataGridViewContentAlignment.MiddleRight));
             dgwStockEntranceList.Columns.Add(Global.CreateCellWithAlignment("ExportNumber", "Xuất", 100, DataGridViewContentAlignment.MiddleRight));
             dgwStockEntranceList.Columns.Add(Global.CreateCellWithAlignment("LastNumber", "Cuối kì", 100, DataGridViewContentAlignment.MiddleRight));
+
+            dgwStockEntranceList.DataSource = data;
         }
 
         private void SetupColumnProductDetails(List<ProductReport> data)
         {
-            dgwStockEntranceList.DataSource = data;
             dgwStockEntranceList.Columns.Clear();
             dgwStockEntranceList.AutoGenerateColumns = false;
             
-            dgwStockEntranceList.Columns.Add(Global.CreateCell("Index", "STT", 30));
-            dgwStockEntranceList.Columns.Add(Global.CreateCell("CreatedDate", "Ngày", 100));
+            dgwStockEntranceList.Columns.Add(Global.CreateCell("UpdatedDateString", "Ngày", 100));
             dgwStockEntranceList.Columns.Add(Global.CreateCell("RecordCode", "Mã phiếu", 100));
-            dgwStockEntranceList.Columns.Add(Global.CreateCellWithAlignment("BeforeNumber", "Số lượng đầu", 120, DataGridViewContentAlignment.MiddleRight));
-            dgwStockEntranceList.Columns.Add(Global.CreateCellWithAlignment("Amount", "Số lượng cập nhật", 120, DataGridViewContentAlignment.MiddleRight));
-            dgwStockEntranceList.Columns.Add(Global.CreateCellWithAlignment("AfterNumber", "Số lượng cuối", 100, DataGridViewContentAlignment.MiddleRight));         
+            dgwStockEntranceList.Columns.Add(Global.CreateCellWithAlignment("Amount", "Số lượng", 120, DataGridViewContentAlignment.MiddleRight));
+            dgwStockEntranceList.DataSource = data;
         }
 
         private void btnSearch_Click(object sender, EventArgs e)
@@ -380,23 +377,19 @@ namespace BaoHien.UI
 
         private PdfPTable ProductDetailTable()
         {
-            PdfPTable table = FormatConfig.Table(6, new float[] { 0.5f, 1.5f, 2f, 2f, 2f, 2f });
+            PdfPTable table = FormatConfig.Table(4, new float[] { 1f, 2.5f, 3.5f, 3f });
             table.AddCell(FormatConfig.TableCellHeader("STT"));
             table.AddCell(FormatConfig.TableCellHeader("Ngày"));
             table.AddCell(FormatConfig.TableCellHeader("Mã phiếu"));
-            table.AddCell(FormatConfig.TableCellHeader("Số lượng đầu"));
-            table.AddCell(FormatConfig.TableCellHeader("Số lượng cập nhật"));
-            table.AddCell(FormatConfig.TableCellHeader("Số lượng cuối"));
+            table.AddCell(FormatConfig.TableCellHeader("Số lượng"));
 
             int index = 0;
             foreach (ProductReport item in productReports)
             {
                 table.AddCell(FormatConfig.TableCellBody((++index).ToString(), PdfPCell.ALIGN_CENTER));
-                table.AddCell(FormatConfig.TableCellBody(item.CreatedDate, PdfPCell.ALIGN_CENTER));
+                table.AddCell(FormatConfig.TableCellBody(item.UpdatedDateString, PdfPCell.ALIGN_CENTER));
                 table.AddCell(FormatConfig.TableCellBody(item.RecordCode, PdfPCell.ALIGN_CENTER));
-                table.AddCell(FormatConfig.TableCellBody(item.BeforeNumber, PdfPCell.ALIGN_RIGHT));
                 table.AddCell(FormatConfig.TableCellBody(item.Amount, PdfPCell.ALIGN_RIGHT));
-                table.AddCell(FormatConfig.TableCellBody(item.AfterNumber, PdfPCell.ALIGN_RIGHT));
             }
             return table;
         }
@@ -430,6 +423,24 @@ namespace BaoHien.UI
                 MessageBox.Show("Không thể kết nối máy in!");
             }
             this.Cursor = Cursors.Default;
+        }
+
+        private void dgwStockEntranceList_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            DataGridView gridView = sender as DataGridView;
+            if (null != gridView)
+            {
+                gridView.AutoResizeRowHeadersWidth(DataGridViewRowHeadersWidthSizeMode.AutoSizeToDisplayedHeaders);
+                foreach (DataGridViewRow r in gridView.Rows)
+                {
+                    gridView.Rows[r.Index].HeaderCell.Value = (r.Index + 1).ToString();
+                    if(modeReport == 1)
+                    {
+                        gridView.Rows[r.Index].DefaultCellStyle.BackColor = productReports[r.Index].Direction == BHConstant.DIRECTION_IN ?
+                            System.Drawing.Color.White : System.Drawing.Color.Wheat;
+                    }
+                }
+            }
         }
     }
 }

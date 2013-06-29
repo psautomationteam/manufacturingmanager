@@ -225,6 +225,7 @@
             this.dgwOrderList.TabIndex = 4;
             this.dgwOrderList.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgwOrderList_CellClick);
             this.dgwOrderList.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgwOrderList_CellDoubleClick);
+            this.dgwOrderList.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.dgwOrderList_DataBindingComplete);
             // 
             // lbTotal
             // 

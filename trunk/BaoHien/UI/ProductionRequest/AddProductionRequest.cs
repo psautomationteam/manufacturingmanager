@@ -169,7 +169,7 @@ namespace BaoHien.UI
         {
             if (productionRequest != null)
             {
-                txtDate.Text = productionRequest.RequestedDate.ToString(BHConstant.DATE_FORMAT);
+                txtDate.Text = productionRequest.CreatedDate.ToString(BHConstant.DATE_FORMAT);
                 txtDate.Enabled = false;
                 txtUser.Text = productionRequest.SystemUser.FullName;
                 txtUser.Enabled = false;
@@ -436,7 +436,7 @@ namespace BaoHien.UI
                         }
                         else
                         {
-                            MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                            MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return;
                         }
 
@@ -445,8 +445,8 @@ namespace BaoHien.UI
                         {
                             Note = txtNote.Text,
                             ReqCode = ss.AddSeedID(BHConstant.PREFIX_FOR_PRODUCTION),
-                            RequestedDate = systime,
-                            RequestedBy = userId,
+                            CreatedDate = systime,
+                            UserId = userId,
                         };
 
                         bool result = prs.AddProductionRequest(productionRequest);
@@ -458,27 +458,34 @@ namespace BaoHien.UI
                                 if (prd.ProductId > 0 && prd.AttributeId > 0 && prd.UnitId > 0)
                                 {
                                     prd.ProductionRequestId = (int)newProductionRequestId;
+                                    prd.Direction = BHConstant.DIRECTION_IN;
                                     bool ret = productionRequestDetailService.AddProductionRequestDetail(prd);
                                     if (!ret)
                                     {
-                                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                         return;
                                     }
 
                                     //Save in Production Log
-                                    ProductLog pl = productLogService.GetNewestProductUnitLog(prd.ProductId, prd.AttributeId, prd.UnitId);
-                                    ProductLog plg = new ProductLog
+                                    ProductLog pl = productLogService.GetProductLog(prd.ProductId, prd.AttributeId, prd.UnitId);
+                                    if (pl == null)
                                     {
-                                        AttributeId = prd.AttributeId,
-                                        ProductId = prd.ProductId,
-                                        UnitId = prd.UnitId,
-                                        RecordCode = productionRequest.ReqCode,
-                                        BeforeNumber = pl.AfterNumber,
-                                        Amount = prd.NumberUnit,
-                                        AfterNumber = pl.AfterNumber + prd.NumberUnit,
-                                        CreatedDate = systime
-                                    };
-                                    result = productLogService.AddProductLog(plg);
+                                        pl = new ProductLog()
+                                        {
+                                            AttributeId = prd.AttributeId,
+                                            ProductId = prd.ProductId,
+                                            UnitId = prd.UnitId,
+                                            Amount = prd.NumberUnit,
+                                            UpdatedDate = systime
+                                        };
+                                        productLogService.AddProductLog(pl);
+                                    }
+                                    else
+                                    {
+                                        pl.UpdatedDate = systime;
+                                        pl.Amount += prd.NumberUnit;
+                                        result = productLogService.UpdateProductLog(pl);
+                                    }
                                 }
                             }
 
@@ -487,27 +494,22 @@ namespace BaoHien.UI
                                 if (prd.ProductId > 0 && prd.AttributeId > 0 && prd.UnitId > 0)
                                 {
                                     prd.ProductionRequestId = (int)newProductionRequestId;
+                                    prd.Direction = BHConstant.DIRECTION_OUT;
                                     bool ret = productionRequestDetailService.AddProductionRequestDetail(prd);
                                     if (!ret)
                                     {
-                                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                         return;
                                     }
 
                                     //Save in Product Log
-                                    ProductLog pl = productLogService.GetNewestProductUnitLog(prd.ProductId, prd.AttributeId, prd.UnitId);
-                                    ProductLog plg = new ProductLog
+                                    ProductLog pl = productLogService.GetProductLog(prd.ProductId, prd.AttributeId, prd.UnitId);
+                                    if (pl != null)
                                     {
-                                        AttributeId = prd.AttributeId,
-                                        ProductId = prd.ProductId,
-                                        UnitId = prd.UnitId,
-                                        RecordCode = productionRequest.ReqCode,
-                                        BeforeNumber = pl.AfterNumber,
-                                        Amount = prd.NumberUnit,
-                                        AfterNumber = pl.AfterNumber - prd.NumberUnit,
-                                        CreatedDate = systime
-                                    };
-                                    result = productLogService.AddProductLog(plg);
+                                        pl.UpdatedDate = systime;
+                                        pl.Amount -= prd.NumberUnit;
+                                        result = productLogService.UpdateProductLog(pl);
+                                    }
                                 }
                             }
                             MessageBox.Show("Phiếu sản xuất đã được tạo thành công");
@@ -515,7 +517,7 @@ namespace BaoHien.UI
                         }
                         else
                         {
-                            MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                            MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return;
                         }
                     }
@@ -611,11 +613,9 @@ namespace BaoHien.UI
                 dgv.Rows[rowIndex].Cells[NumberUnitCell].Value != null &&
                 (colIndex == UnitCell || colIndex == NumberUnitCell || colIndex == ProductAttrCell))
             {
-                ProductLog pl = productLogService.GetNewestProductUnitLog(
-                    productionRequestDetailInMaterials[rowIndex].ProductId,
-                    productionRequestDetailInMaterials[rowIndex].AttributeId,
-                    (int)dgv.Rows[rowIndex].Cells[UnitCell].Value);
-                if (pl.Id == 0)
+                ProductLog pl = productLogService.GetProductLog(productionRequestDetailInMaterials[rowIndex].ProductId,
+                    productionRequestDetailInMaterials[rowIndex].AttributeId, (int)dgv.Rows[rowIndex].Cells[UnitCell].Value);
+                if (pl == null)
                 {
                     MessageBox.Show("Sản phẩm với đơn vị tính này hiện chưa có trong kho.");
                     dgv.Rows[rowIndex].Cells[NumberUnitCell].Value = 0;
@@ -625,7 +625,7 @@ namespace BaoHien.UI
                 }
                 else
                 {
-                    if (pl.AfterNumber <= 0)
+                    if (pl.Amount <= 0)
                     {
                         MessageBox.Show("Số lượng sản phẩm trong kho đã hết.");
                         dgv.Rows[rowIndex].Cells[NumberUnitCell].Value = 0;
@@ -633,13 +633,13 @@ namespace BaoHien.UI
                         productionRequestDetailInMaterials[rowIndex].UnitId = (int)dgv.Rows[rowIndex].Cells[UnitCell].Value;
                         productionRequestDetailInMaterials[rowIndex].NumberUnit = 0;
                     }
-                    else if (pl.AfterNumber < (int)dgv.Rows[rowIndex].Cells[NumberUnitCell].Value)
+                    else if (pl.Amount < (int)dgv.Rows[rowIndex].Cells[NumberUnitCell].Value)
                     {
-                        MessageBox.Show("Số lượng sản phẩm trong kho còn lại là : " + pl.AfterNumber);
-                        dgv.Rows[rowIndex].Cells[NumberUnitCell].Value = pl.AfterNumber;
+                        MessageBox.Show("Số lượng sản phẩm trong kho còn lại là : " + pl.Amount);
+                        dgv.Rows[rowIndex].Cells[NumberUnitCell].Value = pl.Amount;
 
                         productionRequestDetailInMaterials[rowIndex].UnitId = (int)dgv.Rows[rowIndex].Cells[UnitCell].Value;
-                        productionRequestDetailInMaterials[rowIndex].NumberUnit = (int)pl.AfterNumber;
+                        productionRequestDetailInMaterials[rowIndex].NumberUnit = (int)pl.Amount;
                     }
                     else
                     {

@@ -12,6 +12,7 @@ using BaoHien.Services.MeasurementUnits;
 using BaoHien.Model;
 using DAL.Helper;
 using BaoHien.Common;
+using BaoHien.Services.ProductLogs;
 namespace BaoHien.UI
 {
     public partial class ProductList : UserControl
@@ -49,7 +50,6 @@ namespace BaoHien.UI
         {
             if (products != null)
             {
-                int index = 0;
                 var query = from product in products
                             select new
                             {
@@ -58,8 +58,7 @@ namespace BaoHien.UI
                                 Description = product.Description,
                                 Id = product.Id,
                                 Status = product.Status,
-                                ProductType = (product.ProductType1 != null) ? product.ProductType1.ProductName : "",
-                                Index = ++index
+                                ProductType = (product.ProductType1 != null) ? product.ProductType1.TypeName : ""
                             };
                 dgvProductList.DataSource = query.ToList();
                 lblTotalResult.Text = products.Count.ToString();
@@ -73,12 +72,12 @@ namespace BaoHien.UI
             setUpDataGrid(products);
             ProductTypeService productTypeService = new ProductTypeService();
             List<ProductType> productTypes = productTypeService.GetProductTypes();
-            productTypes.Add(new ProductType() { Id = 0, ProductName = "Tất cả" });
+            productTypes.Add(new ProductType() { Id = 0, TypeName = "Tất cả" });
             productTypes = productTypes.OrderBy(x => x.Id).ToList();
             if (productTypes != null)
             {
                 cbProductTypes.DataSource = productTypes;
-                cbProductTypes.DisplayMember = "ProductName";
+                cbProductTypes.DisplayMember = "TypeName";
                 cbProductTypes.ValueMember = "Id";
             }
         }
@@ -89,27 +88,7 @@ namespace BaoHien.UI
             frmAddProduct.CallFromUserControll = this;
             frmAddProduct.ShowDialog();
         }
-
-        private void btnDelete_Click(object sender, EventArgs e)
-        {
-            DataGridViewSelectedRowCollection selectedRows = dgvProductList.SelectedRows;
-
-            foreach (DataGridViewRow dgv in selectedRows)
-            {
-
-                ProductService productService = new ProductService();
-                //Product mu = (Product)dgv.DataBoundItem;
-                int id = ObjectHelper.GetValueFromAnonymousType<int>(dgv.DataBoundItem, "Id");
-                if (!productService.DeleteProduct(id))
-                {
-                    MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
-                    break;
-                }
-
-            }
-            loadProductList();
-        }
-
+        
         private void btnSearch_Click(object sender, EventArgs e)
         {
             searchProduct();
@@ -119,7 +98,6 @@ namespace BaoHien.UI
         {
             dgvProductList.AutoGenerateColumns = false;
 
-            dgvProductList.Columns.Add(Global.CreateCell("Index", "STT", 30));
             dgvProductList.Columns.Add(Global.CreateCell("ProductCode", "Mã sản phẩm", 100));
             dgvProductList.Columns.Add(Global.CreateCell("ProductName", "Tên sản phẩm", 150));
             dgvProductList.Columns.Add(Global.CreateCell("ProductType", "Loại sản phẩm", 170));
@@ -155,18 +133,38 @@ namespace BaoHien.UI
                         DataGridViewRow currentRow = dgvProductList.Rows[e.RowIndex];
 
                         ProductService productService = new ProductService();
-                        //Product mu = (Product)dgv.DataBoundItem;
                         int id = ObjectHelper.GetValueFromAnonymousType<int>(currentRow.DataBoundItem, "Id");
-                        if (!productService.DeleteProduct(id))
+                        ProductLogService productLogService = new ProductLogService();
+                        ProductLog log = productLogService.GetProductLogs().Where(p => p.ProductId == id).FirstOrDefault();
+                        if (log == null)
                         {
-                            MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
-                            
+                            if (!productService.DeleteProduct(id))
+                            {
+                                MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show("Sản phẩm này còn trong kho nên không thể xóa được!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                         }
                         loadProductList();
                     }
 
                 }
 
+            }
+        }
+
+        private void dgvProductList_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            DataGridView gridView = sender as DataGridView;
+            if (null != gridView)
+            {
+                gridView.AutoResizeRowHeadersWidth(DataGridViewRowHeadersWidthSizeMode.AutoSizeToDisplayedHeaders);
+                foreach (DataGridViewRow r in gridView.Rows)
+                {
+                    gridView.Rows[r.Index].HeaderCell.Value = (r.Index + 1).ToString();
+                }
             }
         }
     }

@@ -32,10 +32,6 @@ namespace BaoHien.UI
             dgvUserList.AutoGenerateColumns = false;
             loadSystemUserList();
             SetupColumns();
-            if (!Global.isAdmin())
-            {
-                btnAdd.Visible = btnDelete.Visible = false;
-            }
         }
 
         public void loadSystemUserList()
@@ -69,20 +65,17 @@ namespace BaoHien.UI
         {
             if (systemUsers != null)
             {
-                int index = 0;
                 var query = from user in systemUsers
-
                             select new
                             {
-                                username = user.username,
+                                Username = user.Username,
                                 FullName = user.FullName,
                                 Type = getNameForTypeUser(user.Type),
                                 Id = user.Id,
                                 Status = user.Status == Constant.ACTIVE_PROPERTY_VALUE?true:false,
-                                Index = ++index
                             };
                 dgvUserList.DataSource = query.ToList();
-                
+                lblTotalResult.Text = systemUsers.Count.ToString();
             }
         }
 
@@ -90,8 +83,7 @@ namespace BaoHien.UI
         {
             dgvUserList.AutoGenerateColumns = false;
 
-            dgvUserList.Columns.Add(Global.CreateCell("Index", "STT", 30));
-            dgvUserList.Columns.Add(Global.CreateCell("username", "Tên đăng nhập", 200));
+            dgvUserList.Columns.Add(Global.CreateCell("Username", "Tên đăng nhập", 200));
             dgvUserList.Columns.Add(Global.CreateCell("FullName", "Tên đầy đủ", 200));
             dgvUserList.Columns.Add(Global.CreateCell("Type", "Kiểu người dùng", 200));
         }
@@ -105,47 +97,11 @@ namespace BaoHien.UI
                 int id = ObjectHelper.GetValueFromAnonymousType<int>(dgv.DataBoundItem, "Id");
                 if (!systemUserService.DeleteSystemUser(id))
                 {
-                    MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                    MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     break;
                 }
             }
             loadSystemUserList();
-        }
-
-        private void dgvUserList_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            //if (sender is DataGridView)
-            //{
-            //    DataGridViewCell cell = ((DataGridView)sender).CurrentCell;
-            //    if (cell.ColumnIndex == ((DataGridView)sender).ColumnCount - 1)
-            //    {
-            //        DataGridViewCheckBoxCell checkBoxcell = (DataGridViewCheckBoxCell)cell;
-            //        DataGridViewRow currentRow = dgvUserList.Rows[e.RowIndex];
-
-            //        SystemUserService systemUserService = new SystemUserService();
-            //        int id = ObjectHelper.GetValueFromAnonymousType<int>(currentRow.DataBoundItem, "Id");
-            //        SystemUser user = systemUserService.GetSystemUser(id);
-            //        if (checkBoxcell.Value != null && checkBoxcell.Value.ToString().Equals(bool.TrueString))
-            //        {
-            //            user.Status = Constant.ACTIVE_PROPERTY_VALUE;
-            //        }
-            //        else
-            //        {
-            //            user.Status = Constant.DEACTIVE_PROPERTY_VALUE;
-            //        }
-            //        bool result = systemUserService.UpdateSystemUser(user);
-            //        if (!result)
-            //        {
-            //            MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
-            //        }
-            //        else
-            //        {
-            //            MessageBox.Show("Thực hiện thành công!");
-            //            loadSystemUserList();
-            //        }
-            //    }
-
-            //}
         }
 
         private void dgvUserList_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
@@ -164,6 +120,19 @@ namespace BaoHien.UI
             else
             {
                 MessageBox.Show("Tài khoản quản trị mới xem được thông tin người dùng!");
+            }
+        }
+
+        private void dgvUserList_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            DataGridView gridView = sender as DataGridView;
+            if (null != gridView)
+            {
+                gridView.AutoResizeRowHeadersWidth(DataGridViewRowHeadersWidthSizeMode.AutoSizeToDisplayedHeaders);
+                foreach (DataGridViewRow r in gridView.Rows)
+                {
+                    gridView.Rows[r.Index].HeaderCell.Value = (r.Index + 1).ToString();
+                }
             }
         }
     }

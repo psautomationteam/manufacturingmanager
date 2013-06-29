@@ -9,7 +9,6 @@ using System.Windows.Forms;
 using DAL;
 using BaoHien.Services.Products;
 using BaoHien.Services.MeasurementUnits;
-using BaoHien.Services.Prices;
 using DAL.Helper;
 using BaoHien.Services.BaseAttributes;
 using BaoHien.UI.Base;
@@ -66,7 +65,7 @@ namespace BaoHien.UI
                     }
                     else
                     {
-                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
                 else//add new
@@ -95,7 +94,7 @@ namespace BaoHien.UI
                     }
                     else
                     {
-                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
             }
@@ -124,7 +123,7 @@ namespace BaoHien.UI
                         if ((BaseAttribute)dgv.DataBoundItem == pa.BaseAttribute)
                         {
                             checkbox.Value = 1;
-                            if (productLogService.GetNewestProductLog(product.Id, pa.AttributeId).Id != 0)
+                            if (productLogService.GetNewestProductLog(product.Id, pa.AttributeId) != null)
                             {
                                 checkbox.FlatStyle = FlatStyle.Flat;
                                 checkbox.Style.ForeColor = Color.DarkGray;
@@ -155,7 +154,7 @@ namespace BaoHien.UI
             if (productTypes != null)
             {
                 cmbType.DataSource = productTypes;
-                cmbType.DisplayMember = "ProductName";
+                cmbType.DisplayMember = "TypeName";
                 cmbType.ValueMember = "Id";
             }
 
@@ -211,7 +210,7 @@ namespace BaoHien.UI
             }
             DataGridViewCheckBoxColumn checkboxColumn = new DataGridViewCheckBoxColumn();
             checkboxColumn.Width = 30;
-            checkboxColumn.HeaderText = "STT";
+            checkboxColumn.HeaderText = "";
             checkboxColumn.ValueType = typeof(string);
             //checkboxColumn.Frozen = true;
             dgvBaseAttributes.Columns.Add(checkboxColumn);
@@ -317,6 +316,19 @@ namespace BaoHien.UI
                     {
                         this.Close();
                     }
+                }
+            }
+        }
+
+        private void dgvBaseAttributes_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            DataGridView gridView = sender as DataGridView;
+            if (null != gridView)
+            {
+                gridView.AutoResizeRowHeadersWidth(DataGridViewRowHeadersWidthSizeMode.AutoSizeToDisplayedHeaders);
+                foreach (DataGridViewRow r in gridView.Rows)
+                {
+                    gridView.Rows[r.Index].HeaderCell.Value = (r.Index + 1).ToString();
                 }
             }
         }

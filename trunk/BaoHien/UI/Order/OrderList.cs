@@ -23,6 +23,7 @@ namespace BaoHien.UI
     {
         List<Customer> customers;
         List<SystemUser> systemUsers;
+
         public OrderList()
         {
             InitializeComponent();
@@ -73,7 +74,6 @@ namespace BaoHien.UI
             dgwOrderList.AutoGenerateColumns = false;
             if (orders != null)
             {
-                int index = 0;
                 var query = from order in orders
                             select new
                             {
@@ -87,8 +87,7 @@ namespace BaoHien.UI
                                 CustomerCode = order.Customer != null ? order.Customer.CustCode : "",
                                 Discount = Global.formatCurrencyTextWithoutMask(order.Discount.ToString()),
                                 CreatedDate = order.CreatedDate.ToString(BHConstant.DATE_FORMAT),
-                                CreateBy = order.SystemUser.FullName,
-                                Index = ++index
+                                UserId = order.SystemUser.FullName
                             };
                 dgwOrderList.DataSource = query.ToList();
                 lblTotalResult.Text = orders.Count.ToString();
@@ -100,7 +99,6 @@ namespace BaoHien.UI
         {
             dgwOrderList.AutoGenerateColumns = false;
 
-            dgwOrderList.Columns.Add(Global.CreateCell("Index", "STT", 30));
             dgwOrderList.Columns.Add(Global.CreateCell("CreatedDate", "Ngày", 100));
             dgwOrderList.Columns.Add(Global.CreateCell("OrderCode", "Mã đặt hàng", 100));
             dgwOrderList.Columns.Add(Global.CreateCell("CustomerName", "Khách hàng", 200));
@@ -174,30 +172,8 @@ namespace BaoHien.UI
                 #region CustomerLog
 
                 CustomerLogService cls = new CustomerLogService();
-                CustomerLog newest = cls.GetNewestCustomerLog(order.CustId);
-                double beforeDebit = 0.0;
-                if (newest != null)
-                {
-                    beforeDebit = newest.AfterDebit;
-                }
-                CustomerLog cl = new CustomerLog
-                {
-                    CustomerId = order.CustId,
-                    RecordCode = order.OrderCode,
-                    BeforeDebit = beforeDebit,
-                    Amount = order.Total,
-                    AfterDebit = beforeDebit - order.Total,
-                    CreatedDate = systime,
-                    Status = BHConstant.DEACTIVE_STATUS
-                };
-                bool kq = cls.AddCustomerLog(cl);
-
-                List<CustomerLog> deactiveCustomerLog = cls.SelectCustomerLogByWhere(x => x.Status == BHConstant.ACTIVE_STATUS && x.RecordCode == order.OrderCode).ToList();
-                foreach (CustomerLog item in deactiveCustomerLog)
-                {
-                    item.Status = BHConstant.DEACTIVE_STATUS;
-                    cls.UpdateCustomerLog(item);
-                }
+                CustomerLog cl = cls.GetCustomerLog(order.OrderCode);
+                bool kq = cls.DeleteCustomerLog(cl.Id);
 
                 #endregion
 
@@ -210,26 +186,13 @@ namespace BaoHien.UI
                 foreach (OrderDetail od in details)
                 {
                     totalCommission += od.Commission;
-                    ProductLog pl = productLogService.GetNewestProductUnitLog(od.ProductId, od.AttributeId, od.UnitId);
-                    ProductLog plg = new ProductLog
+                    ProductLog pl = productLogService.GetProductLog(od.ProductId, od.AttributeId, od.UnitId);
+                    if (pl != null)
                     {
-                        AttributeId = od.AttributeId,
-                        ProductId = od.ProductId,
-                        UnitId = od.UnitId,
-                        RecordCode = order.OrderCode,
-                        BeforeNumber = pl.AfterNumber,
-                        Amount = od.NumberUnit,
-                        AfterNumber = pl.AfterNumber + od.NumberUnit,
-                        CreatedDate = systime
-                    };
-                    productLogService.AddProductLog(plg);
-                }
-
-                List<ProductLog> deactiveProductLog = productLogService.SelectProductLogByWhere(x => x.RecordCode == order.OrderCode && x.Status == BHConstant.ACTIVE_STATUS).ToList();
-                foreach (ProductLog item in deactiveProductLog)
-                {
-                    item.Status = BHConstant.DEACTIVE_STATUS;
-                    productLogService.UpdateProductLog(item);
+                        pl.UpdatedDate = systime;
+                        pl.Amount += od.NumberUnit;
+                        productLogService.UpdateProductLog(pl);
+                    }
                 }
 
                 #endregion
@@ -239,33 +202,16 @@ namespace BaoHien.UI
                 int salerId = (int)order.Customer.SalerId;
                 if (salerId > 0)
                 {
-                    EmployeeLogService els = new EmployeeLogService();
-                    EmployeeLog el = els.GetNewestEmployeeLog(order.CreateBy);
-                    EmployeeLog newel = new EmployeeLog
-                    {
-                        EmployeeId = salerId,
-                        RecordCode = order.OrderCode,
-                        BeforeNumber = el.AfterNumber,
-                        Amount = totalCommission,
-                        AfterNumber = el.AfterNumber - totalCommission,
-                        CreatedDate = systime,
-                        Status = BHConstant.DEACTIVE_STATUS
-                    };
-                    kq = els.AddEmployeeLog(newel);
-
-                    List<EmployeeLog> deactiveEmployeeLog = els.SelectEmployeeLogByWhere(x => x.RecordCode == order.OrderCode && x.Status == BHConstant.ACTIVE_STATUS).ToList();
-                    foreach (EmployeeLog item in deactiveEmployeeLog)
-                    {
-                        item.Status = BHConstant.DEACTIVE_STATUS;
-                        els.UpdateEmployeeLog(item);
-                    }
+                    EmployeeLogService els = new EmployeeLogService(); 
+                    EmployeeLog order_el = els.SelectEmployeeLogByWhere(x => x.RecordCode == order.OrderCode).FirstOrDefault();
+                    els.DeleteEmployeeLog(order_el.Id);
                 }
 
                 #endregion
 
                 if (!orderService.DeleteOrder(id) && kq)
                 {
-                    MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                    MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 loadOrderList();
             }
@@ -283,6 +229,19 @@ namespace BaoHien.UI
                 if (cm != null)
                 {
                     lbCustomerName.Text = cm.CustomerName;
+                }
+            }
+        }
+
+        private void dgwOrderList_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            DataGridView gridView = sender as DataGridView;
+            if (null != gridView)
+            {
+                gridView.AutoResizeRowHeadersWidth(DataGridViewRowHeadersWidthSizeMode.AutoSizeToDisplayedHeaders);
+                foreach (DataGridViewRow r in gridView.Rows)
+                {
+                    gridView.Rows[r.Index].HeaderCell.Value = (r.Index + 1).ToString();
                 }
             }
         }

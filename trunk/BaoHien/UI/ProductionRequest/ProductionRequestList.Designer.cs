@@ -150,6 +150,7 @@
             this.dgwRequestList.TabIndex = 5;
             this.dgwRequestList.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgwRequestList_CellClick);
             this.dgwRequestList.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgwRequestList_CellDoubleClick);
+            this.dgwRequestList.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.dgwRequestList_DataBindingComplete);
             // 
             // productionRequestInTotal
             // 

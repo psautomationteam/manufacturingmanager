@@ -49,6 +49,7 @@ namespace BaoHien.UI
                 int customerId = (int)cbmCustomers.SelectedValue;
                 if (customerId != 0)
                 {
+                    SetupColumnOneCustomer();
                     modeReport = 1;
                     textForPrint = "Từ ngày " + dtpFrom.Value.ToString(BHConstant.DATE_FORMAT) + " đến ngày " + dtpTo.Value.ToString(BHConstant.DATE_FORMAT); 
                     customerPrint = ((Customer)cbmCustomers.SelectedItem);
@@ -57,17 +58,16 @@ namespace BaoHien.UI
                     customerReports = customerLogService.GetReportsOfCustomer(customerId, dtpFrom.Value, 
                         dtpTo.Value.AddDays(1).Date, ref total);
                     dgwStockEntranceList.DataSource = customerReports;
-                    SetupColumnOneCustomer();
                     lbTotal.Text = Global.formatVNDCurrencyText(total.ToString());
                 }
                 else
                 {
+                    SetupColumnAllCustomers();
                     double total = 0.0;
                     textForPrint = "Từ ngày " + dtpFrom.Value.ToString(BHConstant.DATE_FORMAT) + " đến ngày " + dtpTo.Value.ToString(BHConstant.DATE_FORMAT);
                     CustomerLogService customerLogService = new CustomerLogService();
                     customersReports = customerLogService.GetReportsOfCustomers(dtpFrom.Value, dtpTo.Value.AddDays(1).Date, ref total);
                     dgwStockEntranceList.DataSource = customersReports;
-                    SetupColumnAllCustomers();
                     setColorRow(4);
                     lbTotal.Text = Global.formatVNDCurrencyText(total.ToString());
                 }
@@ -102,7 +102,6 @@ namespace BaoHien.UI
             dgwStockEntranceList.Columns.Clear();
             dgwStockEntranceList.AutoGenerateColumns = false;
 
-            dgwStockEntranceList.Columns.Add(Global.CreateCell("Index", "STT", 30));
             dgwStockEntranceList.Columns.Add(Global.CreateCell("Date", "Ngày", 100));
             dgwStockEntranceList.Columns.Add(Global.CreateCell("ProductName", "Mặt hàng", 150));
             dgwStockEntranceList.Columns.Add(Global.CreateCell("AttrName", "Quy cách", 100));
@@ -116,7 +115,6 @@ namespace BaoHien.UI
             dgwStockEntranceList.Columns.Clear();
             dgwStockEntranceList.AutoGenerateColumns = false;
 
-            dgwStockEntranceList.Columns.Add(Global.CreateCell("Index", "STT", 30));
             dgwStockEntranceList.Columns.Add(Global.CreateCell("Date", "Ngày", 100));
             dgwStockEntranceList.Columns.Add(Global.CreateCell("CustomerName", "Tên khách hàng", 150));
             dgwStockEntranceList.Columns.Add(Global.CreateCell("CustomerCode", "Mã khách hàng", 150));
@@ -336,6 +334,19 @@ namespace BaoHien.UI
                 if (cm != null)
                 {
                     lbCustomerName.Text = cm.CustomerName;
+                }
+            }
+        }
+
+        private void dgwStockEntranceList_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            DataGridView gridView = sender as DataGridView;
+            if (null != gridView)
+            {
+                gridView.AutoResizeRowHeadersWidth(DataGridViewRowHeadersWidthSizeMode.AutoSizeToDisplayedHeaders);
+                foreach (DataGridViewRow r in gridView.Rows)
+                {
+                    gridView.Rows[r.Index].HeaderCell.Value = (r.Index + 1).ToString();
                 }
             }
         }

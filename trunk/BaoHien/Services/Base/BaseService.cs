@@ -180,9 +180,6 @@ namespace BaoHien.Services.Base
 
             try
             {
-
-
-
                 Type typeofClassWithGenericStaticMethod = typeof(BaoHienRepository);
                 MethodInfo methodInfo = typeofClassWithGenericStaticMethod.GetMethod("Update", System.Reflection.BindingFlags.Static | BindingFlags.Public);
                 Type[] genericArguments = new Type[] { typeof(TItem) };
@@ -199,8 +196,7 @@ namespace BaoHien.Services.Base
         }
 
         protected bool OnDeleteItem<TItem>(string id)
-        {
-            
+        {            
             try
             {
                 Type type = typeof(TItem);
@@ -239,7 +235,6 @@ namespace BaoHien.Services.Base
 
         protected bool OnDeleteItem<TItem>(List<string> ids)
         {
-
             try
             {
                 Type type = typeof(TItem);
@@ -281,8 +276,6 @@ namespace BaoHien.Services.Base
             List<TItem> list = null;
             try
             {
-                
-                
                 Type typeofClassWithGenericStaticMethod = typeof(BaoHienRepository);
                 MethodInfo methodInfo = typeofClassWithGenericStaticMethod.GetMethod("SelectByWhere", System.Reflection.BindingFlags.Static | BindingFlags.Public);
                 var expressionKey = typeof(Expression<>).MakeGenericType(typeof(Func<,>).MakeGenericType(typeof(TItem), typeof(bool)));

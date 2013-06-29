@@ -58,7 +58,7 @@ namespace BaoHien.Services.Products
             }
             if (productTypeSearchCriteria.ProductTypeName != null)
             {
-                query = query.Where(p => p.ProductName.ToLower().Contains(productTypeSearchCriteria.ProductTypeName));
+                query = query.Where(p => p.TypeName.ToLower().Contains(productTypeSearchCriteria.ProductTypeName));
             }
             
             if (query != null)

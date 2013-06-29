@@ -76,7 +76,6 @@ namespace BaoHien.UI
         {
             dgvProductList.AutoGenerateColumns = false;
 
-            dgvProductList.Columns.Add(Global.CreateCell("Index", "STT", 30));
             dgvProductList.Columns.Add(Global.CreateCell("CustomerName", "Khách hàng", 200));
             dgvProductList.Columns.Add(Global.CreateCell("CustCode", "Mã khách hàng", 150));
             dgvProductList.Columns.Add(Global.CreateCell("CustomerPhone", "SĐT Cty", 100));
@@ -99,7 +98,7 @@ namespace BaoHien.UI
 
                 if (!customerService.DeleteCustomer(id))
                 {
-                    MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                    MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     break;
                 }
 
@@ -148,7 +147,7 @@ namespace BaoHien.UI
 
                         if (!customerService.DeleteCustomer(id))
                         {
-                            MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                            MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             
                         }
                         loadCustomerList();
@@ -263,6 +262,19 @@ namespace BaoHien.UI
                 MessageBox.Show("Không thể kết nối máy in!");
             }
             this.Cursor = Cursors.Default;
+        }
+
+        private void dgvProductList_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            DataGridView gridView = sender as DataGridView;
+            if (null != gridView)
+            {
+                gridView.AutoResizeRowHeadersWidth(DataGridViewRowHeadersWidthSizeMode.AutoSizeToDisplayedHeaders);
+                foreach (DataGridViewRow r in gridView.Rows)
+                {
+                    gridView.Rows[r.Index].HeaderCell.Value = (r.Index + 1).ToString();
+                }
+            }
         }
     }
 }

@@ -48,7 +48,7 @@ namespace BaoHien.UI
                     systemUser.FullName = txtName.Text;
                     if (txtPass.Text != "" && txtConfirmPass.Text != "" && txtPass.Text.Equals(txtConfirmPass.Text))
                     {
-                        systemUser.password = txtPass.Text;
+                        systemUser.Password = txtPass.Text;
                     }
 
                     systemUser.Type = userType;
@@ -62,7 +62,7 @@ namespace BaoHien.UI
                     }
                     else
                     {
-                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
                 else
@@ -70,9 +70,9 @@ namespace BaoHien.UI
                     systemUser = new SystemUser
                     {
                         FullName = txtName.Text,
-                        password = txtPass.Text,
+                        Password = txtPass.Text,
                         Type = userType,
-                        username = txtCode.Text
+                        Username = txtCode.Text
                     };
                     SystemUserService systemUserService = new SystemUserService();
                     if (systemUserService.AddPSystemUser(systemUser))
@@ -83,7 +83,7 @@ namespace BaoHien.UI
                     }
                     else
                     {
-                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
 
@@ -122,7 +122,7 @@ namespace BaoHien.UI
             if (systemUser != null)
             {
                 txtName.Text = systemUser.FullName ;
-                txtCode.Text = systemUser.username;
+                txtCode.Text = systemUser.Username;
                 txtCode.Enabled = false;
                 txtConfirmPass.Text = "";
                 txtPass.Text = "";

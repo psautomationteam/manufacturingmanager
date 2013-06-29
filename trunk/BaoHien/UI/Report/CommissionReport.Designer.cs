@@ -80,7 +80,7 @@
             // 
             // btnSearch
             // 
-            this.btnSearch.Location = new System.Drawing.Point(939, 21);
+            this.btnSearch.Location = new System.Drawing.Point(974, 24);
             this.btnSearch.Name = "btnSearch";
             this.btnSearch.Size = new System.Drawing.Size(73, 25);
             this.btnSearch.TabIndex = 3;
@@ -132,6 +132,7 @@
             this.dgwEmployeeCommissionList.Size = new System.Drawing.Size(1053, 498);
             this.dgwEmployeeCommissionList.TabIndex = 6;
             this.dgwEmployeeCommissionList.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgwEmployeeCommissionList_CellDoubleClick);
+            this.dgwEmployeeCommissionList.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.dgwEmployeeCommissionList_DataBindingComplete);
             // 
             // lbTotal
             // 
@@ -156,7 +157,7 @@
             // 
             // btnPrint
             // 
-            this.btnPrint.Location = new System.Drawing.Point(938, 88);
+            this.btnPrint.Location = new System.Drawing.Point(964, 89);
             this.btnPrint.Name = "btnPrint";
             this.btnPrint.Size = new System.Drawing.Size(106, 25);
             this.btnPrint.TabIndex = 4;
@@ -166,7 +167,7 @@
             // 
             // btnExportExcel
             // 
-            this.btnExportExcel.Location = new System.Drawing.Point(785, 88);
+            this.btnExportExcel.Location = new System.Drawing.Point(824, 89);
             this.btnExportExcel.Name = "btnExportExcel";
             this.btnExportExcel.Size = new System.Drawing.Size(134, 25);
             this.btnExportExcel.TabIndex = 5;

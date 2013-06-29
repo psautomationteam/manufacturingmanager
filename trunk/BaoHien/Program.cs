@@ -5,7 +5,6 @@ using System.Windows.Forms;
 using BaoHien.UI;
 using BaoHien.Properties;
 using DAL.Helper;
-using BaoHien.UI.PrintPreviewCustom;
 
 namespace Com.Baohien
 {

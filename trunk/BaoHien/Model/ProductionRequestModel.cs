@@ -14,12 +14,12 @@ namespace BaoHien.Model
             get { return reqCode; }
             set { reqCode = value; }
         }
-        private string requestedBy;
+        private string UserId;
 
-        public string RequestedBy
+        public string userId
         {
-            get { return requestedBy; }
-            set { requestedBy = value; }
+            get { return userId; }
+            set { userId = value; }
         }
         private string note;
 

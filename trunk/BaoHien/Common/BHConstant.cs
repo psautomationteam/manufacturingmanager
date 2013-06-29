@@ -7,8 +7,8 @@ namespace BaoHien.Common
 {
     public class BHConstant
     {
-        public const string BUILD_VERSION = "1.0.6";
-        public const string BUILD_RELEASE_DATE = "22/06/2013 11:00:00 PM";
+        public const string BUILD_VERSION = "1.1.0";
+        public const string BUILD_RELEASE_DATE = "30/06/2013 2:00:00 AM";
 
         public const string MASTER_USERNAME = "baohien";
         public const string MASTER_PASSWORD_TO_DELETE = "admin";
@@ -43,16 +43,16 @@ namespace BaoHien.Common
         public const string REGULAR_EXPRESSION_FOR_NUMBER = "[0-9]";
         public const string REGULAR_EXPRESSION_FOR_CURRENCY = "[0-9]?.?[0-9]";
 
-        public const byte DATA_STATUS_IN_STOCK_FOR_INPUT = 1;
-        public const byte DATA_STATUS_IN_STOCK_FOR_OUTPUT = 2;
-        public const byte DATA_STATUS_IN_STOCK_FOR_EDIT = 3;
+        public const byte DELETED_PROPERTY_VALUE = 3;
+        public const byte ACTIVE_PROPERTY_VALUE = 1;
+        public const byte DEACTIVE_PROPERTY_VALUE = 2;
 
         public static string SAVE_IN_DIRECTORY = AppDomain.CurrentDomain.BaseDirectory + @"Temp";
 
         public static string DATETIME_FORMAT = "dd/MM/yyyy HH:mm:ss";
         public static string DATE_FORMAT = "dd/MM/yyyy";
 
-        public static int DEACTIVE_STATUS = 1;
+        public static int DEACTIVE_STATUS = 3;
         public static int ACTIVE_STATUS = 0;
 
         // FOR DB CONFIG
@@ -65,5 +65,8 @@ namespace BaoHien.Common
 
         public const string CONTENT_FONT_PATH = @"C:\Windows\Fonts\TIMES.TTF";
         public const string HEADER_FONT_PATH = @"C:\Windows\Fonts\TIMES.TTF";
+
+        public const bool DIRECTION_IN = true;
+        public const bool DIRECTION_OUT = false;
     }
 }

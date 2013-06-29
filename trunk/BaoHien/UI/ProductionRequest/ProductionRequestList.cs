@@ -66,17 +66,15 @@ namespace BaoHien.UI
         {
             if (productionRequests != null)
             {
-                int index = 0;
                 var query = from productionRequest in productionRequests
                             select new 
                             {
                                 ReqCode = productionRequest.ReqCode,
-                                RequestedBy = productionRequest.SystemUser.FullName,
+                                UserId = productionRequest.SystemUser.FullName,
                                 Note = productionRequest.Note,
                                 Id = productionRequest.Id,
-                                CreatedBy = productionRequest.RequestedDate.ToString(BHConstant.DATE_FORMAT),
+                                CreatedBy = productionRequest.CreatedDate.ToString(BHConstant.DATE_FORMAT),
                                 Status = productionRequest.Status != null?productionRequest.Status.Value: (byte)0,
-                                Index = ++index
                             };
                 dgwRequestList.DataSource = query.ToList();
                 productionRequestInTotal.Text = query.Count().ToString();
@@ -85,10 +83,9 @@ namespace BaoHien.UI
 
         private void SetupColumns()
         {
-            dgwRequestList.Columns.Add(Global.CreateCell("Index", "STT", 30));
             dgwRequestList.Columns.Add(Global.CreateCell("CreatedBy", "Ngày tạo", 100));
             dgwRequestList.Columns.Add(Global.CreateCell("ReqCode", "Mã yêu cầu", 150));
-            dgwRequestList.Columns.Add(Global.CreateCell("RequestedBy", "Yêu cầu bởi", 200));
+            dgwRequestList.Columns.Add(Global.CreateCell("UserId", "Yêu cầu bởi", 200));
             dgwRequestList.Columns.Add(Global.CreateCell("Note", "Ghi chú", 300));
             dgwRequestList.Columns.Add(Global.CreateCellDeleteAction());
         }
@@ -122,7 +119,6 @@ namespace BaoHien.UI
 
                         ProductionRequestService productionRequestService = new ProductionRequestService();
                         ProductionRequestDetailService productionRequestDetailService = new ProductionRequestDetailService();
-                        //Product mu = (Product)dgv.DataBoundItem;
                         int id = ObjectHelper.GetValueFromAnonymousType<int>(currentRow.DataBoundItem, "Id");
                         ProductionRequest pr = productionRequestService.GetProductionRequest(id);
                         List<ProductionRequestDetail> productionRequestDetails = productionRequestDetailService.GetProductionRequestDetails().Where(p => p.ProductionRequestId == id).ToList();
@@ -134,41 +130,27 @@ namespace BaoHien.UI
                             ProductLogService productLogService = new ProductLogService();
                             foreach (ProductionRequestDetail prd in productionRequestDetails)
                             {
-                                ProductLog pl = productLogService.GetNewestProductUnitLog(prd.ProductId, prd.AttributeId, prd.UnitId);
-                                ProductLog plg = new ProductLog
+                                ProductLog pl = productLogService.GetProductLog(prd.ProductId, prd.AttributeId, prd.UnitId);
+                                if (pl != null)
                                 {
-                                    AttributeId = prd.AttributeId,
-                                    ProductId = prd.ProductId,
-                                    UnitId = prd.UnitId,
-                                    RecordCode = pr.ReqCode,
-                                    BeforeNumber = pl.AfterNumber,
-                                    Amount = prd.NumberUnit,
-                                    AfterNumber = (prd.Direction == true) ?
-                                        ((pl.AfterNumber - prd.NumberUnit) > 0 ? (pl.AfterNumber - prd.NumberUnit) : 0)
-                                        : (pl.AfterNumber + prd.NumberUnit),
-                                    CreatedDate = systime,
-                                    Status = BHConstant.DEACTIVE_STATUS
-                                };
-                                ret = productLogService.AddProductLog(plg);
+                                    pl.UpdatedDate = systime;
+                                    pl.Amount -= (prd.Direction == BHConstant.DIRECTION_OUT) ? -prd.NumberUnit : prd.NumberUnit;
+                                    if (pl.Amount < 0)
+                                        pl.Amount = 0;
+                                    ret = productLogService.UpdateProductLog(pl);
+                                }
                                 ret = productionRequestDetailService.DeleteProductionRequestDetail(prd.Id.ToString());
                                 if (!ret)
                                 {
-                                    MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                                    MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                     return;
                                 }
-                            }
-
-                            List<ProductLog> deactives = productLogService.SelectProductLogByWhere(x => x.RecordCode == pr.ReqCode && x.Status == BHConstant.ACTIVE_STATUS).ToList();
-                            foreach (ProductLog item in deactives)
-                            {
-                                item.Status = BHConstant.DEACTIVE_STATUS;
-                                productLogService.UpdateProductLog(item);
                             }
                         }
 
                         if (!productionRequestService.DeleteProductionRequest(id))
                         {
-                            MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!");
+                            MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                         loadProductionRequestList();
                     }
@@ -183,7 +165,7 @@ namespace BaoHien.UI
             ProductionRequestSearchCriteria productionRequestSearchCriteria = new ProductionRequestSearchCriteria
             {
                 CodeRequest = txtCode.Text != null ? txtCode.Text.ToLower() : "",
-                RequestedBy = (cbmUsers.SelectedValue != null && cbmUsers.SelectedIndex != 0) ? (int?)cbmUsers.SelectedValue : (int?)null,
+                UserId = (cbmUsers.SelectedValue != null && cbmUsers.SelectedIndex != 0) ? (int?)cbmUsers.SelectedValue : (int?)null,
                 From = dtpFrom.Value != null ? dtpFrom.Value : (DateTime?)null,
                 To = dtpTo.Value != null ? dtpTo.Value.AddDays(1).Date : (DateTime?)null,
             };
@@ -194,6 +176,19 @@ namespace BaoHien.UI
                 productionRequests = new List<ProductionRequest>();
             }
             setUpDataGrid(productionRequests);
+        }
+
+        private void dgwRequestList_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            DataGridView gridView = sender as DataGridView;
+            if (null != gridView)
+            {
+                gridView.AutoResizeRowHeadersWidth(DataGridViewRowHeadersWidthSizeMode.AutoSizeToDisplayedHeaders);
+                foreach (DataGridViewRow r in gridView.Rows)
+                {
+                    gridView.Rows[r.Index].HeaderCell.Value = (r.Index + 1).ToString();
+                }
+            }
         }
     }
 }

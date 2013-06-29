@@ -20,7 +20,7 @@ namespace BaoHien.Services.ProductionRequests
         public List<ProductionRequest> GetProductionRequests()
         {
             List<ProductionRequest> productionRequests = OnGetItems<ProductionRequest>();
-            return productionRequests.OrderByDescending(x => x.RequestedDate).ToList();
+            return productionRequests.OrderByDescending(x => x.CreatedDate).ToList();
         }
 
         public bool AddProductionRequest(ProductionRequest product)
@@ -43,9 +43,9 @@ namespace BaoHien.Services.ProductionRequests
             List<ProductionRequest> productionRequests = OnGetItems<ProductionRequest>();           
             if (productionRequestSearchCriteria != null)
             {
-                if (productionRequestSearchCriteria.RequestedBy.HasValue)
+                if (productionRequestSearchCriteria.UserId.HasValue)
                 {
-                    productionRequests = productionRequests.Where(pr => pr.RequestedBy == productionRequestSearchCriteria.RequestedBy.Value).ToList();
+                    productionRequests = productionRequests.Where(pr => pr.UserId == productionRequestSearchCriteria.UserId.Value).ToList();
                 }
                 if (productionRequestSearchCriteria.CodeRequest != "")
                 {
@@ -54,8 +54,8 @@ namespace BaoHien.Services.ProductionRequests
                 if (productionRequestSearchCriteria.To.HasValue && productionRequestSearchCriteria.From.HasValue)
                 {
                     productionRequests = productionRequests.
-                        Where(pr => pr.RequestedDate.CompareTo(productionRequestSearchCriteria.From.Value) >= 0 
-                            && pr.RequestedDate.CompareTo(productionRequestSearchCriteria.To.Value) <= 0)
+                        Where(pr => pr.CreatedDate.CompareTo(productionRequestSearchCriteria.From.Value) >= 0 
+                            && pr.CreatedDate.CompareTo(productionRequestSearchCriteria.To.Value) <= 0)
                             .ToList();
                 }
             }

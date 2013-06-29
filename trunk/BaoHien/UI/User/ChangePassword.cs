@@ -32,10 +32,10 @@ namespace BaoHien.UI
                 else
                 {
                     SystemUserService systemUserService = new SystemUserService();
-                    SystemUser user = systemUserService.GetSystemUsers().Where(u => u.username == Global.CurrentUser.username && u.password == txtCurrentPass.Text).FirstOrDefault();
+                    SystemUser user = systemUserService.GetSystemUsers().Where(u => u.Username == Global.CurrentUser.Username && u.Password == txtCurrentPass.Text).FirstOrDefault();
                     if (user != null)
                     {
-                        user.password = txtNewPass.Text;
+                        user.Password = txtNewPass.Text;
                         bool result = systemUserService.UpdateSystemUser(user);
                         if (result)
                         { 

@@ -47,7 +47,7 @@ namespace BaoHien.UI
                 if (user != null)
                 {
                     SystemUserService systemUserService = new SystemUserService();
-                    user = systemUserService.GetSystemUsers().Single(u => (u.username == Global.CurrentUser.username) && (u.password == Global.CurrentUser.password));
+                    user = systemUserService.GetSystemUsers().Single(u => (u.Username == Global.CurrentUser.Username) && (u.Password == Global.CurrentUser.Password));
                 }
                 if (user == null)
                 {

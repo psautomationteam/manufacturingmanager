@@ -28,12 +28,12 @@ namespace BaoHien.Model
             get { return codeRequest; }
             set { codeRequest = value; }
         }
-        int? requestedBy;
+        int? userId;
 
-        public int? RequestedBy
+        public int? UserId
         {
-            get { return requestedBy; }
-            set { requestedBy = value; }
+            get { return userId; }
+            set { userId = value; }
         }
         
     }

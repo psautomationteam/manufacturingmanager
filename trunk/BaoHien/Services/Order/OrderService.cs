@@ -50,7 +50,7 @@ namespace BaoHien.Services.Orders
             {
                 if (productionRequestSearchCriteria.CreatedBy.HasValue)
                 {
-                    orders = orders.Where(pr => pr.CreateBy == productionRequestSearchCriteria.CreatedBy.Value).ToList();
+                    orders = orders.Where(pr => pr.UserId == productionRequestSearchCriteria.CreatedBy.Value).ToList();
                 }
                 if (productionRequestSearchCriteria.Customer.HasValue)
                 {
