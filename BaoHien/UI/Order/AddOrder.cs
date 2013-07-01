@@ -50,6 +50,7 @@ namespace BaoHien.UI
         public AddOrder()
         {
             InitializeComponent();
+            DAL.Helper.BaoHienRepository.ResetDBDataContext();
         }
 
         private bool saveData()

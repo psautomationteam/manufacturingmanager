@@ -68,5 +68,6 @@ namespace BaoHien.Common
 
         public const bool DIRECTION_IN = true;
         public const bool DIRECTION_OUT = false;
+        public static DateTime CLONE_STOCK_DATE = Convert.ToDateTime("7/1/2013 00:00:00 AM");
     }
 }
