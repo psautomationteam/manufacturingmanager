@@ -243,6 +243,7 @@ namespace BaoHien.UI
             this.cbxCustomer.TabIndex = 1;
             this.validator1.SetType(this.cbxCustomer, Itboy.Components.ValidationType.Required);
             this.cbxCustomer.SelectedIndexChanged += new System.EventHandler(this.cbxCustomer_SelectedIndexChanged);
+            this.cbxCustomer.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cbxCustomer_KeyDown);
             // 
             // label2
             // 

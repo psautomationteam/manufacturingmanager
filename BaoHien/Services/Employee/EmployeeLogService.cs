@@ -43,6 +43,12 @@ namespace BaoHien.Services.Employees
         public List<EmployeeReport> GetReportsOfEmployee(int employeeId, DateTime from, DateTime to, ref double total)
         {
             List<EmployeeReport> result = new List<EmployeeReport>();
+            if (from > to)
+            {
+                DateTime d = from;
+                from = to;
+                to = d;
+            }
             using (BaoHienDBDataContext context = new BaoHienDBDataContext(SettingManager.BuildStringConnection()))
             {
                 List<EmployeeLog> logs = context.EmployeeLogs
@@ -94,31 +100,32 @@ namespace BaoHien.Services.Employees
         public List<EmployeesReport> GetReportsOfEmployees(DateTime from, DateTime to, ref double total)
         {
             List<EmployeesReport> result = new List<EmployeesReport>();
+            if (from > to)
+            {
+                DateTime d = from;
+                from = to;
+                to = d;
+            }
             using (BaoHienDBDataContext context = new BaoHienDBDataContext(SettingManager.BuildStringConnection()))
             {
                 List<EmployeeLog> logs = context.EmployeeLogs
                     .Where(c => c.CreatedDate >= from && c.CreatedDate <= to && c.Status == BHConstant.ACTIVE_STATUS)
                     .OrderBy(x => x.CreatedDate).ToList();
-                ConvertEmployeeLogsToReports(logs, ref result, ref total);
+                int index = 0;
+                foreach (EmployeeLog log in logs)
+                {
+                    result.Add(new EmployeesReport
+                    {
+                        EmployeeName = log.Employee.FullName,
+                        RecordCode = log.RecordCode,
+                        Amount = Global.formatVNDCurrencyText(log.Amount.ToString()),
+                        CreatedDate = log.CreatedDate.ToString(BHConstant.DATE_FORMAT),
+                        Index = ++index
+                    });
+                    total += log.Amount;
+                }
             }
             return result;
-        }
-
-        private void ConvertEmployeeLogsToReports(List<EmployeeLog> logs, ref List<EmployeesReport> reports, ref double total)
-        {
-            int index = 0;
-            foreach (EmployeeLog log in logs)
-            {
-                reports.Add(new EmployeesReport
-                {
-                    EmployeeName = log.Employee.FullName,
-                    RecordCode = log.RecordCode,
-                    Amount = Global.formatVNDCurrencyText(log.Amount.ToString()),
-                    CreatedDate = log.CreatedDate.ToString(BHConstant.DATE_FORMAT),
-                    Index = ++index
-                });
-                total += log.Amount;
-            }
         }
 
         public List<EmployeeLog> SelectEmployeeLogByWhere(Expression<Func<EmployeeLog, bool>> func)

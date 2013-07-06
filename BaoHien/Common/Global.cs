@@ -385,5 +385,10 @@ namespace BaoHien.Common
                 return false;
             }
         }
+
+        public static void DisableDropDownWhenSuggesting(ComboBox cb)
+        {
+            cb.DroppedDown = false;
+        }
     }
 }

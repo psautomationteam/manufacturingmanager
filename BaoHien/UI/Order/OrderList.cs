@@ -49,11 +49,10 @@ namespace BaoHien.UI
         private void loadSomeData()
         {
             CustomerService customerService = new CustomerService();
-            customers = customerService.GetCustomers();
-            customers.Add(new Customer() { Id = 0, CustomerName = "Tất cả", CustCode = "Tất cả" });
-            customers = customers.OrderBy(x => x.Id).ToList();
+            customers = customerService.GetCustomers().OrderBy(x => x.CustCode).ToList();
+            customers.Insert(0, new Customer() { Id = 0, CustomerName = "Tất cả", CustCode = "Tất cả" });
 
-            cbmCustomers.AutoCompleteMode = AutoCompleteMode.Append;
+            cbmCustomers.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
             cbmCustomers.AutoCompleteSource = AutoCompleteSource.ListItems;
             cbmCustomers.DataSource = customers;
             cbmCustomers.DisplayMember = "CustCode";
@@ -173,7 +172,9 @@ namespace BaoHien.UI
 
                 CustomerLogService cls = new CustomerLogService();
                 CustomerLog cl = cls.GetCustomerLog(order.OrderCode);
-                bool kq = cls.DeleteCustomerLog(cl.Id);
+                bool kq = true;
+                if (cl != null)
+                    kq = cls.DeleteCustomerLog(cl.Id);
 
                 #endregion
 
@@ -204,7 +205,8 @@ namespace BaoHien.UI
                 {
                     EmployeeLogService els = new EmployeeLogService(); 
                     EmployeeLog order_el = els.SelectEmployeeLogByWhere(x => x.RecordCode == order.OrderCode).FirstOrDefault();
-                    els.DeleteEmployeeLog(order_el.Id);
+                    if(order_el != null)
+                        els.DeleteEmployeeLog(order_el.Id);
                 }
 
                 #endregion
@@ -244,6 +246,11 @@ namespace BaoHien.UI
                     gridView.Rows[r.Index].HeaderCell.Value = (r.Index + 1).ToString();
                 }
             }
+        }
+
+        private void cbmCustomers_KeyDown(object sender, KeyEventArgs e)
+        {
+            Global.DisableDropDownWhenSuggesting(cbmCustomers);
         }
     }
 }

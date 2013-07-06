@@ -116,6 +116,7 @@
             this.cbmCustomers.Size = new System.Drawing.Size(145, 21);
             this.cbmCustomers.TabIndex = 2;
             this.cbmCustomers.SelectedIndexChanged += new System.EventHandler(this.cbmCustomers_SelectedIndexChanged);
+            this.cbmCustomers.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cbmCustomers_KeyDown);
             // 
             // label5
             // 
