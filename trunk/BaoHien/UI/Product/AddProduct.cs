@@ -48,9 +48,7 @@ namespace BaoHien.UI
                 {
                     product.Description = txtDescription.Text;
                     product.ProductName = txtName.Text;
-                    //product.BaseUnit = cmbUnit.SelectedValue != null ? (int)cmbUnit.SelectedValue : (int?)null;
                     product.ProductCode = txtCode.Text;
-                    //product.ProductType = (int)cmbType.SelectedValue;
 
                     ProductType refProductType = productTypes.Single(pt => pt.Id == (int)cmbType.SelectedValue);
                     product.ProductType1 = refProductType;
@@ -60,7 +58,6 @@ namespace BaoHien.UI
                     if (result)
                     {
                         MessageBox.Show("Sản phẩm đã được cập nhật thành công");
-                        ((ProductList)this.CallFromUserControll).loadProductList();
                         this.Close();
                     }
                     else
@@ -120,6 +117,7 @@ namespace BaoHien.UI
                     foreach (DataGridViewRow dgv in dgvBaseAttributes.Rows)
                     {
                         DataGridViewCheckBoxCell checkbox = (DataGridViewCheckBoxCell)dgv.Cells[0];
+                        checkbox.Value = 0;
                         if ((BaseAttribute)dgv.DataBoundItem == pa.BaseAttribute)
                         {
                             checkbox.Value = 1;
@@ -139,7 +137,7 @@ namespace BaoHien.UI
             var product_codes = new AutoCompleteStringCollection();
             product_codes.AddRange(products.Select(x => x.ProductCode).ToArray());
             txtCode.AutoCompleteCustomSource = product_codes;
-            txtCode.AutoCompleteMode = AutoCompleteMode.Append;
+            txtCode.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
             txtCode.AutoCompleteSource = AutoCompleteSource.CustomSource;
         }
 
@@ -293,33 +291,7 @@ namespace BaoHien.UI
             BaoHienRepository.ResetDBDataContext();
             return result;
         }
-
-        private void txtCode_MouseLeave(object sender, EventArgs e)
-        {
-            string code = txtCode.Text;
-            if (!string.IsNullOrEmpty(code))
-            {
-                Product p = null;
-                if (product != null)
-                    p = products.Where(x => x.ProductCode == code && x.Id != product.Id).FirstOrDefault();
-                else
-                    p = products.Where(x => x.ProductCode == code).FirstOrDefault();
-                if (p != null)
-                {
-                    if (MessageBox.Show("Sản phẩm với mã này hiện đang tồn tại, bạn có muốn chỉnh sửa lại sản phẩm này không ?", "Thông báo ...", MessageBoxButtons.YesNo, MessageBoxIcon.Information)
-                        == System.Windows.Forms.DialogResult.Yes)
-                    {
-                        loadDataForEditProduct(p.Id);
-                        AddProduct_Load(null, null);
-                    }
-                    else
-                    {
-                        this.Close();
-                    }
-                }
-            }
-        }
-
+        
         private void dgvBaseAttributes_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
             DataGridView gridView = sender as DataGridView;
@@ -329,6 +301,25 @@ namespace BaoHien.UI
                 foreach (DataGridViewRow r in gridView.Rows)
                 {
                     gridView.Rows[r.Index].HeaderCell.Value = (r.Index + 1).ToString();
+                }
+            }
+        }
+
+        private void txtCode_Leave(object sender, EventArgs e)
+        {
+            string code = txtCode.Text;
+            if (!string.IsNullOrEmpty(code))
+            {
+                Product p = null;
+                if (product != null)
+                    p = products.Where(x => x.ProductCode == code && x.Id != product.Id).FirstOrDefault();
+                else
+                    p = products.Where(x => x.ProductCode.ToLower() == code.ToLower()).FirstOrDefault();
+                if (p != null)
+                {
+                    MessageBox.Show("Chỉnh sửa thông tin sản phẩm này ....");
+                    loadDataForEditProduct(p.Id);
+                    AddProduct_Load(null, null);
                 }
             }
         }

@@ -37,11 +37,10 @@ namespace BaoHien.UI
         private void loadSomeData()
         {
             CustomerService customerService = new CustomerService();
-            customers = customerService.GetCustomers();
-            customers.Add(new Customer() { Id = 0, CustomerName = "Tất cả", CustCode = "Tất cả" });
-            customers = customers.OrderBy(x => x.Id).ToList();
+            customers = customerService.GetCustomers().OrderBy(x => x.CustCode).ToList();
+            customers.Insert(0, new Customer() { Id = 0, CustomerName = "Tất cả", CustCode = "Tất cả" });
 
-            cbmCustomers.AutoCompleteMode = AutoCompleteMode.Append;
+            cbmCustomers.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
             cbmCustomers.AutoCompleteSource = AutoCompleteSource.ListItems;
             cbmCustomers.DataSource = customers;
             cbmCustomers.DisplayMember = "CustCode";
@@ -155,7 +154,9 @@ namespace BaoHien.UI
                         Bill bill = billService.GetBill(id);
                         CustomerLogService cls = new CustomerLogService();
                         CustomerLog cl = cls.SelectCustomerLogByWhere(x => x.RecordCode == bill.BillCode).FirstOrDefault();
-                        bool kq = cls.DeleteCustomerLog(cl.Id);
+                        bool kq = true;
+                        if(cl != null)
+                            cls.DeleteCustomerLog(cl.Id);
 
                         if (!billService.DeleteBill(id) && kq)
                         {
@@ -196,6 +197,11 @@ namespace BaoHien.UI
                     gridView.Rows[r.Index].HeaderCell.Value = (r.Index + 1).ToString();
                 }
             }
+        }
+
+        private void cbmCustomers_KeyDown(object sender, KeyEventArgs e)
+        {
+            Global.DisableDropDownWhenSuggesting(cbmCustomers);
         }
     }
 }

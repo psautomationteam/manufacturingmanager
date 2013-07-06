@@ -58,7 +58,7 @@ namespace BaoHien.UI
             calculateTotal();
             if (validator1.Validate() && ValidateData())
             {
-                if (cbxCustomer.SelectedValue == null)
+                if (cbxCustomer.SelectedValue == null || cbxCustomer.SelectedIndex <= 0)
                 {
                     MessageBox.Show("Bạn cần có một khách hàng cho phiếu này!");
                     return false;
@@ -87,8 +87,8 @@ namespace BaoHien.UI
                     if (order != null)//update
                     {
                         #region Update
-                        
-                        order.CustId = cbxCustomer.SelectedValue != null ? (int)cbxCustomer.SelectedValue : 0;
+
+                        order.CustId = (int)cbxCustomer.SelectedValue;
                         order.Discount = discount;
                         order.Note = txtNote.Text;
                         order.VAT = vat;
@@ -104,7 +104,7 @@ namespace BaoHien.UI
                         List<OrderDetailEntity> rev_details = old_orderDetails.Where(x => !orderDetails.Select(y => y.ProductId.ToString() + '_' +
                             y.AttributeId.ToString() + '_' + y.UnitId.ToString()).Contains(x.ProductId.ToString() + '_' +
                             x.AttributeId.ToString() + '_' + x.UnitId.ToString())).ToList();
-                        foreach(OrderDetailEntity item in rev_details)
+                        foreach (OrderDetailEntity item in rev_details)
                         {
                             ProductLog pl = productLogService.GetProductLog(item.ProductId, item.AttributeId, item.UnitId);
                             if (pl != null)
@@ -129,7 +129,7 @@ namespace BaoHien.UI
                                     //Save in Production Log
                                     if (amount != 0)
                                     {
-                                        ProductLog pl = productLogService.GetProductLog(od.ProductId, od.AttributeId, od.UnitId); 
+                                        ProductLog pl = productLogService.GetProductLog(od.ProductId, od.AttributeId, od.UnitId);
                                         if (pl != null)
                                         {
                                             pl.UpdatedDate = createdDate;
@@ -148,7 +148,7 @@ namespace BaoHien.UI
                                     bool ret = orderDetailService.AddOrderDetail(od);
 
                                     //Save in Production Log
-                                    ProductLog pl = productLogService.GetProductLog(od.ProductId, od.AttributeId, od.UnitId); 
+                                    ProductLog pl = productLogService.GetProductLog(od.ProductId, od.AttributeId, od.UnitId);
                                     if (pl != null)
                                     {
                                         pl.UpdatedDate = createdDate;
@@ -173,7 +173,7 @@ namespace BaoHien.UI
 
                         CustomerLogService cls = new CustomerLogService();
                         CustomerLog newest = cls.GetCustomerLog(order.OrderCode);
-                        if(newest != null)
+                        if (newest != null)
                         {
                             newest.Amount = totalWithTax;
                             cls.UpdateCustomerLog(newest);
@@ -184,8 +184,11 @@ namespace BaoHien.UI
                         {
                             EmployeeLogService els = new EmployeeLogService();
                             EmployeeLog order_el = els.SelectEmployeeLogByWhere(x => x.RecordCode == order.OrderCode).FirstOrDefault();
-                            order_el.Amount = totalCommission;
-                            els.UpdateEmployeeLog(order_el);
+                            if (order_el != null)
+                            {
+                                order_el.Amount = totalCommission;
+                                els.UpdateEmployeeLog(order_el);
+                            }
                         }
 
                         #endregion
@@ -312,8 +315,11 @@ namespace BaoHien.UI
                 }
                 return false;
             }
-            MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            return false;
+            else
+            {
+                MessageBox.Show("Vui lòng kiểm tra các thông tin cần thiết!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
         }
 
         private void loadSomeData()
@@ -321,11 +327,12 @@ namespace BaoHien.UI
             if(customers == null)
             {
                 CustomerService customerService = new CustomerService();
-                customers = new BindingList<Customer>(customerService.GetCustomers());
+                customers = new BindingList<Customer>(customerService.GetCustomers().OrderBy(x => x.CustCode).ToList());
+                customers.Insert(0, new Customer() { Id = 0, CustCode = "", CustomerName = ""});
             }
             if (customers != null)
             {
-                cbxCustomer.AutoCompleteMode = AutoCompleteMode.Append;
+                cbxCustomer.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
                 cbxCustomer.AutoCompleteSource = AutoCompleteSource.ListItems;
 
                 cbxCustomer.DataSource = customers;
@@ -682,11 +689,11 @@ namespace BaoHien.UI
                         if (prodCode != null)
                         {
                             prodCode.DropDownStyle = ComboBoxStyle.DropDown;
-                            prodCode.AutoCompleteMode = AutoCompleteMode.Append;
+                            prodCode.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
                             prodCode.AutoCompleteCustomSource = source;
                             prodCode.AutoCompleteSource = AutoCompleteSource.CustomSource;
                             prodCode.MaxDropDownItems = 5;
-
+                            prodCode.KeyDown += DisableDropperDown;
                         }
                         //this.validator1.SetType(prodCode, Itboy.Components.ValidationType.Required);
                     } break;
@@ -706,10 +713,11 @@ namespace BaoHien.UI
                         if (prodCode != null)
                         {
                             prodCode.DropDownStyle = ComboBoxStyle.DropDown;
-                            prodCode.AutoCompleteMode = AutoCompleteMode.Append;
+                            prodCode.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
                             prodCode.AutoCompleteCustomSource = source;
                             prodCode.AutoCompleteSource = AutoCompleteSource.CustomSource;
                             prodCode.MaxDropDownItems = 5;
+                            prodCode.KeyDown += DisableDropperDown;
                         }
                         //this.validator1.SetType(prodCode, Itboy.Components.ValidationType.Required);
                     } break;
@@ -740,6 +748,11 @@ namespace BaoHien.UI
                         }
                     } break;
             }
+        }
+
+        void DisableDropperDown(object sender, KeyEventArgs e)
+        {
+            Global.DisableDropDownWhenSuggesting((ComboBox)sender);
         }
 
         private void btnPrintS_Click(object sender, EventArgs e)
@@ -1224,6 +1237,10 @@ namespace BaoHien.UI
                 
             }
         }
-
+        
+        private void cbxCustomer_KeyDown(object sender, KeyEventArgs e)
+        {
+            Global.DisableDropDownWhenSuggesting(cbxCustomer);
+        }
     }
 }

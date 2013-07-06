@@ -37,11 +37,12 @@ namespace BaoHien.UI
             if (customers == null)
             {
                 CustomerService customerService = new CustomerService();
-                customers = customerService.GetCustomers();               
+                customers = customerService.GetCustomers().OrderBy(x => x.CustCode).ToList();
+                customers.Insert(0, new Customer() { Id = 0, CustCode = "", CustomerName = "" });
             }
             if (customers != null)
             {
-                cbxCustomer.AutoCompleteMode = AutoCompleteMode.Append;
+                cbxCustomer.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
                 cbxCustomer.AutoCompleteSource = AutoCompleteSource.ListItems;
                 cbxCustomer.DataSource = customers;
                 cbxCustomer.DisplayMember = "CustCode";
@@ -68,7 +69,7 @@ namespace BaoHien.UI
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            if (validator1.Validate())
+            if (validator1.Validate() && cbxCustomer.SelectedValue != null && cbxCustomer.SelectedIndex > 0)
             {
                 BillService billService = new BillService();
                 if (bill == null)
@@ -120,18 +121,15 @@ namespace BaoHien.UI
                         return;
                     }
                 }
-                else
-                {
-                    
-                }
                 if (this.CallFromUserControll != null && this.CallFromUserControll is BillList)
                 {
                     ((BillList)this.CallFromUserControll).loadBillList();
                 }
-
                 this.Close();
+                return;
             }
-            
+            MessageBox.Show("Vui lòng kiểm tra các thông tin cần thiết!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            return;  
         }
 
         private void AddBill_Load(object sender, EventArgs e)
@@ -159,6 +157,11 @@ namespace BaoHien.UI
                     lbCustomerName.Text = cm.CustomerName;
                 }
             }
+        }
+
+        private void cbxCustomer_KeyDown(object sender, KeyEventArgs e)
+        {
+            Global.DisableDropDownWhenSuggesting(cbxCustomer);
         }
     }
 }

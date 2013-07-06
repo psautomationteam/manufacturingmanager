@@ -40,3 +40,9 @@ D:\Workspace - VS\Bao Hien Project\SVN\DAL\bin\Debug\DAL.pdb
 D:\Workspace - VS\Bao Hien Project\SVN\DAL\obj\Debug\ResolveAssemblyReference.cache
 D:\Workspace - VS\Bao Hien Project\SVN\DAL\obj\Debug\DAL.dll
 D:\Workspace - VS\Bao Hien Project\SVN\DAL\obj\Debug\DAL.pdb
+E:\Project\BHProject\DAL\bin\Debug\DAL.dll.config
+E:\Project\BHProject\DAL\bin\Debug\DAL.dll
+E:\Project\BHProject\DAL\bin\Debug\DAL.pdb
+E:\Project\BHProject\DAL\obj\Debug\DAL.csprojResolveAssemblyReference.cache
+E:\Project\BHProject\DAL\obj\Debug\DAL.dll
+E:\Project\BHProject\DAL\obj\Debug\DAL.pdb

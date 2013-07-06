@@ -173,6 +173,7 @@
             this.chkAuto.TabIndex = 3;
             this.chkAuto.Text = "Sinh tự dộng";
             this.chkAuto.UseVisualStyleBackColor = true;
+            this.chkAuto.Visible = false;
             this.chkAuto.CheckedChanged += new System.EventHandler(this.chkAuto_CheckedChanged);
             // 
             // txtCode
@@ -183,7 +184,7 @@
             this.txtCode.Size = new System.Drawing.Size(140, 20);
             this.txtCode.TabIndex = 2;
             this.validator1.SetType(this.txtCode, Itboy.Components.ValidationType.Required);
-            this.txtCode.MouseLeave += new System.EventHandler(this.txtCode_MouseLeave);
+            this.txtCode.Leave += new System.EventHandler(this.txtCode_Leave);
             // 
             // label2
             // 

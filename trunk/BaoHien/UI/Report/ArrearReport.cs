@@ -81,16 +81,10 @@ namespace BaoHien.UI
         void LoadCustomers()
         {
             CustomerService customerService = new CustomerService();
-            customers = customerService.GetCustomers();
-            Customer ctm = new Customer { 
-                Id = 0,
-                CustomerName = "Tất cả",
-                CustCode = "Tất cả"
-            };
-            customers.Add(ctm);
-            customers = customers.OrderBy(ct => ct.Id).ToList();
+            customers = customerService.GetCustomers().OrderBy(x => x.CustCode).ToList();
+            customers.Insert(0, new Customer() { Id = 0, CustomerName = "Tất cả", CustCode = "Tất cả"});
 
-            cbmCustomers.AutoCompleteMode = AutoCompleteMode.Append;
+            cbmCustomers.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
             cbmCustomers.AutoCompleteSource = AutoCompleteSource.ListItems;
             cbmCustomers.DataSource = customers;
             cbmCustomers.DisplayMember = "CustCode";
@@ -349,6 +343,11 @@ namespace BaoHien.UI
                     gridView.Rows[r.Index].HeaderCell.Value = (r.Index + 1).ToString();
                 }
             }
+        }
+
+        private void cbmCustomers_KeyDown(object sender, KeyEventArgs e)
+        {
+            Global.DisableDropDownWhenSuggesting(cbmCustomers);
         }
     }
 }

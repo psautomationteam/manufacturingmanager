@@ -54,6 +54,12 @@ namespace BaoHien.Services.Customers
         public List<CustomerReport> GetReportsOfCustomer(int customerId, DateTime from, DateTime to, ref double total)
         {
             List<CustomerReport> result = new List<CustomerReport>();
+            if (from > to)
+            {
+                DateTime d = from;
+                from = to;
+                to = d;
+            }
             using (BaoHienDBDataContext context = new BaoHienDBDataContext(SettingManager.BuildStringConnection()))
             {
                 List<CustomerLog> logs = context.CustomerLogs
@@ -103,31 +109,32 @@ namespace BaoHien.Services.Customers
         public List<CustomersReport> GetReportsOfCustomers(DateTime from, DateTime to, ref double total)
         {
             List<CustomersReport> result = new List<CustomersReport>();
+            if (from > to)
+            {
+                DateTime d = from;
+                from = to;
+                to = d;
+            }
             using (BaoHienDBDataContext context = new BaoHienDBDataContext(SettingManager.BuildStringConnection()))
             {
                 List<CustomerLog> logs = context.CustomerLogs.Where(c => c.CreatedDate >= from && c.CreatedDate <= to && c.Status == BHConstant.ACTIVE_STATUS)
                     .OrderBy(c => c.CreatedDate).ToList();
                 total = logs.Sum(x => x.Amount);
-                ConvertLogToReport(logs, ref result);
+                int index = 0;
+                foreach (CustomerLog log in logs)
+                {
+                    result.Add(new CustomersReport
+                    {
+                        CustomerName = log.Customer.CustomerName,
+                        CustomerCode = log.Customer.CustCode,
+                        Date = log.CreatedDate.ToString(BHConstant.DATE_FORMAT),
+                        Amount = Global.formatCurrencyTextWithoutMask(log.Amount.ToString()),
+                        RecordCode = log.RecordCode,
+                        Index = ++index
+                    });
+                }
             }
             return result;
-        }
-
-        private void ConvertLogToReport(List<CustomerLog> logs, ref List<CustomersReport> reports)
-        {
-            int index = 0;
-            foreach (CustomerLog log in logs)
-            {
-                reports.Add(new CustomersReport
-                {
-                    CustomerName = log.Customer.CustomerName,
-                    CustomerCode = log.Customer.CustCode,
-                    Date = log.CreatedDate.ToString(BHConstant.DATE_FORMAT),
-                    Amount = Global.formatCurrencyTextWithoutMask(log.Amount.ToString()),
-                    RecordCode = log.RecordCode,
-                    Index = ++index
-                });
-            }
         }
     }
 }

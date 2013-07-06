@@ -95,12 +95,19 @@ namespace BaoHien.Services.ProductLogs
         {
             List<ProductReport> result = new List<ProductReport>();
             int index = 0;
+            if (from > to)
+            {
+                DateTime d = from;
+                from = to;
+                to = d;
+            }
+            DateTime dt = new DateTime(2013, 7, 1);
             using (BaoHienDBDataContext context = new BaoHienDBDataContext(SettingManager.BuildStringConnection()))
             {
                 var produces = context.EntranceStockDetails.Join(context.EntranceStocks,
                     child => child.EntranceStockId, parent => parent.Id,
                     (child, parent) => new { EntranceStockDetail = child, EntranceStock = parent }).Where(x => x.EntranceStock.CreatedDate >= from
-                    && x.EntranceStock.CreatedDate <= to && x.EntranceStock.Status == null && x.EntranceStock.CreatedDate > BHConstant.CLONE_STOCK_DATE &&
+                    && x.EntranceStock.CreatedDate <= to && x.EntranceStock.Status == null && x.EntranceStock.CreatedDate > dt &&
                     x.EntranceStockDetail.ProductId == productId && x.EntranceStockDetail.AttributeId == attrId && x.EntranceStockDetail.UnitId == unitId);
                 foreach (var item in produces)
                 {
@@ -117,7 +124,7 @@ namespace BaoHien.Services.ProductLogs
                 var imports = context.ProductionRequestDetails.Join(context.ProductionRequests,
                     child => child.ProductionRequestId, parent => parent.Id,
                     (child, parent) => new { ProductionRequestDetail = child, ProductionRequest = parent }).Where(x => x.ProductionRequest.CreatedDate >= from
-                    && x.ProductionRequest.CreatedDate <= to && x.ProductionRequest.Status == null && x.ProductionRequest.CreatedDate > BHConstant.CLONE_STOCK_DATE &&
+                    && x.ProductionRequest.CreatedDate <= to && x.ProductionRequest.Status == null && x.ProductionRequest.CreatedDate > dt &&
                     x.ProductionRequestDetail.ProductId == productId && x.ProductionRequestDetail.AttributeId == attrId && x.ProductionRequestDetail.UnitId == unitId);
                 foreach (var item in imports)
                 {
@@ -134,7 +141,7 @@ namespace BaoHien.Services.ProductLogs
                 var orders = context.OrderDetails.Join(context.Orders,
                     child => child.OrderId, parent => parent.Id,
                     (child, parent) => new { OrderDetail = child, Order = parent }).Where(x => x.Order.CreatedDate >= from
-                    && x.Order.CreatedDate <= to && x.Order.Status == null && x.Order.CreatedDate > BHConstant.CLONE_STOCK_DATE && 
+                    && x.Order.CreatedDate <= to && x.Order.Status == null && x.Order.CreatedDate > dt && 
                     x.OrderDetail.ProductId == productId && x.OrderDetail.AttributeId == attrId && x.OrderDetail.UnitId == unitId);
                 foreach (var item in orders)
                 {
@@ -156,13 +163,20 @@ namespace BaoHien.Services.ProductLogs
         public List<ProductsReport> GetReportsOfProducts(int productTypeId, int productId, int attrId, int unitId, DateTime from, DateTime to)
         {
             List<ProductsReport> result = new List<ProductsReport>();
-            List<ProductDetail> items = new List<ProductDetail>();
+            List<ProductDetail> items = new List<ProductDetail>(); 
+            if (from > to)
+            {
+                DateTime d = from;
+                from = to;
+                to = d;
+            }
+            DateTime dt = new DateTime(2013, 7, 1);
             using (BaoHienDBDataContext context = new BaoHienDBDataContext(SettingManager.BuildStringConnection()))
             {
                 var produces = context.EntranceStockDetails.Join(context.EntranceStocks,
                     child => child.EntranceStockId, parent => parent.Id,
                     (child, parent) => new { EntranceStockDetail = child, EntranceStock = parent }).Where(x =>
-                    x.EntranceStock.CreatedDate <= to && x.EntranceStock.CreatedDate > BHConstant.CLONE_STOCK_DATE && x.EntranceStock.Status == null);
+                    x.EntranceStock.CreatedDate <= to && x.EntranceStock.CreatedDate > dt && x.EntranceStock.Status == null);
                 if (unitId > 0)
                     produces = produces.Where(x => x.EntranceStockDetail.UnitId == unitId);
                 if (attrId > 0)
@@ -188,7 +202,7 @@ namespace BaoHien.Services.ProductLogs
                 var imports = context.ProductionRequestDetails.Join(context.ProductionRequests,
                     child => child.ProductionRequestId, parent => parent.Id,
                     (child, parent) => new { ProductionRequestDetail = child, ProductionRequest = parent }).Where(x =>
-                    x.ProductionRequest.CreatedDate <= to && x.ProductionRequest.CreatedDate > BHConstant.CLONE_STOCK_DATE && x.ProductionRequest.Status == null);
+                    x.ProductionRequest.CreatedDate <= to && x.ProductionRequest.CreatedDate > dt && x.ProductionRequest.Status == null);
                 if (unitId > 0)
                     imports = imports.Where(x => x.ProductionRequestDetail.UnitId == unitId);
                 if (attrId > 0)
@@ -214,7 +228,7 @@ namespace BaoHien.Services.ProductLogs
                 var orders = context.OrderDetails.Join(context.Orders,
                     child => child.OrderId, parent => parent.Id,
                     (child, parent) => new { OrderDetail = child, Order = parent }).Where(x =>
-                    x.Order.CreatedDate <= to && x.Order.CreatedDate > BHConstant.CLONE_STOCK_DATE && x.Order.Status == null);
+                    x.Order.CreatedDate <= to && x.Order.CreatedDate > dt && x.Order.Status == null);
                 if (unitId > 0)
                     orders = orders.Where(x => x.OrderDetail.UnitId == unitId);
                 if (attrId > 0)
@@ -247,14 +261,14 @@ namespace BaoHien.Services.ProductLogs
                 {
                     if (type_distincts.Contains(type.Id))
                     {
-                        result.Add(new ProductsReport()
+                        List<ProductsReport> type_products = new List<ProductsReport>();
+                        type_products.Add(new ProductsReport()
                         {
                             ProductName = type.TypeName
                         });
 
                         var item_types = items.Where(x => x.ProductTypeId == type.Id);
                         var distincts = item_types.GroupBy(x => new { x.ProductId, x.AttributeId, x.UnitId }).Select(x => x.First());
-                        distincts = distincts.OrderByDescending(x => x.Jampo);
                         foreach (var item in distincts)
                         {
                             Product p = context.Products.Where(x => x.Id == item.ProductId).First();
@@ -279,8 +293,10 @@ namespace BaoHien.Services.ProductLogs
                             pr.ImportNumber = a2.Where(x => x.Direction == BHConstant.DIRECTION_IN).Sum(x => x.Amount).ToString();
                             pr.ExportNumber = a2.Where(x => x.Direction == BHConstant.DIRECTION_OUT).Sum(x => x.Amount).ToString();
 
-                            result.Add(pr);
+                            type_products.Add(pr);
                         }
+                        type_products = type_products.OrderBy(x => x.ProductCode).ThenBy(x => x.Jampo).ToList();
+                        result.AddRange(type_products);
                     }
                 }
             }

@@ -206,11 +206,11 @@ namespace BaoHien.UI
                             if (prodCode != null)
                             {
                                 prodCode.DropDownStyle = ComboBoxStyle.DropDown;
-                                prodCode.AutoCompleteMode = AutoCompleteMode.Append;
+                                prodCode.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
                                 prodCode.AutoCompleteCustomSource = source;
                                 prodCode.AutoCompleteSource = AutoCompleteSource.CustomSource;
                                 prodCode.MaxDropDownItems = 5;
-
+                                prodCode.KeyDown += DisableDropperDown;
                             }
                             //DataGridViewComboBoxEditingControl avcbe = e.Control as DataGridViewComboBoxEditingControl;
                             //this.validator1.SetType(avcbe, Itboy.Components.ValidationType.Required);
@@ -231,10 +231,11 @@ namespace BaoHien.UI
                             if (prodCode != null)
                             {
                                 prodCode.DropDownStyle = ComboBoxStyle.DropDown;
-                                prodCode.AutoCompleteMode = AutoCompleteMode.Append;
+                                prodCode.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
                                 prodCode.AutoCompleteCustomSource = source;
                                 prodCode.AutoCompleteSource = AutoCompleteSource.CustomSource;
                                 prodCode.MaxDropDownItems = 5;
+                                prodCode.KeyDown += DisableDropperDown;
                             }
                             //this.validator1.SetType(prodCode, Itboy.Components.ValidationType.Required);
                         } break;
@@ -313,11 +314,11 @@ namespace BaoHien.UI
                             if (prodCode != null)
                             {
                                 prodCode.DropDownStyle = ComboBoxStyle.DropDown;
-                                prodCode.AutoCompleteMode = AutoCompleteMode.Append;
+                                prodCode.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
                                 prodCode.AutoCompleteCustomSource = source;
                                 prodCode.AutoCompleteSource = AutoCompleteSource.CustomSource;
                                 prodCode.MaxDropDownItems = 5;
-
+                                prodCode.KeyDown += DisableDropperDown;
                             }
                             //DataGridViewComboBoxEditingControl avcbe = e.Control as DataGridViewComboBoxEditingControl;
                             //this.validator1.SetType(avcbe, Itboy.Components.ValidationType.Required);
@@ -338,10 +339,11 @@ namespace BaoHien.UI
                             if (prodCode != null)
                             {
                                 prodCode.DropDownStyle = ComboBoxStyle.DropDown;
-                                prodCode.AutoCompleteMode = AutoCompleteMode.Append;
+                                prodCode.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
                                 prodCode.AutoCompleteCustomSource = source;
                                 prodCode.AutoCompleteSource = AutoCompleteSource.CustomSource;
                                 prodCode.MaxDropDownItems = 5;
+                                prodCode.KeyDown += DisableDropperDown;
                             }
                             //this.validator1.SetType(prodCode, Itboy.Components.ValidationType.Required);
                         } break;
@@ -728,6 +730,11 @@ namespace BaoHien.UI
             productForProducts = new BindingList<ProductAttributeModel>(productAttrService.GetProductAndAttribute());
             ((DataGridViewComboBoxColumn)dgvMaterial.Columns[0]).DataSource = productForProducts;
             ((DataGridViewComboBoxColumn)dgvProduct.Columns[0]).DataSource = productForProducts;
+        }
+
+        void DisableDropperDown(object sender, KeyEventArgs e)
+        {
+            Global.DisableDropDownWhenSuggesting((ComboBox)sender);
         }
     }
 }
