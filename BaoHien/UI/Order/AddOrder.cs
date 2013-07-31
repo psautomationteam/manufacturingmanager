@@ -126,6 +126,11 @@ namespace BaoHien.UI
                                     double amount = tmp_ode.NumberUnit - od.NumberUnit;
                                     bool ret = orderDetailService.UpdateOrderDetail(od);
 
+                                    if (!ret)
+                                    {
+                                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                        return false;
+                                    }
                                     //Save in Production Log
                                     if (amount != 0)
                                     {
@@ -136,17 +141,17 @@ namespace BaoHien.UI
                                             pl.Amount += amount;
                                             productLogService.UpdateProductLog(pl);
                                         }
-                                        if (!ret)
-                                        {
-                                            MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                            return false;
-                                        }
                                     }
                                 }
                                 else
                                 {
-                                    bool ret = orderDetailService.AddOrderDetail(od);
+                                    bool ret = od.Id != null ? orderDetailService.UpdateOrderDetail(od) : orderDetailService.AddOrderDetail(od);
 
+                                    if (!ret)
+                                    {
+                                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                        return false;
+                                    }
                                     //Save in Production Log
                                     ProductLog pl = productLogService.GetProductLog(od.ProductId, od.AttributeId, od.UnitId);
                                     if (pl != null)
@@ -154,11 +159,6 @@ namespace BaoHien.UI
                                         pl.UpdatedDate = createdDate;
                                         pl.Amount -= od.NumberUnit;
                                         productLogService.UpdateProductLog(pl);
-                                    }
-                                    if (!ret)
-                                    {
-                                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                        return false;
                                     }
                                 }
                             }
@@ -284,7 +284,7 @@ namespace BaoHien.UI
                         result = cls.AddCustomerLog(cl);
 
                         int salerId = (int)order.Customer.SalerId;
-                        if (salerId > 0 && totalCommission > 0)
+                        if (salerId > 0)
                         {
                             EmployeeLogService els = new EmployeeLogService();
                             EmployeeLog newel = new EmployeeLog

@@ -103,7 +103,6 @@ namespace BaoHien.UI
             products = productService.GetProducts();
 
             productLogService = new ProductLogService();
-            dgvBaseAttributes.AutoGenerateColumns = false;
             loadSomeData();
             SetupColumns();
 
@@ -111,16 +110,16 @@ namespace BaoHien.UI
             if (mode == 1) // Load data grid
             {
                 List<ProductAttribute> pas = product.ProductAttributes.ToList<ProductAttribute>();
-                foreach (ProductAttribute pa in pas)
+                oldAttr = pas.Select(x => x.AttributeId).ToList();
+                foreach (DataGridViewRow dgv in dgvBaseAttributes.Rows)
                 {
-                    oldAttr.Add(pa.AttributeId);
-                    foreach (DataGridViewRow dgv in dgvBaseAttributes.Rows)
+                    DataGridViewCheckBoxCell checkbox = (DataGridViewCheckBoxCell)dgvBaseAttributes.Rows[dgv.Index].Cells[0];
+                    checkbox.Value = "0";
+                    foreach (ProductAttribute pa in pas)
                     {
-                        DataGridViewCheckBoxCell checkbox = (DataGridViewCheckBoxCell)dgv.Cells[0];
-                        checkbox.Value = 0;
                         if ((BaseAttribute)dgv.DataBoundItem == pa.BaseAttribute)
                         {
-                            checkbox.Value = 1;
+                            checkbox.Value = "1";
                             if (productLogService.GetNewestProductLog(product.Id, pa.AttributeId) != null)
                             {
                                 checkbox.FlatStyle = FlatStyle.Flat;
@@ -202,6 +201,8 @@ namespace BaoHien.UI
         private void SetupColumns()
         {
             dgvBaseAttributes.AutoGenerateColumns = false;
+            dgvBaseAttributes.DataSource = null;
+            dgvBaseAttributes.Rows.Clear();
             if (baseAttributes != null)
             {
                 dgvBaseAttributes.DataSource = baseAttributes;
@@ -210,6 +211,8 @@ namespace BaoHien.UI
             checkboxColumn.Width = 30;
             checkboxColumn.HeaderText = "";
             checkboxColumn.ValueType = typeof(string);
+            checkboxColumn.FalseValue = "0";
+            checkboxColumn.TrueValue = "1";
             //checkboxColumn.Frozen = true;
             dgvBaseAttributes.Columns.Add(checkboxColumn);
 
