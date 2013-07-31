@@ -31,7 +31,7 @@ namespace BaoHien.UI
         BindingList<EntranceStockDetail> entranceStockDetails;
         BindingList<ProductAttributeModel> products;
         BindingList<MeasurementUnit> units;
-        BindingList<ProductionRequestDetailModel> originalEntranceDetail;
+        List<EntranceStockDetailEntity> old_details;
 
         const int ProductAttrCell = 0, NumberUnitCell = 1, UnitCell = 2, NoteCell = 3;
 
@@ -98,7 +98,6 @@ namespace BaoHien.UI
                             Note = entranceStockDetail.Note,                            
                         };
             dgvStockEntranceDetails.DataSource = new BindingList<ProductionRequestDetailModel>(query.ToList());
-            originalEntranceDetail = new BindingList<ProductionRequestDetailModel>(query.ToList());
             dgvStockEntranceDetails.ReadOnly = false;
 
             DataGridViewComboBoxColumn productColumn = new DataGridViewComboBoxColumn();
@@ -275,17 +274,28 @@ namespace BaoHien.UI
         public void loadDataForEditEntranceStock(int entranceId)
         {
             isUpdating = true;
-            this.Text = "Xem thông tin phiếu nhập kho";
+            this.Text = "Chỉnh sửa phiếu nhập kho";
             this.btnSave.Text = "OK";
-            this.btnSave.Enabled = false;
             EntranceStockService entranceStockService = new EntranceStockService();
             entranceStock = entranceStockService.GetEntranceStock(entranceId);
+            old_details = new List<EntranceStockDetailEntity>();
             if (entranceStock != null)
             {
                 if (entranceStockDetails == null)
                 {
                     EntranceStockDetailService entranceStockDetailService = new EntranceStockDetailService();
                     entranceStockDetails = new BindingList<EntranceStockDetail>(entranceStockDetailService.SelectEntranceStockDetailByWhere(o => o.EntranceStockId == entranceStock.Id));
+                    foreach (EntranceStockDetail od in entranceStockDetails)
+                    {
+                        old_details.Add(new EntranceStockDetailEntity
+                        {
+                            AttributeId = od.AttributeId,
+                            ProductId = od.ProductId,
+                            UnitId = od.UnitId,
+                            EntranceStockId = od.EntranceStockId,
+                            NumberUnit = od.NumberUnit
+                        });
+                    }
                 }
             }
         }
@@ -305,17 +315,109 @@ namespace BaoHien.UI
                     MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
-                if (entranceStock != null)//update
+                if (entranceStock != null && isUpdating)//update
                 {
                     #region Fix Update
 
+                    entranceStock.UserId = userId;
+                    entranceStock.Note = txtNote.Text;
+                    entranceStock.UpdatedDate = systime;
+
+                    EntranceStockDetailService entranceStockDetailService = new EntranceStockDetailService();
+                    List<EntranceStockDetailEntity> rev_details = old_details.Where(x => !entranceStockDetails.Select(y => y.ProductId.ToString() + '_' +
+                        y.AttributeId.ToString() + '_' + y.UnitId.ToString()).Contains(x.ProductId.ToString() + '_' +
+                        x.AttributeId.ToString() + '_' + x.UnitId.ToString())).ToList();
+                    foreach (EntranceStockDetailEntity item in rev_details)
+                    {
+                        ProductLog pl = productLogService.GetProductLog(item.ProductId, item.AttributeId, item.UnitId);
+                        if (pl != null)
+                        {
+                            pl.UpdatedDate = systime;
+                            pl.Amount -= item.NumberUnit;
+                            if (pl.Amount < 0)
+                                pl.Amount = 0;
+                            productLogService.UpdateProductLog(pl);
+                        }
+                    }
+                    foreach (EntranceStockDetail od in entranceStockDetails)
+                    {
+                        od.EntranceStockId = entranceStock.Id;
+                        if (od.ProductId > 0 && od.AttributeId > 0 && od.UnitId > 0)
+                        {
+                            EntranceStockDetailEntity tmp_ode = old_details.Where(x => x.ProductId == od.ProductId &&
+                                x.AttributeId == od.AttributeId && x.UnitId == od.UnitId && x.EntranceStockId == entranceStock.Id).FirstOrDefault();
+                            if (tmp_ode != null)
+                            {
+                                double amount = od.NumberUnit - tmp_ode.NumberUnit;
+                                bool ret = entranceStockDetailService.UpdateEntranceStockDetail(od);
+
+                                if (!ret)
+                                {
+                                    MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    return;
+                                }
+                                //Save in Production Log
+                                if (amount != 0)
+                                {
+                                    ProductLog pl = productLogService.GetProductLog(od.ProductId, od.AttributeId, od.UnitId);
+                                    if (pl != null)
+                                    {
+                                        pl.UpdatedDate = systime;
+                                        pl.Amount += amount;
+                                        if (pl.Amount < 0)
+                                            pl.Amount = 0;
+                                        productLogService.UpdateProductLog(pl);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                bool ret = od.Id != null ? entranceStockDetailService.UpdateEntranceStockDetail(od) : entranceStockDetailService.AddEntranceStockDetail(od);
+
+                                if (!ret)
+                                {
+                                    MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    return;
+                                }
+                                //Save in Production Log
+                                ProductLog pl = productLogService.GetProductLog(od.ProductId, od.AttributeId, od.UnitId);
+                                if (pl != null)
+                                {
+                                    pl.UpdatedDate = systime;
+                                    pl.Amount += od.NumberUnit;
+                                    productLogService.UpdateProductLog(pl);
+                                }
+                                else
+                                {
+                                    pl = new ProductLog()
+                                    {
+                                        ProductId = od.ProductId,
+                                        AttributeId = od.AttributeId,
+                                        UnitId = od.UnitId,
+                                        Amount = od.NumberUnit,
+                                        UpdatedDate = systime
+                                    };
+                                    productLogService.AddProductLog(pl);
+                                }
+                            }
+                        }
+                    }
+
+                    EntranceStockService entranceStockService = new EntranceStockService();
+                    bool result = entranceStockService.UpdateEntranceStock(entranceStock);
+
+                    if (result)
+                        MessageBox.Show("Phiếu nhập kho đã được cập nhật thành công");
+                    else
+                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    this.Close();
 
                     #endregion
-
-                    this.Close();
                 }
                 else//add new
                 {
+                    #region New
+
                     SeedService ss = new SeedService();
                     entranceStock = new EntranceStock
                     {
@@ -363,15 +465,12 @@ namespace BaoHien.UI
                         }
                     }
                     if (result)
-                    {
                         MessageBox.Show("Phiếu nhập kho đã được tạo thành công");
-                        //((OrderList)this.CallFromUserControll).loadOrderList();
-                        this.Close();
-                    }
                     else
-                    {
                         MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
+                    this.Close();
+
+                    #endregion
                 }
             }
             

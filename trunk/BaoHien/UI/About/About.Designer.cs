@@ -67,6 +67,7 @@
             this.pbAbout.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pbAbout.TabIndex = 2;
             this.pbAbout.TabStop = false;
+            this.pbAbout.DoubleClick += new System.EventHandler(this.pbAbout_DoubleClick);
             // 
             // label2
             // 
