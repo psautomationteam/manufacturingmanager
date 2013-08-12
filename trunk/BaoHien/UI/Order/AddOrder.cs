@@ -39,7 +39,6 @@ namespace BaoHien.UI
         BindingList<OrderDetail> orderDetails;
         List<OrderDetailEntity> old_orderDetails;
         BindingList<ProductAttributeModel> productAttrs;
-        BindingList<ProductionRequestDetailModel> originalProductions;
         double totalWithTax = 0.0, totalCommission = 0.0;
 
         int XKNumber = 0, BHNumber = 0;
@@ -116,6 +115,7 @@ namespace BaoHien.UI
                         }
                         foreach (OrderDetail od in orderDetails)
                         {
+                            od.OrderId = order.Id;
                             if (od.ProductId > 0 && od.AttributeId > 0 && od.UnitId > 0)
                             {
                                 totalCommission += od.Commission;
@@ -145,7 +145,8 @@ namespace BaoHien.UI
                                 }
                                 else
                                 {
-                                    bool ret = od.Id != null ? orderDetailService.UpdateOrderDetail(od) : orderDetailService.AddOrderDetail(od);
+                                    bool ret = (od.Id != null && od.Id > 0) ? orderDetailService.UpdateOrderDetail(od) 
+                                        : orderDetailService.AddOrderDetail(od);
 
                                     if (!ret)
                                     {
@@ -158,6 +159,8 @@ namespace BaoHien.UI
                                     {
                                         pl.UpdatedDate = createdDate;
                                         pl.Amount -= od.NumberUnit;
+                                        if (pl.Amount < 0)
+                                            pl.Amount = 0;
                                         productLogService.UpdateProductLog(pl);
                                     }
                                 }
@@ -478,8 +481,6 @@ namespace BaoHien.UI
                             Total = (double)orderDetail.Price * orderDetail.NumberUnit,
                             Commission = orderDetail.Commission,
                         };
-
-            originalProductions = new BindingList<ProductionRequestDetailModel>(query.ToList());
             dgwOrderDetails.DataSource = new BindingList<ProductionRequestDetailModel>(query.ToList());
 
             dgwOrderDetails.ReadOnly = false;
