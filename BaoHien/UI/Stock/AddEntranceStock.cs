@@ -372,7 +372,8 @@ namespace BaoHien.UI
                             }
                             else
                             {
-                                bool ret = od.Id != null ? entranceStockDetailService.UpdateEntranceStockDetail(od) : entranceStockDetailService.AddEntranceStockDetail(od);
+                                bool ret = (od.Id != null && od.Id > 0) ? entranceStockDetailService.UpdateEntranceStockDetail(od) 
+                                    : entranceStockDetailService.AddEntranceStockDetail(od);
 
                                 if (!ret)
                                 {

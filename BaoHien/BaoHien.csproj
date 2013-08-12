@@ -112,6 +112,7 @@
     <Compile Include="Common\FormatConfig.cs" />
     <Compile Include="Common\Global.cs" />
     <Compile Include="Model\BillSearchCriteria.cs" />
+    <Compile Include="Model\ProductionRequestDetailEntity.cs" />
     <Compile Include="Model\EntranceStockDetailEntity.cs" />
     <Compile Include="Model\ProductDetail.cs" />
     <Compile Include="Model\ProductsReport.cs" />

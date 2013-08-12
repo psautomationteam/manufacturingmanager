@@ -43,24 +43,21 @@ namespace BaoHien.UI.Cleaner
                     string sqlQuery = "";
                     if(chkBH.Checked)
                     {
-                        sqlQuery += "UPDATE customerlog SET status = 1 WHERE createddate < '" + dateString + "' AND recordcode like '%" + BHConstant.PREFIX_FOR_ORDER + "%'; ";
-                        sqlQuery += "UPDATE employeelog SET status = 1 WHERE createddate < '" + dateString + "' AND recordcode like '%" + BHConstant.PREFIX_FOR_ORDER + "%'; ";
-                        sqlQuery += "UPDATE productlog SET status = 1 WHERE createddate < '" + dateString + "' AND recordcode like '%" + BHConstant.PREFIX_FOR_ORDER + "%'; ";
+                        sqlQuery += "UPDATE customerlog SET status = 3 WHERE createddate < '" + dateString + "' AND recordcode like '%" + BHConstant.PREFIX_FOR_ORDER + "%'; ";
+                        sqlQuery += "UPDATE employeelog SET status = 3 WHERE createddate < '" + dateString + "' AND recordcode like '%" + BHConstant.PREFIX_FOR_ORDER + "%'; ";
                         sqlQuery += "UPDATE dbo.[order] SET status = 3 WHERE createddate < '" + dateString + "'; ";
                     }
                     if (chkTT.Checked)
                     {
-                        sqlQuery += "UPDATE customerlog SET status = 1 WHERE createddate < '" + dateString + "' AND recordcode like '%" + BHConstant.PREFIX_FOR_BILLING + "%'; ";
+                        sqlQuery += "UPDATE customerlog SET status = 3 WHERE createddate < '" + dateString + "' AND recordcode like '%" + BHConstant.PREFIX_FOR_BILLING + "%'; ";
                         sqlQuery += "UPDATE bill SET status = 3 WHERE createddate < '" + dateString + "'; ";
                     }
                     if(chkNK.Checked)
                     {
-                        sqlQuery += "UPDATE productlog SET status = 1 WHERE createddate < '" + dateString + "' AND recordcode like '%" + BHConstant.PREFIX_FOR_ENTRANCE + "%'; ";
                         sqlQuery += "UPDATE entrancestock SET status = 3  WHERE CreatedDate < '" + dateString + "'; ";
                     }
                     if (chkSX.Checked)
                     {
-                        sqlQuery += "UPDATE productlog SET status = 1 WHERE createddate < '" + dateString + "' AND recordcode like '%" + BHConstant.PREFIX_FOR_PRODUCTION + "%'; ";
                         sqlQuery += "UPDATE productionrequest SET status = 3  WHERE CreatedDate < '" + dateString + "'; ";
                     }
                     if (!string.IsNullOrEmpty(sqlQuery))
