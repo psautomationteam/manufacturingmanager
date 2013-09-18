@@ -7,6 +7,10 @@ namespace BaoHien.Model
 {
     public class ProductsReport
     {
+        public int ProductId { get; set; }
+        public int AttrId { get; set; }
+        public int UnitId { get; set; }
+
         string index;
         public string Index
         {

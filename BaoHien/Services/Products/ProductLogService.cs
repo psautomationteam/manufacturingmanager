@@ -277,21 +277,29 @@ namespace BaoHien.Services.ProductLogs
 
                             ProductsReport pr = new ProductsReport()
                             {
-                                ProductCode = p.ProductCode,
+                                ProductCode = p.Id + " - " + b.Id + " - " + m.Id,//p.ProductCode,
                                 ProductName = p.ProductName + " - " + b.AttributeName,
                                 Jampo = item.Jampo ? "Jampo" : "",
                                 UnitName = m.Name,
-                                Index = (++index).ToString()
+                                Index = (++index).ToString(),
+                                ProductId = p.Id,
+                                AttrId = b.Id,
+                                UnitId = m.Id
                             };
 
                             var a = items.Where(x => x.ProductId == item.ProductId && x.AttributeId == item.AttributeId
                                 && x.UnitId == item.UnitId);
                             var a1 = a.Where(x => x.CreatedDate < from);
-                            pr.FirstNumber = a1.Sum(x => (x.Direction == BHConstant.DIRECTION_IN ? 1 : -1) * x.Amount).ToString();
-                            pr.LastNumber = a.Sum(x => (x.Direction == BHConstant.DIRECTION_IN ? 1 : -1) * x.Amount).ToString();
+                            int firstnumber = 0, lastnumber = 0, importnumber = 0, exportnumber = 0;
+                            firstnumber = Convert.ToInt32(a1.Sum(x => (x.Direction == BHConstant.DIRECTION_IN ? 1 : -1) * x.Amount));
+                            pr.FirstNumber = firstnumber < 0 ? "0" : firstnumber.ToString();
+                            lastnumber = Convert.ToInt32(a.Sum(x => (x.Direction == BHConstant.DIRECTION_IN ? 1 : -1) * x.Amount));
+                            pr.LastNumber = lastnumber < 0 ? "0" : lastnumber.ToString();
                             var a2 = a.Where(x => x.CreatedDate >= from);
-                            pr.ImportNumber = a2.Where(x => x.Direction == BHConstant.DIRECTION_IN).Sum(x => x.Amount).ToString();
-                            pr.ExportNumber = a2.Where(x => x.Direction == BHConstant.DIRECTION_OUT).Sum(x => x.Amount).ToString();
+                            importnumber = Convert.ToInt32(a2.Where(x => x.Direction == BHConstant.DIRECTION_IN).Sum(x => x.Amount));
+                            pr.ImportNumber = importnumber < 0 ? "0" : importnumber.ToString();
+                            exportnumber = Convert.ToInt32(a2.Where(x => x.Direction == BHConstant.DIRECTION_OUT).Sum(x => x.Amount));
+                            pr.ExportNumber = exportnumber < 0 ? "0" : exportnumber.ToString();
 
                             type_products.Add(pr);
                         }

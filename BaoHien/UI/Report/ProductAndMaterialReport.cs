@@ -129,8 +129,11 @@ namespace BaoHien.UI
             if (productTypeId == 0)
             {
                 cbmProducts.Enabled = false;
+                cbmProducts.SelectedValue = 0;
                 cbmAttrs.Enabled = false;
+                cbmAttrs.SelectedValue = 0;
                 cbmUnits.Enabled = false;
+                cbmUnits.SelectedValue = 0;
             }
             else
             {
@@ -159,7 +162,9 @@ namespace BaoHien.UI
             if (productId == 0)
             {
                 cbmAttrs.Enabled = false;
+                cbmAttrs.SelectedValue = 0;
                 cbmUnits.Enabled = false;
+                cbmUnits.SelectedValue = 0;
             }
             else
             {
@@ -196,6 +201,7 @@ namespace BaoHien.UI
             if (attrId == 0)
             {
                 cbmUnits.Enabled = false;
+                cbmUnits.SelectedValue = 0;
             }
             else
             {
