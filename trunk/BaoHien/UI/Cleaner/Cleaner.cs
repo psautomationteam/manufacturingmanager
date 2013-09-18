@@ -9,6 +9,9 @@ using System.Windows.Forms;
 using BaoHien.UI.Base;
 using System.Data.SqlClient;
 using BaoHien.Common;
+using BaoHien.Services.ProductLogs;
+using BaoHien.Model;
+using DAL;
 
 namespace BaoHien.UI.Cleaner
 {
@@ -76,6 +79,14 @@ namespace BaoHien.UI.Cleaner
                         }
                     }
                 }
+            }
+            ProductLogService productLogService = new ProductLogService();
+            List<ProductsReport> productsReports = productLogService.GetReportsOfProducts(0, 0, 0, 0, from, DateTime.Now);
+            foreach (ProductsReport pr in productsReports)
+            {
+                ProductLog pl = productLogService.GetProductLog(pr.ProductId, pr.AttrId, pr.UnitId);
+                pl.Amount = Convert.ToInt32(pr.LastNumber);
+                productLogService.UpdateProductLog(pl);
             }
         }
     }
