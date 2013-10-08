@@ -7,6 +7,13 @@ namespace BaoHien.Model
 {
     public class ProductDetail
     {
+        int Id;
+        public int ID
+        {
+            get { return Id; }
+            set { Id = value; }
+        }
+
         int typeId;
         public int ProductTypeId
         {
@@ -35,11 +42,25 @@ namespace BaoHien.Model
             set { unitId = value; }
         }
 
+        double beforeNumber;
+        public double BeforeNumber
+        {
+            get { return beforeNumber; }
+            set { beforeNumber = value; }
+        }
+
         double amount;
         public double Amount
         {
             get { return amount; }
             set { amount = value; }
+        }
+
+        double afterNumber;
+        public double AfterNUmber
+        {
+            get { return afterNumber; }
+            set { afterNumber = value; }
         }
 
         DateTime createdDate;
@@ -61,6 +82,13 @@ namespace BaoHien.Model
         {
             get { return jampo; }
             set { jampo = value; }
+        }
+
+        int status;
+        public int Status
+        {
+            get { return status; }
+            set { status = value; }
         }
     }
 }

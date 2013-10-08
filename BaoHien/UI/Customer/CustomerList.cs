@@ -60,6 +60,7 @@ namespace BaoHien.UI
                                 CustomerName = customer.CustomerName,
                                 CustCode = customer.CustCode,
                                 CustomerPhone = customer.Phone,
+                                Address = customer.Address,
                                 CustomerPersonName = customer.ContactPerson,
                                 CustomerPersonPhone = customer.ContactPersonPhone,
                                 FavoriteProduct = customer.FavoriteProduct,
@@ -79,6 +80,7 @@ namespace BaoHien.UI
             dgvProductList.Columns.Add(Global.CreateCell("CustomerName", "Khách hàng", 200));
             dgvProductList.Columns.Add(Global.CreateCell("CustCode", "Mã khách hàng", 150));
             dgvProductList.Columns.Add(Global.CreateCell("CustomerPhone", "SĐT Cty", 100));
+            dgvProductList.Columns.Add(Global.CreateCell("Address", "Địa chỉ", 200));
             dgvProductList.Columns.Add(Global.CreateCell("CustomerPersonName", "Tên người liên lạc", 150));
             dgvProductList.Columns.Add(Global.CreateCell("CustomerPersonPhone", "SĐT người liên lạc", 150));
             dgvProductList.Columns.Add(Global.CreateCell("FavoriteProduct", "Dòng sản phẩm", 150));

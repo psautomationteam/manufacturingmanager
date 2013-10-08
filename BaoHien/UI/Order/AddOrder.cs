@@ -19,12 +19,12 @@ using PDF = iTextSharp.text;
 using iTextSharp.text.pdf;
 using Microsoft.Win32;
 using System.Diagnostics;
-using BaoHien.Services.ProductLogs;
 using BaoHien.Services.Employees;
 using BaoHien.Services.MeasurementUnits;
 using BaoHien.UI.PrintPreviewCustom;
 using BaoHien.Services.Seeds;
 using iTextSharp.text;
+using BaoHien.Services.ProductLogs;
 
 namespace BaoHien.UI
 {
@@ -37,7 +37,7 @@ namespace BaoHien.UI
         BindingList<MeasurementUnit> units;
         BindingList<Customer> customers;
         BindingList<OrderDetail> orderDetails;
-        List<OrderDetailEntity> old_orderDetails;
+        List<OrderDetail> old_orderDetails;
         BindingList<ProductAttributeModel> productAttrs;
         double totalWithTax = 0.0, totalCommission = 0.0;
 
@@ -99,19 +99,76 @@ namespace BaoHien.UI
 
                         #region Update Order Detail
 
+                        string msg = "";
+                        int error = 0, amount_change = 0;
+                        ProductLog pl, newpl;
+                        OrderDetail prd;
+
+                        // Check old data
+
                         OrderDetailService orderDetailService = new OrderDetailService();
-                        List<OrderDetailEntity> rev_details = old_orderDetails.Where(x => !orderDetails.Select(y => y.ProductId.ToString() + '_' +
+                        List<OrderDetail> deleted_details = old_orderDetails.Where(x => !orderDetails.Select(y => y.ProductId.ToString() + '_' +
                             y.AttributeId.ToString() + '_' + y.UnitId.ToString()).Contains(x.ProductId.ToString() + '_' +
                             x.AttributeId.ToString() + '_' + x.UnitId.ToString())).ToList();
-                        foreach (OrderDetailEntity item in rev_details)
+                        List<OrderDetail> updated_details = old_orderDetails.Where(x => orderDetails.Select(y => y.ProductId.ToString() + '_' +
+                            y.AttributeId.ToString() + '_' + y.UnitId.ToString()).Contains(x.ProductId.ToString() + '_' +
+                            x.AttributeId.ToString() + '_' + x.UnitId.ToString())).ToList();
+                        List<OrderDetail> new_details = orderDetails.Where(x => !old_orderDetails.Select(y => y.ProductId.ToString() + '_' +
+                            y.AttributeId.ToString() + '_' + y.UnitId.ToString()).Contains(x.ProductId.ToString() + '_' +
+                            x.AttributeId.ToString() + '_' + x.UnitId.ToString())).ToList();
+                        foreach (OrderDetail item in updated_details)
                         {
-                            ProductLog pl = productLogService.GetProductLog(item.ProductId, item.AttributeId, item.UnitId);
-                            if (pl != null)
+                            pl = productLogService.GetProductLog(item.ProductId, item.AttributeId, item.UnitId);
+                            prd = orderDetails.Where(x => x.ProductId == item.ProductId && x.AttributeId == item.AttributeId &&
+                                x.UnitId == item.UnitId).FirstOrDefault();
+                            amount_change = Convert.ToInt32(prd.NumberUnit - item.NumberUnit);
+                            if (amount_change > 0 && pl.AfterNumber - amount_change < 0) // Tang nguyen lieu
                             {
-                                pl.UpdatedDate = createdDate;
-                                pl.Amount += item.NumberUnit;
-                                productLogService.UpdateProductLog(pl);
+                                if (error == 0)
+                                {
+                                    msg += "Những sản phẩm sau đã bị SỬA nhưng không đảm bảo dữ liệu trong kho:\n";
+                                    error = 1;
+                                }
+                                msg += "- " + productLogService.GetNameOfProductLog(pl) + " : " + amount_change.ToString() + "\n";
                             }
+                        }
+                        foreach (OrderDetail item in new_details)
+                        {
+                            pl = productLogService.GetProductLog(item.ProductId, item.AttributeId, item.UnitId);
+                            if (pl.AfterNumber - item.NumberUnit < 0)
+                            {
+                                if (error < 2)
+                                {
+                                    msg += "Những sản phẩm sau không đủ số lượng để tạo phiếu bán hàng:\n";
+                                    error = 2;
+                                }
+                                msg += "- " + productLogService.GetNameOfProductLog(pl) + " còn : " + pl.AfterNumber + "\n";
+                            }
+                        }
+
+                        if (error > 0)
+                        {
+                            MessageBox.Show(msg, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return false;
+                        }
+
+                        foreach (OrderDetail item in deleted_details)
+                        {
+                            pl = productLogService.GetProductLog(item.ProductId, item.AttributeId, item.UnitId);
+                            newpl = new ProductLog()
+                            {
+                                ProductId = item.ProductId,
+                                AttributeId = item.AttributeId,
+                                UnitId = item.UnitId,
+                                BeforeNumber = pl.AfterNumber,
+                                Amount = item.NumberUnit,
+                                AfterNumber = pl.AfterNumber + item.NumberUnit,
+                                RecordCode = order.OrderCode,
+                                Status = BHConstant.ACTIVE_STATUS,
+                                Direction = BHConstant.DIRECTION_IN,
+                                UpdatedDate = createdDate
+                            };
+                            productLogService.AddProductLog(newpl);
                         }
                         foreach (OrderDetail od in orderDetails)
                         {
@@ -119,50 +176,52 @@ namespace BaoHien.UI
                             if (od.ProductId > 0 && od.AttributeId > 0 && od.UnitId > 0)
                             {
                                 totalCommission += od.Commission;
-                                OrderDetailEntity tmp_ode = old_orderDetails.Where(x => x.ProductId == od.ProductId &&
+                                OrderDetail tmp_ode = old_orderDetails.Where(x => x.ProductId == od.ProductId &&
                                     x.AttributeId == od.AttributeId && x.UnitId == od.UnitId && x.OrderId == order.Id).FirstOrDefault();
                                 if (tmp_ode != null)
                                 {
                                     double amount = tmp_ode.NumberUnit - od.NumberUnit;
                                     bool ret = orderDetailService.UpdateOrderDetail(od);
-
-                                    if (!ret)
-                                    {
-                                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                        return false;
-                                    }
                                     //Save in Production Log
                                     if (amount != 0)
                                     {
-                                        ProductLog pl = productLogService.GetProductLog(od.ProductId, od.AttributeId, od.UnitId);
-                                        if (pl != null)
+                                        pl = productLogService.GetProductLog(od.ProductId, od.AttributeId, od.UnitId);
+                                        newpl = new ProductLog()
                                         {
-                                            pl.UpdatedDate = createdDate;
-                                            pl.Amount += amount;
-                                            productLogService.UpdateProductLog(pl);
-                                        }
+                                            ProductId = od.ProductId,
+                                            AttributeId = od.AttributeId,
+                                            UnitId = od.UnitId,
+                                            BeforeNumber = pl.AfterNumber,
+                                            Amount = Math.Abs(amount),
+                                            AfterNumber = pl.AfterNumber + amount,
+                                            RecordCode = order.OrderCode,
+                                            Status = BHConstant.ACTIVE_STATUS,
+                                            Direction = amount > 0 ? BHConstant.DIRECTION_IN : BHConstant.DIRECTION_OUT,
+                                            UpdatedDate = createdDate
+                                        };
+                                        productLogService.AddProductLog(newpl);
                                     }
                                 }
                                 else
                                 {
                                     bool ret = (od.Id != null && od.Id > 0) ? orderDetailService.UpdateOrderDetail(od) 
                                         : orderDetailService.AddOrderDetail(od);
-
-                                    if (!ret)
-                                    {
-                                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                        return false;
-                                    }
                                     //Save in Production Log
-                                    ProductLog pl = productLogService.GetProductLog(od.ProductId, od.AttributeId, od.UnitId);
-                                    if (pl != null)
+                                    pl = productLogService.GetProductLog(od.ProductId, od.AttributeId, od.UnitId);
+                                    newpl = new ProductLog()
                                     {
-                                        pl.UpdatedDate = createdDate;
-                                        pl.Amount -= od.NumberUnit;
-                                        if (pl.Amount < 0)
-                                            pl.Amount = 0;
-                                        productLogService.UpdateProductLog(pl);
-                                    }
+                                        ProductId = od.ProductId,
+                                        AttributeId = od.AttributeId,
+                                        UnitId = od.UnitId,
+                                        BeforeNumber = pl.AfterNumber,
+                                        Amount = od.NumberUnit,
+                                        AfterNumber = pl.AfterNumber - od.NumberUnit,
+                                        RecordCode = order.OrderCode,
+                                        Status = BHConstant.ACTIVE_STATUS,
+                                        Direction = BHConstant.DIRECTION_OUT,
+                                        UpdatedDate = createdDate
+                                    };
+                                    productLogService.AddProductLog(newpl);
                                 }
                             }
                         }
@@ -214,6 +273,29 @@ namespace BaoHien.UI
                     {
                         #region Create New
 
+                        ProductLog pl, newpl;
+                        string msg = "";
+                        int error = 0;
+                        foreach (OrderDetail item in orderDetails)
+                        {
+                            pl = productLogService.GetProductLog(item.ProductId, item.AttributeId, item.UnitId);
+                            if (pl.AfterNumber - item.NumberUnit < 0)
+                            {
+                                if (error == 0)
+                                {
+                                    msg += "Những sản phẩm sau không đủ số lượng để tạo phiếu bán hàng:\n";
+                                    error = 1;
+                                }
+                                msg += "- " + productLogService.GetNameOfProductLog(pl) + " còn : " + pl.AfterNumber + "\n";
+                            }
+                        }
+
+                        if (error > 0)
+                        {
+                            MessageBox.Show(msg, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return false;
+                        }
+
                         SeedService ss = new SeedService();
                         order = new Order
                         {
@@ -230,7 +312,16 @@ namespace BaoHien.UI
                         };
                         OrderService orderService = new OrderService();
                         bool result = orderService.AddOrder(order);
-                        long newOrderId = BaoHienRepository.GetMaxId<Order>();
+                        long newOrderId = -1;
+                        try
+                        {
+                            newOrderId = order.Id;// BaoHienRepository.GetMaxId<Order>();
+                        }
+                        catch
+                        {
+                            MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return false;
+                        }
 
                         #region New Order Detail
 
@@ -244,30 +335,21 @@ namespace BaoHien.UI
                                 totalCommission += od.Commission;
 
                                 //Save in Production Log
-                                ProductLog pl = productLogService.GetProductLog(od.ProductId, od.AttributeId, od.UnitId);
-                                if (pl == null)
+                                pl = productLogService.GetProductLog(od.ProductId, od.AttributeId, od.UnitId);
+                                newpl = new ProductLog()
                                 {
-                                    pl = new ProductLog()
-                                    {
-                                        AttributeId = od.AttributeId,
-                                        ProductId = od.ProductId,
-                                        UnitId = od.UnitId,
-                                        Amount = od.NumberUnit,
-                                        UpdatedDate = createdDate
-                                    };
-                                    productLogService.AddProductLog(pl);
-                                }
-                                else
-                                {
-                                    pl.UpdatedDate = createdDate;
-                                    pl.Amount -= od.NumberUnit;
-                                    result = productLogService.UpdateProductLog(pl);
-                                }
-                                if (!ret)
-                                {
-                                    MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                    return false;
-                                }
+                                    ProductId = od.ProductId,
+                                    AttributeId = od.AttributeId,
+                                    UnitId = od.UnitId,
+                                    BeforeNumber = pl.AfterNumber,
+                                    Amount = od.NumberUnit,
+                                    AfterNumber = pl.AfterNumber - od.NumberUnit,
+                                    RecordCode = order.OrderCode,
+                                    Status = BHConstant.ACTIVE_STATUS,
+                                    Direction = BHConstant.DIRECTION_OUT,
+                                    UpdatedDate = createdDate
+                                };
+                                productLogService.AddProductLog(newpl);
                             }
                         }
 
@@ -416,10 +498,10 @@ namespace BaoHien.UI
                 {
                     OrderDetailService orderDetailService = new OrderDetailService();
                     orderDetails = new BindingList<OrderDetail>(orderDetailService.SelectOrderDetailByWhere(o => o.OrderId == order.Id));
-                    old_orderDetails = new List<OrderDetailEntity>();
+                    old_orderDetails = new List<OrderDetail>();
                     foreach (OrderDetail od in orderDetails)
                     {
-                        old_orderDetails.Add(new OrderDetailEntity
+                        old_orderDetails.Add(new OrderDetail
                             {
                                 AttributeId = od.AttributeId,
                                 ProductId = od.ProductId,
@@ -470,19 +552,7 @@ namespace BaoHien.UI
             {
                 orderDetails = new BindingList<OrderDetail>();
             }
-            var query = from orderDetail in orderDetails
-                        select new ProductionRequestDetailModel
-                        {
-                            ProductId = orderDetail.ProductId,
-                            AttributeId = orderDetail.AttributeId,
-                            NumberUnit = orderDetail.NumberUnit,                           
-                            Price = orderDetail.Price,
-                            Note = orderDetail.Note,
-                            Total = (double)orderDetail.Price * orderDetail.NumberUnit,
-                            Commission = orderDetail.Commission,
-                        };
-            dgwOrderDetails.DataSource = new BindingList<ProductionRequestDetailModel>(query.ToList());
-
+            dgwOrderDetails.DataSource = orderDetails;
             dgwOrderDetails.ReadOnly = false;
             if (isUpdating && !Global.isAdmin())
                 dgwOrderDetails.ReadOnly = true;
@@ -544,7 +614,7 @@ namespace BaoHien.UI
             {
                 orderDetails = new BindingList<OrderDetail>();
             }
-            if (orderDetails.Count < dgwOrderDetails.RowCount)
+            if (orderDetails.Count < dgwOrderDetails.RowCount - 1)
             {
                 OrderDetail orderDetail = new OrderDetail();
                 orderDetails.Add(orderDetail);
@@ -565,13 +635,29 @@ namespace BaoHien.UI
                         } break;
                     case PriceCell:
                         {
-                            orderDetails[e.RowIndex].Price = (double)dgv.CurrentCell.Value;
-                            dgv.CurrentCell.ToolTipText = Global.formatVNDCurrencyText(orderDetails[e.RowIndex].Price.ToString());
+                            double price = 0;
+                            try
+                            {
+                                price = (double)dgv.CurrentCell.Value;
+                                if (price < 0)
+                                    price = 0;
+                            }
+                            catch { price = 0; }
+                            orderDetails[e.RowIndex].Price = price;
+                            dgv.CurrentCell.ToolTipText = Global.formatVNDCurrencyText(price.ToString());
                         } break;
                     case CommissionCell:
                         {
-                            orderDetails[e.RowIndex].Commission = double.Parse(dgv.CurrentCell.Value.ToString());
-                            dgv.CurrentCell.ToolTipText = Global.formatVNDCurrencyText(orderDetails[e.RowIndex].Commission.ToString());
+                            double commission = 0;
+                            try
+                            {
+                                commission = (double)dgv.CurrentCell.Value;
+                                if (commission < 0)
+                                    commission = 0;
+                            }
+                            catch { commission = 0; }
+                            orderDetails[e.RowIndex].Commission = commission;
+                            dgv.CurrentCell.ToolTipText = Global.formatVNDCurrencyText(commission.ToString());
                         } break;
                     case TotalCell:
                         {
@@ -598,47 +684,40 @@ namespace BaoHien.UI
                 dgv.Rows[rowIndex].Cells[NumberUnitCell].Value != null &&
                 (colIndex == UnitCell || colIndex == NumberUnitCell || colIndex == ProductAttrCell))
             {
-                ProductLog pl = productLogService.GetProductLog(orderDetails[rowIndex].ProductId, orderDetails[rowIndex].AttributeId,
-                    (int)dgv.Rows[rowIndex].Cells[UnitCell].Value);
-                if (pl == null)
+                int unitId = (int)dgv.Rows[rowIndex].Cells[UnitCell].Value;
+                int numberUnit = (int)dgv.Rows[rowIndex].Cells[NumberUnitCell].Value;
+                if (numberUnit < 0)
+                    numberUnit = 0;
+                ProductLog pl = productLogService.GetProductLog(orderDetails[rowIndex].ProductId, 
+                    orderDetails[rowIndex].AttributeId, unitId);
+                double current_number = pl.AfterNumber;
+                if (isUpdating)
                 {
-                    MessageBox.Show("Sản phẩm với đơn vị tính này hiện chưa có trong kho.");
+                    OrderDetail ode = old_orderDetails.Where(x => x.ProductId == orderDetails[rowIndex].ProductId &&
+                                x.AttributeId == orderDetails[rowIndex].AttributeId && x.UnitId == unitId && x.OrderId == order.Id).FirstOrDefault();
+                    if (ode != null)
+                        current_number += ode.NumberUnit;
+                }
+                if (current_number <= 0)
+                {
+                    MessageBox.Show("Số lượng sản phẩm trong kho đã hết.");
                     dgv.Rows[rowIndex].Cells[NumberUnitCell].Value = 0;
 
-                    orderDetails[rowIndex].UnitId = (int)dgv.Rows[rowIndex].Cells[UnitCell].Value;
+                    orderDetails[rowIndex].UnitId = unitId;
                     orderDetails[rowIndex].NumberUnit = 0;
+                }
+                else if (current_number < numberUnit)
+                {
+                    MessageBox.Show("Số lượng sản phẩm trong kho còn lại là : " + current_number);
+                    dgv.Rows[rowIndex].Cells[NumberUnitCell].Value = current_number;
+
+                    orderDetails[rowIndex].UnitId = unitId;
+                    orderDetails[rowIndex].NumberUnit = (int)current_number;
                 }
                 else
                 {
-                    double current_number = pl.Amount;
-                    if (isUpdating)
-                    {
-                        OrderDetailEntity ode = old_orderDetails.Where(x => x.ProductId == orderDetails[rowIndex].ProductId &&
-                                    x.AttributeId == orderDetails[rowIndex].AttributeId && x.UnitId == orderDetails[rowIndex].UnitId && x.OrderId == order.Id).FirstOrDefault();
-                        if (ode != null)
-                            current_number += ode.NumberUnit;
-                    }
-                    if (current_number <= 0)
-                    {
-                        MessageBox.Show("Số lượng sản phẩm trong kho đã hết.");
-                        dgv.Rows[rowIndex].Cells[NumberUnitCell].Value = 0;
-
-                        orderDetails[rowIndex].UnitId = (int)dgv.Rows[rowIndex].Cells[UnitCell].Value;
-                        orderDetails[rowIndex].NumberUnit = 0;
-                    }
-                    else if (current_number < (int)dgv.Rows[rowIndex].Cells[NumberUnitCell].Value)
-                    {
-                        MessageBox.Show("Số lượng sản phẩm trong kho còn lại là : " + current_number);
-                        dgv.Rows[rowIndex].Cells[NumberUnitCell].Value = current_number;
-
-                        orderDetails[rowIndex].UnitId = (int)dgv.Rows[rowIndex].Cells[UnitCell].Value;
-                        orderDetails[rowIndex].NumberUnit = (int)current_number;
-                    }
-                    else
-                    {
-                        orderDetails[rowIndex].UnitId = (int)dgv.Rows[rowIndex].Cells[UnitCell].Value;
-                        orderDetails[rowIndex].NumberUnit = (int)dgv.Rows[rowIndex].Cells[NumberUnitCell].Value;
-                    }
+                    orderDetails[rowIndex].UnitId = unitId;
+                    orderDetails[rowIndex].NumberUnit = numberUnit;
                 }
             }
         }
@@ -696,7 +775,6 @@ namespace BaoHien.UI
                             prodCode.MaxDropDownItems = 5;
                             prodCode.KeyDown += DisableDropperDown;
                         }
-                        //this.validator1.SetType(prodCode, Itboy.Components.ValidationType.Required);
                     } break;
                 case NumberUnitCell:
                     {
@@ -720,7 +798,6 @@ namespace BaoHien.UI
                             prodCode.MaxDropDownItems = 5;
                             prodCode.KeyDown += DisableDropperDown;
                         }
-                        //this.validator1.SetType(prodCode, Itboy.Components.ValidationType.Required);
                     } break;
                 case PriceCell:
                     {
@@ -1206,39 +1283,7 @@ namespace BaoHien.UI
                 }
             }
         }
-
-        private void dgwOrderDetails_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
-        {
-            try
-            {
-                if (e.Value != null && orderDetails.Count > 0)
-                {
-                    DataGridViewCell cell = dgwOrderDetails.Rows[e.RowIndex].Cells[e.ColumnIndex];
-                    switch (e.ColumnIndex)
-                    {
-                        case PriceCell:
-                            {
-                                cell.ToolTipText = Global.formatVNDCurrencyText(orderDetails[e.RowIndex].Price.ToString());
-                            } break;
-                        case CommissionCell:
-                            {
-                                cell.ToolTipText = Global.formatVNDCurrencyText(orderDetails[e.RowIndex].Commission.ToString());
-                            } break;
-                        case TotalCell:
-                            {
-                                cell.ToolTipText = Global.formatVNDCurrencyText(orderDetails[e.RowIndex].Cost.ToString());
-                            } break;
-                        default:
-                            break;
-                    }
-                }
-            }
-            catch (Exception ex)
-            { 
                 
-            }
-        }
-        
         private void cbxCustomer_KeyDown(object sender, KeyEventArgs e)
         {
             Global.DisableDropDownWhenSuggesting(cbxCustomer);

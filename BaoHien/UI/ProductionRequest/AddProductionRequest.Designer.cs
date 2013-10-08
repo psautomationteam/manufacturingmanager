@@ -175,7 +175,6 @@
             this.dgvProduct.Size = new System.Drawing.Size(463, 294);
             this.dgvProduct.TabIndex = 5;
             this.dgvProduct.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvProduct_CellEndEdit);
-            this.dgvProduct.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvProduct_CellEnter);
             this.dgvProduct.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.dgvProduct_CellValidating);
             this.dgvProduct.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dgvProduct_DataError);
             this.dgvProduct.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.dgvProduct_EditingControlShowing);

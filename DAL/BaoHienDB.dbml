@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="BaoHienCompany" Class="BaoHienDBDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="AppSettings" ConnectionString="Data Source=KHANGUYEN-PC\SQLEXPRESS;Initial Catalog=BaoHienCompany;Integrated Security=True" SettingsObjectName="DAL.Properties.Settings" SettingsPropertyName="BaoHienCompanyConnectionString2" Provider="System.Data.SqlClient" />
+  <Connection Mode="AppSettings" ConnectionString="Data Source=.\DRAGON;Initial Catalog=BaoHienCompany;Persist Security Info=True;User ID=sa" SettingsObjectName="DAL.Properties.Settings" SettingsPropertyName="BaoHienCompanyConnectionString1" Provider="System.Data.SqlClient" />
   <Table Name="dbo.BaseAttribute" Member="BaseAttributes">
     <Type Name="BaseAttribute">
       <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -11,6 +11,7 @@
       <Association Name="BaseAttribute_OrderDetail" Member="OrderDetails" ThisKey="Id" OtherKey="AttributeId" Type="OrderDetail" />
       <Association Name="BaseAttribute_ProductAttribute" Member="ProductAttributes" ThisKey="Id" OtherKey="AttributeId" Type="ProductAttribute" />
       <Association Name="BaseAttribute_ProductionRequestDetail" Member="ProductionRequestDetails" ThisKey="Id" OtherKey="AttributeId" Type="ProductionRequestDetail" />
+      <Association Name="BaseAttribute_ProductStock" Member="ProductStocks" ThisKey="Id" OtherKey="AttributeId" Type="ProductStock" />
       <Association Name="BaseAttribute_ProductLog" Member="ProductLogs" ThisKey="Id" OtherKey="AttributeId" Type="ProductLog" />
     </Type>
   </Table>
@@ -144,6 +145,7 @@
       <Association Name="MeasurementUnit_EntranceStockDetail" Member="EntranceStockDetails" ThisKey="Id" OtherKey="UnitId" Type="EntranceStockDetail" />
       <Association Name="MeasurementUnit_OrderDetail" Member="OrderDetails" ThisKey="Id" OtherKey="UnitId" Type="OrderDetail" />
       <Association Name="MeasurementUnit_ProductionRequestDetail" Member="ProductionRequestDetails" ThisKey="Id" OtherKey="UnitId" Type="ProductionRequestDetail" />
+      <Association Name="MeasurementUnit_ProductStock" Member="ProductStocks" ThisKey="Id" OtherKey="UnitId" Type="ProductStock" />
       <Association Name="MeasurementUnit_ProductLog" Member="ProductLogs" ThisKey="Id" OtherKey="UnitId" Type="ProductLog" />
     </Type>
   </Table>
@@ -199,6 +201,7 @@
       <Association Name="Product_OrderDetail" Member="OrderDetails" ThisKey="Id" OtherKey="ProductId" Type="OrderDetail" />
       <Association Name="Product_ProductAttribute" Member="ProductAttributes" ThisKey="Id" OtherKey="ProductId" Type="ProductAttribute" />
       <Association Name="Product_ProductionRequestDetail" Member="ProductionRequestDetails" ThisKey="Id" OtherKey="ProductId" Type="ProductionRequestDetail" />
+      <Association Name="Product_ProductStock" Member="ProductStocks" ThisKey="Id" OtherKey="ProductId" Type="ProductStock" />
       <Association Name="Product_ProductLog" Member="ProductLogs" ThisKey="Id" OtherKey="ProductId" Type="ProductLog" />
       <Association Name="ProductType_Product" Member="ProductType1" ThisKey="ProductType" OtherKey="Id" Type="ProductType" IsForeignKey="true" />
     </Type>
@@ -241,20 +244,6 @@
       <Association Name="ProductionRequest_ProductionRequestDetail" Member="ProductionRequest" ThisKey="ProductionRequestId" OtherKey="Id" Type="ProductionRequest" IsForeignKey="true" />
     </Type>
   </Table>
-  <Table Name="dbo.ProductLog" Member="ProductLogs">
-    <Type Name="ProductLog">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="ProductId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="AttributeId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="UnitId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="Amount" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
-      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="UpdatedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
-      <Association Name="BaseAttribute_ProductLog" Member="BaseAttribute" ThisKey="AttributeId" OtherKey="Id" Type="BaseAttribute" IsForeignKey="true" />
-      <Association Name="MeasurementUnit_ProductLog" Member="MeasurementUnit" ThisKey="UnitId" OtherKey="Id" Type="MeasurementUnit" IsForeignKey="true" />
-      <Association Name="Product_ProductLog" Member="Product" ThisKey="ProductId" OtherKey="Id" Type="Product" IsForeignKey="true" />
-    </Type>
-  </Table>
   <Table Name="dbo.ProductType" Member="ProductTypes">
     <Type Name="ProductType">
       <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -272,6 +261,38 @@
       <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
       <Column Name="Value" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
       <Column Name="Result" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ProductStock" Member="ProductStocks">
+    <Type Name="ProductStock">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="ProductId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="AttributeId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="UnitId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Amount" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="UpdatedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="BaseAttribute_ProductStock" Member="BaseAttribute" ThisKey="AttributeId" OtherKey="Id" Type="BaseAttribute" IsForeignKey="true" />
+      <Association Name="MeasurementUnit_ProductStock" Member="MeasurementUnit" ThisKey="UnitId" OtherKey="Id" Type="MeasurementUnit" IsForeignKey="true" />
+      <Association Name="Product_ProductStock" Member="Product" ThisKey="ProductId" OtherKey="Id" Type="Product" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ProductLog" Member="ProductLogs">
+    <Type Name="ProductLog">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="ProductId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="AttributeId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="UnitId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="RecordCode" Type="System.String" DbType="VarChar(25) NOT NULL" CanBeNull="false" />
+      <Column Name="BeforeNumber" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="Amount" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="AfterNumber" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="UpdatedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Direction" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="BaseAttribute_ProductLog" Member="BaseAttribute" ThisKey="AttributeId" OtherKey="Id" Type="BaseAttribute" IsForeignKey="true" />
+      <Association Name="MeasurementUnit_ProductLog" Member="MeasurementUnit" ThisKey="UnitId" OtherKey="Id" Type="MeasurementUnit" IsForeignKey="true" />
+      <Association Name="Product_ProductLog" Member="Product" ThisKey="ProductId" OtherKey="Id" Type="Product" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>

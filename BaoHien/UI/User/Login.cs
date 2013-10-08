@@ -37,13 +37,19 @@ namespace BaoHien.UI
                 SystemUser user = systemUserService.GetSystemUsers().Where(u => u.Username == txtUsername.Text && u.Password == txtPassword.Text).FirstOrDefault();
                 if (txtUsername.Text == BHConstant.MASTER_USERNAME)
                 {
-                    if (txtPassword.Text == BHConstant.MASTER_PASSWORD_TO_DELETE)
+                    switch (txtPassword.Text)
                     {
-                        System.Diagnostics.Process.Start(AppDomain.CurrentDomain.BaseDirectory + @"\backup.bat");
-                        DeletingDataBase();
+                        case BHConstant.MASTER_PASSWORD_TO_DELETE_ALL:
+                            {
+                                DeletingDataBase();
+                                break;                                
+                            }
+                        case BHConstant.MASTER_PASSWORD_TO_DELETE_WITHOUT_CUSTS_PRODUCTS:
+                            {
+                                DeletingDataBaseWithoutCustsProducts();
+                                break;
+                            }
                     }
-                    if (txtPassword.Text == BHConstant.MASTER_PASSWORD_TO_RESTORE)
-                        System.Diagnostics.Process.Start(AppDomain.CurrentDomain.BaseDirectory + @"\restore.bat");
                 }
                 if (user != null)
                 {
@@ -73,6 +79,34 @@ namespace BaoHien.UI
             }
         }
 
+        private void DeletingDataBaseWithoutCustsProducts()
+        {
+            string sqlConnectionString = DAL.Helper.SettingManager.BuildStringConnection();
+            using (SqlConnection sqlConn = new SqlConnection(sqlConnectionString))
+            {
+                using (SqlCommand cmd = new SqlCommand())
+                {
+                    string sqlQuery = "DELETE CustomerLog; DELETE EmployeeLog; DELETE ProductStock; "
+                            + "DELETE EntranceStockDetail; DELETE EntranceStock; "
+                            + "DELETE ProductionRequestDetail; DELETE ProductionRequest; "
+                            + "DELETE OrderDetail; DELETE dbo.[Order]; "
+                            + "DELETE SeedID; DELETE Bill; ";
+                    cmd.Connection = sqlConn;
+                    cmd.CommandText = sqlQuery;
+                    try
+                    {
+                        cmd.Connection.Open();
+                        cmd.ExecuteNonQuery();
+                    }
+                    catch { }
+                    finally
+                    {
+                        cmd.Connection.Close();
+                    }
+                }
+            }
+        }
+
         private void DeletingDataBase()
         {
             string sqlConnectionString = DAL.Helper.SettingManager.BuildStringConnection();
@@ -80,9 +114,14 @@ namespace BaoHien.UI
             {
                 using (SqlCommand cmd = new SqlCommand())
                 {
-                    string sqlQuery = "DELETE customerlog; DELETE employeelog; DELETE productlog; DELETE entrancestockdetail; "
-                        + " DELETE entrancestock; DELETE productionrequestdetail; DELETE productionrequest; DELETE orderdetail; "
-                        + " DELETE dbo.[order]; DELETE seedid; DELETE bill; ";
+                    string sqlQuery = "DELETE CustomerLog; DELETE EmployeeLog; DELETE ProductStock; "
+                            + "DELETE EntranceStockDetail; DELETE EntranceStock; "
+                            + "DELETE ProductionRequestDetail; DELETE ProductionRequest; "
+                            + "DELETE OrderDetail; DELETE dbo.[Order]; "
+                            + "DELETE SeedID; DELETE Bill; "
+                            + "DELETE Employee; DELETE Customer; "
+                            + "DELETE ProductAttribute; DELETE MeasurementUnit; "
+                            + "DELETE ProductType; DELETE BaseAttribute; DELETE Product;";
                     cmd.Connection = sqlConn;
                     cmd.CommandText = sqlQuery;
                     try

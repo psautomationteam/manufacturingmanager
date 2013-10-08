@@ -11,8 +11,8 @@ namespace BaoHien.Common
         public const string BUILD_RELEASE_DATE = "09/18/2013 21:00:00 AM";
 
         public const string MASTER_USERNAME = "baohien";
-        public const string MASTER_PASSWORD_TO_DELETE = "admin";
-        public const string MASTER_PASSWORD_TO_RESTORE = "baohien";
+        public const string MASTER_PASSWORD_TO_DELETE_ALL = "baohien123456";
+        public const string MASTER_PASSWORD_TO_DELETE_WITHOUT_CUSTS_PRODUCTS = "baohien123";
 
         public const string COMPANY_NAME = "Cty TNHH BẢO HIẾN";
         public const string COMPANY_ADDRESS = "341/42B Lạc Long Quân - P.5 - Q.11";

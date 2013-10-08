@@ -16,7 +16,6 @@ using BaoHien.Services.ProductAttributes;
 using BaoHien.Common;
 using BaoHien.Services.ProductLogs;
 
-
 namespace BaoHien.UI
 {
     public partial class AddProduct : BaseForm

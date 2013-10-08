@@ -112,8 +112,6 @@
     <Compile Include="Common\FormatConfig.cs" />
     <Compile Include="Common\Global.cs" />
     <Compile Include="Model\BillSearchCriteria.cs" />
-    <Compile Include="Model\ProductionRequestDetailEntity.cs" />
-    <Compile Include="Model\EntranceStockDetailEntity.cs" />
     <Compile Include="Model\ProductDetail.cs" />
     <Compile Include="Model\ProductsReport.cs" />
     <Compile Include="Model\CustomersReport.cs" />
@@ -124,7 +122,6 @@
     <Compile Include="Model\EmployeesReport.cs" />
     <Compile Include="Model\ProductReport.cs" />
     <Compile Include="Model\EntranceStockSearchCriteria.cs" />
-    <Compile Include="Model\OrderDetailEntity.cs" />
     <Compile Include="Model\ProductAttributeModel.cs" />
     <Compile Include="Model\ProductionRequestSearchCriteria.cs" />
     <Compile Include="Model\ProductionRequestDetailModel.cs" />
