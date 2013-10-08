@@ -58,3 +58,9 @@ D:\Projects\BHProject\DAL\bin\Debug\DAL.pdb
 D:\Projects\BHProject\DAL\obj\Debug\DAL.csprojResolveAssemblyReference.cache
 D:\Projects\BHProject\DAL\obj\Debug\DAL.dll
 D:\Projects\BHProject\DAL\obj\Debug\DAL.pdb
+D:\Projects\BaoHienProject\BHProject\DAL\bin\Debug\DAL.dll.config
+D:\Projects\BaoHienProject\BHProject\DAL\bin\Debug\DAL.dll
+D:\Projects\BaoHienProject\BHProject\DAL\bin\Debug\DAL.pdb
+D:\Projects\BaoHienProject\BHProject\DAL\obj\Debug\DAL.csprojResolveAssemblyReference.cache
+D:\Projects\BaoHienProject\BHProject\DAL\obj\Debug\DAL.dll
+D:\Projects\BaoHienProject\BHProject\DAL\obj\Debug\DAL.pdb

@@ -9,8 +9,8 @@ using System.Windows.Forms;
 using BaoHien.Services.MeasurementUnits;
 using DAL;
 using DAL.Helper;
-using BaoHien.Services.ProductLogs;
 using BaoHien.Common;
+using BaoHien.Services.ProductLogs;
 
 namespace BaoHien.UI
 {
@@ -93,7 +93,7 @@ namespace BaoHien.UI
                         MeasurementUnitService measurementUnitService = new MeasurementUnitService();
                         int id = ObjectHelper.GetValueFromAnonymousType<int>(currentRow.DataBoundItem, "Id");
                         ProductLogService productLogService = new ProductLogService();
-                        ProductLog log = productLogService.GetProductLogs().Where(p => p.UnitId == id).FirstOrDefault();
+                        ProductLog log = productLogService.GetProductLogs().Where(p => p.UnitId == id && p.Status == BHConstant.ACTIVE_STATUS).FirstOrDefault();
                         if (log == null)
                         {
                             if (!measurementUnitService.DeleteMeasurementUnit(id))

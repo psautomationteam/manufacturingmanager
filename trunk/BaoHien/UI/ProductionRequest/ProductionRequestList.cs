@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using BaoHien.Services.ProductionRequests;
 using DAL;
@@ -12,8 +8,8 @@ using DAL.Helper;
 using BaoHien.Model;
 using BaoHien.Services.ProductionRequestDetails;
 using BaoHien.Services.SystemUsers;
-using BaoHien.Services.ProductLogs;
 using BaoHien.Common;
+using BaoHien.Services.ProductLogs;
 
 namespace BaoHien.UI
 {
@@ -125,29 +121,49 @@ namespace BaoHien.UI
                         bool ret = false;
                         DateTime systime = BaoHienRepository.GetBaoHienDBDataContext().GetSystemDate();
 
-                        if (productionRequestDetails != null)
+                        ProductLogService productLogService = new ProductLogService();
+                        string msg = "";
+                        int error = 0, amount = 0;
+                        ProductLog pl, newpl;
+                        foreach (ProductionRequestDetail item in productionRequestDetails)
                         {
-                            ProductLogService productLogService = new ProductLogService();
-                            foreach (ProductionRequestDetail prd in productionRequestDetails)
+                            pl = productLogService.GetProductLog(item.ProductId, item.AttributeId, item.UnitId);
+                            amount = (item.Direction == BHConstant.DIRECTION_OUT) ? -item.NumberUnit : item.NumberUnit;
+                            if (pl.AfterNumber - amount < 0)
                             {
-                                ProductLog pl = productLogService.GetProductLog(prd.ProductId, prd.AttributeId, prd.UnitId);
-                                if (pl != null)
+                                if (error == 0)
                                 {
-                                    pl.UpdatedDate = systime;
-                                    pl.Amount -= (prd.Direction == BHConstant.DIRECTION_OUT) ? -prd.NumberUnit : prd.NumberUnit;
-                                    if (pl.Amount < 0)
-                                        pl.Amount = 0;
-                                    ret = productLogService.UpdateProductLog(pl);
+                                    msg += "Những sản phẩm sau đã bị XÓA nhưng không đảm bảo dữ liệu trong kho:\n";
+                                    error = 1;
                                 }
-                                ret = productionRequestDetailService.DeleteProductionRequestDetail(prd.Id.ToString());
-                                if (!ret)
-                                {
-                                    MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                    return;
-                                }
+                                msg += "- " + productLogService.GetNameOfProductLog(pl) + " : " + item.NumberUnit + "\n";
                             }
                         }
-
+                        if (error > 0)
+                        {
+                            MessageBox.Show(msg, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+                        foreach (ProductionRequestDetail item in productionRequestDetails)
+                        {
+                            pl = productLogService.GetProductLog(item.ProductId, item.AttributeId, item.UnitId);
+                            amount = (item.Direction == BHConstant.DIRECTION_OUT) ? -item.NumberUnit : item.NumberUnit;
+                            newpl = new ProductLog()
+                            {
+                                ProductId = item.ProductId,
+                                AttributeId = item.AttributeId,
+                                UnitId = item.UnitId,
+                                BeforeNumber = pl.AfterNumber,
+                                Amount = item.NumberUnit,
+                                AfterNumber = pl.AfterNumber - amount,
+                                RecordCode = pr.ReqCode,
+                                Status = BHConstant.DEACTIVE_STATUS,
+                                Direction = !item.Direction,
+                                UpdatedDate = systime
+                            };
+                            productLogService.AddProductLog(newpl);
+                        }
+                        productLogService.DeactiveProductLog(pr.ReqCode);
                         if (!productionRequestService.DeleteProductionRequest(id))
                         {
                             MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);

@@ -54,7 +54,8 @@ namespace BaoHien.Services.Employees
                 List<EmployeeLog> logs = context.EmployeeLogs
                     .Where(c => c.EmployeeId == employeeId && c.CreatedDate >= from && c.CreatedDate <= to && c.Status == BHConstant.ACTIVE_STATUS)
                     .OrderByDescending(c => c.CreatedDate).ToList();
-                List<Order> orders = context.Orders.Where(x => logs.Select(y => y.RecordCode).Contains(x.OrderCode)).ToList();
+                List<Order> orders = context.Orders.Where(x => logs.Select(y => y.RecordCode).Contains(x.OrderCode))
+                    .OrderByDescending(x => x.CreatedDate).ToList();
                 List<OrderDetail> details = context.OrderDetails.Where(x => orders.Select(y => y.Id).Contains(x.OrderId)).ToList();
                 int curr_month = from.Month, curr_year = from.Year, month = curr_month, year = curr_year, index = 0;
                 result.Add(new EmployeeReport
@@ -110,7 +111,7 @@ namespace BaoHien.Services.Employees
             {
                 List<EmployeeLog> logs = context.EmployeeLogs
                     .Where(c => c.CreatedDate >= from && c.CreatedDate <= to && c.Status == BHConstant.ACTIVE_STATUS)
-                    .OrderBy(x => x.CreatedDate).ToList();
+                    .OrderByDescending(x => x.CreatedDate).ToList();
                 int index = 0;
                 foreach (EmployeeLog log in logs)
                 {
@@ -131,6 +132,23 @@ namespace BaoHien.Services.Employees
         public List<EmployeeLog> SelectEmployeeLogByWhere(Expression<Func<EmployeeLog, bool>> func)
         {
             return SelectItemByWhere<EmployeeLog>(func);
+        }
+
+        public void MoveEmployeeLogOfCustomer(int customerId, int old_employeeId, int new_employeeId)
+        {
+            using (BaoHienDBDataContext context = new BaoHienDBDataContext(SettingManager.BuildStringConnection()))
+            {
+                var epls = context.EmployeeLogs.Join(context.Orders,
+                    child => child.RecordCode, parent => parent.OrderCode,
+                    (child, parent) => new { EmployeeLog = child, Order = parent }).Where(x => 
+                    x.EmployeeLog.EmployeeId == old_employeeId && x.Order.CustId == customerId)
+                    .Select(x => x.EmployeeLog);
+                foreach (var item in epls)
+                {
+                    item.EmployeeId = new_employeeId;
+                    context.SubmitChanges();
+                }
+            }
         }
     }
 }

@@ -6,7 +6,6 @@ using DAL;
 using BaoHien.Services.Products;
 using BaoHien.Model;
 using BaoHien.Services.BaseAttributes;
-using BaoHien.Services.ProductLogs;
 using BaoHien.Common;
 using BaoHien.Services.MeasurementUnits;
 using DAL.Helper;
@@ -19,6 +18,7 @@ using iTextSharp.text;
 using iTextSharp.text.pdf;
 using System.Drawing.Printing;
 using System.IO;
+using BaoHien.Services.ProductLogs;
 
 namespace BaoHien.UI
 {

@@ -135,7 +135,7 @@ namespace BaoHien.UI
                         ProductService productService = new ProductService();
                         int id = ObjectHelper.GetValueFromAnonymousType<int>(currentRow.DataBoundItem, "Id");
                         ProductLogService productLogService = new ProductLogService();
-                        ProductLog log = productLogService.GetProductLogs().Where(p => p.ProductId == id).FirstOrDefault();
+                        ProductLog log = productLogService.GetProductLogs().Where(p => p.ProductId == id && p.Status == BHConstant.ACTIVE_STATUS).FirstOrDefault();
                         if (log == null)
                         {
                             if (!productService.DeleteProduct(id))

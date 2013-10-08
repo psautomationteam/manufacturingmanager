@@ -1,25 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using DAL;
 using BaoHien.Services.MeasurementUnits;
-using BaoHien.Services.Products;
 using BaoHien.Services.ProductAttributes;
 using BaoHien.Common;
 using BaoHien.Services.ProductionRequests;
 using DAL.Helper;
 using BaoHien.Services.ProductionRequestDetails;
 using BaoHien.UI.Base;
-using BaoHien.Services.BaseAttributes;
 using BaoHien.Model;
-using BaoHien.Services.ProductInStocks;
-using BaoHien.Services.ProductLogs;
 using BaoHien.Services.Seeds;
+using BaoHien.Services.ProductLogs;
 
 namespace BaoHien.UI
 {
@@ -33,8 +27,8 @@ namespace BaoHien.UI
         BindingList<ProductionRequestDetail> productionRequestDetailInProductions;
         BindingList<ProductionRequestDetail> productionRequestDetailInMaterials;
         BindingList<ProductAttributeModel> productForProducts;
-        List<ProductionRequestDetailEntity> old_marterial_details;
-        List<ProductionRequestDetailEntity> old_production_details;
+        List<ProductionRequestDetail> old_marterial_details;
+        List<ProductionRequestDetail> old_production_details;
 
         const int ProductAttrCell = 0, NumberUnitCell = 1, UnitCell = 2, NoteCell = 3;
 
@@ -50,16 +44,7 @@ namespace BaoHien.UI
             {
                 productionRequestDetailInMaterials = new BindingList<ProductionRequestDetail>();
             }
-
-            var query = from productionRequestDetail in productionRequestDetailInMaterials
-                        select new ProductionRequestDetailModel
-                        {
-                            ProductId = productionRequestDetail.ProductId,
-                            AttributeId = productionRequestDetail.AttributeId,
-                            NumberUnit = productionRequestDetail.NumberUnit,
-                            Note = productionRequestDetail.Note,
-                        };
-            dgvMaterial.DataSource = new BindingList<ProductionRequestDetailModel>(query.ToList());
+            dgvMaterial.DataSource = productionRequestDetailInMaterials;
 
             dgvMaterial.ReadOnly = false;
             DataGridViewComboBoxColumn productColumn = new DataGridViewComboBoxColumn();
@@ -105,16 +90,7 @@ namespace BaoHien.UI
             {
                 productionRequestDetailInProductions = new BindingList<ProductionRequestDetail>();
             }
-            
-            var query = from productionRequestDetail in productionRequestDetailInProductions
-                        select new ProductionRequestDetailModel
-                        {
-                            ProductId = productionRequestDetail.ProductId,
-                            AttributeId = productionRequestDetail.AttributeId,
-                            NumberUnit = productionRequestDetail.NumberUnit,
-                            Note = productionRequestDetail.Note,
-                        };
-            dgvProduct.DataSource = new BindingList<ProductionRequestDetailModel>(query.ToList());            
+            dgvProduct.DataSource = productionRequestDetailInProductions;
             dgvProduct.ReadOnly = false;
             
             DataGridViewComboBoxColumn productColumn = new DataGridViewComboBoxColumn();
@@ -210,8 +186,6 @@ namespace BaoHien.UI
                                 prodCode.MaxDropDownItems = 5;
                                 prodCode.KeyDown += DisableDropperDown;
                             }
-                            //DataGridViewComboBoxEditingControl avcbe = e.Control as DataGridViewComboBoxEditingControl;
-                            //this.validator1.SetType(avcbe, Itboy.Components.ValidationType.Required);
                         } break;
                     case NumberUnitCell:
                         {
@@ -235,7 +209,6 @@ namespace BaoHien.UI
                                 prodCode.MaxDropDownItems = 5;
                                 prodCode.KeyDown += DisableDropperDown;
                             }
-                            //this.validator1.SetType(prodCode, Itboy.Components.ValidationType.Required);
                         } break;
                     case NoteCell:
                         {
@@ -246,13 +219,7 @@ namespace BaoHien.UI
                             }
                         } break;
                 }
-            }
-            
-        }
-
-        private void dgvMaterial_CellEnter(object sender, DataGridViewCellEventArgs e)
-        {
-             
+            }            
         }
 
         private void dgvMaterial_CellEndEdit(object sender, DataGridViewCellEventArgs e)
@@ -262,10 +229,9 @@ namespace BaoHien.UI
             {
                 productionRequestDetailInMaterials = new BindingList<ProductionRequestDetail>();
             }
-            if (productionRequestDetailInMaterials.Count < dgvMaterial.RowCount)
+            if (productionRequestDetailInMaterials.Count < dgvMaterial.RowCount - 1)
             {
                 ProductionRequestDetail productionRequestDetail = new ProductionRequestDetail();
-                productionRequestDetail.Direction = false;
                 productionRequestDetailInMaterials.Add(productionRequestDetail);
             }
 
@@ -318,8 +284,6 @@ namespace BaoHien.UI
                                 prodCode.MaxDropDownItems = 5;
                                 prodCode.KeyDown += DisableDropperDown;
                             }
-                            //DataGridViewComboBoxEditingControl avcbe = e.Control as DataGridViewComboBoxEditingControl;
-                            //this.validator1.SetType(avcbe, Itboy.Components.ValidationType.Required);
                         } break;
                     case NumberUnitCell:
                         {
@@ -343,7 +307,6 @@ namespace BaoHien.UI
                                 prodCode.MaxDropDownItems = 5;
                                 prodCode.KeyDown += DisableDropperDown;
                             }
-                            //this.validator1.SetType(prodCode, Itboy.Components.ValidationType.Required);
                         } break;
                     case NoteCell :
                         {
@@ -365,10 +328,9 @@ namespace BaoHien.UI
             {
                 productionRequestDetailInProductions = new BindingList<ProductionRequestDetail>();
             }
-            if (productionRequestDetailInProductions.Count < dgvProduct.RowCount)
+            if (productionRequestDetailInProductions.Count < dgvProduct.RowCount - 1)
             {
                 ProductionRequestDetail productionRequestDetail = new ProductionRequestDetail();
-                productionRequestDetail.Direction = true;
                 productionRequestDetailInProductions.Add(productionRequestDetail);
             }
             if (dgv.CurrentCell.Value != null)
@@ -395,12 +357,7 @@ namespace BaoHien.UI
                         productionRequestDetailInProductions[e.RowIndex].Note = (string)dgv.CurrentCell.Value;
                         break;
                 }
-            }           
-        }
-
-        private void dgvProduct_CellEnter(object sender, DataGridViewCellEventArgs e)
-        {
-            
+            }
         }
 
         private void dgvProduct_DataError(object sender, DataGridViewDataErrorEventArgs e)
@@ -412,284 +369,398 @@ namespace BaoHien.UI
         {
             if (this.validator1.Validate() && ValidateData())
             {
-                DialogResult dialogResult = MessageBox.Show("Bạn muốn lưu?", "Xác nhận", MessageBoxButtons.YesNo);
-                if (dialogResult == System.Windows.Forms.DialogResult.Yes)
+                ProductionRequestService prs = new ProductionRequestService();
+                ProductionRequestDetailService productionRequestDetailService = new ProductionRequestDetailService();
+                DateTime systime = BaoHienRepository.GetBaoHienDBDataContext().GetSystemDate();
+                if (productionRequest != null)
                 {
-                    ProductionRequestService prs = new ProductionRequestService();
-                    ProductionRequestDetailService productionRequestDetailService = new ProductionRequestDetailService();
-                    DateTime systime = BaoHienRepository.GetBaoHienDBDataContext().GetSystemDate();
-                    if (productionRequest != null)
-                    {
-                        #region Fix Update
+                    #region Fix Update
                         
-                        productionRequest.UpdatedDate = systime;
-                        productionRequest.Note = txtNote.Text;
+                    productionRequest.UpdatedDate = systime;
+                    productionRequest.Note = txtNote.Text;
 
-                        #region Update Marterial
+                    string msg = "";
+                    int error = 0, amount_change = 0;
+                    ProductLog pl, newpl;
+                    ProductionRequestDetail prd;
 
-                        List<ProductionRequestDetailEntity> rev_details = old_marterial_details.Where(x => !productionRequestDetailInMaterials.Select(y => y.ProductId.ToString() + '_' +
+                    #region Check old data
+
+                    // Material
+                    List<ProductionRequestDetail> deleted_material_details = old_marterial_details.Where(x => !productionRequestDetailInMaterials.Select(y => y.ProductId.ToString() + '_' +
                         y.AttributeId.ToString() + '_' + y.UnitId.ToString()).Contains(x.ProductId.ToString() + '_' +
                         x.AttributeId.ToString() + '_' + x.UnitId.ToString())).ToList();
-                        foreach (ProductionRequestDetailEntity item in rev_details)
-                        {
-                            ProductLog pl = productLogService.GetProductLog(item.ProductId, item.AttributeId, item.UnitId);
-                            if (pl != null)
-                            {
-                                pl.UpdatedDate = systime;
-                                pl.Amount += item.NumberUnit;
-                                if (pl.Amount < 0)
-                                    pl.Amount = 0;
-                                productLogService.UpdateProductLog(pl);
-                            }
-                        }
-                        foreach (ProductionRequestDetail od in productionRequestDetailInMaterials)
-                        {
-                            od.ProductionRequestId = productionRequest.Id;
-                            if (od.ProductId > 0 && od.AttributeId > 0 && od.UnitId > 0)
-                            {
-                                ProductionRequestDetailEntity tmp_ode = old_marterial_details.Where(x => x.ProductId == od.ProductId &&
-                                    x.AttributeId == od.AttributeId && x.UnitId == od.UnitId && x.ProductionRequestId == productionRequest.Id).FirstOrDefault();
-                                if (tmp_ode != null)
-                                {
-                                    double amount = tmp_ode.NumberUnit - od.NumberUnit;
-                                    bool ret = productionRequestDetailService.UpdateProductionRequestDetail(od);
-
-                                    if (!ret)
-                                    {
-                                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                        return;
-                                    }
-                                    //Save in Production Log
-                                    if (amount != 0)
-                                    {
-                                        ProductLog pl = productLogService.GetProductLog(od.ProductId, od.AttributeId, od.UnitId);
-                                        if (pl != null)
-                                        {
-                                            pl.UpdatedDate = systime;
-                                            pl.Amount += amount;
-                                            if (pl.Amount < 0)
-                                                pl.Amount = 0;
-                                            productLogService.UpdateProductLog(pl);
-                                        }
-                                    }
-                                }
-                                else
-                                {
-                                    bool ret = (od.Id != null && od.Id > 0) ? productionRequestDetailService.UpdateProductionRequestDetail(od) 
-                                        : productionRequestDetailService.AddProductionRequestDetail(od);
-
-                                    if (!ret)
-                                    {
-                                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                        return;
-                                    }
-                                    //Save in Production Log
-                                    ProductLog pl = productLogService.GetProductLog(od.ProductId, od.AttributeId, od.UnitId);
-                                    if (pl != null)
-                                    {
-                                        pl.UpdatedDate = systime;
-                                        pl.Amount -= od.NumberUnit;
-                                        if (pl.Amount < 0)
-                                            pl.Amount = 0;
-                                        productLogService.UpdateProductLog(pl);
-                                    }
-                                }
-                            }
-                        }
-
-                        #endregion
-
-                        #region Update Production
-
-                        rev_details = old_production_details.Where(x => !productionRequestDetailInProductions.Select(y => y.ProductId.ToString() + '_' +
+                    List<ProductionRequestDetail> updated_material_details = old_marterial_details.Where(x => productionRequestDetailInMaterials.Select(y => y.ProductId.ToString() + '_' +
                         y.AttributeId.ToString() + '_' + y.UnitId.ToString()).Contains(x.ProductId.ToString() + '_' +
                         x.AttributeId.ToString() + '_' + x.UnitId.ToString())).ToList();
-                        foreach (ProductionRequestDetailEntity item in rev_details)
+                    List<ProductionRequestDetail> new_material_details = productionRequestDetailInMaterials.Where(x => !old_marterial_details.Select(y => y.ProductId.ToString() + '_' +
+                        y.AttributeId.ToString() + '_' + y.UnitId.ToString()).Contains(x.ProductId.ToString() + '_' +
+                        x.AttributeId.ToString() + '_' + x.UnitId.ToString())).ToList();
+                    foreach (ProductionRequestDetail item in updated_material_details)
+                    {
+                        pl = productLogService.GetProductLog(item.ProductId, item.AttributeId, item.UnitId);
+                        prd = productionRequestDetailInMaterials.Where(x => x.ProductId == item.ProductId && x.AttributeId == item.AttributeId &&
+                            x.UnitId == item.UnitId).FirstOrDefault();
+                        amount_change = Convert.ToInt32(prd.NumberUnit - item.NumberUnit);
+                        if (amount_change > 0 && pl.AfterNumber - amount_change < 0) // Tang nguyen lieu
                         {
-                            ProductLog pl = productLogService.GetProductLog(item.ProductId, item.AttributeId, item.UnitId);
-                            if (pl != null)
+                            if (error == 0)
                             {
-                                pl.UpdatedDate = systime;
-                                pl.Amount -= item.NumberUnit;
-                                if (pl.Amount < 0)
-                                    pl.Amount = 0;
-                                productLogService.UpdateProductLog(pl);
+                                msg += "Phần NGUYÊN LIỆU\n";
+                                msg += "Những sản phẩm sau đã bị SỬA nhưng không đảm bảo dữ liệu trong kho:\n";
+                                error = 1;
+                            }
+                            msg += "- " + productLogService.GetNameOfProductLog(pl) + " : " + amount_change.ToString() + "\n";
+                        }
+                    }
+                    foreach (ProductionRequestDetail item in new_material_details)
+                    {
+                        pl = productLogService.GetProductLog(item.ProductId, item.AttributeId, item.UnitId);
+                        if (pl.AfterNumber - item.NumberUnit < 0)
+                        {
+                            if (error < 2)
+                            {
+                                msg += "Phần NGUYÊN LIỆU\n";
+                                msg += "Những sản phẩm sau không đủ số lượng để tạo phiếu sản xuất:\n";
+                                error = 2;
+                            }
+                            msg += "- " + productLogService.GetNameOfProductLog(pl) + " còn : " + pl.AfterNumber + "\n";
+                        }
+                    }
+
+                    // Production
+                    List<ProductionRequestDetail> deleted_production_details = old_production_details.Where(x => !productionRequestDetailInProductions.Select(y => y.ProductId.ToString() + '_' +
+                        y.AttributeId.ToString() + '_' + y.UnitId.ToString()).Contains(x.ProductId.ToString() + '_' +
+                        x.AttributeId.ToString() + '_' + x.UnitId.ToString())).ToList();
+                    List<ProductionRequestDetail> updated_production_details = old_production_details.Where(x => productionRequestDetailInProductions.Select(y => y.ProductId.ToString() + '_' +
+                        y.AttributeId.ToString() + '_' + y.UnitId.ToString()).Contains(x.ProductId.ToString() + '_' +
+                        x.AttributeId.ToString() + '_' + x.UnitId.ToString())).ToList();
+                    foreach (ProductionRequestDetail item in deleted_production_details)
+                    {
+                        pl = productLogService.GetProductLog(item.ProductId, item.AttributeId, item.UnitId);
+                        if (pl.AfterNumber - item.NumberUnit < 0)
+                        {
+                            if (error < 3)
+                            {
+                                msg += "Phần THÀNH PHẨM\n";
+                                msg += "Những sản phẩm sau đã bị XÓA nhưng không đảm bảo dữ liệu trong kho:\n";
+                                error = 3;
+                            }
+                            msg += "- " + productLogService.GetNameOfProductLog(pl) + " : " + item.NumberUnit + "\n";
+                        }
+                    }
+                    foreach (ProductionRequestDetail item in updated_production_details)
+                    {
+                        pl = productLogService.GetProductLog(item.ProductId, item.AttributeId, item.UnitId);
+                        prd = productionRequestDetailInProductions.Where(x => x.ProductId == item.ProductId && x.AttributeId == item.AttributeId &&
+                            x.UnitId == item.UnitId).FirstOrDefault();
+                        amount_change = Convert.ToInt32(prd.NumberUnit - item.NumberUnit);
+                        if (amount_change < 0 && pl.AfterNumber + amount_change < 0) // Giam so luong thanh pham
+                        {
+                            if (error < 4)
+                            {
+                                msg += "Phần THÀNH PHẨM\n";
+                                msg += "Những sản phẩm sau đã bị SỬA nhưng không đảm bảo dữ liệu trong kho:\n";
+                                error = 4;
+                            }
+                            msg += "- " + productLogService.GetNameOfProductLog(pl) + " : " + amount_change.ToString() + "\n";
+                        }
+                    }
+
+                    if (error > 0)
+                    {
+                        MessageBox.Show(msg, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+
+                    #endregion
+
+                    #region Update Marterial
+
+                    foreach (ProductionRequestDetail item in deleted_material_details)
+                    {
+                        pl = productLogService.GetProductLog(item.ProductId, item.AttributeId, item.UnitId);
+                        newpl = new ProductLog()
+                        {
+                            ProductId = item.ProductId,
+                            AttributeId = item.AttributeId,
+                            UnitId = item.UnitId,
+                            BeforeNumber = pl.AfterNumber,
+                            Amount = item.NumberUnit,
+                            AfterNumber = pl.AfterNumber + item.NumberUnit,
+                            RecordCode = productionRequest.ReqCode,
+                            Status = BHConstant.ACTIVE_STATUS,
+                            Direction = BHConstant.DIRECTION_IN,
+                            UpdatedDate = systime
+                        };
+                        productLogService.AddProductLog(newpl);
+                    }
+                    foreach (ProductionRequestDetail od in productionRequestDetailInMaterials)
+                    {
+                        od.ProductionRequestId = productionRequest.Id;
+                        od.Direction = BHConstant.DIRECTION_OUT;
+                        if (od.ProductId > 0 && od.AttributeId > 0 && od.UnitId > 0)
+                        {
+                            ProductionRequestDetail tmp_ode = old_marterial_details.Where(x => x.ProductId == od.ProductId &&
+                                x.AttributeId == od.AttributeId && x.UnitId == od.UnitId && x.ProductionRequestId == productionRequest.Id).FirstOrDefault();
+                            if (tmp_ode != null)
+                            {
+                                double amount = tmp_ode.NumberUnit - od.NumberUnit;
+                                productionRequestDetailService.UpdateProductionRequestDetail(od);
+                                //Save in Production Log
+                                if (amount != 0)
+                                {
+                                    pl = productLogService.GetProductLog(od.ProductId, od.AttributeId, od.UnitId);
+                                    newpl = new ProductLog()
+                                    {
+                                        ProductId = od.ProductId,
+                                        AttributeId = od.AttributeId,
+                                        UnitId = od.UnitId,
+                                        BeforeNumber = pl.AfterNumber,
+                                        Amount = Math.Abs(amount),
+                                        AfterNumber = pl.AfterNumber + amount,
+                                        RecordCode = productionRequest.ReqCode,
+                                        Status = BHConstant.ACTIVE_STATUS,
+                                        Direction = amount > 0 ? BHConstant.DIRECTION_IN : BHConstant.DIRECTION_OUT,
+                                        UpdatedDate = systime
+                                    };
+                                    productLogService.AddProductLog(newpl);
+                                }
+                            }
+                            else
+                            {
+                                bool ret = (od.Id != null && od.Id > 0) ? productionRequestDetailService.UpdateProductionRequestDetail(od) 
+                                    : productionRequestDetailService.AddProductionRequestDetail(od);
+                                //Save in Production Log
+                                pl = productLogService.GetProductLog(od.ProductId, od.AttributeId, od.UnitId);
+                                newpl = new ProductLog()
+                                {
+                                    ProductId = od.ProductId,
+                                    AttributeId = od.AttributeId,
+                                    UnitId = od.UnitId,
+                                    BeforeNumber = pl.AfterNumber,
+                                    Amount = od.NumberUnit,
+                                    AfterNumber = pl.AfterNumber - od.NumberUnit,
+                                    RecordCode = productionRequest.ReqCode,
+                                    Status = BHConstant.ACTIVE_STATUS,
+                                    Direction = BHConstant.DIRECTION_OUT,
+                                    UpdatedDate = systime
+                                };
+                                productLogService.AddProductLog(newpl);
                             }
                         }
-                        foreach (ProductionRequestDetail od in productionRequestDetailInProductions)
+                    }
+
+                    #endregion
+
+                    #region Update Production
+
+                    foreach (ProductionRequestDetail item in deleted_production_details)
+                    {
+                        pl = productLogService.GetProductLog(item.ProductId, item.AttributeId, item.UnitId);
+                        newpl = new ProductLog()
                         {
-                            od.ProductionRequestId = productionRequest.Id;
-                            if (od.ProductId > 0 && od.AttributeId > 0 && od.UnitId > 0)
+                            ProductId = item.ProductId,
+                            AttributeId = item.AttributeId,
+                            UnitId = item.UnitId,
+                            BeforeNumber = pl.AfterNumber,
+                            Amount = item.NumberUnit,
+                            AfterNumber = pl.AfterNumber - item.NumberUnit,
+                            RecordCode = productionRequest.ReqCode,
+                            Status = BHConstant.ACTIVE_STATUS,
+                            Direction = BHConstant.DIRECTION_OUT,
+                            UpdatedDate = systime
+                        };
+                        productLogService.AddProductLog(newpl);
+                    }
+                    foreach (ProductionRequestDetail od in productionRequestDetailInProductions)
+                    {
+                        od.ProductionRequestId = productionRequest.Id;
+                        od.Direction = BHConstant.DIRECTION_IN;
+                        if (od.ProductId > 0 && od.AttributeId > 0 && od.UnitId > 0)
+                        {
+                            ProductionRequestDetail tmp_ode = old_production_details.Where(x => x.ProductId == od.ProductId &&
+                                x.AttributeId == od.AttributeId && x.UnitId == od.UnitId && x.ProductionRequestId == productionRequest.Id).FirstOrDefault();
+                            if (tmp_ode != null)
                             {
-                                ProductionRequestDetailEntity tmp_ode = old_production_details.Where(x => x.ProductId == od.ProductId &&
-                                    x.AttributeId == od.AttributeId && x.UnitId == od.UnitId && x.ProductionRequestId == productionRequest.Id).FirstOrDefault();
-                                if (tmp_ode != null)
+                                double amount = od.NumberUnit - tmp_ode.NumberUnit;
+                                productionRequestDetailService.UpdateProductionRequestDetail(od);
+                                //Save in Production Log
+                                if (amount != 0)
                                 {
-                                    double amount = od.NumberUnit - tmp_ode.NumberUnit;
-                                    bool ret = productionRequestDetailService.UpdateProductionRequestDetail(od);
-
-                                    if (!ret)
+                                    pl = productLogService.GetProductLog(od.ProductId, od.AttributeId, od.UnitId);
+                                    newpl = new ProductLog()
                                     {
-                                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                        return;
-                                    }
-                                    //Save in Production Log
-                                    if (amount != 0)
-                                    {
-                                        ProductLog pl = productLogService.GetProductLog(od.ProductId, od.AttributeId, od.UnitId);
-                                        if (pl != null)
-                                        {
-                                            pl.UpdatedDate = systime;
-                                            pl.Amount += amount;
-                                            if (pl.Amount < 0)
-                                                pl.Amount = 0;
-                                            productLogService.UpdateProductLog(pl);
-                                        }
-                                    }
-                                }
-                                else
-                                {
-                                    bool ret = (od.Id != null && od.Id > 0) ? productionRequestDetailService.UpdateProductionRequestDetail(od) 
-                                        : productionRequestDetailService.AddProductionRequestDetail(od);
-
-                                    if (!ret)
-                                    {
-                                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                        return;
-                                    }
-                                    //Save in Production Log
-                                    ProductLog pl = productLogService.GetProductLog(od.ProductId, od.AttributeId, od.UnitId);
-                                    if (pl != null)
-                                    {
-                                        pl.UpdatedDate = systime;
-                                        pl.Amount += od.NumberUnit;
-                                        if (pl.Amount < 0)
-                                            pl.Amount = 0;
-                                        productLogService.UpdateProductLog(pl);
-                                    }
-                                    else
-                                    {
-                                        pl = new ProductLog()
-                                        {
-                                            ProductId = od.ProductId,
-                                            AttributeId = od.AttributeId,
-                                            UnitId = od.UnitId,
-                                            Amount = od.NumberUnit,
-                                            UpdatedDate = systime
-                                        };
-                                        productLogService.AddProductLog(pl);
-                                    }
+                                        ProductId = od.ProductId,
+                                        AttributeId = od.AttributeId,
+                                        UnitId = od.UnitId,
+                                        BeforeNumber = pl.AfterNumber,
+                                        Amount = Math.Abs(amount),
+                                        AfterNumber = pl.AfterNumber + amount,
+                                        RecordCode = productionRequest.ReqCode,
+                                        Status = BHConstant.ACTIVE_STATUS,
+                                        Direction = amount > 0 ? BHConstant.DIRECTION_IN : BHConstant.DIRECTION_OUT,
+                                        UpdatedDate = systime
+                                    };
+                                    productLogService.AddProductLog(newpl);
                                 }
                             }
+                            else
+                            {
+                                bool ret = (od.Id != null && od.Id > 0) ? productionRequestDetailService.UpdateProductionRequestDetail(od) 
+                                    : productionRequestDetailService.AddProductionRequestDetail(od);
+                                //Save in Production Log
+                                pl = productLogService.GetProductLog(od.ProductId, od.AttributeId, od.UnitId);
+                                newpl = new ProductLog()
+                                {
+                                    ProductId = od.ProductId,
+                                    AttributeId = od.AttributeId,
+                                    UnitId = od.UnitId,
+                                    BeforeNumber = pl.AfterNumber,
+                                    Amount = od.NumberUnit,
+                                    AfterNumber = pl.AfterNumber + od.NumberUnit,
+                                    RecordCode = productionRequest.ReqCode,
+                                    Status = BHConstant.ACTIVE_STATUS,
+                                    Direction = BHConstant.DIRECTION_IN,
+                                    UpdatedDate = systime
+                                };
+                                productLogService.AddProductLog(newpl);
+                            }
                         }
+                    }
 
-                        #endregion
+                    #endregion
 
-                        bool result = prs.UpdateProductionRequest(productionRequest);
-                        if (result)
-                            MessageBox.Show("Phiếu sản xuất đã được cập nhật thành công");
-                        else
-                            MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        this.Close();
+                    bool result = prs.UpdateProductionRequest(productionRequest);
+                    if (result)
+                        MessageBox.Show("Phiếu sản xuất đã được cập nhật thành công");
+                    else
+                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    this.Close();
 
-                        #endregion
+                    #endregion
+                }
+                else
+                {
+                    #region New
+
+                    int userId = 0;
+                    ProductLog pl, newpl;
+                    if (Global.CurrentUser != null)
+                    {
+                        userId = Global.CurrentUser.Id;
                     }
                     else
                     {
-                        int userId = 0;
-                        if (Global.CurrentUser != null)
-                        {
-                            userId = Global.CurrentUser.Id;
-                        }
-                        else
-                        {
-                            MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            return;
-                        }
+                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
 
-                        SeedService ss = new SeedService();
-                        productionRequest = new ProductionRequest
+                    string msg = "";
+                    int error = 0;
+                    foreach (ProductionRequestDetail prd in productionRequestDetailInMaterials)
+                    {
+                        pl = productLogService.GetProductLog(prd.ProductId, prd.AttributeId, prd.UnitId);
+                        if (pl.AfterNumber - prd.NumberUnit < 0)
                         {
-                            Note = txtNote.Text,
-                            ReqCode = ss.AddSeedID(BHConstant.PREFIX_FOR_PRODUCTION),
-                            CreatedDate = systime,
-                            UserId = userId,
-                        };
+                            if (error == 0)
+                            {
+                                msg += "Những sản phẩm sau bên phần nguyên liệu không đủ số lượng để tạo phiếu sản xuất:\n";
+                                error = 1;
+                            }
+                            msg += "- " + productLogService.GetNameOfProductLog(pl) + " còn : " + pl.AfterNumber + "\n";
+                        }
+                    }
 
-                        bool result = prs.AddProductionRequest(productionRequest);
-                        if (result)
+                    if (error > 0)
+                    {
+                        MessageBox.Show(msg, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+
+                    SeedService ss = new SeedService();
+                    productionRequest = new ProductionRequest
+                    {
+                        Note = txtNote.Text,
+                        ReqCode = ss.AddSeedID(BHConstant.PREFIX_FOR_PRODUCTION),
+                        CreatedDate = systime,
+                        UserId = userId,
+                    };
+
+                    bool result = prs.AddProductionRequest(productionRequest);
+                    if (result)
+                    {
+                        long newProductionRequestId = BaoHienRepository.GetMaxId<ProductionRequest>();
+                        try
                         {
-                            long newProductionRequestId = BaoHienRepository.GetMaxId<ProductionRequest>();
                             foreach (ProductionRequestDetail prd in productionRequestDetailInProductions)
                             {
+                                prd.Direction = BHConstant.DIRECTION_IN;
                                 if (prd.ProductId > 0 && prd.AttributeId > 0 && prd.UnitId > 0)
                                 {
                                     prd.ProductionRequestId = (int)newProductionRequestId;
                                     prd.Direction = BHConstant.DIRECTION_IN;
-                                    bool ret = productionRequestDetailService.AddProductionRequestDetail(prd);
-                                    if (!ret)
-                                    {
-                                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                        return;
-                                    }
-
+                                    productionRequestDetailService.AddProductionRequestDetail(prd);
                                     //Save in Production Log
-                                    ProductLog pl = productLogService.GetProductLog(prd.ProductId, prd.AttributeId, prd.UnitId);
-                                    if (pl == null)
+                                    pl = productLogService.GetProductLog(prd.ProductId, prd.AttributeId, prd.UnitId);
+                                    newpl = new ProductLog()
                                     {
-                                        pl = new ProductLog()
-                                        {
-                                            AttributeId = prd.AttributeId,
-                                            ProductId = prd.ProductId,
-                                            UnitId = prd.UnitId,
-                                            Amount = prd.NumberUnit,
-                                            UpdatedDate = systime
-                                        };
-                                        productLogService.AddProductLog(pl);
-                                    }
-                                    else
-                                    {
-                                        pl.UpdatedDate = systime;
-                                        pl.Amount += prd.NumberUnit;
-                                        result = productLogService.UpdateProductLog(pl);
-                                    }
+                                        ProductId = prd.ProductId,
+                                        AttributeId = prd.AttributeId,
+                                        UnitId = prd.UnitId,
+                                        BeforeNumber = pl.AfterNumber,
+                                        Amount = prd.NumberUnit,
+                                        AfterNumber = pl.AfterNumber + prd.NumberUnit,
+                                        RecordCode = productionRequest.ReqCode,
+                                        Status = BHConstant.ACTIVE_STATUS,
+                                        Direction = BHConstant.DIRECTION_IN,
+                                        UpdatedDate = systime
+                                    };
+                                    productLogService.AddProductLog(newpl);
                                 }
                             }
 
                             foreach (ProductionRequestDetail prd in productionRequestDetailInMaterials)
                             {
+                                prd.Direction = BHConstant.DIRECTION_OUT;
                                 if (prd.ProductId > 0 && prd.AttributeId > 0 && prd.UnitId > 0)
                                 {
                                     prd.ProductionRequestId = (int)newProductionRequestId;
                                     prd.Direction = BHConstant.DIRECTION_OUT;
-                                    bool ret = productionRequestDetailService.AddProductionRequestDetail(prd);
-                                    if (!ret)
-                                    {
-                                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                        return;
-                                    }
+                                    productionRequestDetailService.AddProductionRequestDetail(prd);
 
                                     //Save in Product Log
-                                    ProductLog pl = productLogService.GetProductLog(prd.ProductId, prd.AttributeId, prd.UnitId);
-                                    if (pl != null)
+                                    pl = productLogService.GetProductLog(prd.ProductId, prd.AttributeId, prd.UnitId);
+                                    newpl = new ProductLog()
                                     {
-                                        pl.UpdatedDate = systime;
-                                        pl.Amount -= prd.NumberUnit;
-                                        result = productLogService.UpdateProductLog(pl);
-                                    }
+                                        ProductId = prd.ProductId,
+                                        AttributeId = prd.AttributeId,
+                                        UnitId = prd.UnitId,
+                                        BeforeNumber = pl.AfterNumber,
+                                        Amount = prd.NumberUnit,
+                                        AfterNumber = pl.AfterNumber - prd.NumberUnit,
+                                        RecordCode = productionRequest.ReqCode,
+                                        Status = BHConstant.ACTIVE_STATUS,
+                                        Direction = BHConstant.DIRECTION_OUT,
+                                        UpdatedDate = systime
+                                    };
+                                    productLogService.AddProductLog(newpl);
                                 }
                             }
-                            MessageBox.Show("Phiếu sản xuất đã được tạo thành công");
-                            this.Close();
                         }
-                        else
-                        {
-                            MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            return;
-                        }
+                        catch { }
+                        MessageBox.Show("Phiếu sản xuất đã được tạo thành công");
+                        this.Close();
                     }
-                }                
-            }
+                    else
+                    {
+                        MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+
+                    #endregion
+                }
+            } 
         }
 
         public void loadDataForEditProductRequest(int productionRequestId)
@@ -698,8 +769,8 @@ namespace BaoHien.UI
             isUpdating = true;
             ProductionRequestService prs = new ProductionRequestService();
             productionRequest = prs.GetProductionRequest(productionRequestId);
-            old_marterial_details = new List<ProductionRequestDetailEntity>();
-            old_production_details = new List<ProductionRequestDetailEntity>();
+            old_marterial_details = new List<ProductionRequestDetail>();
+            old_production_details = new List<ProductionRequestDetail>();
             if (productionRequest != null)
             {
                 ProductionRequestDetailService prds = new ProductionRequestDetailService();
@@ -707,7 +778,7 @@ namespace BaoHien.UI
                     .Where(p => p.ProductionRequestId == productionRequestId && p.Direction == BHConstant.PRODUCTION_REQUEST_DETAIL_OUT).ToList());
                 foreach (ProductionRequestDetail od in productionRequestDetailInProductions)
                 {
-                    old_production_details.Add(new ProductionRequestDetailEntity
+                    old_production_details.Add(new ProductionRequestDetail
                     {
                         AttributeId = od.AttributeId,
                         ProductId = od.ProductId,
@@ -720,7 +791,7 @@ namespace BaoHien.UI
                     .Where(p => p.ProductionRequestId == productionRequestId && p.Direction == BHConstant.PRODUCTION_REQUEST_DETAIL_IN).ToList());
                 foreach (ProductionRequestDetail od in productionRequestDetailInMaterials)
                 {
-                    old_marterial_details.Add(new ProductionRequestDetailEntity
+                    old_marterial_details.Add(new ProductionRequestDetail
                     {
                         AttributeId = od.AttributeId,
                         ProductId = od.ProductId,
@@ -805,39 +876,37 @@ namespace BaoHien.UI
                 dgv.Rows[rowIndex].Cells[NumberUnitCell].Value != null &&
                 (colIndex == UnitCell || colIndex == NumberUnitCell || colIndex == ProductAttrCell))
             {
+                int unitId = (int)dgv.Rows[rowIndex].Cells[UnitCell].Value;
+                int numberUnit = (int)dgv.Rows[rowIndex].Cells[NumberUnitCell].Value;
                 ProductLog pl = productLogService.GetProductLog(productionRequestDetailInMaterials[rowIndex].ProductId,
-                    productionRequestDetailInMaterials[rowIndex].AttributeId, (int)dgv.Rows[rowIndex].Cells[UnitCell].Value);
-                if (pl == null)
+                    productionRequestDetailInMaterials[rowIndex].AttributeId, unitId);
+                int amount = (int)pl.AfterNumber;
+                if (isUpdating)
                 {
-                    MessageBox.Show("Sản phẩm với đơn vị tính này hiện chưa có trong kho.");
+                    ProductionRequestDetail prd = old_marterial_details.Where(x => x.ProductId == productionRequestDetailInMaterials[rowIndex].ProductId &&
+                        x.AttributeId == productionRequestDetailInMaterials[rowIndex].AttributeId && x.UnitId == unitId).FirstOrDefault();
+                    amount += prd.NumberUnit;
+                }
+                if (amount <= 0)
+                {
+                    MessageBox.Show("Số lượng sản phẩm trong kho đã hết.");
                     dgv.Rows[rowIndex].Cells[NumberUnitCell].Value = 0;
 
-                    productionRequestDetailInMaterials[rowIndex].UnitId = (int)dgv.Rows[rowIndex].Cells[UnitCell].Value;
+                    productionRequestDetailInMaterials[rowIndex].UnitId = unitId;
                     productionRequestDetailInMaterials[rowIndex].NumberUnit = 0;
+                }
+                else if (amount < numberUnit)
+                {
+                    MessageBox.Show("Số lượng sản phẩm trong kho còn lại là : " + amount);
+                    dgv.Rows[rowIndex].Cells[NumberUnitCell].Value = amount;
+
+                    productionRequestDetailInMaterials[rowIndex].UnitId = unitId;
+                    productionRequestDetailInMaterials[rowIndex].NumberUnit = amount;
                 }
                 else
                 {
-                    if (pl.Amount <= 0)
-                    {
-                        MessageBox.Show("Số lượng sản phẩm trong kho đã hết.");
-                        dgv.Rows[rowIndex].Cells[NumberUnitCell].Value = 0;
-
-                        productionRequestDetailInMaterials[rowIndex].UnitId = (int)dgv.Rows[rowIndex].Cells[UnitCell].Value;
-                        productionRequestDetailInMaterials[rowIndex].NumberUnit = 0;
-                    }
-                    else if (pl.Amount < (int)dgv.Rows[rowIndex].Cells[NumberUnitCell].Value)
-                    {
-                        MessageBox.Show("Số lượng sản phẩm trong kho còn lại là : " + pl.Amount);
-                        dgv.Rows[rowIndex].Cells[NumberUnitCell].Value = pl.Amount;
-
-                        productionRequestDetailInMaterials[rowIndex].UnitId = (int)dgv.Rows[rowIndex].Cells[UnitCell].Value;
-                        productionRequestDetailInMaterials[rowIndex].NumberUnit = (int)pl.Amount;
-                    }
-                    else
-                    {
-                        productionRequestDetailInMaterials[rowIndex].UnitId = (int)dgv.Rows[rowIndex].Cells[UnitCell].Value;
-                        productionRequestDetailInMaterials[rowIndex].NumberUnit = (int)dgv.Rows[rowIndex].Cells[NumberUnitCell].Value;
-                    }
+                    productionRequestDetailInMaterials[rowIndex].UnitId = unitId;
+                    productionRequestDetailInMaterials[rowIndex].NumberUnit = numberUnit ;
                 }
             }
         }
@@ -848,11 +917,6 @@ namespace BaoHien.UI
             bool isFirst = true;
             string message = "";
             List<string> errors = new List<string>();
-            if (productionRequestDetailInMaterials.Count <= 0)
-            {
-                result = true;
-                //message += "- Không có dữ liệu sản phẩm bên phần nguyên liệu";
-            }
             for (int i = 0; i < productionRequestDetailInMaterials.Count; i++)
             {
                 if ((productionRequestDetailInMaterials[i].ProductId != 0 && productionRequestDetailInMaterials[i].AttributeId != 0 &&
@@ -908,7 +972,7 @@ namespace BaoHien.UI
                 message += "\n";
             }
             if (!result)
-                MessageBox.Show(message, "Lỗi phiếu sản xuất", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(message, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
             return result;
         }
 

@@ -1,25 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using DAL;
 using BaoHien.Services.SystemUsers;
 using BaoHien.Services;
 using DAL.Helper;
 using BaoHien.Model;
-using BaoHien.Services.ProductLogs;
 using BaoHien.Common;
 using BaoHien.Services.ProductInStocks;
+using BaoHien.Services.ProductLogs;
 
 namespace BaoHien.UI
 {
     public partial class StockEntranceList : UserControl
     {
-        List<EntranceStock> entranceStocks;
         List<SystemUser> systemUsers;
 
         public StockEntranceList()
@@ -109,23 +104,54 @@ namespace BaoHien.UI
                         ProductLogService productLogService = new ProductLogService();
                         EntranceStockDetailService entranceStockDetailService = new EntranceStockDetailService();
                         List<EntranceStockDetail> details = entranceStockDetailService.SelectEntranceStockDetailByWhere(x => x.EntranceStockId == es.Id).ToList();
-                        foreach (EntranceStockDetail esd in details)
+                        string msg = "";
+                        int error = 0;
+                        ProductLog pl, newpl;
+                        foreach (EntranceStockDetail item in details)
                         {
-                            ProductLog pl = productLogService.GetProductLog(esd.ProductId, esd.AttributeId, esd.UnitId);
-                            if (pl != null)
+                            pl = productLogService.GetProductLog(item.ProductId, item.AttributeId, item.UnitId);
+                            if (pl.AfterNumber - item.NumberUnit < 0)
                             {
-                                pl.UpdatedDate = systime;
-                                pl.Amount -= esd.NumberUnit;
-                                if (pl.Amount < 0)
-                                    pl.Amount = 0;
-                                productLogService.UpdateProductLog(pl);
+                                if (error == 0)
+                                {
+                                    msg += "Những sản phẩm sau đã bị XÓA nhưng không đảm bảo dữ liệu trong kho:\n";
+                                    error = 1;
+                                }
+                                msg += "- " + productLogService.GetNameOfProductLog(pl) + " : " + item.NumberUnit + "\n";
                             }
-                            entranceStockDetailService.DeleteEntranceStockDetail(esd.Id);
                         }
-                        if (!entranceStockService.DeleteEntranceStock(id))
+                        if (error > 0)
                         {
-                            MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show(msg, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
                         }
+                        try
+                        {
+                            foreach (EntranceStockDetail item in details)
+                            {
+                                pl = productLogService.GetProductLog(item.ProductId, item.AttributeId, item.UnitId);
+                                newpl = new ProductLog()
+                                {
+                                    ProductId = item.ProductId,
+                                    AttributeId = item.AttributeId,
+                                    UnitId = item.UnitId,
+                                    BeforeNumber = pl.AfterNumber,
+                                    Amount = item.NumberUnit,
+                                    AfterNumber = pl.AfterNumber - item.NumberUnit,
+                                    RecordCode = es.EntranceCode,
+                                    Status = BHConstant.DEACTIVE_STATUS,
+                                    Direction = BHConstant.DIRECTION_OUT,
+                                    UpdatedDate = systime
+                                };
+                                productLogService.AddProductLog(newpl);
+                            }
+                            productLogService.DeactiveProductLog(es.EntranceCode);
+                            if (!entranceStockService.DeleteEntranceStock(id))
+                            {
+                                MessageBox.Show("Hiện tại hệ thống đang có lỗi. Vui lòng thử lại sau!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
+                        }
+                        catch { }
                         loadEntranceStockList();
                     }
 

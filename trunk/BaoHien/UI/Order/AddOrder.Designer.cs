@@ -289,7 +289,6 @@ namespace BaoHien.UI
             this.dgwOrderDetails.Size = new System.Drawing.Size(784, 263);
             this.dgwOrderDetails.TabIndex = 9;
             this.dgwOrderDetails.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgwOrderDetails_CellEndEdit);
-            this.dgwOrderDetails.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dgwOrderDetails_CellFormatting);
             this.dgwOrderDetails.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dgwOrderDetails_DataError);
             this.dgwOrderDetails.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.dgwOrderDetails_EditingControlShowing);
             // 

@@ -13,9 +13,9 @@ using DAL.Helper;
 using BaoHien.Services.SystemUsers;
 using BaoHien.Model;
 using BaoHien.Common;
-using BaoHien.Services.ProductLogs;
 using BaoHien.Services.Employees;
 using BaoHien.Services.OrderDetails;
+using BaoHien.Services.ProductLogs;
 
 namespace BaoHien.UI
 {
@@ -180,21 +180,29 @@ namespace BaoHien.UI
 
                 #region ProductLog
 
-                double totalCommission = 0.0;
                 ProductLogService productLogService = new ProductLogService();
                 OrderDetailService orderDetailService = new OrderDetailService();
                 List<OrderDetail> details = orderDetailService.SelectOrderDetailByWhere(x => x.OrderId == order.Id).ToList();
-                foreach (OrderDetail od in details)
+                ProductLog pl, newpl;
+                foreach (OrderDetail item in details)
                 {
-                    totalCommission += od.Commission;
-                    ProductLog pl = productLogService.GetProductLog(od.ProductId, od.AttributeId, od.UnitId);
-                    if (pl != null)
+                    pl = productLogService.GetProductLog(item.ProductId, item.AttributeId, item.UnitId);
+                    newpl = new ProductLog()
                     {
-                        pl.UpdatedDate = systime;
-                        pl.Amount += od.NumberUnit;
-                        productLogService.UpdateProductLog(pl);
-                    }
+                        ProductId = item.ProductId,
+                        AttributeId = item.AttributeId,
+                        UnitId = item.UnitId,
+                        BeforeNumber = pl.AfterNumber,
+                        Amount = item.NumberUnit,
+                        AfterNumber = pl.AfterNumber + item.NumberUnit,
+                        RecordCode = order.OrderCode,
+                        Status = BHConstant.DEACTIVE_STATUS,
+                        Direction = BHConstant.DIRECTION_IN,
+                        UpdatedDate = systime
+                    };
+                    productLogService.AddProductLog(newpl);
                 }
+                productLogService.DeactiveProductLog(order.OrderCode);
 
                 #endregion
 

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using BaoHien.Services.Base;
 using DAL;
 using DAL.Helper;
@@ -51,7 +50,7 @@ namespace BaoHien.Services.ProductLogs
             using (BaoHienDBDataContext context = new BaoHienDBDataContext(SettingManager.BuildStringConnection()))
             {
                 List<ProductLog> logs = context.ProductLogs.Where(p => p.ProductId == productId && p.AttributeId == attrId)
-                                 .GroupBy(p => p.UnitId).Select(p => p.First()).ToList();
+                                 .OrderByDescending(x => x.UpdatedDate).GroupBy(p => p.UnitId).Select(p => p.First()).ToList();
                 foreach (ProductLog log in logs)
                 {
                     result.Add(log.MeasurementUnit);
@@ -75,9 +74,40 @@ namespace BaoHien.Services.ProductLogs
         public ProductLog GetProductLog(int productId, int attrId, int unitId)
         {
             ProductLog result = null;
-            List<ProductLog> logs = GetProductLogs(productId, attrId, unitId);
-            result = logs.FirstOrDefault();
+            using (BaoHienDBDataContext context = new BaoHienDBDataContext(SettingManager.BuildStringConnection()))
+            {
+                result = context.ProductLogs.Where(p => p.ProductId == productId && p.AttributeId == attrId && p.UnitId == unitId)
+                    .OrderByDescending(c => c.Id).FirstOrDefault();
+                if (result == null)
+                {
+                    result = new ProductLog()
+                    {
+                        ProductId = productId,
+                        AttributeId = attrId,
+                        UnitId = unitId,
+                        Amount = 0,
+                        AfterNumber = 0,
+                        BeforeNumber = 0,
+                        RecordCode = "",
+                        Status = BHConstant.DEACTIVE_STATUS,
+                        Direction = BHConstant.DIRECTION_IN,
+                        UpdatedDate = context.GetSystemDate()
+                    };
+                    context.ProductLogs.InsertOnSubmit(result);
+                    context.SubmitChanges();
+                }
+            }
             return result;
+        }
+        
+        public void DeactiveProductLog(string RecordCode)
+        {
+            using (BaoHienDBDataContext context = new BaoHienDBDataContext(SettingManager.BuildStringConnection()))
+            {
+                context.ProductLogs.Where(p => p.RecordCode == RecordCode && p.Status == BHConstant.ACTIVE_STATUS)
+                    .ToList().ForEach(x => x.Status = BHConstant.DEACTIVE_STATUS);
+                context.SubmitChanges();
+            }
         }
 
         public ProductLog GetNewestProductLog(int productId, int attrId)
@@ -86,7 +116,7 @@ namespace BaoHien.Services.ProductLogs
             using (BaoHienDBDataContext context = new BaoHienDBDataContext(SettingManager.BuildStringConnection()))
             {
                 result = context.ProductLogs.Where(p => p.ProductId == productId && p.AttributeId == attrId)
-                    .OrderByDescending(c => c.UpdatedDate).FirstOrDefault();
+                    .OrderByDescending(c => c.Id).FirstOrDefault();
             }
             return result;
         }
@@ -101,58 +131,21 @@ namespace BaoHien.Services.ProductLogs
                 from = to;
                 to = d;
             }
-            DateTime dt = new DateTime(2013, 7, 1);
             using (BaoHienDBDataContext context = new BaoHienDBDataContext(SettingManager.BuildStringConnection()))
             {
-                var produces = context.EntranceStockDetails.Join(context.EntranceStocks,
-                    child => child.EntranceStockId, parent => parent.Id,
-                    (child, parent) => new { EntranceStockDetail = child, EntranceStock = parent }).Where(x => x.EntranceStock.CreatedDate >= from
-                    && x.EntranceStock.CreatedDate <= to && x.EntranceStock.Status == null && x.EntranceStock.CreatedDate > dt &&
-                    x.EntranceStockDetail.ProductId == productId && x.EntranceStockDetail.AttributeId == attrId && x.EntranceStockDetail.UnitId == unitId);
+                var produces = context.ProductLogs.Where(x => x.UpdatedDate >= from && x.UpdatedDate <= to &&
+                    x.ProductId == productId && x.AttributeId == attrId && x.UnitId == unitId && 
+                    x.Status == BHConstant.ACTIVE_STATUS && x.RecordCode != "");
                 foreach (var item in produces)
                 {
                     result.Add(new ProductReport()
                     {
                         Index = (index += 1),
-                        RecordCode = item.EntranceStock.EntranceCode,
-                        Amount = item.EntranceStockDetail.NumberUnit.ToString(),
-                        Direction = BHConstant.DIRECTION_IN,
-                        UpdatedDate = item.EntranceStock.CreatedDate,
-                        UpdatedDateString = item.EntranceStock.CreatedDate.ToString(BHConstant.DATE_FORMAT)
-                    });
-                }
-                var imports = context.ProductionRequestDetails.Join(context.ProductionRequests,
-                    child => child.ProductionRequestId, parent => parent.Id,
-                    (child, parent) => new { ProductionRequestDetail = child, ProductionRequest = parent }).Where(x => x.ProductionRequest.CreatedDate >= from
-                    && x.ProductionRequest.CreatedDate <= to && x.ProductionRequest.Status == null && x.ProductionRequest.CreatedDate > dt &&
-                    x.ProductionRequestDetail.ProductId == productId && x.ProductionRequestDetail.AttributeId == attrId && x.ProductionRequestDetail.UnitId == unitId);
-                foreach (var item in imports)
-                {
-                    result.Add(new ProductReport()
-                    {
-                        Index = (index += 1),
-                        RecordCode = item.ProductionRequest.ReqCode,
-                        Amount = item.ProductionRequestDetail.NumberUnit.ToString(),
-                        Direction = item.ProductionRequestDetail.Direction,
-                        UpdatedDate = item.ProductionRequest.CreatedDate,
-                        UpdatedDateString = item.ProductionRequest.CreatedDate.ToString(BHConstant.DATE_FORMAT)
-                    });
-                }
-                var orders = context.OrderDetails.Join(context.Orders,
-                    child => child.OrderId, parent => parent.Id,
-                    (child, parent) => new { OrderDetail = child, Order = parent }).Where(x => x.Order.CreatedDate >= from
-                    && x.Order.CreatedDate <= to && x.Order.Status == null && x.Order.CreatedDate > dt && 
-                    x.OrderDetail.ProductId == productId && x.OrderDetail.AttributeId == attrId && x.OrderDetail.UnitId == unitId);
-                foreach (var item in orders)
-                {
-                    result.Add(new ProductReport()
-                    {
-                        Index = (index += 1),
-                        RecordCode = item.Order.OrderCode,
-                        Amount = item.OrderDetail.NumberUnit.ToString(),
-                        Direction = BHConstant.DIRECTION_OUT,
-                        UpdatedDate = item.Order.CreatedDate,
-                        UpdatedDateString = item.Order.CreatedDate.ToString(BHConstant.DATE_FORMAT)
+                        RecordCode = item.RecordCode,
+                        Amount = item.Amount.ToString(),
+                        Direction = item.Direction,
+                        UpdatedDate = item.UpdatedDate,
+                        UpdatedDateString = item.UpdatedDate.ToString(BHConstant.DATE_FORMAT)
                     });
                 }
                 result = result.OrderByDescending(x => x.UpdatedDate).ToList();
@@ -170,85 +163,33 @@ namespace BaoHien.Services.ProductLogs
                 from = to;
                 to = d;
             }
-            DateTime dt = new DateTime(2013, 7, 1);
             using (BaoHienDBDataContext context = new BaoHienDBDataContext(SettingManager.BuildStringConnection()))
             {
-                var produces = context.EntranceStockDetails.Join(context.EntranceStocks,
-                    child => child.EntranceStockId, parent => parent.Id,
-                    (child, parent) => new { EntranceStockDetail = child, EntranceStock = parent }).Where(x =>
-                    x.EntranceStock.CreatedDate <= to && x.EntranceStock.CreatedDate > dt && x.EntranceStock.Status == null);
+                var produces = context.ProductLogs.Where(x => x.UpdatedDate <= to && x.UpdatedDate >= from && x.RecordCode != "");
                 if (unitId > 0)
-                    produces = produces.Where(x => x.EntranceStockDetail.UnitId == unitId);
+                    produces = produces.Where(x => x.UnitId == unitId);
                 if (attrId > 0)
-                    produces = produces.Where(x => x.EntranceStockDetail.AttributeId == attrId);
+                    produces = produces.Where(x => x.AttributeId == attrId);
                 if (productId > 0)
-                    produces = produces.Where(x => x.EntranceStockDetail.ProductId == productId);
+                    produces = produces.Where(x => x.ProductId == productId);
                 if (productTypeId > 0)
-                    produces = produces.Where(x => x.EntranceStockDetail.Product.ProductType == productTypeId);
+                    produces = produces.Where(x => x.Product.ProductType == productTypeId);
                 foreach (var item in produces)
                 {
                     items.Add(new ProductDetail()
                     {
-                        UnitId = item.EntranceStockDetail.UnitId,
-                        AttributeId = item.EntranceStockDetail.AttributeId,
-                        Direction = BHConstant.DIRECTION_IN,
-                        ProductId = item.EntranceStockDetail.ProductId,
-                        ProductTypeId = item.EntranceStockDetail.Product.ProductType,
-                        Amount = item.EntranceStockDetail.NumberUnit,
-                        Jampo = item.EntranceStockDetail.BaseAttribute.Jampo,
-                        CreatedDate = item.EntranceStock.CreatedDate
-                    });
-                }
-                var imports = context.ProductionRequestDetails.Join(context.ProductionRequests,
-                    child => child.ProductionRequestId, parent => parent.Id,
-                    (child, parent) => new { ProductionRequestDetail = child, ProductionRequest = parent }).Where(x =>
-                    x.ProductionRequest.CreatedDate <= to && x.ProductionRequest.CreatedDate > dt && x.ProductionRequest.Status == null);
-                if (unitId > 0)
-                    imports = imports.Where(x => x.ProductionRequestDetail.UnitId == unitId);
-                if (attrId > 0)
-                    imports = imports.Where(x => x.ProductionRequestDetail.AttributeId == attrId);
-                if (productId > 0)
-                    imports = imports.Where(x => x.ProductionRequestDetail.ProductId == productId);
-                if (productTypeId > 0)
-                    imports = imports.Where(x => x.ProductionRequestDetail.Product.ProductType == productTypeId);
-                foreach (var item in imports)
-                {
-                    items.Add(new ProductDetail()
-                    {
-                        UnitId = item.ProductionRequestDetail.UnitId,
-                        AttributeId = item.ProductionRequestDetail.AttributeId,
-                        Direction = item.ProductionRequestDetail.Direction,
-                        ProductId = item.ProductionRequestDetail.ProductId,
-                        ProductTypeId = item.ProductionRequestDetail.Product.ProductType,
-                        Amount = item.ProductionRequestDetail.NumberUnit,
-                        Jampo = item.ProductionRequestDetail.BaseAttribute.Jampo,
-                        CreatedDate = item.ProductionRequest.CreatedDate
-                    });
-                }
-                var orders = context.OrderDetails.Join(context.Orders,
-                    child => child.OrderId, parent => parent.Id,
-                    (child, parent) => new { OrderDetail = child, Order = parent }).Where(x =>
-                    x.Order.CreatedDate <= to && x.Order.CreatedDate > dt && x.Order.Status == null);
-                if (unitId > 0)
-                    orders = orders.Where(x => x.OrderDetail.UnitId == unitId);
-                if (attrId > 0)
-                    orders = orders.Where(x => x.OrderDetail.AttributeId == attrId);
-                if (productId > 0)
-                    orders = orders.Where(x => x.OrderDetail.ProductId == productId);
-                if (productTypeId > 0)
-                    orders = orders.Where(x => x.OrderDetail.Product.ProductType == productTypeId);
-                foreach (var item in orders)
-                {
-                    items.Add(new ProductDetail()
-                    {
-                        UnitId = item.OrderDetail.UnitId,
-                        AttributeId = item.OrderDetail.AttributeId,
-                        Direction = BHConstant.DIRECTION_OUT,
-                        ProductId = item.OrderDetail.ProductId,
-                        ProductTypeId = item.OrderDetail.Product.ProductType,
-                        Amount = item.OrderDetail.NumberUnit,
-                        Jampo = item.OrderDetail.BaseAttribute.Jampo,
-                        CreatedDate = item.Order.CreatedDate
+                        ID = item.Id,
+                        UnitId = item.UnitId,
+                        AttributeId = item.AttributeId,
+                        Direction = item.Direction,
+                        ProductId = item.ProductId,
+                        ProductTypeId = item.Product.ProductType,
+                        Amount = item.Amount,
+                        Jampo = item.BaseAttribute.Jampo,
+                        CreatedDate = item.UpdatedDate,
+                        BeforeNumber = item.BeforeNumber,
+                        AfterNUmber = item.AfterNumber,
+                        Status = item.Status
                     });
                 }
 
@@ -277,7 +218,7 @@ namespace BaoHien.Services.ProductLogs
 
                             ProductsReport pr = new ProductsReport()
                             {
-                                ProductCode = p.Id + " - " + b.Id + " - " + m.Id,//p.ProductCode,
+                                ProductCode = p.ProductCode, //p.Id + " - " + b.Id + " - " + m.Id,//p.ProductCode,
                                 ProductName = p.ProductName + " - " + b.AttributeName,
                                 Jampo = item.Jampo ? "Jampo" : "",
                                 UnitName = m.Name,
@@ -288,18 +229,11 @@ namespace BaoHien.Services.ProductLogs
                             };
 
                             var a = items.Where(x => x.ProductId == item.ProductId && x.AttributeId == item.AttributeId
-                                && x.UnitId == item.UnitId);
-                            var a1 = a.Where(x => x.CreatedDate < from);
-                            int firstnumber = 0, lastnumber = 0, importnumber = 0, exportnumber = 0;
-                            firstnumber = Convert.ToInt32(a1.Sum(x => (x.Direction == BHConstant.DIRECTION_IN ? 1 : -1) * x.Amount));
-                            pr.FirstNumber = firstnumber < 0 ? "0" : firstnumber.ToString();
-                            lastnumber = Convert.ToInt32(a.Sum(x => (x.Direction == BHConstant.DIRECTION_IN ? 1 : -1) * x.Amount));
-                            pr.LastNumber = lastnumber < 0 ? "0" : lastnumber.ToString();
-                            var a2 = a.Where(x => x.CreatedDate >= from);
-                            importnumber = Convert.ToInt32(a2.Where(x => x.Direction == BHConstant.DIRECTION_IN).Sum(x => x.Amount));
-                            pr.ImportNumber = importnumber < 0 ? "0" : importnumber.ToString();
-                            exportnumber = Convert.ToInt32(a2.Where(x => x.Direction == BHConstant.DIRECTION_OUT).Sum(x => x.Amount));
-                            pr.ExportNumber = exportnumber < 0 ? "0" : exportnumber.ToString();
+                                && x.UnitId == item.UnitId).OrderBy(x => x.ID);
+                            pr.FirstNumber = a.First().BeforeNumber.ToString();
+                            pr.LastNumber = a.Last().AfterNUmber.ToString();
+                            pr.ImportNumber = a.Where(x => x.Direction == BHConstant.DIRECTION_IN && x.Status == BHConstant.ACTIVE_STATUS).Sum(x => x.Amount).ToString();
+                            pr.ExportNumber = a.Where(x => x.Direction == BHConstant.DIRECTION_OUT && x.Status == BHConstant.ACTIVE_STATUS).Sum(x => x.Amount).ToString();
 
                             type_products.Add(pr);
                         }
@@ -310,5 +244,16 @@ namespace BaoHien.Services.ProductLogs
             }
             return result;
         }        
+        
+        public string GetNameOfProductLog(ProductLog pl)
+        {
+            ProductLog result = null;
+            using (BaoHienDBDataContext context = new BaoHienDBDataContext(SettingManager.BuildStringConnection()))
+            {
+                result = context.ProductLogs.Where(p => p.ProductId == pl.ProductId && p.AttributeId == pl.AttributeId && p.UnitId == pl.UnitId)
+                    .OrderByDescending(c => c.Id).FirstOrDefault();
+                return result.Product.ProductName + " " + result.BaseAttribute.AttributeName + " (" + result.MeasurementUnit.Name + ")";
+            }
+        }
     }
 }

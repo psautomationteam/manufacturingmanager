@@ -71,12 +71,7 @@ namespace BaoHien.UI
                         if (dl == DialogResult.Yes)
                         {
                             EmployeeLogService els = new EmployeeLogService();
-                            var epls = els.GetEmployeeLogs().Where(x => x.EmployeeId == old_saler_id);
-                            foreach(EmployeeLog epl in epls)
-                            {
-                                epl.EmployeeId = emp.Id;
-                                els.UpdateEmployeeLog(epl);
-                            }
+                            els.MoveEmployeeLogOfCustomer(customer.Id, old_saler_id, emp.Id);
                         }
                     }
                     customer.Description = txtDescription.Text;

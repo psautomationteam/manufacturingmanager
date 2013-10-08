@@ -179,7 +179,11 @@ namespace BaoHien.UI
         {
             AddOrder frmAddOrder = new AddOrder();
             pnlMain.Controls.Clear();
-            frmAddOrder.ShowDialog();
+            try
+            {
+                frmAddOrder.ShowDialog();
+            }
+            catch { }
         }
 
         private void tsbAddProductionRequest_Click(object sender, EventArgs e)
