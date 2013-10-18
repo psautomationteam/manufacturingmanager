@@ -165,6 +165,7 @@ namespace BaoHien.Services.ProductLogs
             }
             using (BaoHienDBDataContext context = new BaoHienDBDataContext(SettingManager.BuildStringConnection()))
             {
+                // Products has transaction on period of time
                 var produces = context.ProductLogs.Where(x => x.UpdatedDate <= to && x.UpdatedDate >= from && x.RecordCode != "");
                 if (unitId > 0)
                     produces = produces.Where(x => x.UnitId == unitId);
@@ -193,6 +194,47 @@ namespace BaoHien.Services.ProductLogs
                     });
                 }
 
+                // Products out period of time
+                var old_products = context.ProductLogs.Where(x => x.UpdatedDate < from &&
+                    !items.Select(y => y.ProductId.ToString() + '_' +
+                            y.AttributeId.ToString() + '_' + y.UnitId.ToString()).Contains(x.ProductId.ToString() + '_' +
+                            x.AttributeId.ToString() + '_' + x.UnitId.ToString()))
+                            .GroupBy(
+                                x => new { x.ProductId, x.AttributeId, x.UnitId },
+                                (x, y) => new
+                                {
+                                    Key = new { x.ProductId, x.AttributeId, x.UnitId },
+                                    Value = y.OrderByDescending(z => z.UpdatedDate).First()
+                                })
+                             .Select(x => x.Value);
+                if (unitId > 0)
+                    old_products = old_products.Where(x => x.UnitId == unitId);
+                if (attrId > 0)
+                    old_products = old_products.Where(x => x.AttributeId == attrId);
+                if (productId > 0)
+                    old_products = old_products.Where(x => x.ProductId == productId);
+                if (productTypeId > 0)
+                    old_products = old_products.Where(x => x.Product.ProductType == productTypeId);
+                foreach (var item in old_products)
+                {
+                    items.Add(new ProductDetail()
+                    {
+                        ID = item.Id,
+                        UnitId = item.UnitId,
+                        AttributeId = item.AttributeId,
+                        Direction = item.Direction,
+                        ProductId = item.ProductId,
+                        ProductTypeId = item.Product.ProductType,
+                        Amount = 0,
+                        Jampo = item.BaseAttribute.Jampo,
+                        CreatedDate = item.UpdatedDate,
+                        BeforeNumber = item.AfterNumber,
+                        AfterNUmber = item.AfterNumber,
+                        Status = item.Status
+                    });
+                }
+
+                // Start collecting report
                 var dits = items.GroupBy(x => new { x.ProductTypeId, x.ProductId, x.AttributeId, x.UnitId });
                 List<int> type_distincts = items.GroupBy(x => x.ProductTypeId).Select(x => x.First()).Select(x => x.ProductTypeId).ToList();
                 List<ProductType> types = context.ProductTypes.OrderBy(x => x.TypeName).ToList();

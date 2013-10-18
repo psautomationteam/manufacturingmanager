@@ -73,7 +73,7 @@ namespace BaoHien.UI
             ProductTypeService productTypeService = new ProductTypeService();
             List<ProductType> productTypes = productTypeService.GetProductTypes();
             productTypes.Add(new ProductType() { Id = 0, TypeName = "Tất cả" });
-            productTypes = productTypes.OrderBy(x => x.TypeName).ToList();
+            productTypes = productTypes.OrderBy(x => x.Id).ToList();
             if (productTypes != null)
             {
                 cbProductTypes.DataSource = productTypes;
