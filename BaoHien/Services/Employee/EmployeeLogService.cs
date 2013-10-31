@@ -87,7 +87,7 @@ namespace BaoHien.Services.Employees
                                 AttrName = details_of_order[i].BaseAttribute.AttributeName,
                                 Number = details_of_order[i].NumberUnit.ToString(),
                                 Unit = details_of_order[i].MeasurementUnit.Name,
-                                Cost = Global.formatCurrencyTextWithoutMask(details_of_order[i].Cost.ToString()),
+                                Price = Global.formatCurrencyTextWithoutMask(details_of_order[i].Price.ToString()),
                                 Commission = Global.formatCurrencyTextWithoutMask(details_of_order[i].Commission.ToString()),
                                 RecordCode = item.OrderCode,
                             });

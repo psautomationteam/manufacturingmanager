@@ -121,7 +121,7 @@ namespace BaoHien.UI
             dgwEmployeeCommissionList.Columns.Add(Global.CreateCell("AttrName", "Quy cách", 150));
             dgwEmployeeCommissionList.Columns.Add(Global.CreateCellWithAlignment("Number", "Số lượng", 80, DataGridViewContentAlignment.MiddleRight));
             dgwEmployeeCommissionList.Columns.Add(Global.CreateCellWithAlignment("Unit", "ĐVT", 100, DataGridViewContentAlignment.MiddleRight));
-            dgwEmployeeCommissionList.Columns.Add(Global.CreateCellWithAlignment("Cost", "Đơn giá", 100, DataGridViewContentAlignment.MiddleRight));
+            dgwEmployeeCommissionList.Columns.Add(Global.CreateCellWithAlignment("Price", "Đơn giá", 100, DataGridViewContentAlignment.MiddleRight));
             dgwEmployeeCommissionList.Columns.Add(Global.CreateCellWithAlignment("Commission", "Hoa hồng", 100, DataGridViewContentAlignment.MiddleRight));
         }
 
@@ -223,7 +223,7 @@ namespace BaoHien.UI
             table.AddCell(FormatConfig.TableCellHeader("Quy cách"));
             table.AddCell(FormatConfig.TableCellHeader("Số lượng"));
             table.AddCell(FormatConfig.TableCellHeader("ĐVT"));
-            table.AddCell(FormatConfig.TableCellHeader("Tổng giá"));
+            table.AddCell(FormatConfig.TableCellHeader("Đơn giá"));
             table.AddCell(FormatConfig.TableCellHeader("Hoa hồng"));
 
             foreach (EmployeeReport item in employee_reports)
@@ -241,7 +241,7 @@ namespace BaoHien.UI
                     table.AddCell(FormatConfig.TableCellBody(item.AttrName, PdfPCell.ALIGN_CENTER));
                     table.AddCell(FormatConfig.TableCellBody(item.Number, PdfPCell.ALIGN_RIGHT));
                     table.AddCell(FormatConfig.TableCellBody(item.Unit, PdfPCell.ALIGN_CENTER));
-                    table.AddCell(FormatConfig.TableCellBody(item.Cost, PdfPCell.ALIGN_RIGHT));
+                    table.AddCell(FormatConfig.TableCellBody(item.Price, PdfPCell.ALIGN_RIGHT));
                     table.AddCell(FormatConfig.TableCellBody(item.Commission, PdfPCell.ALIGN_RIGHT));
                 }
             }
