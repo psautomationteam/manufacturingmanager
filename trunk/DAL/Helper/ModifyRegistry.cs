@@ -75,7 +75,7 @@ namespace DAL.Helper
 			// If the RegistrySubKey doesn't exist -> (null)
 			if ( sk1 == null )
 			{
-				return null;
+				return "";
 			}
 			else
 			{

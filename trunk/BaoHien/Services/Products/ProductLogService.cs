@@ -277,7 +277,8 @@ namespace BaoHien.Services.ProductLogs
                             pr.ImportNumber = a.Where(x => x.Direction == BHConstant.DIRECTION_IN && x.Status == BHConstant.ACTIVE_STATUS).Sum(x => x.Amount).ToString();
                             pr.ExportNumber = a.Where(x => x.Direction == BHConstant.DIRECTION_OUT && x.Status == BHConstant.ACTIVE_STATUS).Sum(x => x.Amount).ToString();
 
-                            type_products.Add(pr);
+                            if (!(pr.FirstNumber == "0" && pr.LastNumber == "0" && pr.ImportNumber == "0" && pr.ExportNumber == "0"))
+                                type_products.Add(pr);
                         }
                         type_products = type_products.OrderBy(x => x.ProductCode).ThenBy(x => x.Jampo).ToList();
                         result.AddRange(type_products);

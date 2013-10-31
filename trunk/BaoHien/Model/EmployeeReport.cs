@@ -63,11 +63,11 @@ namespace BaoHien.Model
             set { unit = value; }
         }
 
-        string cost;
-        public string Cost
+        string price;
+        public string Price
         {
-            get { return cost; }
-            set { cost = value; }
+            get { return price; }
+            set { price = value; }
         }
 
         string commission;

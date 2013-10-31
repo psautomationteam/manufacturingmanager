@@ -365,7 +365,7 @@ namespace BaoHien.Common
                             cell.DataType = new EnumValue<CellValues>(CellValues.SharedString);
                         }
                         // Insert the text into the SharedStringTablePart.
-                        string value = dgw[j, i].Value != null ? ((j == 7 || j == 8) ? dgw[j, i].Value.ToString().Replace(".", "") : dgw[j, i].Value.ToString()) : "";
+                        string value = dgw[j, i].Value != null ? ((j == 6 || j == 7) ? dgw[j, i].Value.ToString().Replace(".", "") : dgw[j, i].Value.ToString()) : "";
                         index = Global.InsertSharedStringItem(value, shareStringPart);
                         cell = Global.InsertCellInWorksheet(cl, row, worksheetPart);
                         cell.CellValue = new CellValue(index.ToString());
