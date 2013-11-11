@@ -204,7 +204,7 @@ namespace BaoHien.Services.ProductLogs
                                 (x, y) => new
                                 {
                                     Key = new { x.ProductId, x.AttributeId, x.UnitId },
-                                    Value = y.OrderByDescending(z => z.UpdatedDate).First()
+                                    Value = y.OrderByDescending(z => z.Id).First()
                                 })
                              .Select(x => x.Value);
                 if (unitId > 0)
