@@ -195,7 +195,7 @@ namespace BaoHien.Services.ProductLogs
                 }
 
                 // Products out period of time
-                var old_products = context.ProductLogs.Where(x => x.UpdatedDate < from &&
+                var old_products = context.ProductLogs.AsEnumerable().Where(x => x.UpdatedDate < from &&
                     !items.Select(y => y.ProductId.ToString() + '_' +
                             y.AttributeId.ToString() + '_' + y.UnitId.ToString()).Contains(x.ProductId.ToString() + '_' +
                             x.AttributeId.ToString() + '_' + x.UnitId.ToString()))
