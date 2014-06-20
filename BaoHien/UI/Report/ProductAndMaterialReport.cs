@@ -46,7 +46,7 @@ namespace BaoHien.UI
         
         void LoadReport()
         {
-            DateTime dtFrom = dtpFrom.Value;
+            DateTime dtFrom = dtpFrom.Value.Date;
             DateTime dtTo = dtpTo.Value.AddDays(1).Date;
             int productTypeId = cbmProductTypes.SelectedValue == null ? 0 : (int)cbmProductTypes.SelectedValue;
             int productId = cbmProducts.SelectedValue == null ? 0 : (int)cbmProducts.SelectedValue;
@@ -64,7 +64,9 @@ namespace BaoHien.UI
             }
             else
             {
-                textForPrint = "Từ ngày " + dtpFrom.Value.ToString(BHConstant.DATE_FORMAT) + " đến ngày " + dtpTo.Value.ToString(BHConstant.DATE_FORMAT); 
+                textForPrint = "Từ ngày " + dtpFrom.Value.ToString(BHConstant.DATE_FORMAT) + " đến ngày " + dtpTo.Value.ToString(BHConstant.DATE_FORMAT);
+                if (dtpTo.Value.Date == DateTime.Now.Date)
+                    dtFrom = new DateTime(2000, 1, 1);
                 productsReports = productLogService.GetReportsOfProducts(productTypeId, productId, attrId, unitId, dtFrom, dtTo);
                 SetupColumnProducts(productsReports);
             }
