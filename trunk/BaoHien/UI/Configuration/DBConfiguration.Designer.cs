@@ -200,6 +200,7 @@
             this.Name = "DBConfiguration";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Cấu hình cơ sở dữ liệu";
+            this.Load += new System.EventHandler(this.DBConfiguration_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

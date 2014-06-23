@@ -18,7 +18,15 @@ namespace BaoHien.UI.PrintPreviewCustom
         public PrintPreview(string filePath)
         {
             InitializeComponent();
-            ShowFile(filePath);
+            try
+            {
+                ShowFile(filePath);
+            }
+            catch
+            {
+                MessageBox.Show("Kiểm tra plugin pdf không tương thích!", "Lỗi plugin");
+                this.Close();
+            }
         }
 
         private void ShowFile(string filePath)
