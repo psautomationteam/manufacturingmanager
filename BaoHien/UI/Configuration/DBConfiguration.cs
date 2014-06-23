@@ -83,5 +83,17 @@ namespace BaoHien.UI
             }
 
         }
+
+        private void DBConfiguration_Load(object sender, EventArgs e)
+        {
+            ModifyRegistry reg = new ModifyRegistry();
+
+            txtIP.Text = String.IsNullOrEmpty(reg.Read("DBServerName")) ? BHConstant.INIT_IP : reg.Read("DBServerName");
+            txtPort.Text = String.IsNullOrEmpty(reg.Read("Port")) ? BHConstant.INIT_PORT : reg.Read("Port");
+            txtNet.Text = String.IsNullOrEmpty(reg.Read("NetworkLibrary")) ? BHConstant.INIT_NETWORK_LIBRARY : reg.Read("NetworkLibrary");
+            txtDataName.Text = String.IsNullOrEmpty(reg.Read("DatabaseName")) ? BHConstant.INIT_DATABASE_NAME : reg.Read("DatabaseName");
+            txtUsername.Text = String.IsNullOrEmpty(reg.Read("DatabaseUserID")) ? BHConstant.INIT_USER_ID : reg.Read("DatabaseUserID");
+            txtPass.Text = String.IsNullOrEmpty(reg.Read("DatabasePwd")) ? BHConstant.INIT_PW : reg.Read("DatabasePwd");
+        }
     }
 }
